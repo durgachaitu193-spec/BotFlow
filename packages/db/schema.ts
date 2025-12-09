@@ -33,6 +33,9 @@ export const user = pgTable('user', {
   name: text('name').notNull(),
   email: text('email').notNull().unique(),
   emailVerified: boolean('email_verified').notNull(),
+  walletAddress: text('wallet_address')
+    .unique()
+    .default('0x0000000000000000000000000000000000000000'),
   image: text('image'),
   createdAt: timestamp('created_at').notNull(),
   updatedAt: timestamp('updated_at').notNull(),

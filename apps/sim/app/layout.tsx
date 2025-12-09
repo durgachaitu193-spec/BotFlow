@@ -12,6 +12,7 @@ import { QueryProvider } from '@/app/_shell/providers/query-provider'
 import { SessionProvider } from '@/app/_shell/providers/session-provider'
 import { ThemeProvider } from '@/app/_shell/providers/theme-provider'
 import { ZoomPrevention } from '@/app/_shell/zoom-prevention'
+import { PrivyAuthProvider } from '@/lib/privy-provider'
 import { season } from '@/app/_styles/fonts/season/season'
 
 export const viewport: Viewport = {
@@ -188,14 +189,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <OneDollarStats />
         <PostHogProvider>
           <ThemeProvider>
-            <QueryProvider>
-              <SessionProvider>
-                <BrandedLayout>
-                  <ZoomPrevention />
-                  {children}
-                </BrandedLayout>
-              </SessionProvider>
-            </QueryProvider>
+            <PrivyAuthProvider>
+              <QueryProvider>
+                <SessionProvider>
+                  <BrandedLayout>
+                    <ZoomPrevention />
+                    {children}
+                  </BrandedLayout>
+                </SessionProvider>
+              </QueryProvider>
+            </PrivyAuthProvider>
           </ThemeProvider>
         </PostHogProvider>
       </body>

@@ -1,1 +1,2 @@
-export { auth, getSession, signIn, signUp } from './auth'
+export { getSession } from './session'
+export { auth } from './auth'

@@ -1,4 +1,3 @@
-import { getSessionCookie } from 'better-auth/cookies'
 import { type NextRequest, NextResponse } from 'next/server'
 import { isHosted } from './lib/core/config/environment'
 import { generateRuntimeCSP } from './lib/core/security/csp'
@@ -134,8 +133,9 @@ function handleSecurityFiltering(request: NextRequest): NextResponse | null {
 export async function proxy(request: NextRequest) {
   const url = request.nextUrl
 
-  const sessionCookie = getSessionCookie(request)
-  const hasActiveSession = !!sessionCookie
+  // Check for Privy authentication cookie
+  const privyUserId = request.cookies.get('privy-user-id')?.value
+  const hasActiveSession = !!privyUserId
 
   const redirect = handleRootPathRedirects(request, hasActiveSession)
   if (redirect) return redirect

@@ -1,5 +1,8 @@
 import type { Socket } from 'socket.io'
-import { auth } from '@/lib/auth'
+import { db } from '@sim/db'
+import { user } from '@sim/db/schema'
+import { eq } from 'drizzle-orm'
+import { verifyInternalToken } from '@/lib/auth/internal'
 import { createLogger } from '@/lib/logs/console/logger'
 
 const logger = createLogger('SocketAuth')
@@ -32,30 +35,46 @@ export async function authenticateSocket(socket: AuthenticatedSocket, next: any)
       return next(new Error('Authentication required'))
     }
 
-    // Validate one-time token with Better Auth
+    // Validate internal JWT token
     try {
       logger.debug(`Attempting token validation for socket ${socket.id}`, {
         tokenLength: token?.length || 0,
         origin,
       })
 
-      const session = await auth.api.verifyOneTimeToken({
-        body: {
-          token,
-        },
-      })
+      const verification = await verifyInternalToken(token)
 
-      if (!session?.user?.id) {
+      if (!verification.valid || !verification.userId) {
         logger.warn(`Socket ${socket.id} rejected: Invalid token - no user found`)
         return next(new Error('Invalid session'))
       }
 
+      // Fetch user data from database
+      const [userData] = await db
+        .select({
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          image: user.image,
+        })
+        .from(user)
+        .where(eq(user.id, verification.userId))
+        .limit(1)
+
+      if (!userData) {
+        logger.warn(`Socket ${socket.id} rejected: User not found in database`)
+        return next(new Error('User not found'))
+      }
+
       // Store user info in socket for later use
-      socket.userId = session.user.id
-      socket.userName = session.user.name || session.user.email || 'Unknown User'
-      socket.userEmail = session.user.email
-      socket.userImage = session.user.image || null
-      socket.activeOrganizationId = session.session.activeOrganizationId || undefined
+      socket.userId = userData.id
+      socket.userName = userData.name || userData.email || 'Unknown User'
+      socket.userEmail = userData.email
+      socket.userImage = userData.image || null
+
+      logger.debug(`Socket ${socket.id} authenticated successfully`, {
+        userId: socket.userId,
+      })
 
       next()
     } catch (tokenError) {

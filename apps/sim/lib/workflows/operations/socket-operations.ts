@@ -1,4 +1,3 @@
-import { client } from '@/lib/auth/auth-client'
 import { createLogger } from '@/lib/logs/console/logger'
 import { useOperationQueueStore } from '@/stores/operation-queue/store'
 import type { WorkflowState } from '@/stores/workflows/workflow/types'
@@ -7,10 +6,15 @@ const logger = createLogger('WorkflowSocketOperations')
 
 async function resolveUserId(): Promise<string> {
   try {
-    const sessionResult = await client.getSession()
-    const userId = sessionResult.data?.user?.id
-    if (userId) {
-      return userId
+    const response = await fetch('/api/auth/session', {
+      credentials: 'include',
+    })
+    if (response.ok) {
+      const sessionData = await response.json()
+      const userId = sessionData?.user?.id
+      if (userId) {
+        return userId
+      }
     }
   } catch (error) {
     logger.warn('Failed to resolve session user id for workflow operation', { error })
