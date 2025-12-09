@@ -3,7 +3,6 @@
 import type React from 'react'
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 import posthog from 'posthog-js'
-import { client } from '@/lib/auth/auth-client'
 
 export type AppSession = {
   user: {
@@ -40,8 +39,11 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     try {
       setIsPending(true)
       setError(null)
-      const res = await client.getSession()
-      setData(res?.data ?? null)
+      const res = await fetch('/api/auth/session', {
+        credentials: 'include',
+      })
+      const json = await res.json()
+      setData(json?.data ?? null)
     } catch (e) {
       setError(e instanceof Error ? e : new Error('Failed to fetch session'))
     } finally {

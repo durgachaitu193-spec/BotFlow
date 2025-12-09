@@ -259,8 +259,8 @@ export async function validateChatAuth(
         return { authorized: false, error: 'Email not authorized for SSO access' }
       }
 
-      const { auth } = await import('@/lib/auth')
-      const session = await auth.api.getSession({ headers: request.headers })
+      const { getSession } = await import('@/lib/auth')
+      const session = await getSession()
 
       if (!session || !session.user) {
         return { authorized: false, error: 'auth_required_sso' }

@@ -13,7 +13,8 @@ import {
   ModalHeader,
 } from '@/components/emcn/components/modal/modal'
 import { Input, Skeleton } from '@/components/ui'
-import { signOut, useSession } from '@/lib/auth/auth-client'
+import { usePrivy } from '@privy-io/react-auth'
+import { useSession } from '@/lib/auth/auth-client'
 import { useBrandConfig } from '@/lib/branding/branding'
 import { getEnv, isTruthy } from '@/lib/core/config/env'
 import { getBaseUrl } from '@/lib/core/utils/urls'
@@ -47,6 +48,7 @@ export function General({ onOpenChange }: GeneralProps) {
   const router = useRouter()
   const brandConfig = useBrandConfig()
   const { data: session } = useSession()
+  const { authenticated: privyAuthenticated, logout: privyLogout } = usePrivy()
 
   const { data: profile, isLoading: isProfileLoading } = useUserProfile()
   const updateProfile = useUpdateUserProfile()
@@ -173,10 +175,37 @@ export function General({ onOpenChange }: GeneralProps) {
 
   const handleSignOut = async () => {
     try {
-      await Promise.all([signOut(), clearUserData()])
+      // If user is authenticated with Privy, use Privy logout
+      if (privyAuthenticated) {
+        try {
+          // Clear the privy-user-id cookie via API
+          await fetch('/api/auth/privy/logout', {
+            method: 'POST',
+            credentials: 'include',
+          }).catch(() => {
+            // If API fails, try to clear cookie client-side as fallback
+            document.cookie = 'privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+          })
+
+          // Logout from Privy
+          await privyLogout()
+
+          logger.info('Privy logout successful')
+        } catch (privyError) {
+          logger.error('Error during Privy logout:', { error: privyError })
+        }
+
+        // Clear user data for Privy users
+        await clearUserData()
+      } else {
+        // Fallback: just clear user data
+        await clearUserData()
+      }
+
       router.push('/login?fromLogout=true')
     } catch (error) {
       logger.error('Error signing out:', { error })
+      // Still redirect even if there's an error
       router.push('/login?fromLogout=true')
     }
   }

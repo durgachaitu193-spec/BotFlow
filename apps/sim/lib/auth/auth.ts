@@ -331,7 +331,7 @@ export const auth = betterAuth({
               const profileResponse = await fetch('https://api.github.com/user', {
                 headers: {
                   Authorization: `Bearer ${tokens.accessToken}`,
-                  'User-Agent': 'sim-studio',
+                  'User-Agent': 'MegalithLabs',
                 },
               })
 
@@ -349,7 +349,7 @@ export const auth = betterAuth({
                 const emailsResponse = await fetch('https://api.github.com/user/emails', {
                   headers: {
                     Authorization: `Bearer ${tokens.accessToken}`,
-                    'User-Agent': 'sim-studio',
+                    'User-Agent': 'MegalithLabs',
                   },
                 })
 
@@ -1319,7 +1319,7 @@ export const auth = betterAuth({
               const response = await fetch('https://oauth.reddit.com/api/v1/me', {
                 headers: {
                   Authorization: `Bearer ${tokens.accessToken}`,
-                  'User-Agent': 'sim-studio/1.0',
+                  'User-Agent': 'MegalithLabs/1.0',
                 },
               })
 
@@ -2110,12 +2110,7 @@ export const auth = betterAuth({
   },
 })
 
-export async function getSession() {
-  const hdrs = await headers()
-  return await auth.api.getSession({
-    headers: hdrs,
-  })
-}
-
-export const signIn = auth.api.signInEmail
-export const signUp = auth.api.signUpEmail
+// Note: getSession is now exported from ./session.ts for Privy compatibility
+// These better-auth exports are kept for backward compatibility but should not be used
+// export const signIn = auth.api.signInEmail
+// export const signUp = auth.api.signUpEmail

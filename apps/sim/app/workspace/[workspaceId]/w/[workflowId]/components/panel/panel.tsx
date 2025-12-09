@@ -32,6 +32,7 @@ import {
   Editor,
   Toolbar,
 } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components'
+import { WalletButton } from '@/components/wallet-button'
 import {
   usePanelResize,
   useUsageLimits,
@@ -426,8 +427,8 @@ export function Panel() {
               </Button>
             </div>
 
-            {/* Deploy and Run */}
-            <div className='flex gap-[4px]'>
+            {/* Deploy, Run, and Wallet */}
+            <div className='flex gap-[4px] items-center'>
               <Deploy activeWorkflowId={activeWorkflowId} userPermissions={userPermissions} />
               <Button
                 className='h-[32px] w-[61.5px] gap-[8px]'
@@ -442,6 +443,7 @@ export function Panel() {
                 )}
                 Run
               </Button>
+              <WalletButton />
             </div>
           </div>
 

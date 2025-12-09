@@ -1,14 +1,14 @@
 import { db, ssoProvider } from '@sim/db'
 import { eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/lib/auth'
+import { getSession } from '@/lib/auth'
 import { createLogger } from '@/lib/logs/console/logger'
 
 const logger = createLogger('SSO-Providers')
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await auth.api.getSession({ headers: req.headers })
+    const session = await getSession()
 
     let providers
     if (session?.user?.id) {

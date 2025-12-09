@@ -1,9 +1,8 @@
 import { db } from '@sim/db'
-import { workflow } from '@sim/db/schema'
+import { workflow, user } from '@sim/db/schema'
 import { eq } from 'drizzle-orm'
 import type { NextRequest } from 'next/server'
 import { authenticateApiKeyFromHeader, updateApiKeyLastUsed } from '@/lib/api-key/service'
-import { getSession } from '@/lib/auth'
 import { verifyInternalToken } from '@/lib/auth/internal'
 import { createLogger } from '@/lib/logs/console/logger'
 
@@ -103,13 +102,20 @@ export async function checkHybridAuth(
       }
     }
 
-    // 2. Try session auth (for web UI)
-    const session = await getSession()
-    if (session?.user?.id) {
-      return {
-        success: true,
-        userId: session.user.id,
-        authType: 'session',
+    // 2. Try Privy cookie auth (for web UI)
+    const privyUserId = request.cookies.get('privy-user-id')?.value
+    if (privyUserId) {
+      const [privyUser] = await db
+        .select({ id: user.id })
+        .from(user)
+        .where(eq(user.id, privyUserId))
+        .limit(1)
+      if (privyUser) {
+        return {
+          success: true,
+          userId: privyUser.id,
+          authType: 'session',
+        }
       }
     }
 
