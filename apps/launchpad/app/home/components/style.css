@@ -1,0 +1,7 @@
+.token-card:hover {
+  background: linear-gradient(270deg, #281a61 0%, #5136c7 100%);
+}
+
+.ant-skeleton-paragraph {
+  margin: 0 !important;
+}

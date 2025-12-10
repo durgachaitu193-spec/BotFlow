@@ -9,8 +9,8 @@ export function generateBrandedMetadata(override: Partial<Metadata> = {}): Metad
   const brand = getBrandConfig()
 
   const defaultTitle = brand.name
-  const summaryFull = `Sim is an open-source AI agent workflow builder. Developers at trail-blazing startups to Fortune 500 companies deploy agentic workflows on the Sim platform. 60,000+ developers already use Sim to build and deploy AI agent workflows and connect them to 100+ apps. Sim is SOC2 and HIPAA compliant, ensuring enterprise-grade security for AI automation.`
-  const summaryShort = `Sim is an open-source AI agent workflow builder for production workflows.`
+  const summaryFull = `Megalith is the epi-agentic infrastructure for the autonomous agent economy. A no-code builder for on-chain verified, trustless AI agents: build, deploy, and monetize with 100+ apps integrated, instant gasless, EVM-native x402 agent-to-agent payments, and a Launchpad to graduate tokenised agents into an active trading pool.`
+  const summaryShort = `Megalith is the epi-agentic infrastructure for the autonomous agent economy.`
 
   return {
     title: {
@@ -67,7 +67,7 @@ export function generateBrandedMetadata(override: Partial<Metadata> = {}): Metad
       siteName: brand.name,
       images: [
         {
-          url: brand.logoUrl || '/social/facebook.png',
+          url: brand.logoUrl || '/social/megalith.png',
           width: 1200,
           height: 630,
           alt: brand.name,
@@ -78,15 +78,17 @@ export function generateBrandedMetadata(override: Partial<Metadata> = {}): Metad
       card: 'summary_large_image',
       title: defaultTitle,
       description: summaryFull,
-      images: [brand.logoUrl || '/social/twitter.png'],
-      creator: '@simstudioai',
-      site: '@simstudioai',
+      images: [brand.logoUrl || '/social/megalith.png'],
+      creator: '@megalithlabsstudio',
+      site: '@megalithlabsstudio',
     },
     manifest: '/manifest.webmanifest',
     icons: {
       icon: [
+        { url: '/favicon/favicon.svg', type: 'image/svg+xml' },
         { url: '/favicon/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
         { url: '/favicon/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+        { url: '/favicon/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
         {
           url: '/favicon/favicon-192x192.png',
           sizes: '192x192',
@@ -97,10 +99,9 @@ export function generateBrandedMetadata(override: Partial<Metadata> = {}): Metad
           sizes: '512x512',
           type: 'image/png',
         },
-        { url: brand.faviconUrl || '/sim.png', sizes: 'any', type: 'image/png' },
       ],
       apple: '/favicon/apple-touch-icon.png',
-      shortcut: brand.faviconUrl || '/favicon/favicon.ico',
+      shortcut: '/favicon/favicon.ico',
     },
     appleWebApp: {
       capable: true,
@@ -114,7 +115,7 @@ export function generateBrandedMetadata(override: Partial<Metadata> = {}): Metad
     other: {
       'apple-mobile-web-app-capable': 'yes',
       'mobile-web-app-capable': 'yes',
-      'msapplication-TileColor': '#701FFC', // Default Sim brand primary color
+      'msapplication-TileColor': '#f26522',
       'msapplication-config': '/favicon/browserconfig.xml',
     },
     ...override,
@@ -128,23 +129,20 @@ export function generateStructuredData() {
   return {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Sim',
+    name: 'Megalith',
     description:
-      'Sim is an open-source AI agent workflow builder. Developers at trail-blazing startups to Fortune 500 companies deploy agentic workflows on the Sim platform. 60,000+ developers already use Sim to build and deploy AI agent workflows and connect them to 100+ apps. Sim is SOC2 and HIPAA compliant, ensuring enterprise-level security.',
-    url: getBaseUrl(),
+      'Megalith is the epi-agentic infrastructure for the autonomous agent economy. A no-code builder for on-chain verified, trustless AI agents: build, deploy, and monetize with 100+ apps integrated, instant gasless, EVM-native x402 agent-to-agent payments, and a Launchpad to graduate tokenised agents into an active trading pool.',
+    url: 'https://www.megalithlabs.ai/',
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web Browser',
-    applicationSubCategory: 'AIWorkflowAutomation',
-    areaServed: 'Worldwide',
-    availableLanguage: ['en'],
     offers: {
       '@type': 'Offer',
       category: 'SaaS',
     },
     creator: {
       '@type': 'Organization',
-      name: 'Sim',
-      url: 'https://sim.ai',
+      name: 'MegalithLabs',
+      url: 'https://www.megalithlabs.ai/',
     },
     featureList: [
       'Visual AI Agent Builder',
@@ -154,3 +152,4 @@ export function generateStructuredData() {
     ],
   }
 }
+

@@ -1600,3 +1600,142 @@ export const ssoProvider = pgTable(
     organizationIdIdx: index('sso_provider_organization_id_idx').on(table.organizationId),
   })
 )
+
+
+export const launchpadTokens = pgTable(
+  'launchpad_tokens',
+  {
+    id: text('id').primaryKey(),
+    name: text('name').notNull(),
+    symbol: text('symbol').notNull(),
+    description: text('description').notNull(),
+    logo: text('logo').notNull(),
+    twitter: text('twitter'),
+    telegram: text('telegram'),
+    website: text('website'),
+    network: text('network').notNull(),
+    createdBy: text('created_by').notNull(), // Wallet address
+    supply: text('supply').notNull().default('0'), // Stored as string for big numbers
+    reserveBalance: text('reserve_balance').notNull().default('0'), // Stored as string for big numbers
+    active: boolean('active').notNull().default(false),
+    txHash: text('tx_hash'),
+    mnemonic: text('mnemonic'),
+    hydradxId: text('hydradx_id'),
+    ipfsHash: text('ipfs_hash'),
+    tokenAddress: text('token_address'),
+    currentPrice: text('current_price').notNull().default('0'),
+    tradeDisabled: boolean('trade_disabled').notNull().default(false),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  },
+  (table) => ({
+    createdByIdx: index('launchpad_tokens_created_by_idx').on(table.createdBy),
+    networkIdx: index('launchpad_tokens_network_idx').on(table.network),
+    activeIdx: index('launchpad_tokens_active_idx').on(table.active),
+  })
+)
+
+export const launchpadTransactions = pgTable(
+  'launchpad_transactions',
+  {
+    txHash: text('tx_hash').primaryKey(),
+    tokenId: text('token_id')
+      .notNull()
+      .references(() => launchpadTokens.id, { onDelete: 'cascade' }),
+    symbol: text('symbol').notNull(),
+    amount: text('amount').notNull(), // Stored as string for big numbers
+    value: text('value').notNull(), // Stored as string for big numbers
+    currentPrice: text('current_price').notNull(),
+    type: text('type').notNull(), // 'buy', 'sell', 'created'
+    from: text('from').notNull(), // Wallet address
+    to: text('to').notNull(), // Wallet address
+    userAddressTxHash: text('user_address_tx_hash'),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (table) => ({
+    tokenIdIdx: index('launchpad_transactions_token_id_idx').on(table.tokenId),
+    fromIdx: index('launchpad_transactions_from_idx').on(table.from),
+    toIdx: index('launchpad_transactions_to_idx').on(table.to),
+    typeIdx: index('launchpad_transactions_type_idx').on(table.type),
+    createdAtIdx: index('launchpad_transactions_created_at_idx').on(table.createdAt),
+  })
+)
+
+export const launchpadHoldings = pgTable(
+  'launchpad_holdings',
+  {
+    walletAddress: text('wallet_address').notNull(),
+    tokenId: text('token_id')
+      .notNull()
+      .references(() => launchpadTokens.id, { onDelete: 'cascade' }),
+    balance: text('balance').notNull().default('0'), // Stored as string for big numbers
+    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  },
+  (table) => ({
+    pk: uniqueIndex('launchpad_holdings_pk').on(table.walletAddress, table.tokenId),
+    walletAddressIdx: index('launchpad_holdings_wallet_address_idx').on(table.walletAddress),
+    tokenIdIdx: index('launchpad_holdings_token_id_idx').on(table.tokenId),
+  })
+)
+
+export const launchpadComments = pgTable(
+  'launchpad_comments',
+  {
+    id: text('id').primaryKey(),
+    tokenId: text('token_id')
+      .notNull()
+      .references(() => launchpadTokens.id, { onDelete: 'cascade' }),
+    address: text('address').notNull(),
+    message: text('message').notNull(),
+    img: text('img'),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (table) => ({
+    tokenIdIdx: index('launchpad_comments_token_id_idx').on(table.tokenId),
+    addressIdx: index('launchpad_comments_address_idx').on(table.address),
+    createdAtIdx: index('launchpad_comments_created_at_idx').on(table.createdAt),
+  })
+
+)
+export const agent = pgTable(
+  'agent',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    workflowId: text('workflow_id')
+      .notNull()
+      .references(() => workflow.id, { onDelete: 'cascade' }),
+    // On-chain agent ID from AgentIdentityRegistry contract
+    agentId: text('agent_id').notNull().unique(),
+    agentWallet: text('agent_wallet').notNull(),
+    agentDID: text('agent_did'),
+    ownerWallet: text('owner_wallet').notNull(), // User's wallet address
+    // User DID (if available)
+    userDID: text('user_did'),
+    // Deployment information
+    deploymentType: text('deployment_type').notNull(), // 'api' or 'chat'
+    // Link to chat deployment (if deploymentType is 'chat')
+    chatId: text('chat_id').references(() => chat.id, { onDelete: 'set null' }),
+    // Metadata stored as JSON (includes workflowName, chatIdentifier, chatTitle, etc.)
+    metadata: json('metadata').notNull(),
+    // Blockchain transaction info
+    transactionHash: text('transaction_hash'),
+    // Status
+    isActive: boolean('is_active').notNull().default(true),
+    // Timestamps
+    registeredAt: timestamp('registered_at').notNull().defaultNow(),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  },
+  (table) => ({
+    userIdIdx: index('agent_user_id_idx').on(table.userId),
+    workflowIdIdx: index('agent_workflow_id_idx').on(table.workflowId),
+    agentIdIdx: index('agent_agent_id_idx').on(table.agentId),
+    ownerWalletIdx: index('agent_owner_wallet_idx').on(table.ownerWallet),
+    userDIDIdx: index('agent_user_did_idx').on(table.userDID),
+    agentDIDIdx: index('agent_agent_did_idx').on(table.agentDID),
+    chatIdIdx: index('agent_chat_id_idx').on(table.chatId),
+  })
+)

@@ -1,1 +1,1 @@
-ALTER TABLE "template_creators" ADD COLUMN "verified" boolean DEFAULT false NOT NULL;
+-- ALTER TABLE "template_creators" ADD COLUMN "verified" boolean DEFAULT false NOT NULL;

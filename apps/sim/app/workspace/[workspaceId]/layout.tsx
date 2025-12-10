@@ -15,6 +15,8 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
       <GlobalCommandsProvider>
         <Tooltip.Provider delayDuration={600} skipDelayDuration={0}>
           <WorkspacePermissionsProvider>
+            {/* <LaunchpadNavbar />
+          <Navbar /> */}
             <div className='flex min-h-screen w-full'>
               <SidebarNew />
               <div className='flex flex-1 flex-col'>{children}</div>

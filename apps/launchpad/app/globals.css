@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 10, 10, 15;
+  --background-end-rgb: 10, 10, 15;
+
+  /* Theme Variables - Default (Builder/Orange) */
+  --accent-primary: #f26522;
+  --accent-secondary: #00ff94;
+}
+
+[data-theme="launchpad"] {
+  --accent-primary: #00ff94;
+  --accent-secondary: #f26522;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  font-family: var(--font-inter), sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .glass-panel {
+    @apply bg-bg-card/60 backdrop-blur-xl border border-white/5 shadow-xl;
+  }
+
+  .glass-card {
+    @apply bg-bg-surface/40 backdrop-blur-md border border-white/5 hover:border-white/10 transition-all duration-300;
+  }
+
+  .neon-text-primary {
+    text-shadow: 0 0 10px rgba(0, 255, 148, 0.5);
+  }
+
+  .neon-text-secondary {
+    text-shadow: 0 0 10px rgba(0, 194, 255, 0.5);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0c;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1c1c21;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #374151;
+}

@@ -1,1 +1,1 @@
-ALTER TABLE "workflow" ADD COLUMN "variables" json DEFAULT '{}';
+-- ALTER TABLE "workflow" ADD COLUMN "variables" json DEFAULT '{}';

@@ -1,1 +1,1 @@
-DROP TABLE "copilot_api_keys" CASCADE;
+-- DROP TABLE "copilot_api_keys" CASCADE;

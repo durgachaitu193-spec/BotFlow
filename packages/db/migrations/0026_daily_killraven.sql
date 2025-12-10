@@ -1,1 +1,1 @@
-ALTER TABLE "workflow" ADD COLUMN "deployed_state" json;
+-- ALTER TABLE "workflow" ADD COLUMN "deployed_state" json;

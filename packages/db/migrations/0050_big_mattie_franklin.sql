@@ -1,1 +1,1 @@
-ALTER TABLE "settings" ADD COLUMN "auto_pan" boolean DEFAULT true NOT NULL;
+-- ALTER TABLE "settings" ADD COLUMN "auto_pan" boolean DEFAULT true NOT NULL;

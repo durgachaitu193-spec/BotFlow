@@ -1,1 +1,1 @@
-ALTER TABLE "workflow_logs" ADD COLUMN "trigger" text NOT NULL;
+-- ALTER TABLE "workflow_logs" ADD COLUMN "trigger" text NOT NULL;

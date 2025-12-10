@@ -78,45 +78,72 @@
  * Dark color tokens - single source of truth for all colors (dark-only)
  */
 @layer base {
+
   :root,
   .light {
     /* Neutrals (surfaces) - shadcn stone palette */
-    --bg: #ffffff; /* pure white for landing/auth pages */
-    --surface-1: #fafaf9; /* stone-50 */
-    --surface-2: #ffffff; /* white */
-    --surface-3: #f5f5f4; /* stone-100 */
-    --surface-4: #f5f5f4; /* stone-100 */
-    --surface-5: #eeedec; /* stone-150 */
-    --surface-6: #f5f5f4; /* stone-100 */
-    --surface-9: #f5f5f4; /* stone-100 */
-    --surface-11: #e7e5e4; /* stone-200 */
-    --surface-12: #d6d3d1; /* stone-300 */
-    --surface-13: #a8a29e; /* stone-400 */
-    --surface-14: #78716c; /* stone-500 */
-    --surface-15: #57534e; /* stone-600 */
-    --surface-elevated: #ffffff; /* white */
-    --bg-strong: #e7e5e4; /* stone-200 */
+    --bg: #ffffff;
+    /* pure white for landing/auth pages */
+    --surface-1: #fafaf9;
+    /* stone-50 */
+    --surface-2: #ffffff;
+    /* white */
+    --surface-3: #f5f5f4;
+    /* stone-100 */
+    --surface-4: #f5f5f4;
+    /* stone-100 */
+    --surface-5: #eeedec;
+    /* stone-150 */
+    --surface-6: #f5f5f4;
+    /* stone-100 */
+    --surface-9: #f5f5f4;
+    /* stone-100 */
+    --surface-11: #e7e5e4;
+    /* stone-200 */
+    --surface-12: #d6d3d1;
+    /* stone-300 */
+    --surface-13: #a8a29e;
+    /* stone-400 */
+    --surface-14: #78716c;
+    /* stone-500 */
+    --surface-15: #57534e;
+    /* stone-600 */
+    --surface-elevated: #ffffff;
+    /* white */
+    --bg-strong: #e7e5e4;
+    /* stone-200 */
 
     /* Text - shadcn stone palette for proper contrast */
-    --text-primary: #1c1917; /* stone-900 */
-    --text-secondary: #292524; /* stone-800 */
-    --text-tertiary: #57534e; /* stone-600 */
-    --text-muted: #78716c; /* stone-500 */
-    --text-subtle: #a8a29e; /* stone-400 */
-    --text-inverse: #fafaf9; /* stone-50 */
+    --text-primary: #1c1917;
+    /* stone-900 */
+    --text-secondary: #292524;
+    /* stone-800 */
+    --text-tertiary: #57534e;
+    /* stone-600 */
+    --text-muted: #78716c;
+    /* stone-500 */
+    --text-subtle: #a8a29e;
+    /* stone-400 */
+    --text-inverse: #fafaf9;
+    /* stone-50 */
     --text-error: #dc2626;
 
     /* Borders / dividers - shadcn stone palette */
-    --border: #d6d3d1; /* stone-300 */
-    --border-strong: #d6d3d1; /* stone-300 */
-    --divider: #e7e5e4; /* stone-200 */
-    --border-muted: #e7e5e4; /* stone-200 */
-    --border-success: #d6d3d1; /* stone-300 */
+    --border: #d6d3d1;
+    /* stone-300 */
+    --border-strong: #d6d3d1;
+    /* stone-300 */
+    --divider: #e7e5e4;
+    /* stone-200 */
+    --border-muted: #e7e5e4;
+    /* stone-200 */
+    --border-success: #d6d3d1;
+    /* stone-300 */
 
     /* Brand & state */
-    --brand-400: #8e4cfb;
-    --brand-500: #6f3dfa;
-    --brand-secondary: #33b4ff;
+    --brand-400: #ff8a50;
+    --brand-500: #f26522;
+    --brand-secondary: #00bac7;
     --brand-tertiary: #22c55e;
     --brand-tertiary-2: #33c481;
     --warning: #ea580c;
@@ -130,46 +157,80 @@
     --font-weight-semibold: 500;
 
     /* RGB for opacity usage - stone palette */
-    --surface-4-rgb: 245 245 244; /* stone-100 */
-    --surface-5-rgb: 238 237 236; /* stone-150 */
-    --surface-7-rgb: 245 245 244; /* stone-100 */
-    --surface-9-rgb: 245 245 244; /* stone-100 */
-    --divider-rgb: 231 229 228; /* stone-200 */
+    --surface-4-rgb: 245 245 244;
+    /* stone-100 */
+    --surface-5-rgb: 238 237 236;
+    /* stone-150 */
+    --surface-7-rgb: 245 245 244;
+    /* stone-100 */
+    --surface-9-rgb: 245 245 244;
+    /* stone-100 */
+    --divider-rgb: 231 229 228;
+    /* stone-200 */
     --white-rgb: 255 255 255;
     --black-rgb: 0 0 0;
 
     /* Extended palette - mapped to shadcn stone palette */
-    --c-0D0D0D: #0c0a09; /* stone-950 */
-    --c-1A1A1A: #1c1917; /* stone-900 */
-    --c-1F1F1F: #1c1917; /* stone-900 */
-    --c-2A2A2A: #292524; /* stone-800 */
-    --c-383838: #44403c; /* stone-700 */
-    --c-414141: #57534e; /* stone-600 */
+    --c-0D0D0D: #0c0a09;
+    /* stone-950 */
+    --c-1A1A1A: #1c1917;
+    /* stone-900 */
+    --c-1F1F1F: #1c1917;
+    /* stone-900 */
+    --c-2A2A2A: #292524;
+    /* stone-800 */
+    --c-383838: #44403c;
+    /* stone-700 */
+    --c-414141: #57534e;
+    /* stone-600 */
     --c-442929: #442929;
     --c-491515: #491515;
-    --c-575757: #78716c; /* stone-500 */
-    --c-686868: #78716c; /* stone-500 */
-    --c-707070: #78716c; /* stone-500 */
-    --c-727272: #78716c; /* stone-500 */
-    --c-737373: #78716c; /* stone-500 */
-    --c-808080: #a8a29e; /* stone-400 */
-    --c-858585: #a8a29e; /* stone-400 */
-    --c-868686: #a8a29e; /* stone-400 */
-    --c-8D8D8D: #a8a29e; /* stone-400 */
-    --c-939393: #a8a29e; /* stone-400 */
-    --c-A8A8A8: #a8a29e; /* stone-400 */
-    --c-B8B8B8: #d6d3d1; /* stone-300 */
-    --c-C0C0C0: #d6d3d1; /* stone-300 */
-    --c-CDCDCD: #d6d3d1; /* stone-300 */
-    --c-D0D0D0: #d6d3d1; /* stone-300 */
-    --c-D2D2D2: #d6d3d1; /* stone-300 */
-    --c-E0E0E0: #e7e5e4; /* stone-200 */
-    --c-E5E5E5: #e7e5e4; /* stone-200 */
-    --c-E8E8E8: #e7e5e4; /* stone-200 */
-    --c-EEEEEE: #f5f5f4; /* stone-100 */
-    --c-F0F0F0: #f5f5f4; /* stone-100 */
-    --c-F4F4F4: #fafaf9; /* stone-50 */
-    --c-F5F5F5: #fafaf9; /* stone-50 */
+    --c-575757: #78716c;
+    /* stone-500 */
+    --c-686868: #78716c;
+    /* stone-500 */
+    --c-707070: #78716c;
+    /* stone-500 */
+    --c-727272: #78716c;
+    /* stone-500 */
+    --c-737373: #78716c;
+    /* stone-500 */
+    --c-808080: #a8a29e;
+    /* stone-400 */
+    --c-858585: #a8a29e;
+    /* stone-400 */
+    --c-868686: #a8a29e;
+    /* stone-400 */
+    --c-8D8D8D: #a8a29e;
+    /* stone-400 */
+    --c-939393: #a8a29e;
+    /* stone-400 */
+    --c-A8A8A8: #a8a29e;
+    /* stone-400 */
+    --c-B8B8B8: #d6d3d1;
+    /* stone-300 */
+    --c-C0C0C0: #d6d3d1;
+    /* stone-300 */
+    --c-CDCDCD: #d6d3d1;
+    /* stone-300 */
+    --c-D0D0D0: #d6d3d1;
+    /* stone-300 */
+    --c-D2D2D2: #d6d3d1;
+    /* stone-300 */
+    --c-E0E0E0: #e7e5e4;
+    /* stone-200 */
+    --c-E5E5E5: #e7e5e4;
+    /* stone-200 */
+    --c-E8E8E8: #e7e5e4;
+    /* stone-200 */
+    --c-EEEEEE: #f5f5f4;
+    /* stone-100 */
+    --c-F0F0F0: #f5f5f4;
+    /* stone-100 */
+    --c-F4F4F4: #fafaf9;
+    /* stone-50 */
+    --c-F5F5F5: #fafaf9;
+    /* stone-50 */
 
     /* Blues and cyans */
     --c-00B0B0: #00b0b0;
@@ -203,10 +264,14 @@
     /* Terminal status badges */
     --terminal-status-error-bg: #feeeee;
     --terminal-status-error-border: #f87171;
-    --terminal-status-info-bg: #f5f5f4; /* stone-100 */
-    --terminal-status-info-border: #a8a29e; /* stone-400 */
-    --terminal-status-info-color: #57534e; /* stone-600 */
+    --terminal-status-info-bg: #f5f5f4;
+    /* stone-100 */
+    --terminal-status-info-border: #a8a29e;
+    /* stone-400 */
+    --terminal-status-info-color: #57534e;
+    /* stone-600 */
   }
+
   .dark {
     /* Neutrals (surfaces) */
     --bg: #1b1b1b;
@@ -242,8 +307,9 @@
     --border-success: #575757;
 
     /* Brand & state */
-    --brand-400: #8e4cfb;
-    --brand-secondary: #33b4ff;
+   --brand-400: #ff8a50;
+    --brand-500: #f26522;
+    --brand-secondary: #00bac7;
     --brand-tertiary: #22c55e;
     --brand-tertiary-2: #33c481;
     --warning: #ff6600;
@@ -379,6 +445,7 @@
   .dark body {
     @apply antialiased;
   }
+
   ::-webkit-scrollbar {
     width: var(--scrollbar-size);
     height: var(--scrollbar-size);
@@ -571,23 +638,19 @@ input[type="search"]::-ms-clear {
   .streaming-effect::after {
     content: "";
     @apply pointer-events-none absolute left-0 top-0 h-full w-full;
-    background: linear-gradient(
-      90deg,
-      rgba(128, 128, 128, 0) 0%,
-      rgba(128, 128, 128, 0.1) 50%,
-      rgba(128, 128, 128, 0) 100%
-    );
+    background: linear-gradient(90deg,
+        rgba(128, 128, 128, 0) 0%,
+        rgba(128, 128, 128, 0.1) 50%,
+        rgba(128, 128, 128, 0) 100%);
     animation: code-shimmer 1.5s infinite;
     z-index: 10;
   }
 
   .dark .streaming-effect::after {
-    background: linear-gradient(
-      90deg,
-      rgba(180, 180, 180, 0) 0%,
-      rgba(180, 180, 180, 0.1) 50%,
-      rgba(180, 180, 180, 0) 100%
-    );
+    background: linear-gradient(90deg,
+        rgba(180, 180, 180, 0) 0%,
+        rgba(180, 180, 180, 0.1) 50%,
+        rgba(180, 180, 180, 0) 100%);
   }
 
   .loading-placeholder::placeholder {
@@ -639,6 +702,7 @@ input[type="search"]::-ms-clear {
     background-color: var(--surface-11) !important;
     color: var(--text-primary) !important;
   }
+
   html[data-panel-active-tab="copilot"] .panel-container [data-tab-button="toolbar"],
   html[data-panel-active-tab="copilot"] .panel-container [data-tab-button="editor"] {
     background-color: transparent !important;
@@ -649,6 +713,7 @@ input[type="search"]::-ms-clear {
     background-color: var(--surface-11) !important;
     color: var(--text-primary) !important;
   }
+
   html[data-panel-active-tab="toolbar"] .panel-container [data-tab-button="copilot"],
   html[data-panel-active-tab="toolbar"] .panel-container [data-tab-button="editor"] {
     background-color: transparent !important;
@@ -659,6 +724,7 @@ input[type="search"]::-ms-clear {
     background-color: var(--surface-11) !important;
     color: var(--text-primary) !important;
   }
+
   html[data-panel-active-tab="editor"] .panel-container [data-tab-button="copilot"],
   html[data-panel-active-tab="editor"] .panel-container [data-tab-button="toolbar"] {
     background-color: transparent !important;
@@ -672,6 +738,7 @@ input[type="search"]::-ms-clear {
  * Do not modify; remove after migration.
  */
 @layer base {
+
   :root,
   .light {
     --background: 0 0% 100%;
@@ -706,12 +773,13 @@ input[type="search"]::-ms-clear {
     --base-muted-foreground: #737373;
     --gradient-primary: 263 85% 70%;
     --gradient-secondary: 336 95% 65%;
-    --brand-primary-hex: #6f3dfa;
-    --brand-primary-hover-hex: #6338d9;
-    --brand-accent-hex: #6f3dfa;
-    --brand-accent-hover-hex: #6f3dfa;
     --brand-background-hex: #ffffff;
     --surface-elevated: #202020;
+    --brand-primary-hex: #f26522;
+    --brand-primary-hover-hex: #00bac7;
+    --brand-accent-hex: #f26522;
+    --brand-accent-hover-hex: #00bac7;
+
   }
 
   .dark {
@@ -745,10 +813,10 @@ input[type="search"]::-ms-clear {
     --base-muted-foreground: #a3a3a3;
     --gradient-primary: 263 90% 75%;
     --gradient-secondary: 336 100% 72%;
-    --brand-primary-hex: #701ffc;
-    --brand-primary-hover-hex: #802fff;
-    --brand-accent-hex: #9d54ff;
-    --brand-accent-hover-hex: #a66fff;
+    --brand-primary-hex: #f26522;
+    --brand-primary-hover-hex: #00bac7;
+    --brand-accent-hex: #f26522;
+    --brand-accent-hover-hex: #00bac7;
     --brand-background-hex: #0c0c0c;
     --surface-elevated: #202020;
   }

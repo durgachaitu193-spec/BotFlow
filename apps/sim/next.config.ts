@@ -36,32 +36,32 @@ const nextConfig: NextConfig = {
       // Brand logo domain if configured
       ...(getEnv('NEXT_PUBLIC_BRAND_LOGO_URL')
         ? (() => {
-            try {
-              return [
-                {
-                  protocol: 'https' as const,
-                  hostname: new URL(getEnv('NEXT_PUBLIC_BRAND_LOGO_URL')!).hostname,
-                },
-              ]
-            } catch {
-              return []
-            }
-          })()
+          try {
+            return [
+              {
+                protocol: 'https' as const,
+                hostname: new URL(getEnv('NEXT_PUBLIC_BRAND_LOGO_URL')!).hostname,
+              },
+            ]
+          } catch {
+            return []
+          }
+        })()
         : []),
       // Brand favicon domain if configured
       ...(getEnv('NEXT_PUBLIC_BRAND_FAVICON_URL')
         ? (() => {
-            try {
-              return [
-                {
-                  protocol: 'https' as const,
-                  hostname: new URL(getEnv('NEXT_PUBLIC_BRAND_FAVICON_URL')!).hostname,
-                },
-              ]
-            } catch {
-              return []
-            }
-          })()
+          try {
+            return [
+              {
+                protocol: 'https' as const,
+                hostname: new URL(getEnv('NEXT_PUBLIC_BRAND_FAVICON_URL')!).hostname,
+              },
+            ]
+          } catch {
+            return []
+          }
+        })()
         : []),
     ],
   },
@@ -69,9 +69,6 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: isTruthy(env.DOCKER_BUILD),
   },
   output: isTruthy(env.DOCKER_BUILD) ? 'standalone' : undefined,
-  turbopack: {
-    resolveExtensions: ['.tsx', '.ts', '.jsx', '.js', '.mjs', '.json'],
-  },
   serverExternalPackages: [
     'unpdf',
     'ffmpeg-static',
@@ -81,20 +78,20 @@ const nextConfig: NextConfig = {
     'thread-stream',
   ],
   experimental: {
-    optimizeCss: true,
     turbopackSourceMaps: false,
     turbopackFileSystemCacheForDev: true,
   },
+  turbopack: {},
   ...(isDev && {
     allowedDevOrigins: [
       ...(env.NEXT_PUBLIC_APP_URL
         ? (() => {
-            try {
-              return [new URL(env.NEXT_PUBLIC_APP_URL).host]
-            } catch {
-              return []
-            }
-          })()
+          try {
+            return [new URL(env.NEXT_PUBLIC_APP_URL).host]
+          } catch {
+            return []
+          }
+        })()
         : []),
       'localhost:3000',
       'localhost:3001',

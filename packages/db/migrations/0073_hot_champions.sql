@@ -1,1 +1,1 @@
-ALTER TABLE "settings" DROP COLUMN "telemetry_notified_user";
+-- ALTER TABLE "settings" DROP COLUMN "telemetry_notified_user";

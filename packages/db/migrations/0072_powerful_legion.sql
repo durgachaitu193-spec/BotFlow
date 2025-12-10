@@ -1,1 +1,1 @@
-ALTER TABLE "copilot_chats" ADD COLUMN "conversation_id" text;
+-- ALTER TABLE "copilot_chats" ADD COLUMN "conversation_id" text;

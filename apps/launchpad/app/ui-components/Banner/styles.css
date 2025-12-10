@@ -1,0 +1,25 @@
+section {
+  gap: 20px;
+  display: flex;
+  align-items: center;
+}
+
+@keyframes swipe-right {
+  0% {
+    transform: translate(-100%);
+  }
+
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes swipe-left {
+  0% {
+    transform: translate(0);
+  }
+
+  100% {
+    transform: translate(-100%);
+  }
+}

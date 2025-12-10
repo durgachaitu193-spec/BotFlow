@@ -1,1 +1,1 @@
-ALTER TABLE "workflow" DROP COLUMN "state";
+-- ALTER TABLE "workflow" DROP COLUMN "state";

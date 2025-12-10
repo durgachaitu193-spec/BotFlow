@@ -1,1 +1,1 @@
-ALTER TABLE "settings" ADD COLUMN "copilot_auto_allowed_tools" jsonb DEFAULT '[]' NOT NULL;
+-- ALTER TABLE "settings" ADD COLUMN "copilot_auto_allowed_tools" jsonb DEFAULT '[]' NOT NULL;
