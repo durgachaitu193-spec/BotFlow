@@ -105,6 +105,12 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return createErrorResponse('Unable to determine deploying user', 400)
     }
 
+    // Verify payment has been completed before allowing deployment
+    if (!workflowData!.deploymentPaymentPaid) {
+      logger.warn(`[${requestId}] Deployment payment not completed for workflow: ${id}`)
+      return createErrorResponse('Payment required before deployment', 402)
+    }
+
     const deployResult = await deployWorkflow({
       workflowId: id,
       deployedBy: actorUserId,
