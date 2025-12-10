@@ -1,2 +1,2 @@
--- ALTER TABLE "user" ADD COLUMN "wallet_address" text DEFAULT '0x0000000000000000000000000000000000000000';--> statement-breakpoint
--- ALTER TABLE "user" ADD CONSTRAINT "user_wallet_address_unique" UNIQUE("wallet_address");
+ALTER TABLE "user" ADD COLUMN "wallet_address" text DEFAULT '0x0000000000000000000000000000000000000000';--> statement-breakpoint
+ALTER TABLE "user" ADD CONSTRAINT "user_wallet_address_unique" UNIQUE("wallet_address");
