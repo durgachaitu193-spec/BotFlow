@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { client, useSession } from '@/lib/auth/auth-client'
+import { betterAuthClient, useSession } from '@/lib/auth/auth-client'
 import { createLogger } from '@/lib/logs/console/logger'
 
 const logger = createLogger('useVerification')
@@ -93,7 +93,7 @@ export function useVerification({
 
     try {
       const normalizedEmail = email.trim().toLowerCase()
-      const response = await client.signIn.emailOtp({
+      const response = await betterAuthClient.signIn.emailOtp({
         email: normalizedEmail,
         otp,
       })
@@ -166,7 +166,7 @@ export function useVerification({
     setErrorMessage('')
 
     const normalizedEmail = email.trim().toLowerCase()
-    client.emailOtp
+    betterAuthClient.emailOtp
       .sendVerificationOtp({
         email: normalizedEmail,
         type: 'sign-in',

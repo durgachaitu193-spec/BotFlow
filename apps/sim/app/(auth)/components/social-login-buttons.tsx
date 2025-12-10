@@ -3,7 +3,7 @@
 import { type ReactNode, useEffect, useState } from 'react'
 import { GithubIcon, GoogleIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import { client } from '@/lib/auth/auth-client'
+import { betterAuthClient } from '@/lib/auth/auth-client'
 import { inter } from '@/app/_styles/fonts/inter/inter'
 
 interface SocialLoginButtonsProps {
@@ -38,7 +38,7 @@ export function SocialLoginButtons({
 
     setIsGithubLoading(true)
     try {
-      await client.signIn.social({ provider: 'github', callbackURL })
+      await betterAuthClient.signIn.social({ provider: 'github', callbackURL })
     } catch (err: any) {
       let errorMessage = 'Failed to sign in with GitHub'
 
@@ -61,7 +61,7 @@ export function SocialLoginButtons({
 
     setIsGoogleLoading(true)
     try {
-      await client.signIn.social({ provider: 'google', callbackURL })
+      await betterAuthClient.signIn.social({ provider: 'google', callbackURL })
     } catch (err: any) {
       let errorMessage = 'Failed to sign in with Google'
 

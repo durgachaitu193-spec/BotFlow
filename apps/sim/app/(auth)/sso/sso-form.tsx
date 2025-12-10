@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { client } from '@/lib/auth/auth-client'
+import { betterAuthClient } from '@/lib/auth/auth-client'
 import { env, isFalsy } from '@/lib/core/config/env'
 import { cn } from '@/lib/core/utils/cn'
 import { createLogger } from '@/lib/logs/console/logger'
@@ -146,7 +146,7 @@ export default function SSOForm() {
     try {
       const safeCallbackUrl = validateCallbackUrl(callbackUrl) ? callbackUrl : '/workspace'
 
-      await client.signIn.sso({
+      await betterAuthClient.signIn.sso({
         email: emailValue,
         callbackURL: safeCallbackUrl,
         errorCallbackURL: `/sso?error=sso_failed&callbackUrl=${encodeURIComponent(safeCallbackUrl)}`,

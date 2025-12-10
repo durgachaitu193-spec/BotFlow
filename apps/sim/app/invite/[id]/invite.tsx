@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { client, useSession } from '@/lib/auth/auth-client'
+import { betterAuthClient, useSession } from '@/lib/auth/auth-client'
 import { createLogger } from '@/lib/logs/console/logger'
 import { getErrorMessage } from '@/app/invite/[id]/utils'
 import { InviteLayout, InviteStatusCard } from '@/app/invite/components'
@@ -70,7 +70,7 @@ export default function Invite() {
         }
 
         try {
-          const { data } = await client.organization.getInvitation({
+          const { data } = await betterAuthClient.organization.getInvitation({
             query: { id: inviteId },
           })
 
@@ -78,7 +78,7 @@ export default function Invite() {
             setInvitationType('organization')
 
             // Check if user is already in an organization BEFORE showing the invitation
-            const activeOrgResponse = await client.organization
+            const activeOrgResponse = await betterAuthClient.organization
               .getFullOrganization()
               .catch(() => ({ data: null }))
 
@@ -97,7 +97,7 @@ export default function Invite() {
             })
 
             if (data.organizationId) {
-              const orgResponse = await client.organization.getFullOrganization({
+              const orgResponse = await betterAuthClient.organization.getFullOrganization({
                 query: { organizationId: data.organizationId },
               })
 
@@ -157,7 +157,7 @@ export default function Invite() {
         }
 
         // Set the organization as active
-        await client.organization.setActive({
+        await betterAuthClient.organization.setActive({
           organizationId: orgId,
         })
 

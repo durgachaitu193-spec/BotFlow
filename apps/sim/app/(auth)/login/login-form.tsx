@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { client } from '@/lib/auth/auth-client'
+import { betterAuthClient } from '@/lib/auth/auth-client'
 import { getEnv, isFalsy, isTruthy } from '@/lib/core/config/env'
 import { cn } from '@/lib/core/utils/cn'
 import { getBaseUrl } from '@/lib/core/utils/urls'
@@ -222,7 +222,7 @@ export default function LoginPage({
     try {
       const safeCallbackUrl = validateCallbackUrl(callbackUrl) ? callbackUrl : '/workspace'
 
-      const result = await client.signIn.email(
+      const result = await betterAuthClient.signIn.email(
         {
           email,
           password,

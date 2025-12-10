@@ -1,5 +1,36 @@
 import { useContext } from 'react'
+import { ssoClient } from '@better-auth/sso/client'
+import { stripeClient } from '@better-auth/stripe/client'
+import {
+  customSessionClient,
+  emailOTPClient,
+  genericOAuthClient,
+  organizationClient,
+} from 'better-auth/client/plugins'
+import { createAuthClient } from 'better-auth/react'
+import type { auth } from '@/lib/auth'
+import { env } from '@/lib/core/config/env'
+import { isBillingEnabled } from '@/lib/core/config/environment'
+import { getBaseUrl } from '@/lib/core/utils/urls'
 import { SessionContext, type SessionHookResult } from '@/app/_shell/providers/session-provider'
+
+export const betterAuthClient = createAuthClient({
+  baseURL: getBaseUrl(),
+  plugins: [
+    emailOTPClient(),
+    genericOAuthClient(),
+    customSessionClient<typeof auth>(),
+    ...(isBillingEnabled
+      ? [
+          stripeClient({
+            subscription: true, // Enable subscription management
+          }),
+        ]
+      : []),
+    organizationClient(),
+    ...(env.NEXT_PUBLIC_SSO_ENABLED ? [ssoClient()] : []),
+  ],
+})
 
 export function useSession(): SessionHookResult {
   const ctx = useContext(SessionContext)
@@ -99,9 +130,11 @@ export function useSubscription() {
   }
 }
 
+export const { signIn, signUp, signOut } = betterAuthClient
+
 export function useActiveOrganization() {
-  // TODO: Implement active organization fetching from API
   return {
     data: null,
   }
 }
+

@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { client, useSession } from '@/lib/auth/auth-client'
+import { betterAuthClient, useSession } from '@/lib/auth/auth-client'
 import { getEnv, isFalsy, isTruthy } from '@/lib/core/config/env'
 import { cn } from '@/lib/core/utils/cn'
 import { createLogger } from '@/lib/logs/console/logger'
@@ -286,7 +286,7 @@ function SignupFormContent({
 
       const sanitizedName = trimmedName
 
-      const response = await client.signUp.email(
+      const response = await betterAuthClient.signUp.email(
         {
           email: emailValue,
           password: passwordValue,
@@ -356,7 +356,7 @@ function SignupFormContent({
       }
 
       try {
-        await client.emailOtp.sendVerificationOtp({
+        await betterAuthClient.emailOtp.sendVerificationOtp({
           email: emailValue,
           type: 'sign-in',
         })
