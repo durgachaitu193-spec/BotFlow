@@ -80,7 +80,7 @@ export const facilitatorAbiViem = [
 ] as const
 
 export type SupportedToken = {
-  symbol: 'USDT' | 'USDC' | 'ASTER' | 'BNB' | 'ETH'
+  symbol: 'USDT' | 'USDC' | 'ASTER' | 'BNB' | 'ETH' | 'CAKE'
   address: `0x${string}`
   chainId: number
 }
@@ -99,6 +99,11 @@ export const BNB_TOKENS: SupportedToken[] = [
   {
     symbol: 'ASTER',
     address: '0x000ae314e2a2172a039b26378814c252734f556a' as `0x${string}`,
+    chainId: 56,
+  },
+  {
+    symbol: 'CAKE',
+    address: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82' as `0x${string}`,
     chainId: 56,
   },
   {
