@@ -68,7 +68,7 @@ export function DeployModal({
   const isDeployed = deploymentStatus?.isDeployed ?? isDeployedProp
   const setDeploymentStatus = useWorkflowRegistry((state) => state.setDeploymentStatus)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isUndeploying, setIsUndeploying] = useState(false)
+  // const [isUndeploying, setIsUndeploying] = useState(false)
   const [deploymentInfo, setDeploymentInfo] = useState<WorkflowDeploymentInfo | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const workflowMetadata = useWorkflowRegistry((state) =>
@@ -84,7 +84,7 @@ export function DeployModal({
 
   const [versions, setVersions] = useState<WorkflowDeploymentVersionResponse[]>([])
   const [versionsLoading, setVersionsLoading] = useState(false)
-  const [showUndeployConfirm, setShowUndeployConfirm] = useState(false)
+  // const [showUndeployConfirm, setShowUndeployConfirm] = useState(false)
   const [templateFormValid, setTemplateFormValid] = useState(false)
   const [templateSubmitting, setTemplateSubmitting] = useState(false)
   const [hasExistingTemplate, setHasExistingTemplate] = useState(false)
@@ -401,7 +401,7 @@ export function DeployModal({
     [workflowId, versions, refetchDeployedState, fetchVersions, selectedStreamingOutputs]
   )
 
-  const handleUndeploy = async () => {
+  /* const handleUndeploy = async () => {
     try {
       setIsUndeploying(true)
 
@@ -423,7 +423,7 @@ export function DeployModal({
     } finally {
       setIsUndeploying(false)
     }
-  }
+  } */
 
   const handleRedeploy = async () => {
     try {
@@ -594,7 +594,7 @@ export function DeployModal({
                   onValidationChange={setIsChatFormValid}
                   onDeploymentComplete={handleCloseModal}
                   onDeployed={handlePostDeploymentUpdate}
-                  onVersionActivated={() => {}}
+                  onVersionActivated={() => { }}
                 />
               </ModalTabsContent>
 
@@ -617,11 +617,12 @@ export function DeployModal({
             <GeneralFooter
               isDeployed={isDeployed}
               needsRedeployment={needsRedeployment}
+
               isSubmitting={isSubmitting}
-              isUndeploying={isUndeploying}
+              // isUndeploying={isUndeploying}
               onDeploy={onDeploy}
               onRedeploy={handleRedeploy}
-              onUndeploy={() => setShowUndeployConfirm(true)}
+            // onUndeploy={() => setShowUndeployConfirm(true)}
             />
           )}
           {activeTab === 'chat' && (
@@ -696,7 +697,9 @@ export function DeployModal({
         </ModalContent>
       </Modal>
 
-      <Modal open={showUndeployConfirm} onOpenChange={setShowUndeployConfirm}>
+
+
+      {/* <Modal open={showUndeployConfirm} onOpenChange={setShowUndeployConfirm}>
         <ModalContent className='w-[400px]'>
           <ModalHeader>Undeploy API</ModalHeader>
           <ModalBody>
@@ -725,7 +728,7 @@ export function DeployModal({
             </Button>
           </ModalFooter>
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </>
   )
 }
@@ -814,20 +817,20 @@ interface GeneralFooterProps {
   isDeployed?: boolean
   needsRedeployment: boolean
   isSubmitting: boolean
-  isUndeploying: boolean
+  // isUndeploying: boolean
   onDeploy: () => Promise<void>
   onRedeploy: () => Promise<void>
-  onUndeploy: () => void
+  // onUndeploy: () => void
 }
 
 function GeneralFooter({
   isDeployed,
   needsRedeployment,
   isSubmitting,
-  isUndeploying,
+  // isUndeploying,
   onDeploy,
   onRedeploy,
-  onUndeploy,
+  // onUndeploy,
 }: GeneralFooterProps) {
   if (!isDeployed) {
     return (
@@ -843,12 +846,16 @@ function GeneralFooter({
     <ModalFooter className='items-center justify-between'>
       <StatusBadge isWarning={needsRedeployment} />
       <div className='flex items-center gap-2'>
-        <Button variant='default' onClick={onUndeploy} disabled={isUndeploying || isSubmitting}>
+        {/* <Button variant='default' onClick={onUndeploy} disabled={isUndeploying || isSubmitting}>
           {isUndeploying ? 'Undeploying...' : 'Undeploy'}
-        </Button>
-        {needsRedeployment && (
-          <Button variant='primary' onClick={onRedeploy} disabled={isSubmitting || isUndeploying}>
+        </Button> */}
+        {needsRedeployment ? (
+          <Button variant='primary' onClick={onRedeploy} disabled={isSubmitting /* || isUndeploying */}>
             {isSubmitting ? 'Updating...' : 'Update'}
+          </Button>
+        ) : (
+          <Button variant='secondary' disabled>
+            Up to date
           </Button>
         )}
       </div>
