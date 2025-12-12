@@ -1714,11 +1714,8 @@ export const agent = pgTable(
     agentWallet: text('agent_wallet').notNull(),
     agentDID: text('agent_did'),
     ownerWallet: text('owner_wallet').notNull(), // User's wallet address
-    // User DID (if available)
     userDID: text('user_did'),
-    // Deployment information
-    deploymentType: text('deployment_type').notNull(), // 'api' or 'chat'
-    // Link to chat deployment (if deploymentType is 'chat')
+    // Link to chat deployment
     chatId: text('chat_id').references(() => chat.id, { onDelete: 'set null' }),
     // Metadata stored as JSON (includes workflowName, chatIdentifier, chatTitle, etc.)
     metadata: json('metadata').notNull(),

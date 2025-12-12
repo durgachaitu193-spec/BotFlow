@@ -1,0 +1,1 @@
+ALTER TABLE "agent" DROP COLUMN "deployment_type";

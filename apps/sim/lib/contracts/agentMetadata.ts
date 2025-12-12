@@ -4,20 +4,19 @@
 export interface AgentMetadata {
   workflowId: string
   workflowName?: string
-  deploymentType: 'api' | 'chat'
-  // Chat-specific fields
+  // API endpoint
+  apiEndpoint?: string
+  // Chat fields
+  chatUrl?: string
   chatIdentifier?: string
   chatTitle?: string
   chatDescription?: string
   chatAuthType?: 'public' | 'password' | 'email' | 'sso'
-  chatUrl?: string
   // Agent token information
   tokenName?: string
   tokenSymbol?: string
   tokenAddress?: string
   tokenIpfsHash?: string
-  // API-specific fields
-  apiEndpoint?: string
   // Common fields
   deployedAt?: string
   [key: string]: any // Allow additional fields

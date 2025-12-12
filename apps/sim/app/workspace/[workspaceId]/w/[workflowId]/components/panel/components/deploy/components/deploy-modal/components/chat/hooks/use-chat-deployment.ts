@@ -75,7 +75,7 @@ export function useChatDeployment() {
       deploymentInfo: { apiKey: string } | null,
       existingChatId?: string,
       imageUrl?: string | null
-    ): Promise<string> => {
+    ): Promise<{ chatUrl: string; chatId: string }> => {
       const outputConfigs = parseOutputConfigs(formData.selectedOutputBlocks)
 
       const payload = {
@@ -122,7 +122,12 @@ export function useChatDeployment() {
       }
 
       logger.info(`Chat ${existingChatId ? 'updated' : 'deployed'} successfully:`, result.chatUrl)
-      return result.chatUrl
+
+      // Return both chatUrl and chatId
+      return {
+        chatUrl: result.chatUrl,
+        chatId: result.id || existingChatId || '',
+      }
     },
     []
   )

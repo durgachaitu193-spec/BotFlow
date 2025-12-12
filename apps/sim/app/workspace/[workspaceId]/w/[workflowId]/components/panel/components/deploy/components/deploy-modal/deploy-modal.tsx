@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import { usePrivy, useWallets } from '@privy-io/react-auth'
 import clsx from 'clsx'
 import { Button } from '@/components/emcn'
 import {
@@ -25,6 +26,9 @@ import { ApiDeploy } from './components/api/api'
 import { ChatDeploy, type ExistingChat } from './components/chat/chat'
 import { GeneralDeploy } from './components/general/general'
 import { TemplateDeploy } from './components/template/template'
+import { AgentInfo } from './components/agent-info'
+import { registerAgent, updateAgentMetadata } from '@/lib/contracts/agentRegistry'
+import { type AgentMetadata, buildAgentMetadata } from '@/lib/contracts/agentMetadata'
 
 const logger = createLogger('DeployModal')
 
@@ -49,7 +53,7 @@ interface WorkflowDeploymentInfo {
   needsRedeployment: boolean
 }
 
-type TabView = 'general' | 'api' | 'chat' | 'template'
+type TabView = 'general' | 'api' | 'chat' | 'template' | 'agent'
 
 export function DeployModal({
   open,
@@ -96,6 +100,18 @@ export function DeployModal({
 
   const [existingChat, setExistingChat] = useState<ExistingChat | null>(null)
   const [isLoadingChat, setIsLoadingChat] = useState(false)
+
+  // Agent registration state
+  const { user, authenticated } = usePrivy()
+  const { wallets } = useWallets()
+  const [isRegisteringAgent, setIsRegisteringAgent] = useState(false)
+  const [agentData, setAgentData] = useState<{
+    agentId: string
+    agentDID: string
+    transactionHash: string
+    metadata: AgentMetadata
+  } | null>(null)
+  const [pendingTokenImage, setPendingTokenImage] = useState<File | null>(null)
 
   const getApiKeyLabel = (value?: string | null) => {
     if (value && value.trim().length > 0) {
@@ -147,12 +163,55 @@ export function DeployModal({
     }
   }, [workflowId])
 
+  const fetchExistingAgent = useCallback(async () => {
+    if (!workflowId) return
+
+    try {
+      const response = await fetch(`/api/agents?workflowId=${workflowId}`)
+      if (response.ok) {
+        const data = await response.json()
+        if (data.agents && data.agents.length > 0) {
+          const agent = data.agents[0]
+          setAgentData({
+            agentId: agent.agentId,
+            agentDID: agent.agentDID,
+            transactionHash: agent.transactionHash,
+            metadata: agent.metadata,
+          })
+          logger.info('Loaded existing agent data', { agentId: agent.agentId })
+        } else {
+          setAgentData(null)
+        }
+      }
+    } catch (error) {
+      logger.error('Error fetching existing agent:', error)
+      setAgentData(null)
+    }
+  }, [workflowId])
+
+  const fetchVersions = useCallback(async () => {
+    if (!workflowId) return
+    try {
+      const res = await fetch(`/api/workflows/${workflowId}/deployments`)
+      if (res.ok) {
+        const data = await res.json()
+        setVersions(Array.isArray(data.versions) ? data.versions : [])
+      } else {
+        setVersions([])
+      }
+    } catch {
+      setVersions([])
+    }
+  }, [workflowId])
+
   useEffect(() => {
     if (open && workflowId) {
       setActiveTab('general')
       fetchChatDeploymentInfo()
+      fetchVersions()
+      fetchExistingAgent()
     }
-  }, [open, workflowId, fetchChatDeploymentInfo])
+  }, [open, workflowId, fetchChatDeploymentInfo, fetchVersions, fetchExistingAgent])
 
   useEffect(() => {
     async function fetchDeploymentInfo() {
@@ -262,21 +321,6 @@ export function DeployModal({
       setIsSubmitting(false)
     }
   }
-
-  const fetchVersions = useCallback(async () => {
-    if (!workflowId) return
-    try {
-      const res = await fetch(`/api/workflows/${workflowId}/deployments`)
-      if (res.ok) {
-        const data = await res.json()
-        setVersions(Array.isArray(data.versions) ? data.versions : [])
-      } else {
-        setVersions([])
-      }
-    } catch {
-      setVersions([])
-    }
-  }, [workflowId])
 
   useEffect(() => {
     if (open && workflowId) {
@@ -503,6 +547,242 @@ export function DeployModal({
     useWorkflowRegistry.getState().setWorkflowNeedsRedeployment(workflowId, false)
   }
 
+  const registerAgentAfterDeployment = async (chatFormData: {
+    identifier: string
+    title: string
+    description: string
+    authType: string
+    tokenName?: string
+    tokenSymbol?: string
+    tokenImage?: File
+    chatId: string
+  }) => {
+    if (!workflowId) {
+      logger.warn('Cannot register agent: missing workflowId')
+      return null
+    }
+
+    setIsRegisteringAgent(true)
+
+    try {
+      // 1. Check if agent already exists for this workflow
+      const existingAgentResponse = await fetch(`/api/agents?workflowId=${workflowId}`)
+      let existingAgent: any = null
+
+      if (existingAgentResponse.ok) {
+        const agentsData = await existingAgentResponse.json()
+        if (agentsData.agents && agentsData.agents.length > 0) {
+          existingAgent = agentsData.agents[0]
+          logger.info('Found existing agent, will update metadata', { agentId: existingAgent.agentId })
+        }
+      }
+
+      // 2. Build updated metadata with BOTH API and chat info
+      const metadata: AgentMetadata = {
+        workflowId,
+        workflowName: workflowMetadata?.name,
+        deployedAt: new Date().toISOString(),
+        // API info
+        apiEndpoint: deploymentInfo?.endpoint,
+        // Chat info
+        chatIdentifier: chatFormData.identifier,
+        chatTitle: chatFormData.title,
+        chatDescription: chatFormData.description,
+        chatAuthType: chatFormData.authType as any,
+        chatUrl: `${window.location.origin}/chat/${chatFormData.identifier}`,
+        // Token info (preserve existing if updating)
+        tokenName: chatFormData.tokenName || existingAgent?.metadata?.tokenName,
+        tokenSymbol: chatFormData.tokenSymbol || existingAgent?.metadata?.tokenSymbol,
+        tokenAddress: existingAgent?.metadata?.tokenAddress,
+        tokenIpfsHash: existingAgent?.metadata?.tokenIpfsHash,
+      }
+
+      if (existingAgent) {
+        // UPDATE existing agent metadata
+        logger.info('Updating existing agent metadata')
+
+        // Get wallet provider for on-chain update
+        const walletAddress = wallets?.[0]?.address
+        if (walletAddress) {
+          let provider: any = null
+          try {
+            if (wallets && wallets.length > 0) {
+              provider = await wallets[0].getEthereumProvider()
+            }
+          } catch (error) {
+            logger.error('Error getting wallet provider:', error)
+          }
+
+          // Update metadata on-chain
+          if (provider) {
+            try {
+              const updateResult = await updateAgentMetadata(
+                walletAddress,
+                existingAgent.agentId,
+                buildAgentMetadata(metadata),
+                provider
+              )
+
+              if (updateResult) {
+                logger.info('Agent metadata updated on-chain', { txHash: updateResult.txHash })
+              }
+            } catch (onChainError) {
+              logger.error('Error updating agent metadata on-chain:', onChainError)
+              // Continue with database update even if on-chain update fails
+            }
+          }
+        }
+
+        // Update in database
+        const updateResponse = await fetch(`/api/agents?agentId=${existingAgent.agentId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chatId: chatFormData.chatId,
+            metadata,
+          }),
+        })
+
+        if (!updateResponse.ok) {
+          throw new Error('Failed to update agent metadata')
+        }
+
+        const updateResult = await updateResponse.json()
+        logger.info('Agent metadata updated successfully')
+
+        const result = {
+          agentId: existingAgent.agentId,
+          agentDID: existingAgent.agentDID,
+          transactionHash: existingAgent.transactionHash,
+          metadata,
+        }
+
+        setAgentData(result)
+        return result
+      } else {
+        // REGISTER new agent on-chain
+        logger.info('No existing agent found, registering new agent')
+
+        const walletAddress = wallets?.[0]?.address
+        if (!walletAddress) {
+          logger.warn('Cannot register agent: no wallet address')
+          return null
+        }
+
+        let provider: any = null
+        try {
+          if (wallets && wallets.length > 0) {
+            provider = await wallets[0].getEthereumProvider()
+          }
+        } catch (error) {
+          logger.error('Error getting wallet provider:', error)
+          return null
+        }
+
+        if (!provider) {
+          logger.warn('Cannot register agent: no wallet provider')
+          return null
+        }
+
+        // Upload token image to IPFS (if provided)
+        let ipfsHash = ''
+        if (chatFormData.tokenName && chatFormData.tokenSymbol) {
+          try {
+            const formData = new FormData()
+            formData.append('tokenName', chatFormData.tokenName)
+            formData.append('tokenSymbol', chatFormData.tokenSymbol)
+            if (chatFormData.tokenImage) {
+              formData.append('file', chatFormData.tokenImage)
+            }
+
+            const ipfsResponse = await fetch('/api/ipfs/upload', {
+              method: 'POST',
+              body: formData,
+            })
+
+            if (ipfsResponse.ok) {
+              const ipfsData = await ipfsResponse.json()
+              ipfsHash = ipfsData.ipfsHash
+              metadata.tokenIpfsHash = ipfsHash
+              logger.info('IPFS hash obtained', { ipfsHash })
+            }
+          } catch (ipfsError) {
+            logger.error('Error uploading to IPFS:', ipfsError)
+          }
+        }
+
+        // Register agent on-chain
+        const registerResult = await registerAgent(
+          walletAddress,
+          buildAgentMetadata(metadata),
+          provider,
+          undefined, // chain (uses default)
+          chatFormData.tokenName || '',
+          chatFormData.tokenSymbol || '',
+          ipfsHash || ''
+        )
+
+        if (!registerResult) {
+          logger.error('Agent registration failed: no result returned')
+          return null
+        }
+
+        // Update metadata with token address
+        if (registerResult.tokenAddress) {
+          metadata.tokenAddress = registerResult.tokenAddress
+        }
+
+        // Get user DID
+        let userDID: string | undefined
+        try {
+          const profileResponse = await fetch('/api/users/me/profile')
+          if (profileResponse.ok) {
+            const profileData = await profileResponse.json()
+            userDID = profileData.user?.userDID
+          }
+        } catch (error) {
+          logger.warn('Could not fetch user DID', error)
+        }
+
+        // Store in database
+        await fetch('/api/agents', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            workflowId,
+            agentId: registerResult.agentId.toString(),
+            agentWallet: registerResult.agentWallet,
+            agentDID: registerResult.agentDID,
+            ownerWallet: walletAddress,
+            userDID,
+            chatId: chatFormData.chatId,
+            metadata,
+            transactionHash: registerResult.txHash,
+          }),
+        })
+
+        logger.info('Agent registered and stored successfully', {
+          agentId: registerResult.agentId.toString(),
+        })
+
+        const result = {
+          agentId: registerResult.agentId.toString(),
+          agentDID: registerResult.agentDID,
+          transactionHash: registerResult.txHash,
+          metadata,
+        }
+
+        setAgentData(result)
+        return result
+      }
+    } catch (error: any) {
+      logger.error('Error in agent registration/update:', error)
+      throw error
+    } finally {
+      setIsRegisteringAgent(false)
+    }
+  }
+
   const handleChatFormSubmit = () => {
     const form = document.getElementById('chat-deploy-form') as HTMLFormElement
     if (form) {
@@ -552,6 +832,7 @@ export function DeployModal({
               <ModalTabsTrigger value='api'>API</ModalTabsTrigger>
               <ModalTabsTrigger value='chat'>Chat</ModalTabsTrigger>
               <ModalTabsTrigger value='template'>Template</ModalTabsTrigger>
+              <ModalTabsTrigger value='agent'>Agent</ModalTabsTrigger>
             </ModalTabsList>
 
             <ModalBody className='min-h-0 flex-1'>
@@ -593,7 +874,22 @@ export function DeployModal({
                   setChatSubmitting={setChatSubmitting}
                   onValidationChange={setIsChatFormValid}
                   onDeploymentComplete={handleCloseModal}
-                  onDeployed={handlePostDeploymentUpdate}
+                  onDeployed={async (chatData) => {
+                    await handlePostDeploymentUpdate()
+                    // Trigger agent registration after chat deployment
+                    try {
+                      await registerAgentAfterDeployment({
+                        ...chatData,
+                        tokenName: undefined,
+                        tokenSymbol: undefined,
+                        tokenImage: undefined,
+                      })
+                      // Switch to agent tab to show registration result
+                      setActiveTab('agent')
+                    } catch (error) {
+                      logger.error('Error during agent registration:', error)
+                    }
+                  }}
                   onVersionActivated={() => { }}
                 />
               </ModalTabsContent>
@@ -608,6 +904,30 @@ export function DeployModal({
                     onExistingTemplateChange={setHasExistingTemplate}
                     onTemplateStatusChange={setTemplateStatus}
                   />
+                )}
+              </ModalTabsContent>
+
+              <ModalTabsContent value='agent'>
+                {agentData ? (
+                  <AgentInfo
+                    agentId={agentData.agentId}
+                    agentDID={agentData.agentDID}
+                    transactionHash={agentData.transactionHash}
+                    metadata={agentData.metadata}
+                  />
+                ) : (
+                  <div className='flex flex-col items-center justify-center py-12 text-center'>
+                    {isRegisteringAgent ? (
+                      <>
+                        <div className='mb-3 h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent' />
+                        <p className='text-sm text-muted-foreground'>Registering agent on-chain...</p>
+                      </>
+                    ) : (
+                      <p className='text-sm text-muted-foreground'>
+                        No agent registered yet. Deploy a chat to register an agent.
+                      </p>
+                    )}
+                  </div>
                 )}
               </ModalTabsContent>
             </ModalBody>
@@ -633,7 +953,7 @@ export function DeployModal({
                     type='button'
                     variant='default'
                     onClick={handleChatDelete}
-                    disabled={chatSubmitting}
+                    disabled={chatSubmitting || isRegisteringAgent}
                   >
                     Delete
                   </Button>
@@ -642,15 +962,21 @@ export function DeployModal({
                   type='button'
                   variant='primary'
                   onClick={handleChatFormSubmit}
-                  disabled={chatSubmitting || !isChatFormValid}
+                  disabled={!isChatFormValid || chatSubmitting || isRegisteringAgent}
                 >
-                  {chatSubmitting
-                    ? chatExists
-                      ? 'Updating...'
-                      : 'Launching...'
-                    : chatExists
-                      ? 'Update'
-                      : 'Launch Chat'}
+                  {chatSubmitting ? (
+                    <>
+                      <div className='mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent' />
+                      {chatExists ? 'Updating...' : 'Deploying...'}
+                    </>
+                  ) : isRegisteringAgent ? (
+                    <>
+                      <div className='mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent' />
+                      {agentData ? 'Updating Agent...' : 'Registering Agent...'}
+                    </>
+                  ) : (
+                    <>{chatExists ? 'Update' : 'Deploy'}</>
+                  )}
                 </Button>
               </div>
             </ModalFooter>
@@ -695,7 +1021,7 @@ export function DeployModal({
             </ModalFooter>
           )}
         </ModalContent>
-      </Modal>
+      </Modal >
 
 
 

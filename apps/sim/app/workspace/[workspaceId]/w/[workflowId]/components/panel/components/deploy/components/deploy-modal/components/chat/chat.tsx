@@ -43,7 +43,13 @@ interface ChatDeployProps {
   showDeleteConfirmation?: boolean
   setShowDeleteConfirmation?: (show: boolean) => void
   onDeploymentComplete?: () => void
-  onDeployed?: () => void
+  onDeployed?: (chatData: {
+    identifier: string
+    title: string
+    description: string
+    authType: string
+    chatId: string
+  }) => void
   onVersionActivated?: () => void
 }
 
@@ -186,8 +192,8 @@ export function ChatDeploy({
           existingChat.customizations?.welcomeMessage || 'Hi there! How can I help you today?',
         selectedOutputBlocks: Array.isArray(existingChat.outputConfigs)
           ? existingChat.outputConfigs.map(
-              (config: { blockId: string; path: string }) => `${config.blockId}_${config.path}`
-            )
+            (config: { blockId: string; path: string }) => `${config.blockId}_${config.path}`
+          )
           : [],
       })
 
@@ -222,7 +228,7 @@ export function ChatDeploy({
         return
       }
 
-      const chatUrl = await deployChat(
+      const { chatUrl, chatId } = await deployChat(
         workflowId,
         formData,
         deploymentInfo,
@@ -231,13 +237,19 @@ export function ChatDeploy({
       )
 
       onChatExistsChange?.(true)
-      onDeployed?.()
+
+      // Call onDeployed with chat data for agent registration
+      onDeployed?.({
+        identifier: formData.identifier,
+        title: formData.title,
+        description: formData.description,
+        authType: formData.authType,
+        chatId,
+      })
+
       onVersionActivated?.()
 
-      if (chatUrl) {
-        window.open(chatUrl, '_blank', 'noopener,noreferrer')
-      }
-
+      // Don't automatically open chat URL - user can access via chat tab
       setHasInitializedForm(false)
       await onRefetchChat()
     } catch (error: any) {
@@ -679,13 +691,12 @@ function AuthSelector({
               variant={authType === type ? 'active' : 'default'}
               onClick={() => !disabled && onAuthTypeChange(type)}
               disabled={disabled}
-              className={`px-[8px] py-[4px] text-[12px] ${
-                index === 0
-                  ? 'rounded-r-none'
-                  : index === arr.length - 1
-                    ? 'rounded-l-none'
-                    : 'rounded-none'
-              }`}
+              className={`px-[8px] py-[4px] text-[12px] ${index === 0
+                ? 'rounded-r-none'
+                : index === arr.length - 1
+                  ? 'rounded-l-none'
+                  : 'rounded-none'
+                }`}
             >
               {AUTH_LABELS[type]}
             </Button>
