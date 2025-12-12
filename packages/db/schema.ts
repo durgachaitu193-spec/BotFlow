@@ -1738,3 +1738,28 @@ export const agent = pgTable(
     chatIdIdx: index('agent_chat_id_idx').on(table.chatId),
   })
 )
+
+// Template purchases - tracks x402 payments for template usage
+export const templatePurchases = pgTable(
+  'template_purchases',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    templateId: text('template_id')
+      .notNull()
+      .references(() => templates.id, { onDelete: 'cascade' }),
+    // X402 payment details
+    transactionHash: text('transaction_hash'),
+    amount: text('amount'), // Payment amount in wei or token units
+    // Timestamps
+    paidAt: timestamp('paid_at').notNull().defaultNow(),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (table) => ({
+    userIdIdx: index('template_purchases_user_id_idx').on(table.userId),
+    templateIdIdx: index('template_purchases_template_id_idx').on(table.templateId),
+    userTemplateIdx: index('template_purchases_user_template_idx').on(table.userId, table.templateId),
+  })
+)

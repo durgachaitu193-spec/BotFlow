@@ -65,6 +65,44 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     const templateData = template[0]
 
+    // Check if user has access to use this template
+    // (creator or has purchased via x402)
+    const accessCheckResponse = await fetch(
+      `${getBaseUrl()}/api/templates/${id}/check-access`,
+      {
+        headers: {
+          cookie: request.headers.get('cookie') || '',
+        },
+      }
+    )
+
+    if (accessCheckResponse.ok) {
+      const accessData = await accessCheckResponse.json()
+
+      if (!accessData.hasAccess) {
+        logger.warn(
+          `[${requestId}] User ${session.user.id} does not have access to template ${id}`
+        )
+        return NextResponse.json(
+          {
+            error: 'Payment required',
+            requiresPayment: true,
+            message: 'You need to purchase this template before using it'
+          },
+          { status: 402 } // 402 Payment Required
+        )
+      }
+
+      logger.debug(
+        `[${requestId}] Access granted for template ${id}, isCreator: ${accessData.isCreator}`
+      )
+    } else {
+      // If access check fails, log but allow (fail open for now)
+      logger.warn(
+        `[${requestId}] Access check failed for template ${id}, allowing use`
+      )
+    }
+
     // Create a new workflow ID
     const newWorkflowId = uuidv4()
     const now = new Date()

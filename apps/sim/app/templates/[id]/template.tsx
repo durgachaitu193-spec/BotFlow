@@ -38,6 +38,8 @@ import type { CredentialRequirement } from '@/lib/workflows/credentials/credenti
 import { WorkflowPreview } from '@/app/workspace/[workspaceId]/w/components/workflow-preview/workflow-preview'
 import { getBlock } from '@/blocks/registry'
 import { useStarTemplate, useTemplate } from '@/hooks/queries/templates'
+import { X402PaywallDialog } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/deploy/components/x402-paywall-dialog'
+import { usePrivy } from '@privy-io/react-auth'
 
 const logger = createLogger('TemplateDetails')
 
@@ -73,6 +75,9 @@ export default function TemplateDetails({ isWorkspaceContext = false }: Template
   const [isLoadingWorkspaces, setIsLoadingWorkspaces] = useState(false)
   const [showWorkspaceSelectorForEdit, setShowWorkspaceSelectorForEdit] = useState(false)
   const [sharePopoverOpen, setSharePopoverOpen] = useState(false)
+  const [showPaywall, setShowPaywall] = useState(false)
+  const [pendingWorkspaceId, setPendingWorkspaceId] = useState<string | null>(null)
+  const { authenticated } = usePrivy()
 
   const currentUserId = session?.user?.id || null
 
@@ -372,6 +377,23 @@ export default function TemplateDetails({ isWorkspaceContext = false }: Template
 
     setIsUsing(true)
     try {
+      // 1. Check if user has access to this template
+      const accessResponse = await fetch(`/api/templates/${template.id}/check-access`)
+
+      if (accessResponse.ok) {
+        const accessData = await accessResponse.json()
+
+        if (!accessData.hasAccess && accessData.requiresPayment) {
+          // User needs to pay - show paywall
+          logger.info('User requires payment for template', { templateId: template.id })
+          setPendingWorkspaceId(workspaceId)
+          setShowPaywall(true)
+          setIsUsing(false)
+          return
+        }
+      }
+
+      // 2. User has access - proceed with template usage
       const response = await fetch(`/api/templates/${template.id}/use`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -379,6 +401,14 @@ export default function TemplateDetails({ isWorkspaceContext = false }: Template
       })
 
       if (!response.ok) {
+        const errorData = await response.json()
+        if (response.status === 402 && errorData.requiresPayment) {
+          // Payment required - show paywall
+          setPendingWorkspaceId(workspaceId)
+          setShowPaywall(true)
+          setIsUsing(false)
+          return
+        }
         throw new Error('Failed to use template')
       }
 
@@ -387,7 +417,6 @@ export default function TemplateDetails({ isWorkspaceContext = false }: Template
       window.location.href = `/workspace/${workspaceId}/w/${workflowId}`
     } catch (error) {
       logger.error('Error using template:', error)
-    } finally {
       setIsUsing(false)
     }
   }
@@ -542,479 +571,518 @@ export default function TemplateDetails({ isWorkspaceContext = false }: Template
   }
 
   return (
-    <div className={cn('flex min-h-screen flex-col', isWorkspaceContext && 'pl-64')}>
-      <div className='flex flex-1 overflow-hidden'>
-        <div className='flex flex-1 flex-col overflow-auto px-[24px] pt-[24px] pb-[24px]'>
-          {/* Top bar with back button */}
-          <div className='flex items-center justify-between'>
-            {/* Back button */}
-            <button
-              onClick={handleBack}
-              className='flex items-center gap-[6px] font-medium text-[#ADADAD] text-[14px] transition-colors hover:text-white'
-            >
-              <ArrowLeft className='h-[14px] w-[14px]' />
-              <span>More Templates</span>
-            </button>
-          </div>
+    <>
+      <div className={cn('flex min-h-screen flex-col', isWorkspaceContext && 'pl-64')}>
+        <div className='flex flex-1 overflow-hidden'>
+          <div className='flex flex-1 flex-col overflow-auto px-[24px] pt-[24px] pb-[24px]'>
+            {/* Top bar with back button */}
+            <div className='flex items-center justify-between'>
+              {/* Back button */}
+              <button
+                onClick={handleBack}
+                className='flex items-center gap-[6px] font-medium text-[#ADADAD] text-[14px] transition-colors hover:text-white'
+              >
+                <ArrowLeft className='h-[14px] w-[14px]' />
+                <span>More Templates</span>
+              </button>
+            </div>
 
-          {/* Template name and action buttons */}
-          <div className='mt-[24px] flex items-center justify-between'>
-            <h1 className='font-medium text-[18px]'>{template.name}</h1>
+            {/* Template name and action buttons */}
+            <div className='mt-[24px] flex items-center justify-between'>
+              <h1 className='font-medium text-[18px]'>{template.name}</h1>
 
-            {/* Action buttons */}
-            <div className='flex items-center gap-[8px]'>
-              {/* Approve/Reject buttons for super users */}
-              {isSuperUser && template.status === 'pending' && (
-                <>
-                  <Button
-                    variant='active'
-                    onClick={handleApprove}
-                    disabled={isApproving}
-                    className='h-[32px] rounded-[6px]'
-                  >
-                    {isApproving ? 'Approving...' : 'Approve'}
-                  </Button>
-                  <Button
-                    variant='active'
-                    onClick={handleReject}
-                    disabled={isRejecting}
-                    className='h-[32px] rounded-[6px]'
-                  >
-                    {isRejecting ? 'Rejecting...' : 'Reject'}
-                  </Button>
-                </>
-              )}
-
-              {/* Edit button - for template owners */}
-              {canEditTemplate && currentUserId && (
-                <>
-                  {(isWorkspaceContext || template.workflowId) && !showWorkspaceSelectorForEdit ? (
+              {/* Action buttons */}
+              <div className='flex items-center gap-[8px]'>
+                {/* Approve/Reject buttons for super users */}
+                {isSuperUser && template.status === 'pending' && (
+                  <>
                     <Button
                       variant='active'
-                      onClick={handleEditTemplate}
-                      disabled={isEditing || (!isWorkspaceContext && hasWorkspaceAccess === false)}
+                      onClick={handleApprove}
+                      disabled={isApproving}
                       className='h-[32px] rounded-[6px]'
                     >
-                      {isEditing ? 'Opening...' : 'Edit'}
+                      {isApproving ? 'Approving...' : 'Approve'}
                     </Button>
-                  ) : (
-                    <DropdownMenu
-                      open={showWorkspaceSelectorForEdit}
-                      onOpenChange={setShowWorkspaceSelectorForEdit}
-                    >
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant='active'
-                          onClick={() => setShowWorkspaceSelectorForEdit(true)}
-                          disabled={isUsing || isLoadingWorkspaces}
-                          className='h-[32px] rounded-[6px]'
-                        >
-                          {isUsing ? 'Importing...' : isLoadingWorkspaces ? 'Loading...' : 'Edit'}
-                          <ChevronDown className='ml-2 h-4 w-4' />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align='end' className='w-56'>
-                        {workspaces.length === 0 ? (
-                          <DropdownMenuItem disabled className='text-muted-foreground text-sm'>
-                            No workspaces with write access
-                          </DropdownMenuItem>
-                        ) : (
-                          workspaces.map((workspace) => (
-                            <DropdownMenuItem
-                              key={workspace.id}
-                              onClick={() => handleWorkspaceSelectForEdit(workspace.id)}
-                              className='flex cursor-pointer items-center justify-between'
-                            >
-                              <div className='flex flex-col'>
-                                <span className='font-medium text-sm'>{workspace.name}</span>
-                                <span className='text-muted-foreground text-xs capitalize'>
-                                  {workspace.permissions} access
-                                </span>
-                              </div>
-                            </DropdownMenuItem>
-                          ))
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  )}
-                </>
-              )}
-
-              {/* Use template button - only for approved templates and non-owners */}
-              {template.status === 'approved' && !canEditTemplate && (
-                <>
-                  {!currentUserId ? (
                     <Button
-                      variant='primary'
-                      onClick={() => {
-                        const callbackUrl =
-                          isWorkspaceContext && workspaceId
-                            ? encodeURIComponent(
+                      variant='active'
+                      onClick={handleReject}
+                      disabled={isRejecting}
+                      className='h-[32px] rounded-[6px]'
+                    >
+                      {isRejecting ? 'Rejecting...' : 'Reject'}
+                    </Button>
+                  </>
+                )}
+
+                {/* Edit button - for template owners */}
+                {canEditTemplate && currentUserId && (
+                  <>
+                    {(isWorkspaceContext || template.workflowId) && !showWorkspaceSelectorForEdit ? (
+                      <Button
+                        variant='active'
+                        onClick={handleEditTemplate}
+                        disabled={isEditing || (!isWorkspaceContext && hasWorkspaceAccess === false)}
+                        className='h-[32px] rounded-[6px]'
+                      >
+                        {isEditing ? 'Opening...' : 'Edit'}
+                      </Button>
+                    ) : (
+                      <DropdownMenu
+                        open={showWorkspaceSelectorForEdit}
+                        onOpenChange={setShowWorkspaceSelectorForEdit}
+                      >
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant='active'
+                            onClick={() => setShowWorkspaceSelectorForEdit(true)}
+                            disabled={isUsing || isLoadingWorkspaces}
+                            className='h-[32px] rounded-[6px]'
+                          >
+                            {isUsing ? 'Importing...' : isLoadingWorkspaces ? 'Loading...' : 'Edit'}
+                            <ChevronDown className='ml-2 h-4 w-4' />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align='end' className='w-56'>
+                          {workspaces.length === 0 ? (
+                            <DropdownMenuItem disabled className='text-muted-foreground text-sm'>
+                              No workspaces with write access
+                            </DropdownMenuItem>
+                          ) : (
+                            workspaces.map((workspace) => (
+                              <DropdownMenuItem
+                                key={workspace.id}
+                                onClick={() => handleWorkspaceSelectForEdit(workspace.id)}
+                                className='flex cursor-pointer items-center justify-between'
+                              >
+                                <div className='flex flex-col'>
+                                  <span className='font-medium text-sm'>{workspace.name}</span>
+                                  <span className='text-muted-foreground text-xs capitalize'>
+                                    {workspace.permissions} access
+                                  </span>
+                                </div>
+                              </DropdownMenuItem>
+                            ))
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )}
+                  </>
+                )}
+
+                {/* Use template button - only for approved templates and non-owners */}
+                {template.status === 'approved' && !canEditTemplate && (
+                  <>
+                    {!currentUserId ? (
+                      <Button
+                        variant='primary'
+                        onClick={() => {
+                          const callbackUrl =
+                            isWorkspaceContext && workspaceId
+                              ? encodeURIComponent(
                                 `/workspace/${workspaceId}/templates/${template.id}?use=true`
                               )
-                            : encodeURIComponent(`/templates/${template.id}`)
-                        router.push(`/login?callbackUrl=${callbackUrl}`)
-                      }}
-                      className='h-[32px] rounded-[6px]'
-                    >
-                      Sign in to use
+                              : encodeURIComponent(`/templates/${template.id}`)
+                          router.push(`/login?callbackUrl=${callbackUrl}`)
+                        }}
+                        className='h-[32px] rounded-[6px]'
+                      >
+                        Sign in to use
+                      </Button>
+                    ) : isWorkspaceContext ? (
+                      <Button
+                        variant='primary'
+                        onClick={handleUseTemplate}
+                        disabled={isUsing}
+                        className='!text-[#FFFFFF] h-[32px] rounded-[6px] px-[12px] text-[14px]'
+                      >
+                        {isUsing ? 'Creating...' : 'Use template'}
+                      </Button>
+                    ) : null}
+                  </>
+                )}
+
+                {/* Share button */}
+                <Popover open={sharePopoverOpen} onOpenChange={setSharePopoverOpen}>
+                  <PopoverTrigger asChild>
+                    <Button variant='active' className='h-[32px] rounded-[6px] px-[12px]'>
+                      <Share2 className='h-[14px] w-[14px]' />
                     </Button>
-                  ) : isWorkspaceContext ? (
-                    <Button
-                      variant='primary'
-                      onClick={handleUseTemplate}
-                      disabled={isUsing}
-                      className='!text-[#FFFFFF] h-[32px] rounded-[6px] px-[12px] text-[14px]'
-                    >
-                      {isUsing ? 'Creating...' : 'Use template'}
-                    </Button>
-                  ) : null}
-                </>
-              )}
-
-              {/* Share button */}
-              <Popover open={sharePopoverOpen} onOpenChange={setSharePopoverOpen}>
-                <PopoverTrigger asChild>
-                  <Button variant='active' className='h-[32px] rounded-[6px] px-[12px]'>
-                    <Share2 className='h-[14px] w-[14px]' />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent align='end' side='bottom' sideOffset={8}>
-                  <PopoverItem onClick={handleCopyLink}>
-                    <Copy className='h-3 w-3' />
-                    <span>Copy link</span>
-                  </PopoverItem>
-                  <PopoverItem onClick={handleShareToTwitter}>
-                    <svg
-                      className='h-3 w-3'
-                      viewBox='0 0 24 24'
-                      fill='currentColor'
-                      xmlns='http://www.w3.org/2000/svg'
-                    >
-                      <path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z' />
-                    </svg>
-                    <span>Share on X</span>
-                  </PopoverItem>
-                  <PopoverItem onClick={handleShareToLinkedIn}>
-                    <Linkedin className='h-3 w-3' />
-                    <span>Share on LinkedIn</span>
-                  </PopoverItem>
-                </PopoverContent>
-              </Popover>
-            </div>
-          </div>
-
-          {/* Template tagline */}
-          {template.details?.tagline && (
-            <p className='mt-[4px] font-medium text-[#888888] text-[14px]'>
-              {template.details.tagline}
-            </p>
-          )}
-
-          {/* Creator and stats row */}
-          <div className='mt-[16px] flex items-center gap-[8px]'>
-            {/* Star icon and count */}
-            <Star
-              onClick={handleStarToggle}
-              className={cn(
-                'h-[14px] w-[14px] cursor-pointer transition-colors',
-                template.isStarred ? 'fill-yellow-500 text-yellow-500' : 'text-[#888888]',
-                starTemplate.isPending && 'opacity-50'
-              )}
-            />
-            <span className='font-medium text-[#888888] text-[14px]'>{template.stars || 0}</span>
-
-            {/* Users icon and count */}
-            <ChartNoAxesColumn className='h-[16px] w-[16px] text-[#888888]' />
-            <span className='font-medium text-[#888888] text-[14px]'>{template.views}</span>
-
-            {/* Vertical divider */}
-            <div className='mx-[4px] mb-[-1.5px] h-[18px] w-[1.25px] rounded-full bg-[#3A3A3A]' />
-
-            {/* Creator profile pic */}
-            {template.creator?.profileImageUrl ? (
-              <div className='h-[16px] w-[16px] flex-shrink-0 overflow-hidden rounded-full'>
-                <img
-                  src={template.creator.profileImageUrl}
-                  alt={template.creator.name}
-                  className='h-full w-full object-cover'
-                />
+                  </PopoverTrigger>
+                  <PopoverContent align='end' side='bottom' sideOffset={8}>
+                    <PopoverItem onClick={handleCopyLink}>
+                      <Copy className='h-3 w-3' />
+                      <span>Copy link</span>
+                    </PopoverItem>
+                    <PopoverItem onClick={handleShareToTwitter}>
+                      <svg
+                        className='h-3 w-3'
+                        viewBox='0 0 24 24'
+                        fill='currentColor'
+                        xmlns='http://www.w3.org/2000/svg'
+                      >
+                        <path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z' />
+                      </svg>
+                      <span>Share on X</span>
+                    </PopoverItem>
+                    <PopoverItem onClick={handleShareToLinkedIn}>
+                      <Linkedin className='h-3 w-3' />
+                      <span>Share on LinkedIn</span>
+                    </PopoverItem>
+                  </PopoverContent>
+                </Popover>
               </div>
-            ) : (
-              <div className='flex h-[16px] w-[16px] flex-shrink-0 items-center justify-center rounded-full bg-[#4A4A4A]'>
-                <User className='h-[14px] w-[14px] text-[#888888]' />
-              </div>
-            )}
-            {/* Creator name */}
-            <div className='flex items-center gap-[4px]'>
-              <span className='font-medium text-[#8B8B8B] text-[14px]'>
-                {template.creator?.name || 'Unknown'}
-              </span>
-              {template.creator?.verified && <VerifiedBadge size='md' />}
             </div>
-          </div>
 
-          {/* Credentials needed */}
-          {Array.isArray(template.requiredCredentials) &&
-            template.requiredCredentials.length > 0 && (
-              <p className='mt-[12px] font-medium text-[#888888] text-[12px]'>
-                Credentials needed:{' '}
-                {template.requiredCredentials
-                  .map((cred: CredentialRequirement) => {
-                    const blockName =
-                      getBlock(cred.blockType)?.name ||
-                      cred.blockType.charAt(0).toUpperCase() + cred.blockType.slice(1)
-                    const alreadyHasBlock = cred.label
-                      .toLowerCase()
-                      .includes(` for ${blockName.toLowerCase()}`)
-                    return alreadyHasBlock ? cred.label : `${cred.label} for ${blockName}`
-                  })
-                  .join(', ')}
+            {/* Template tagline */}
+            {template.details?.tagline && (
+              <p className='mt-[4px] font-medium text-[#888888] text-[14px]'>
+                {template.details.tagline}
               </p>
             )}
 
-          {/* Canvas preview */}
-          <div
-            className='relative mt-[24px] h-[450px] w-full overflow-hidden rounded-[8px] border border-[var(--border)]'
-            onWheelCapture={handleCanvasWheelCapture}
-          >
-            {renderWorkflowPreview()}
+            {/* Creator and stats row */}
+            <div className='mt-[16px] flex items-center gap-[8px]'>
+              {/* Star icon and count */}
+              <Star
+                onClick={handleStarToggle}
+                className={cn(
+                  'h-[14px] w-[14px] cursor-pointer transition-colors',
+                  template.isStarred ? 'fill-yellow-500 text-yellow-500' : 'text-[#888888]',
+                  starTemplate.isPending && 'opacity-50'
+                )}
+              />
+              <span className='font-medium text-[#888888] text-[14px]'>{template.stars || 0}</span>
 
-            {/* Last updated overlay */}
-            {template.updatedAt && (
-              <div className='pointer-events-none absolute right-[12px] bottom-[12px] rounded-[4px] bg-[var(--bg)]/80 px-[8px] py-[4px] backdrop-blur-sm'>
-                <span className='font-medium text-[#8B8B8B] text-[12px]'>
-                  Last updated{' '}
-                  {formatDistanceToNow(new Date(template.updatedAt), {
-                    addSuffix: true,
-                  })}
+              {/* Users icon and count */}
+              <ChartNoAxesColumn className='h-[16px] w-[16px] text-[#888888]' />
+              <span className='font-medium text-[#888888] text-[14px]'>{template.views}</span>
+
+              {/* Vertical divider */}
+              <div className='mx-[4px] mb-[-1.5px] h-[18px] w-[1.25px] rounded-full bg-[#3A3A3A]' />
+
+              {/* Creator profile pic */}
+              {template.creator?.profileImageUrl ? (
+                <div className='h-[16px] w-[16px] flex-shrink-0 overflow-hidden rounded-full'>
+                  <img
+                    src={template.creator.profileImageUrl}
+                    alt={template.creator.name}
+                    className='h-full w-full object-cover'
+                  />
+                </div>
+              ) : (
+                <div className='flex h-[16px] w-[16px] flex-shrink-0 items-center justify-center rounded-full bg-[#4A4A4A]'>
+                  <User className='h-[14px] w-[14px] text-[#888888]' />
+                </div>
+              )}
+              {/* Creator name */}
+              <div className='flex items-center gap-[4px]'>
+                <span className='font-medium text-[#8B8B8B] text-[14px]'>
+                  {template.creator?.name || 'Unknown'}
                 </span>
-              </div>
-            )}
-          </div>
-
-          {/* About this Workflow */}
-          {template.details?.about && (
-            <div className='mt-8'>
-              <h3 className='mb-4 font-sans font-semibold text-base text-foreground'>
-                About this Workflow
-              </h3>
-              <div className='max-w-none space-y-2'>
-                <ReactMarkdown
-                  components={{
-                    p: ({ children }) => (
-                      <p className='mb-2 font-sans text-muted-foreground text-sm leading-[1.4rem] last:mb-0'>
-                        {children}
-                      </p>
-                    ),
-                    h1: ({ children }) => (
-                      <h1 className='mt-6 mb-3 font-sans font-semibold text-foreground text-xl first:mt-0'>
-                        {children}
-                      </h1>
-                    ),
-                    h2: ({ children }) => (
-                      <h2 className='mt-5 mb-2.5 font-sans font-semibold text-foreground text-lg first:mt-0'>
-                        {children}
-                      </h2>
-                    ),
-                    h3: ({ children }) => (
-                      <h3 className='mt-4 mb-2 font-sans font-semibold text-base text-foreground first:mt-0'>
-                        {children}
-                      </h3>
-                    ),
-                    h4: ({ children }) => (
-                      <h4 className='mt-3 mb-2 font-sans font-semibold text-foreground text-sm first:mt-0'>
-                        {children}
-                      </h4>
-                    ),
-                    ul: ({ children }) => (
-                      <ul className='my-2 ml-5 list-disc space-y-1.5 font-sans text-muted-foreground text-sm'>
-                        {children}
-                      </ul>
-                    ),
-                    ol: ({ children }) => (
-                      <ol className='my-2 ml-5 list-decimal space-y-1.5 font-sans text-muted-foreground text-sm'>
-                        {children}
-                      </ol>
-                    ),
-                    li: ({ children }) => <li className='leading-[1.4rem]'>{children}</li>,
-                    code: ({ inline, children }: any) =>
-                      inline ? (
-                        <code className='rounded bg-muted px-1.5 py-0.5 font-mono text-[#F59E0B] text-xs'>
-                          {children}
-                        </code>
-                      ) : (
-                        <code className='my-2 block overflow-x-auto rounded-md bg-muted p-3 font-mono text-foreground text-xs'>
-                          {children}
-                        </code>
-                      ),
-                    a: ({ href, children }) => (
-                      <a
-                        href={href}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='text-blue-600 underline-offset-2 transition-colors hover:text-blue-500 hover:underline dark:text-blue-400 dark:hover:text-blue-300'
-                      >
-                        {children}
-                      </a>
-                    ),
-                    strong: ({ children }) => (
-                      <strong className='font-sans font-semibold text-foreground'>
-                        {children}
-                      </strong>
-                    ),
-                    em: ({ children }) => <em className='text-muted-foreground'>{children}</em>,
-                  }}
-                >
-                  {template.details.about}
-                </ReactMarkdown>
+                {template.creator?.verified && <VerifiedBadge size='md' />}
               </div>
             </div>
-          )}
 
-          {/* About the Creator */}
-          {template.creator &&
-            (template.creator.details?.about ||
-              template.creator.details?.xUrl ||
-              template.creator.details?.linkedinUrl ||
-              template.creator.details?.websiteUrl ||
-              template.creator.details?.contactEmail) && (
-              <div className='mt-8'>
-                <div className='mb-4 flex items-center justify-between'>
-                  <h3 className='font-sans font-semibold text-base text-foreground'>
-                    About the Creator
-                  </h3>
-                  {isSuperUser && template.creator && (
-                    <Button
-                      variant={template.creator.verified ? 'active' : 'default'}
-                      onClick={handleToggleVerification}
-                      disabled={isVerifying}
-                      className='h-[28px] rounded-[6px] text-[12px]'
-                    >
-                      {isVerifying
-                        ? 'Updating...'
-                        : template.creator.verified
-                          ? 'Unverify Creator'
-                          : 'Verify Creator'}
-                    </Button>
-                  )}
+            {/* Credentials needed */}
+            {Array.isArray(template.requiredCredentials) &&
+              template.requiredCredentials.length > 0 && (
+                <p className='mt-[12px] font-medium text-[#888888] text-[12px]'>
+                  Credentials needed:{' '}
+                  {template.requiredCredentials
+                    .map((cred: CredentialRequirement) => {
+                      const blockName =
+                        getBlock(cred.blockType)?.name ||
+                        cred.blockType.charAt(0).toUpperCase() + cred.blockType.slice(1)
+                      const alreadyHasBlock = cred.label
+                        .toLowerCase()
+                        .includes(` for ${blockName.toLowerCase()}`)
+                      return alreadyHasBlock ? cred.label : `${cred.label} for ${blockName}`
+                    })
+                    .join(', ')}
+                </p>
+              )}
+
+            {/* Canvas preview */}
+            <div
+              className='relative mt-[24px] h-[450px] w-full overflow-hidden rounded-[8px] border border-[var(--border)]'
+              onWheelCapture={handleCanvasWheelCapture}
+            >
+              {renderWorkflowPreview()}
+
+              {/* Last updated overlay */}
+              {template.updatedAt && (
+                <div className='pointer-events-none absolute right-[12px] bottom-[12px] rounded-[4px] bg-[var(--bg)]/80 px-[8px] py-[4px] backdrop-blur-sm'>
+                  <span className='font-medium text-[#8B8B8B] text-[12px]'>
+                    Last updated{' '}
+                    {formatDistanceToNow(new Date(template.updatedAt), {
+                      addSuffix: true,
+                    })}
+                  </span>
                 </div>
-                <div className='flex items-start gap-4'>
-                  {/* Creator profile image */}
-                  {template.creator.profileImageUrl ? (
-                    <div className='h-[48px] w-[48px] flex-shrink-0 overflow-hidden rounded-full'>
-                      <img
-                        src={template.creator.profileImageUrl}
-                        alt={template.creator.name}
-                        className='h-full w-full object-cover'
-                      />
-                    </div>
-                  ) : (
-                    <div className='flex h-[48px] w-[48px] flex-shrink-0 items-center justify-center rounded-full bg-[#4A4A4A]'>
-                      <User className='h-[24px] w-[24px] text-[#888888]' />
-                    </div>
-                  )}
+              )}
+            </div>
 
-                  {/* Creator details */}
-                  <div className='flex-1'>
-                    <div className='mb-[5px] flex items-center gap-3'>
-                      <div className='flex items-center gap-[6px]'>
-                        <h4 className='font-sans font-semibold text-base text-foreground'>
-                          {template.creator.name}
+            {/* About this Workflow */}
+            {template.details?.about && (
+              <div className='mt-8'>
+                <h3 className='mb-4 font-sans font-semibold text-base text-foreground'>
+                  About this Workflow
+                </h3>
+                <div className='max-w-none space-y-2'>
+                  <ReactMarkdown
+                    components={{
+                      p: ({ children }) => (
+                        <p className='mb-2 font-sans text-muted-foreground text-sm leading-[1.4rem] last:mb-0'>
+                          {children}
+                        </p>
+                      ),
+                      h1: ({ children }) => (
+                        <h1 className='mt-6 mb-3 font-sans font-semibold text-foreground text-xl first:mt-0'>
+                          {children}
+                        </h1>
+                      ),
+                      h2: ({ children }) => (
+                        <h2 className='mt-5 mb-2.5 font-sans font-semibold text-foreground text-lg first:mt-0'>
+                          {children}
+                        </h2>
+                      ),
+                      h3: ({ children }) => (
+                        <h3 className='mt-4 mb-2 font-sans font-semibold text-base text-foreground first:mt-0'>
+                          {children}
+                        </h3>
+                      ),
+                      h4: ({ children }) => (
+                        <h4 className='mt-3 mb-2 font-sans font-semibold text-foreground text-sm first:mt-0'>
+                          {children}
                         </h4>
-                        {template.creator.verified && <VerifiedBadge size='md' />}
-                      </div>
-
-                      {/* Social links */}
-                      <div className='flex items-center gap-[12px]'>
-                        {template.creator.details?.websiteUrl && (
-                          <a
-                            href={template.creator.details.websiteUrl}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            className='flex items-center text-[#888888] transition-colors hover:text-[var(--text-primary)]'
-                            aria-label='Website'
-                          >
-                            <Globe className='h-[14px] w-[14px]' />
-                          </a>
-                        )}
-                        {template.creator.details?.xUrl && (
-                          <a
-                            href={template.creator.details.xUrl}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            className='flex items-center text-[#888888] transition-colors hover:text-[var(--text-primary)]'
-                            aria-label='X (Twitter)'
-                          >
-                            <svg
-                              className='h-[14px] w-[14px]'
-                              viewBox='0 0 24 24'
-                              fill='currentColor'
-                            >
-                              <path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z' />
-                            </svg>
-                          </a>
-                        )}
-                        {template.creator.details?.linkedinUrl && (
-                          <a
-                            href={template.creator.details.linkedinUrl}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            className='flex items-center text-[#888888] transition-colors hover:text-[var(--text-primary)]'
-                            aria-label='LinkedIn'
-                          >
-                            <Linkedin className='h-[14px] w-[14px]' />
-                          </a>
-                        )}
-                        {template.creator.details?.contactEmail && (
-                          <a
-                            href={`mailto:${template.creator.details.contactEmail}`}
-                            className='flex items-center text-[#888888] transition-colors hover:text-[var(--text-primary)]'
-                            aria-label='Email'
-                          >
-                            <Mail className='h-[14px] w-[14px]' />
-                          </a>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Creator bio */}
-                    {template.creator.details?.about && (
-                      <div className='max-w-none'>
-                        <ReactMarkdown
-                          components={{
-                            p: ({ children }) => (
-                              <p className='mb-2 font-sans text-muted-foreground text-sm leading-[1.4rem] last:mb-0'>
-                                {children}
-                              </p>
-                            ),
-                            a: ({ href, children }) => (
-                              <a
-                                href={href}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                                className='text-blue-600 underline-offset-2 transition-colors hover:text-blue-500 hover:underline dark:text-blue-400 dark:hover:text-blue-300'
-                              >
-                                {children}
-                              </a>
-                            ),
-                            strong: ({ children }) => (
-                              <strong className='font-sans font-semibold text-foreground'>
-                                {children}
-                              </strong>
-                            ),
-                          }}
+                      ),
+                      ul: ({ children }) => (
+                        <ul className='my-2 ml-5 list-disc space-y-1.5 font-sans text-muted-foreground text-sm'>
+                          {children}
+                        </ul>
+                      ),
+                      ol: ({ children }) => (
+                        <ol className='my-2 ml-5 list-decimal space-y-1.5 font-sans text-muted-foreground text-sm'>
+                          {children}
+                        </ol>
+                      ),
+                      li: ({ children }) => <li className='leading-[1.4rem]'>{children}</li>,
+                      code: ({ inline, children }: any) =>
+                        inline ? (
+                          <code className='rounded bg-muted px-1.5 py-0.5 font-mono text-[#F59E0B] text-xs'>
+                            {children}
+                          </code>
+                        ) : (
+                          <code className='my-2 block overflow-x-auto rounded-md bg-muted p-3 font-mono text-foreground text-xs'>
+                            {children}
+                          </code>
+                        ),
+                      a: ({ href, children }) => (
+                        <a
+                          href={href}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='text-blue-600 underline-offset-2 transition-colors hover:text-blue-500 hover:underline dark:text-blue-400 dark:hover:text-blue-300'
                         >
-                          {template.creator.details.about}
-                        </ReactMarkdown>
-                      </div>
-                    )}
-                  </div>
+                          {children}
+                        </a>
+                      ),
+                      strong: ({ children }) => (
+                        <strong className='font-sans font-semibold text-foreground'>
+                          {children}
+                        </strong>
+                      ),
+                      em: ({ children }) => <em className='text-muted-foreground'>{children}</em>,
+                    }}
+                  >
+                    {template.details.about}
+                  </ReactMarkdown>
                 </div>
               </div>
             )}
+
+            {/* About the Creator */}
+            {template.creator &&
+              (template.creator.details?.about ||
+                template.creator.details?.xUrl ||
+                template.creator.details?.linkedinUrl ||
+                template.creator.details?.websiteUrl ||
+                template.creator.details?.contactEmail) && (
+                <div className='mt-8'>
+                  <div className='mb-4 flex items-center justify-between'>
+                    <h3 className='font-sans font-semibold text-base text-foreground'>
+                      About the Creator
+                    </h3>
+                    {isSuperUser && template.creator && (
+                      <Button
+                        variant={template.creator.verified ? 'active' : 'default'}
+                        onClick={handleToggleVerification}
+                        disabled={isVerifying}
+                        className='h-[28px] rounded-[6px] text-[12px]'
+                      >
+                        {isVerifying
+                          ? 'Updating...'
+                          : template.creator.verified
+                            ? 'Unverify Creator'
+                            : 'Verify Creator'}
+                      </Button>
+                    )}
+                  </div>
+                  <div className='flex items-start gap-4'>
+                    {/* Creator profile image */}
+                    {template.creator.profileImageUrl ? (
+                      <div className='h-[48px] w-[48px] flex-shrink-0 overflow-hidden rounded-full'>
+                        <img
+                          src={template.creator.profileImageUrl}
+                          alt={template.creator.name}
+                          className='h-full w-full object-cover'
+                        />
+                      </div>
+                    ) : (
+                      <div className='flex h-[48px] w-[48px] flex-shrink-0 items-center justify-center rounded-full bg-[#4A4A4A]'>
+                        <User className='h-[24px] w-[24px] text-[#888888]' />
+                      </div>
+                    )}
+
+                    {/* Creator details */}
+                    <div className='flex-1'>
+                      <div className='mb-[5px] flex items-center gap-3'>
+                        <div className='flex items-center gap-[6px]'>
+                          <h4 className='font-sans font-semibold text-base text-foreground'>
+                            {template.creator.name}
+                          </h4>
+                          {template.creator.verified && <VerifiedBadge size='md' />}
+                        </div>
+
+                        {/* Social links */}
+                        <div className='flex items-center gap-[12px]'>
+                          {template.creator.details?.websiteUrl && (
+                            <a
+                              href={template.creator.details.websiteUrl}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='flex items-center text-[#888888] transition-colors hover:text-[var(--text-primary)]'
+                              aria-label='Website'
+                            >
+                              <Globe className='h-[14px] w-[14px]' />
+                            </a>
+                          )}
+                          {template.creator.details?.xUrl && (
+                            <a
+                              href={template.creator.details.xUrl}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='flex items-center text-[#888888] transition-colors hover:text-[var(--text-primary)]'
+                              aria-label='X (Twitter)'
+                            >
+                              <svg
+                                className='h-[14px] w-[14px]'
+                                viewBox='0 0 24 24'
+                                fill='currentColor'
+                              >
+                                <path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z' />
+                              </svg>
+                            </a>
+                          )}
+                          {template.creator.details?.linkedinUrl && (
+                            <a
+                              href={template.creator.details.linkedinUrl}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='flex items-center text-[#888888] transition-colors hover:text-[var(--text-primary)]'
+                              aria-label='LinkedIn'
+                            >
+                              <Linkedin className='h-[14px] w-[14px]' />
+                            </a>
+                          )}
+                          {template.creator.details?.contactEmail && (
+                            <a
+                              href={`mailto:${template.creator.details.contactEmail}`}
+                              className='flex items-center text-[#888888] transition-colors hover:text-[var(--text-primary)]'
+                              aria-label='Email'
+                            >
+                              <Mail className='h-[14px] w-[14px]' />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Creator bio */}
+                      {template.creator.details?.about && (
+                        <div className='max-w-none'>
+                          <ReactMarkdown
+                            components={{
+                              p: ({ children }) => (
+                                <p className='mb-2 font-sans text-muted-foreground text-sm leading-[1.4rem] last:mb-0'>
+                                  {children}
+                                </p>
+                              ),
+                              a: ({ href, children }) => (
+                                <a
+                                  href={href}
+                                  target='_blank'
+                                  rel='noopener noreferrer'
+                                  className='text-blue-600 underline-offset-2 transition-colors hover:text-blue-500 hover:underline dark:text-blue-400 dark:hover:text-blue-300'
+                                >
+                                  {children}
+                                </a>
+                              ),
+                              strong: ({ children }) => (
+                                <strong className='font-sans font-semibold text-foreground'>
+                                  {children}
+                                </strong>
+                              ),
+                            }}
+                          >
+                            {template.creator.details.about}
+                          </ReactMarkdown>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* X402 Paywall Dialog */}
+      {showPaywall && template && pendingWorkspaceId && (
+        <X402PaywallDialog
+          open={showPaywall}
+          onOpenChange={setShowPaywall}
+          onSuccess={async (transactionHash?: string) => {
+            if (!template) return
+
+            try {
+              // Record the purchase
+              const purchaseResponse = await fetch(`/api/templates/${template.id}/purchase`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ transactionHash }),
+              })
+
+              if (!purchaseResponse.ok) {
+                throw new Error('Failed to record purchase')
+              }
+
+              logger.info('Template purchase recorded', { templateId: template.id, transactionHash })
+
+              // Close paywall and proceed with template usage
+              setShowPaywall(false)
+
+              // Now use the template
+              if (pendingWorkspaceId) {
+                await handleWorkspaceSelectForUse(pendingWorkspaceId)
+              }
+            } catch (error) {
+              logger.error('Error recording template purchase:', error)
+              alert('Payment successful but failed to record purchase. Please contact support.')
+            }
+          }}
+        />
+      )}
+    </>
   )
 }
