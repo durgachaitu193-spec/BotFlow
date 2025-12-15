@@ -552,10 +552,12 @@ export function DeployModal({
     title: string
     description: string
     authType: string
+    chatId: string
     tokenName?: string
     tokenSymbol?: string
-    tokenImage?: File
-    chatId: string
+    tokenImage?: File | null
+    tokenImagePreview?: string | null
+    tokenImageIpfsHash?: string
   }) => {
     if (!workflowId) {
       logger.warn('Cannot register agent: missing workflowId')
@@ -578,24 +580,34 @@ export function DeployModal({
       }
 
       // 2. Build updated metadata with BOTH API and chat info
-      const metadata: AgentMetadata = {
-        workflowId,
-        workflowName: workflowMetadata?.name,
-        deployedAt: new Date().toISOString(),
-        // API info
-        apiEndpoint: deploymentInfo?.endpoint,
-        // Chat info
-        chatIdentifier: chatFormData.identifier,
-        chatTitle: chatFormData.title,
-        chatDescription: chatFormData.description,
-        chatAuthType: chatFormData.authType as any,
-        chatUrl: `${window.location.origin}/chat/${chatFormData.identifier}`,
-        // Token info (preserve existing if updating)
-        tokenName: chatFormData.tokenName || existingAgent?.metadata?.tokenName,
-        tokenSymbol: chatFormData.tokenSymbol || existingAgent?.metadata?.tokenSymbol,
-        tokenAddress: existingAgent?.metadata?.tokenAddress,
-        tokenIpfsHash: existingAgent?.metadata?.tokenIpfsHash,
-      }
+      const metadata: AgentMetadata = existingAgent
+        ? {
+          // Preserve ALL existing metadata
+          ...existingAgent.metadata,
+          // Only update chat-related fields
+          chatIdentifier: chatFormData.identifier,
+          chatTitle: chatFormData.title,
+          chatDescription: chatFormData.description,
+          chatAuthType: chatFormData.authType as any,
+          chatUrl: `${window.location.origin}/chat/${chatFormData.identifier}`,
+        }
+        : {
+          // New agent - build complete metadata
+          workflowId,
+          workflowName: workflowMetadata?.name,
+          deployedAt: new Date().toISOString(),
+          // API info
+          apiEndpoint: deploymentInfo?.endpoint,
+          // Chat info
+          chatIdentifier: chatFormData.identifier,
+          chatTitle: chatFormData.title,
+          chatDescription: chatFormData.description,
+          chatAuthType: chatFormData.authType as any,
+          chatUrl: `${window.location.origin}/chat/${chatFormData.identifier}`,
+          // Token info (will be added after IPFS upload)
+          tokenName: chatFormData.tokenName,
+          tokenSymbol: chatFormData.tokenSymbol,
+        }
 
       if (existingAgent) {
         // UPDATE existing agent metadata
@@ -703,7 +715,7 @@ export function DeployModal({
             if (ipfsResponse.ok) {
               const ipfsData = await ipfsResponse.json()
               ipfsHash = ipfsData.ipfsHash
-              metadata.tokenIpfsHash = ipfsHash
+              metadata.tokenImageIpfsHash = ipfsHash
               logger.info('IPFS hash obtained', { ipfsHash })
             }
           } catch (ipfsError) {
@@ -878,12 +890,9 @@ export function DeployModal({
                     await handlePostDeploymentUpdate()
                     // Trigger agent registration after chat deployment
                     try {
-                      await registerAgentAfterDeployment({
-                        ...chatData,
-                        tokenName: undefined,
-                        tokenSymbol: undefined,
-                        tokenImage: undefined,
-                      })
+                      // Register agent with token details
+                      // Note: IPFS upload happens inside registerAgentAfterDeployment
+                      await registerAgentAfterDeployment(chatData)
                       // Switch to agent tab to show registration result
                       setActiveTab('agent')
                     } catch (error) {

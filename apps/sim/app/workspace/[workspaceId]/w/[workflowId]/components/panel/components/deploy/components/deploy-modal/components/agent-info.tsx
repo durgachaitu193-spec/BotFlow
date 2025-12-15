@@ -301,48 +301,69 @@ export function AgentInfo({ agentId, agentDID, transactionHash, metadata }: Agen
                             </div>
                         )}
 
-                        {metadata.tokenIpfsHash && (
-                            <div className='flex items-center justify-between gap-2'>
-                                <span className='text-muted-foreground text-xs flex-shrink-0'>
-                                    Token IPFS Hash:
-                                </span>
-                                <div className='flex items-center gap-1 min-w-0'>
-                                    <a
-                                        href={`https://gateway.pinata.cloud/ipfs/${metadata.tokenIpfsHash}`}
-                                        target='_blank'
-                                        rel='noopener noreferrer'
-                                        className='font-mono text-xs text-blue-600 hover:underline dark:text-blue-400 truncate'
-                                        title={metadata.tokenIpfsHash}
-                                    >
-                                        {truncateMiddle(metadata.tokenIpfsHash, 16)}
-                                    </a>
-                                    <Button
-                                        variant='ghost'
-                                        size='icon'
-                                        className='h-6 w-6 flex-shrink-0 text-muted-foreground hover:text-foreground'
-                                        onClick={() => handleCopy(metadata.tokenIpfsHash!, 'tokenIpfsHash')}
-                                        aria-label='Copy IPFS Hash'
-                                    >
-                                        {copiedItem === 'tokenIpfsHash' ? (
-                                            <Check className='h-3 w-3 text-green-500' />
-                                        ) : (
-                                            <Copy className='h-3 w-3' />
-                                        )}
-                                    </Button>
-                                    <Button
-                                        variant='ghost'
-                                        size='icon'
-                                        className='h-6 w-6 flex-shrink-0 text-muted-foreground hover:text-foreground'
-                                        onClick={() =>
-                                            window.open(
-                                                `https://gateway.pinata.cloud/ipfs/${metadata.tokenIpfsHash}`,
-                                                '_blank'
-                                            )
-                                        }
-                                        aria-label='View on IPFS'
-                                    >
-                                        <ExternalLink className='h-3 w-3' />
-                                    </Button>
+                        {/* Token Image */}
+                        {metadata.tokenImageIpfsHash && (
+                            <div className='space-y-2'>
+                                <span className='text-muted-foreground text-xs'>Token Image:</span>
+                                <div className='flex items-start gap-3'>
+                                    <div className='relative h-20 w-20 overflow-hidden rounded-lg border border-border bg-muted flex-shrink-0'>
+                                        <img
+                                            src={`https://gateway.pinata.cloud/ipfs/${metadata.tokenImageIpfsHash}`}
+                                            alt={metadata.tokenName || 'Token'}
+                                            className='h-full w-full object-cover'
+                                            onError={(e) => {
+                                                const target = e.target as HTMLImageElement
+                                                target.style.display = 'none'
+                                                const parent = target.parentElement
+                                                if (parent) {
+                                                    parent.innerHTML = '<div class="flex h-full w-full items-center justify-center text-muted-foreground text-xs">Failed to load</div>'
+                                                }
+                                            }}
+                                        />
+                                    </div>
+                                    <div className='flex flex-col gap-1 min-w-0 flex-1'>
+                                        <div className='flex items-center gap-1'>
+                                            <a
+                                                href={`https://gateway.pinata.cloud/ipfs/${metadata.tokenImageIpfsHash}`}
+                                                target='_blank'
+                                                rel='noopener noreferrer'
+                                                className='font-mono text-xs text-blue-600 hover:underline dark:text-blue-400 truncate'
+                                                title={metadata.tokenImageIpfsHash}
+                                            >
+                                                {truncateMiddle(metadata.tokenImageIpfsHash, 20)}
+                                            </a>
+                                            <Button
+                                                variant='ghost'
+                                                size='icon'
+                                                className='h-6 w-6 flex-shrink-0 text-muted-foreground hover:text-foreground'
+                                                onClick={() => handleCopy(metadata.tokenImageIpfsHash!, 'tokenImageIpfsHash')}
+                                                aria-label='Copy IPFS Hash'
+                                            >
+                                                {copiedItem === 'tokenImageIpfsHash' ? (
+                                                    <Check className='h-3 w-3 text-green-500' />
+                                                ) : (
+                                                    <Copy className='h-3 w-3' />
+                                                )}
+                                            </Button>
+                                            <Button
+                                                variant='ghost'
+                                                size='icon'
+                                                className='h-6 w-6 flex-shrink-0 text-muted-foreground hover:text-foreground'
+                                                onClick={() =>
+                                                    window.open(
+                                                        `https://gateway.pinata.cloud/ipfs/${metadata.tokenImageIpfsHash}`,
+                                                        '_blank'
+                                                    )
+                                                }
+                                                aria-label='View on IPFS'
+                                            >
+                                                <ExternalLink className='h-3 w-3' />
+                                            </Button>
+                                        </div>
+                                        <span className='text-muted-foreground text-[10px]'>
+                                            Stored on IPFS via Pinata
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         )}

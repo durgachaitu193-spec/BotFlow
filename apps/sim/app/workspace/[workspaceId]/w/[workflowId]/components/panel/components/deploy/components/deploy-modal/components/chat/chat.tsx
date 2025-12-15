@@ -49,6 +49,10 @@ interface ChatDeployProps {
     description: string
     authType: string
     chatId: string
+    tokenName: string
+    tokenSymbol: string
+    tokenImage: File | null
+    tokenImagePreview: string | null
   }) => void
   onVersionActivated?: () => void
 }
@@ -108,6 +112,13 @@ export function ChatDeploy({
   const [isDeleting, setIsDeleting] = useState(false)
   const [internalShowDeleteConfirmation, setInternalShowDeleteConfirmation] = useState(false)
 
+  // Token details state
+  const [tokenName, setTokenName] = useState('')
+  const [tokenSymbol, setTokenSymbol] = useState('')
+  const [tokenImage, setTokenImage] = useState<File | null>(null)
+  const [tokenImagePreview, setTokenImagePreview] = useState<string | null>(null)
+  const [isUploadingTokenImage, setIsUploadingTokenImage] = useState(false)
+
   const showDeleteConfirmation =
     externalShowDeleteConfirmation !== undefined
       ? externalShowDeleteConfirmation
@@ -132,6 +143,43 @@ export function ChatDeploy({
 
   const setError = (field: keyof FormErrors, message: string) => {
     setErrors((prev) => ({ ...prev, [field]: message }))
+  }
+
+  const handleTokenImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file')
+      return
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image size must be less than 5MB')
+      return
+    }
+
+    setTokenImage(file)
+
+    // Create preview
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setTokenImagePreview(reader.result as string)
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const handleRemoveTokenImage = () => {
+    setTokenImage(null)
+    setTokenImagePreview(null)
+  }
+
+  const handleTokenSymbolChange = (value: string) => {
+    // Only allow uppercase letters and numbers, max 6 characters
+    const sanitized = value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6)
+    setTokenSymbol(sanitized)
   }
 
   const validateForm = (isExistingChat: boolean): boolean => {
@@ -162,6 +210,19 @@ export function ChatDeploy({
       newErrors.outputBlocks = 'Please select at least one output block'
     }
 
+    // Validate token details for new chats
+    if (!isExistingChat) {
+      if (!tokenName.trim()) {
+        newErrors.general = 'Token name is required'
+      }
+      if (!tokenSymbol.trim()) {
+        newErrors.general = 'Token symbol is required'
+      }
+      if (!tokenImage) {
+        newErrors.general = 'Token image is required'
+      }
+    }
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -173,7 +234,9 @@ export function ChatDeploy({
     (formData.authType !== 'password' ||
       Boolean(formData.password.trim()) ||
       Boolean(existingChat)) &&
-    ((formData.authType !== 'email' && formData.authType !== 'sso') || formData.emails.length > 0)
+    ((formData.authType !== 'email' && formData.authType !== 'sso') || formData.emails.length > 0) &&
+    // Token validation for new chats
+    (!!existingChat || (!!tokenName.trim() && !!tokenSymbol.trim() && !!tokenImage))
 
   useEffect(() => {
     onValidationChange?.(isFormValid)
@@ -236,6 +299,8 @@ export function ChatDeploy({
         imageUrl
       )
 
+      logger.info('Chat deployed successfully', { chatId })
+
       onChatExistsChange?.(true)
 
       // Call onDeployed with chat data for agent registration
@@ -245,6 +310,11 @@ export function ChatDeploy({
         description: formData.description,
         authType: formData.authType,
         chatId,
+        // Token details for agent metadata
+        tokenName,
+        tokenSymbol,
+        tokenImage,
+        tokenImagePreview,
       })
 
       onVersionActivated?.()
@@ -387,6 +457,124 @@ export function ChatDeploy({
               This message will be displayed when users first open the chat
             </p>
           </div>
+
+          {/* Token Details Section - Only show for new chats */}
+          {!existingChat && (
+            <div className='space-y-[12px] rounded-[8px] border border-[var(--border-secondary)] bg-[var(--surface-6)] p-[16px]'>
+              <div>
+                <Label className='mb-[6.5px] block pl-[2px] font-medium text-[13px] text-[var(--text-primary)]'>
+                  Token Details <span className='text-red-500'>*</span>
+                </Label>
+                <p className='text-[11px] text-[var(--text-secondary)]'>
+                  A token will be created for this agent. All fields are required.
+                </p>
+              </div>
+
+              <div className='grid grid-cols-2 gap-[12px]'>
+                {/* Token Name */}
+                <div>
+                  <Label
+                    htmlFor='tokenName'
+                    className='mb-[6.5px] block pl-[2px] font-medium text-[12px] text-[var(--text-primary)]'
+                  >
+                    Token Name <span className='text-red-500'>*</span>
+                  </Label>
+                  <Input
+                    id='tokenName'
+                    placeholder='e.g., My Agent Token'
+                    value={tokenName}
+                    onChange={(e) => setTokenName(e.target.value)}
+                    disabled={chatSubmitting}
+                    className='h-[32px] text-[13px]'
+                  />
+                </div>
+
+                {/* Token Symbol */}
+                <div>
+                  <Label
+                    htmlFor='tokenSymbol'
+                    className='mb-[6.5px] block pl-[2px] font-medium text-[12px] text-[var(--text-primary)]'
+                  >
+                    Token Symbol <span className='text-red-500'>*</span>
+                  </Label>
+                  <Input
+                    id='tokenSymbol'
+                    placeholder='e.g., AGT'
+                    value={tokenSymbol}
+                    onChange={(e) => handleTokenSymbolChange(e.target.value)}
+                    disabled={chatSubmitting}
+                    className='h-[32px] text-[13px]'
+                    maxLength={6}
+                  />
+                  <p className='mt-[4px] text-[10px] text-[var(--text-tertiary)]'>
+                    Max 6 characters, uppercase
+                  </p>
+                </div>
+              </div>
+
+              {/* Token Image Upload */}
+              <div>
+                <Label className='mb-[6.5px] block pl-[2px] font-medium text-[12px] text-[var(--text-primary)]'>
+                  Token Image <span className='text-red-500'>*</span>
+                </Label>
+
+                {tokenImagePreview ? (
+                  <div className='flex items-center gap-[12px]'>
+                    <div className='relative h-[80px] w-[80px] overflow-hidden rounded-[8px] border border-[var(--border-primary)]'>
+                      <img
+                        src={tokenImagePreview}
+                        alt='Token preview'
+                        className='h-full w-full object-cover'
+                      />
+                    </div>
+                    <div className='flex flex-col gap-[8px]'>
+                      <p className='text-[12px] text-[var(--text-secondary)]'>
+                        {tokenImage?.name}
+                      </p>
+                      <Button
+                        type='button'
+                        variant='outline'
+                        onClick={handleRemoveTokenImage}
+                        disabled={chatSubmitting}
+                        className='h-[28px] text-[11px]'
+                      >
+                        <X className='mr-1 h-3 w-3' />
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <input
+                      type='file'
+                      id='tokenImageInput'
+                      accept='image/*'
+                      onChange={handleTokenImageSelect}
+                      disabled={chatSubmitting}
+                      className='hidden'
+                    />
+                    <label htmlFor='tokenImageInput'>
+                      <Button
+                        type='button'
+                        variant='outline'
+                        disabled={chatSubmitting}
+                        className='h-[32px] cursor-pointer text-[12px]'
+                        onClick={(e) => {
+                          e.preventDefault()
+                          document.getElementById('tokenImageInput')?.click()
+                        }}
+                      >
+                        Upload Image
+                      </Button>
+                    </label>
+                    <p className='mt-[4px] text-[10px] text-[var(--text-tertiary)]'>
+                      PNG, JPG or GIF (max 5MB)
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           <button
             type='button'

@@ -16,7 +16,7 @@ export interface AgentMetadata {
   tokenName?: string
   tokenSymbol?: string
   tokenAddress?: string
-  tokenIpfsHash?: string
+  tokenImageIpfsHash?: string // IPFS hash of token image uploaded to Pinata
   // Common fields
   deployedAt?: string
   [key: string]: any // Allow additional fields
