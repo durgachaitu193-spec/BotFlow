@@ -66,10 +66,15 @@
     "eslint-config-next": "15.4.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.34.3",
+    "fastbench": "1.0.1",
     "globals": "^15.6.0",
+    "pino-elasticsearch": "8.1.0",
     "postcss": "^8",
     "prettier": "^3.3.2",
+    "sonic-boom": "4.2.0",
     "tailwindcss": "^3.4.1",
+    "tap": "21.5.0",
+    "tape": "5.9.0",
     "typescript": "^5",
     "typescript-eslint": "^7.14.1"
   }

@@ -109,7 +109,20 @@ const nextConfig: NextConfig = {
     '@sim/db',
     '@sim/ui',
   ],
-  webpack: (config) => {
+  webpack: (config, { webpack }) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      tap: false,
+      tape: false,
+    }
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^tap$/,
+      }),
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^tape$/,
+      })
+    )
     return config
   },
   async headers() {

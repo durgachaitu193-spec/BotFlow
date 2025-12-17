@@ -1,7 +1,24 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack: (config) => {
+  webpack: (config, { webpack }) => {
     config.externals.push("pino-pretty", "encoding");
+    config.externals.push({
+      'pino': 'commonjs pino',
+      'thread-stream': 'commonjs thread-stream',
+    });
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^tap$/,
+      }),
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^tape$/,
+      })
+    );
+    config.resolve.alias = {
+        ...config.resolve.alias,
+        tap: false,
+        tape: false,
+    }
     return config;
   },
   images: {
@@ -14,7 +31,7 @@ const nextConfig = {
       },
     ],
   },
-  serverExternalPackages: ["pino-pretty", "encoding"],
+  serverExternalPackages: ["pino", "pino-pretty", "encoding", "thread-stream"],
   turbopack: {},
   typescript: {
     // Only use this if you want to ignore TypeScript errors during build
