@@ -9,10 +9,27 @@ import NextLink from "next/link";
 const Link = NextLink as any;
 import { Popover } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-import logout from "@/global/utils/logout";
 import { useRouter } from "next/navigation";
 
 import { Wallet } from "@/global/types";
+
+const logout = async () => {
+  if (typeof window !== "undefined") {
+    // Clear local storage
+    localStorage.removeItem("address");
+    localStorage.removeItem("wallet");
+    localStorage.removeItem("signature");
+
+    // Clear server-side cookies
+    try {
+      await fetch('/api/auth/privy/logout', {
+        method: 'POST',
+      });
+    } catch (error) {
+      console.error('Failed to clear server cookies during logout:', error);
+    }
+  }
+};
 
 const NavHeader = () => {
   const [openModal, setOpenModal] = useState(false);

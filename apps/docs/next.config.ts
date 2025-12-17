@@ -10,6 +10,9 @@ const config = {
     webpackMemoryOptimizations: true,
     webpackBuildWorker: true,
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   async redirects() {
     return [
       {

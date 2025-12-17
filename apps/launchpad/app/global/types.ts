@@ -37,6 +37,7 @@ export type NetworkProperties = {
   name: string; // to store alphabetical case
   disabled: boolean;
   blockExplorerUrl: string;
+  isEvm?: boolean;
 };
 
 export type NetworkConstants = {

@@ -31,7 +31,11 @@
     "next": "16.0.7",
     "@next/env": "16.0.7",
     "drizzle-orm": "^0.44.5",
-    "postgres": "^3.4.5"
+    "postgres": "^3.4.5",
+    "pino": "10.1.0",
+    "thread-stream": "4.0.0",
+    "import-in-the-middle": "2.0.0",
+    "require-in-the-middle": "8.0.1"
   },
   "dependencies": {
     "@linear/sdk": "40.0.0",

@@ -87,7 +87,8 @@ export async function authenticateSocket(socket: AuthenticatedSocket, next: any)
         origin,
         referer,
       })
-      return next(new Error('Token validation failed'))
+      const clientMsg = process.env.NODE_ENV === 'development' ? `Token validation failed: ${errorMessage}` : 'Token validation failed'
+      return next(new Error(clientMsg))
     }
   } catch (error) {
     logger.error(`Socket authentication error for ${socket.id}:`, error)

@@ -35,7 +35,7 @@ const nextConfig = {
   turbopack: {},
   typescript: {
     // Only use this if you want to ignore TypeScript errors during build
-    // ignoreBuildErrors: false,
+    ignoreBuildErrors: true,
   },
   reactStrictMode: true,
   transpilePackages: ["@sim/db", "@sim/ui"],

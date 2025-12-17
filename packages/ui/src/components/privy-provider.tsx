@@ -79,6 +79,7 @@ export function PrivyProviderWrapper({ children, appId, appUrl }: PrivyProviderW
     }
 
     console.log('[PrivyProviderWrapper] Initializing with App ID:', finalAppId?.slice(0, 6) + '...')
+    console.warn('[PrivyProviderWrapper] If you see 403 errors, ensure http://localhost:3000 and http://localhost:3001 are in your Privy Dashboard Allowed Domains')
 
     return (
         <PrivyProvider
@@ -97,7 +98,6 @@ export function PrivyProviderWrapper({ children, appId, appUrl }: PrivyProviderW
                         createOnLogin: 'users-without-wallets',
                     },
                 },
-
                 supportedChains: [BSC_TESTNET, BSC_MAINNET],
             }}
         >

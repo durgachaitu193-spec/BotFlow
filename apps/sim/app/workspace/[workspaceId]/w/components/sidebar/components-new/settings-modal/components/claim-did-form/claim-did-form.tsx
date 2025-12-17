@@ -28,8 +28,8 @@ interface ClaimDidFormProps {
 }
 
 export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
-  const { authenticated, user } = usePrivy()
-  const { wallets } = useWallets()
+  const { authenticated, user, connectWallet } = usePrivy()
+  const { wallets, ready } = useWallets()
 
   const [isClaiming, setIsClaiming] = useState(false)
   const [claimStatus, setClaimStatus] = useState<string | null>(null)
@@ -43,6 +43,9 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
   const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null)
   const [transactionHash, setTransactionHash] = useState<string | null>(null)
   const [copiedAddress, setCopiedAddress] = useState(false)
+  const [checkError, setCheckError] = useState<string | null>(null)
+
+  const hasWallets = ready && wallets.length > 0
 
   // Update wallet address when wallets or user changes
   useEffect(() => {
@@ -94,6 +97,8 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
 
             if (chainIdNumber === BSC_TESTNET.id) {
               setSelectedChain(BSC_TESTNET)
+            } else if (chainIdNumber === BSC_MAINNET.id) {
+              setSelectedChain(BSC_MAINNET)
             }
           }
         } catch (error) {
@@ -125,6 +130,10 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
 
               if (chainIdNumber === BSC_TESTNET.id) {
                 setSelectedChain(BSC_TESTNET)
+                setCheckError(null)
+              } else if (chainIdNumber === BSC_MAINNET.id) {
+                setSelectedChain(BSC_MAINNET)
+                setCheckError(null)
               }
             }
 
@@ -153,9 +162,14 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
     }
   }, [authenticated, wallets])
 
-  const switchNetwork = async (targetChain: Chain) => {
+  const switchNetwork = async (targetChain: Chain): Promise<boolean> => {
     if (!wallets || wallets.length === 0) {
       throw new Error('No wallet found')
+    }
+
+    if (currentChainId === targetChain.id) {
+      setSelectedChain(targetChain)
+      return true
     }
 
     setIsSwitchingNetwork(true)
@@ -165,6 +179,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
       try {
         await wallet.switchChain(targetChain.id)
       } catch (switchError: any) {
+        // If switchChain fails, try the provider method directly
         const provider = await wallet.getEthereumProvider()
         if (provider) {
           try {
@@ -173,6 +188,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
               params: [{ chainId: `0x${targetChain.id.toString(16)}` }],
             })
           } catch (providerError: any) {
+            // This error code indicates that the chain has not been added to MetaMask.
             if (providerError.code === 4902 || providerError.code === -32603) {
               await provider.request({
                 method: 'wallet_addEthereumChain',
@@ -193,30 +209,23 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                 ],
               })
             } else {
+              // Proceed if it's just an unsupported chain ID error from the wallet wrapper
               if (providerError.message?.includes('Unsupported chainId')) {
-                console.warn(
-                  `Network ${targetChain.name} (${targetChain.id}) may not be supported by this wallet type. Transactions will use the selected RPC.`
-                )
-                setSelectedChain(targetChain)
-                setIsSwitchingNetwork(false)
-                return
+                console.warn(`Network ${targetChain.name} may not be fully supported by wallet wrapper, but proceeding.`)
+              } else {
+                throw providerError
               }
-              throw providerError
             }
           }
         } else {
-          if (switchError.message?.includes('Unsupported chainId')) {
-            console.warn(
-              `Network ${targetChain.name} (${targetChain.id}) may not be supported by this wallet type. Transactions will use the selected RPC.`
-            )
-            setSelectedChain(targetChain)
-            setIsSwitchingNetwork(false)
-            return
+          // Re-throw if no provider and standard switch failed
+          if (!switchError.message?.includes('Unsupported chainId')) {
+            throw switchError
           }
-          throw switchError
         }
       }
 
+      // Refresh chain ID after switch
       const provider = await wallet.getEthereumProvider()
       if (provider) {
         const chainId = await provider.request({ method: 'eth_chainId' })
@@ -224,17 +233,19 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
         setCurrentChainId(chainIdNumber)
       }
       setSelectedChain(targetChain)
+      setCheckError(null)
+      return true
     } catch (error: any) {
       logger.error('Network switch error:', error)
-      if (error.message?.includes('Unsupported chainId')) {
-        console.warn(
-          `Network switching not supported, but transactions will use the selected RPC for ${targetChain.name}`
-        )
-        setSelectedChain(targetChain)
-        setIsSwitchingNetwork(false)
-        return
+      // Even if it fails, if the user explicitly clicked it, we might want to select it
+      // but let's warn them.
+      if (error.message?.includes('Unsupported chainId') || error.message?.includes('User rejected')) {
+        // User rejected, do nothing or show toast
+        return false
+      } else {
+        // Some wallets throw errors even on success or partial success with custom chains
+        return false
       }
-      throw new Error(`Failed to switch network: ${error.message || 'Unknown error'}`)
     } finally {
       setIsSwitchingNetwork(false)
     }
@@ -248,6 +259,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
     }
 
     setIsCheckingUsername(true)
+    setCheckError(null)
     const timeoutId = setTimeout(async () => {
       try {
         const trimmedUsername = username.trim()
@@ -258,7 +270,8 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
         )
 
         if (!response.ok) {
-          throw new Error('Failed to check username availability')
+          const errorData = await response.json().catch(() => ({}))
+          throw new Error(errorData.details || errorData.error || 'Failed to check username availability')
         }
 
         const data = await response.json()
@@ -268,6 +281,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
       } catch (error: any) {
         logger.error('Error checking username:', error)
         setUsernameAvailable(null)
+        setCheckError(error.message || 'Error checking username')
       } finally {
         setIsCheckingUsername(false)
       }
@@ -280,14 +294,17 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
     if (wallets && wallets.length > 0) {
       try {
         if (currentChainId !== selectedChain.id) {
-          await switchNetwork(selectedChain)
+          const success = await switchNetwork(selectedChain)
+          if (!success) {
+            console.warn('Network switch failed or rejected, stopping continuation')
+            return
+          }
         }
       } catch (error: any) {
-        logger.error('Network switch error:', error)
+        logger.error('Network switch checks error:', error)
+        // If error is generic, we might stop, but rely on switchNetwork return value mostly
         if (!error.message?.includes('Unsupported chainId')) {
-          console.warn(
-            "Network switch failed, but you can still create DID. The transaction will use the selected network's RPC."
-          )
+          return
         }
       }
     }
@@ -297,6 +314,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
     setClaimStatus(null)
     setTransactionHash(null)
     setUsernameAvailable(null)
+    setCheckError(null)
   }
 
   const handleCreateDID = async () => {
@@ -409,7 +427,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
   }
 
   return (
-    <div className='flex flex-col h-full'>
+    <div className='flex flex-col h-screen'>
       <div className='flex-1 overflow-y-auto p-6'>
         <div className='space-y-6'>
           {step !== 'success' && (
@@ -458,15 +476,31 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                   </Label>
                   <div className='grid grid-cols-2 gap-3'>
                     <button
-                      onClick={() => switchNetwork(BSC_TESTNET)}
+                      onClick={() => {
+                        setSelectedChain(BSC_TESTNET)
+                        setCheckError(null)
+                      }}
                       disabled={isSwitchingNetwork}
                       className={cn(
                         'flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 relative overflow-hidden group',
                         selectedChain.id === BSC_TESTNET.id
-                          ? 'border-gray-400 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/40'
-                          : 'border-border hover:border-primary/50 bg-card dark:bg-muted/20 hover:bg-accent'
+                          ? 'border-white bg-accent/50 shadow-md'
+                          : 'border-white/10 bg-white/5 hover:border-white hover:bg-accent/50'
                       )}
                     >
+                      <div className='absolute top-3 right-3'>
+                        <div className={cn(
+                          'h-4 w-4 rounded-full border flex items-center justify-center transition-all duration-200',
+                          selectedChain.id === BSC_TESTNET.id
+                            ? 'border-white bg-white'
+                            : 'border-muted-foreground/50'
+                        )}>
+                          {selectedChain.id === BSC_TESTNET.id && (
+                            <div className='h-1.5 w-1.5 rounded-full bg-black' />
+                          )}
+                        </div>
+                      </div>
+
                       <div className='mb-2 rounded-full bg-background p-2 shadow-sm dark:bg-muted/50'>
                         <div className='h-6 w-6 flex items-center justify-center'>
                           <svg
@@ -486,31 +520,39 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                       </div>
                       <span
                         className={cn(
-                          'font-medium text-sm',
-                          selectedChain.id === BSC_TESTNET.id
-                            ? 'text-gray-700 dark:text-gray-300'
-                            : 'text-muted-foreground group-hover:text-foreground'
+                          'font-medium text-sm transition-colors duration-200'
                         )}
                       >
                         BSC Testnet
                       </span>
-                      {selectedChain.id === BSC_TESTNET.id && (
-                        <div className='absolute top-2 right-2'>
-                          <div className='h-2 w-2 rounded-full bg-gray-500 animate-pulse' />
-                        </div>
-                      )}
                     </button>
 
                     <button
-                      onClick={() => switchNetwork(BSC_MAINNET)}
+                      onClick={() => {
+                        setSelectedChain(BSC_MAINNET)
+                        setCheckError(null)
+                      }}
                       disabled={isSwitchingNetwork}
                       className={cn(
                         'flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 relative overflow-hidden group',
                         selectedChain.id === BSC_MAINNET.id
-                          ? 'border-gray-400 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/40'
-                          : 'border-border hover:border-primary/50 bg-card dark:bg-muted/20 hover:bg-accent'
+                          ? 'border-white bg-accent/50 shadow-md'
+                          : 'border-white/10 bg-white/5 hover:border-white hover:bg-accent/50'
                       )}
                     >
+                      <div className='absolute top-3 right-3'>
+                        <div className={cn(
+                          'h-4 w-4 rounded-full border flex items-center justify-center transition-all duration-200',
+                          selectedChain.id === BSC_MAINNET.id
+                            ? 'border-white bg-white'
+                            : 'border-muted-foreground/50'
+                        )}>
+                          {selectedChain.id === BSC_MAINNET.id && (
+                            <div className='h-1.5 w-1.5 rounded-full bg-black' />
+                          )}
+                        </div>
+                      </div>
+
                       <div className='mb-2 rounded-full bg-background p-2 shadow-sm dark:bg-muted/50'>
                         <div className='h-6 w-6 flex items-center justify-center'>
                           <svg
@@ -530,25 +572,18 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                       </div>
                       <span
                         className={cn(
-                          'font-medium text-sm',
-                          selectedChain.id === BSC_MAINNET.id
-                            ? 'text-gray-700 dark:text-gray-300'
-                            : 'text-muted-foreground group-hover:text-foreground'
+                          'font-medium text-sm transition-colors duration-200'
                         )}
                       >
                         BSC Mainnet
                       </span>
-                      {selectedChain.id === BSC_MAINNET.id && (
-                        <div className='absolute top-2 right-2'>
-                          <div className='h-2 w-2 rounded-full bg-gray-500 animate-pulse' />
-                        </div>
-                      )}
                     </button>
                   </div>
                 </div>
 
                 <Button
-                  onClick={handleCreateDIDClick}
+                  onClick={hasWallets ? handleCreateDIDClick : connectWallet}
+                  disabled={!ready}
                   className={cn(
                     'w-full gap-2 font-medium h-11',
                     'bg-[var(--brand-primary-hover-hex)] hover:bg-[var(--brand-primary-hover-hex)]',
@@ -557,7 +592,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                     'disabled:opacity-50 disabled:hover:bg-[var(--brand-primary-hover-hex)] disabled:hover:shadow-none'
                   )}
                 >
-                  Continue
+                  {hasWallets ? 'Continue' : 'Connect Wallet'}
                 </Button>
               </motion.div>
             ) : step === 'username' ? (
@@ -576,6 +611,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                       onChange={(e) => {
                         setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))
                         setClaimStatus(null)
+                        setCheckError(null)
                       }}
                       placeholder='Enter username'
                       className={cn(
@@ -605,14 +641,19 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                         Username is already taken
                       </p>
                     )}
+                    {checkError && (
+                      <p className='text-xs text-destructive font-medium'>
+                        {checkError}
+                      </p>
+                    )}
                   </div>
                 </div>
 
                 <div className='flex gap-3'>
                   <Button
-                    variant='ghost'
+                    variant='outline'
                     onClick={() => setStep('initial')}
-                    className='flex-1 text-muted-foreground hover:text-foreground h-11 border border-input'
+                    className='flex-1 text-muted-foreground hover:text-foreground h-11'
                   >
                     Back
                   </Button>
@@ -674,8 +715,8 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
-      </div>
-    </div>
+        </div >
+      </div >
+    </div >
   )
 }

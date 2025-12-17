@@ -36,6 +36,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   );
 
   const handleApi = useCallback(async () => {
+    if (networkConstants[network].isEvm) {
+      setApi(undefined);
+      setApiReady(true);
+      return;
+    }
     const provider = new WsProvider(networkConstants[network].rpcEndpoint);
     const apiPromise = new ApiPromise({ provider });
     await apiPromise.isReady;

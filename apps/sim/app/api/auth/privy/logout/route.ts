@@ -14,15 +14,18 @@ export async function POST() {
     }
 
     const response = NextResponse.json({ success: true })
-
-    // Clear the privy-user-id cookie
-    response.cookies.set('privy-user-id', '', {
+    const cookieOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 0, // Expire immediately
+      sameSite: 'lax' as const,
+      maxAge: 0,
       path: '/',
-    })
+    }
+
+    response.cookies.set('privy-user-id', '', cookieOptions)
+    response.cookies.set('privy-token', '', cookieOptions)
+    response.cookies.set('privy-refresh-token', '', cookieOptions)
+    response.cookies.set('privy-session', '', cookieOptions)
 
     return response
   } catch (error) {

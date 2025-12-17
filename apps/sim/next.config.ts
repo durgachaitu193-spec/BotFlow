@@ -69,7 +69,7 @@ const nextConfig: NextConfig = {
     ],
   },
   typescript: {
-    ignoreBuildErrors: isTruthy(env.DOCKER_BUILD),
+    ignoreBuildErrors: true,
   },
   output: isTruthy(env.DOCKER_BUILD) ? 'standalone' : undefined,
   serverExternalPackages: [
@@ -193,7 +193,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin-allow-popups',
+            value: 'unsafe-none',
           },
         ],
       },

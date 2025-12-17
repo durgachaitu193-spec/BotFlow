@@ -16,6 +16,7 @@ export const networkConstants: NetworkConstants = {
     tokenSymbol: "DOT",
     blockExplorerUrl: "https://assethub-rococo.subscan.io/",
     rpcEndpoint: "wss://polkadot-asset-hub-rpc.polkadot.io",
+    isEvm: false,
   },
   [Network.ASSESTHUB_ROCOCO]: {
     disabled: false,
@@ -28,6 +29,7 @@ export const networkConstants: NetworkConstants = {
     tokenSymbol: "ROC",
     blockExplorerUrl: "https://assethub-rococo.subscan.io/",
     rpcEndpoint: "wss://asset-hub-rococo-rpc.dwellir.com",
+    isEvm: false,
   },
   [Network.ASSESTHUB_WESTEND]: {
     disabled: false,
@@ -40,6 +42,7 @@ export const networkConstants: NetworkConstants = {
     tokenSymbol: "ROC",
     blockExplorerUrl: "https://assethub-rococo.subscan.io/",
     rpcEndpoint: "wss://westend-asset-hub-rpc.polkadot.io",
+    isEvm: false,
   },
   [Network.BNB]: {
     disabled: false,
@@ -53,5 +56,6 @@ export const networkConstants: NetworkConstants = {
     tokenSymbol: "BNB",
     blockExplorerUrl: "https://bscscan.com/",
     rpcEndpoint: "wss://bsc-rpc.publicnode.com",
+    isEvm: true,
   },
 };

@@ -1,14 +1,12 @@
 "use client";
-
-import React from "react";
-import { ChevronDown, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { usePrivy } from "@privy-io/react-auth";
 import clsx from "clsx";
 import { WalletButton } from "./WalletButton";
 
 // Constants defined locally or passed as props if they vary significantly
-const LAUNCHPAD_URL = "http://localhost:3000"; // Default or Env var
-const BUILDER_URL = "http://localhost:3001";   // Default or Env var
+const LAUNCHPAD_URL = process.env.NEXT_PUBLIC_LAUNCHPAD_URL || "http://localhost:3000";
+const BUILDER_URL = process.env.NEXT_PUBLIC_BUILDER_URL || "http://localhost:3001";
 
 export interface NavbarProps {
     onMenuClick?: () => void;
@@ -61,6 +59,7 @@ export function Navbar({ onMenuClick, currentApp, onSwitchApp, isCollapsed, onSi
                 >
                     Launchpad
                 </button>
+                <span className="text-white/10">|</span>
                 <button
                     onClick={() => handleSwitch("builder")}
                     className={clsx(
