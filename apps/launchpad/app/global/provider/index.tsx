@@ -1,9 +1,9 @@
 "use client";
-import React from "react";
+
 import { ReactNode } from "react";
 import { UserDetailsProvider } from "@/context/UserDetailContext";
 import { AppProvider } from "@/context/AppContext";
-import PrivyProviderWrapper from "./PrivyProviderWrapper";
+import { PrivyProviderWrapper } from "@sim/ui";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (

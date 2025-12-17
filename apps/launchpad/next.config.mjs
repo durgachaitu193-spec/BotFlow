@@ -14,13 +14,14 @@ const nextConfig = {
       },
     ],
   },
+  serverExternalPackages: ["pino-pretty", "encoding"],
   turbopack: {},
   typescript: {
     // Only use this if you want to ignore TypeScript errors during build
     // ignoreBuildErrors: false,
   },
   reactStrictMode: true,
-  transpilePackages: ["@sim/db"],
+  transpilePackages: ["@sim/db", "@sim/ui"],
 };
 
 export default nextConfig;

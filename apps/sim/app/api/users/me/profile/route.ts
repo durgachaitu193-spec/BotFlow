@@ -9,6 +9,7 @@ import { createLogger } from '@/lib/logs/console/logger'
 
 const logger = createLogger('UpdateUserProfileAPI')
 
+// UpdateProfileSchema
 const UpdateProfileSchema = z
   .object({
     name: z.string().min(1, 'Name is required').optional(),
@@ -21,15 +22,17 @@ const UpdateProfileSchema = z
         { message: 'Invalid image URL' }
       )
       .optional(),
+    userDID: z.string().optional(),
   })
-  .refine((data) => data.name !== undefined || data.image !== undefined, {
-    message: 'At least one field (name or image) must be provided',
+  .refine((data) => data.name !== undefined || data.image !== undefined || data.userDID !== undefined, {
+    message: 'At least one field (name, image, or userDID) must be provided',
   })
 
 interface UpdateData {
   updatedAt: Date
   name?: string
   image?: string | null
+  userDID?: string
 }
 
 export const dynamic = 'force-dynamic'
@@ -53,6 +56,7 @@ export async function PATCH(request: NextRequest) {
     const updateData: UpdateData = { updatedAt: new Date() }
     if (validatedData.name !== undefined) updateData.name = validatedData.name
     if (validatedData.image !== undefined) updateData.image = validatedData.image
+    if (validatedData.userDID !== undefined) updateData.userDID = validatedData.userDID
 
     const [updatedUser] = await db
       .update(user)
@@ -76,6 +80,7 @@ export async function PATCH(request: NextRequest) {
         name: updatedUser.name,
         email: updatedUser.email,
         image: updatedUser.image,
+        userDID: updatedUser.userDID,
       },
     })
   } catch (error: any) {
@@ -114,6 +119,7 @@ export async function GET() {
         name: user.name,
         email: user.email,
         image: user.image,
+        userDID: user.userDID,
         emailVerified: user.emailVerified,
       })
       .from(user)

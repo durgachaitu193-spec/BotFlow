@@ -20,9 +20,9 @@ export async function getAgents(): Promise<Agent[]> {
       const metadata = a.metadata as Record<string, unknown>;
       const name = String(
         metadata?.chatTitle ||
-          metadata?.tokenName ||
-          metadata?.name ||
-          "Unknown Agent",
+        metadata?.tokenName ||
+        metadata?.name ||
+        "Unknown Agent",
       ).toUpperCase();
 
       // Filter transactions specific to this agent (tokenId matches agent.id)
@@ -70,9 +70,9 @@ export async function getAgents(): Promise<Agent[]> {
         image: metadata?.tokenIpfsHash
           ? `https://gateway.pinata.cloud/ipfs/${String(metadata.tokenIpfsHash)}`
           : String(
-              metadata?.image ||
-                `https://api.dicebear.com/7.x/bottts/svg?seed=${a.id}`,
-            ),
+            metadata?.image ||
+            `https://api.dicebear.com/7.x/bottts/svg?seed=${a.id}`,
+          ),
         isPositive: true,
         status: a.isActive ? "active" : "inactive",
         description: String(
@@ -103,9 +103,9 @@ export async function getAgentById(id: string): Promise<Agent | undefined> {
     // Extract token details from metadata
     const rawName = String(
       metadata?.chatTitle ||
-        metadata?.tokenName ||
-        metadata?.name ||
-        "Unknown Agent",
+      metadata?.tokenName ||
+      metadata?.name ||
+      "Unknown Agent",
     );
     const tokenName = rawName.toUpperCase();
     const tokenTicker = String(
@@ -115,9 +115,9 @@ export async function getAgentById(id: string): Promise<Agent | undefined> {
     const tokenImage = metadata?.tokenIpfsHash
       ? `https://gateway.pinata.cloud/ipfs/${String(metadata.tokenIpfsHash)}`
       : String(
-          metadata?.image ||
-            `https://api.dicebear.com/7.x/bottts/svg?seed=${result.id}`,
-        );
+        metadata?.image ||
+        `https://api.dicebear.com/7.x/bottts/svg?seed=${result.id}`,
+      );
 
     return {
       id: result.id,
@@ -136,7 +136,7 @@ export async function getAgentById(id: string): Promise<Agent | undefined> {
       price: "$0",
       holders: "0",
       contractAddress: tokenAddress,
-      deploymentType: result.deploymentType as "api" | "chat",
+      deploymentType: result.chatId ? "chat" : "api",
       chatUrl: String(metadata?.chatUrl || ""),
     };
   } catch (error) {

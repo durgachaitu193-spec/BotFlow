@@ -3,6 +3,8 @@
 import { useEffect } from 'react'
 import AuthBackground from '@/app/(auth)/components/auth-background'
 import Nav from '@/app/(landing)/components/nav/nav'
+import { usePathname } from 'next/navigation'
+
 
 // Helper to detect if a color is dark
 function isColorDark(hexColor: string): boolean {
@@ -15,6 +17,8 @@ function isColorDark(hexColor: string): boolean {
 }
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+
   useEffect(() => {
     // Check if brand background is dark and add class accordingly
     const rootStyle = getComputedStyle(document.documentElement)
@@ -27,13 +31,11 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     }
   }, [])
   return (
-    <AuthBackground>
-      <main className='relative flex min-h-screen flex-col text-foreground'>
-        {/* Header - Nav handles all conditional logic */}
-        <Nav hideAuthButtons={true} variant='auth' />
+   <AuthBackground>
+      <main className='relative flex h-screen flex-col overflow-hidden font-geist-sans text-foreground'>
+        {pathname !== '/login' && <Nav hideAuthButtons={true} variant='auth' />}
 
-        {/* Content */}
-        <div className='relative z-30 flex flex-1 items-center justify-center px-4 pb-24'>
+        <div className='relative z-30 flex flex-1 items-center justify-center px-4 pb-24 overflow-hidden'>
           <div className='w-full max-w-lg px-4'>{children}</div>
         </div>
       </main>

@@ -52,6 +52,6 @@ export const networkConstants: NetworkConstants = {
     tokenDecimals: 18,
     tokenSymbol: "BNB",
     blockExplorerUrl: "https://bscscan.com/",
-    rpcEndpoint: "https://rpc.ankr.com/bsc",
+    rpcEndpoint: "wss://bsc-rpc.publicnode.com",
   },
 };

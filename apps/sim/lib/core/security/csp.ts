@@ -78,6 +78,8 @@ export const buildTimeCSPDirectives: CSPDirectives = {
     'https://*.walletconnect.org',
     ...getHostnameFromUrl(env.NEXT_PUBLIC_BRAND_LOGO_URL),
     ...getHostnameFromUrl(env.NEXT_PUBLIC_BRAND_FAVICON_URL),
+    ...getHostnameFromUrl(env.NEXT_PUBLIC_APP_URL),
+    'http://localhost:3000',
   ],
 
   'media-src': ["'self'", 'blob:'],
@@ -90,7 +92,7 @@ export const buildTimeCSPDirectives: CSPDirectives = {
     env.OLLAMA_URL || 'http://localhost:11434',
     env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3002',
     env.NEXT_PUBLIC_SOCKET_URL?.replace('http://', 'ws://').replace('https://', 'wss://') ||
-      'ws://localhost:3002',
+    'ws://localhost:3002',
     'https://api.browser-use.com',
     'https://api.exa.ai',
     'https://api.firecrawl.dev',

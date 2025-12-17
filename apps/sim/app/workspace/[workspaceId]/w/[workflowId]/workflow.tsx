@@ -765,7 +765,7 @@ const WorkflowContent = React.memo(() => {
                   block: b,
                   distance: Math.sqrt(
                     (b.position.x - relativePosition.x) ** 2 +
-                      (b.position.y - relativePosition.y) ** 2
+                    (b.position.y - relativePosition.y) ** 2
                   ),
                 }))
                 .sort((a, b) => a.distance - b.distance)[0]?.block
@@ -1535,7 +1535,7 @@ const WorkflowContent = React.memo(() => {
     resizeLoopNodesWrapper()
 
     // No need for cleanup with direct function
-    return () => {}
+    return () => { }
   }, [nodes, resizeLoopNodesWrapper])
 
   // Special effect to handle cleanup after node deletion
@@ -1629,7 +1629,7 @@ const WorkflowContent = React.memo(() => {
         const sourceParentId =
           blocks[sourceNode.id]?.data?.parentId ||
           (connection.sourceHandle === 'loop-start-source' ||
-          connection.sourceHandle === 'parallel-start-source'
+            connection.sourceHandle === 'parallel-start-source'
             ? connection.source
             : undefined)
         const targetParentId = blocks[targetNode.id]?.data?.parentId
@@ -1678,9 +1678,9 @@ const WorkflowContent = React.memo(() => {
           type: 'workflowEdge',
           data: isInsideContainer
             ? {
-                parentId,
-                isInsideContainer,
-              }
+              parentId,
+              isInsideContainer,
+            }
             : undefined,
         })
       }
@@ -1885,7 +1885,7 @@ const WorkflowContent = React.memo(() => {
           }
           setDragStartPosition(null)
         }
-      } catch {}
+      } catch { }
 
       // Don't process parent changes if the node hasn't actually changed parent or is being moved within same parent
       if (potentialParentId === dragStartParentId) return
@@ -1986,7 +1986,7 @@ const WorkflowContent = React.memo(() => {
                 block: b,
                 distance: Math.sqrt(
                   (b.position.x - relativePositionBefore.x) ** 2 +
-                    (b.position.y - relativePositionBefore.y) ** 2
+                  (b.position.y - relativePositionBefore.y) ** 2
                 ),
               }))
               .sort((a, b) => a.distance - b.distance)[0]?.block
@@ -2066,7 +2066,7 @@ const WorkflowContent = React.memo(() => {
     try {
       // Clear current design selection when clicking on empty canvas
       usePanelEditorStore.getState().clearCurrentBlock()
-    } catch {}
+    } catch { }
   }, [])
 
   // Edge selection
@@ -2223,7 +2223,7 @@ const WorkflowContent = React.memo(() => {
 
   if (showSkeletonUI) {
     return (
-      <div className='flex h-screen w-full flex-col overflow-hidden'>
+      <div className='flex h-full w-full flex-col overflow-hidden'>
         <div className='relative h-full w-full flex-1 transition-all duration-200'>
           <div className='workflow-container flex h-full items-center justify-center'>
             <div className='flex flex-col items-center gap-3'>
@@ -2238,7 +2238,7 @@ const WorkflowContent = React.memo(() => {
   }
 
   return (
-    <div className='flex h-screen w-full flex-col overflow-hidden'>
+    <div className='flex h-full w-full flex-col overflow-hidden'>
       <div className='relative h-full w-full flex-1 transition-all duration-200'>
         {/* Training Controls - for recording workflow edits */}
         <TrainingControls />

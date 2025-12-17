@@ -11,6 +11,7 @@ import { useTerminalConsoleStore } from '@/stores/terminal'
 import { useWorkflowRegistry } from '@/stores/workflows/registry/store'
 import { useSubBlockStore } from '@/stores/workflows/subblock/store'
 import { useWorkflowStore } from '@/stores/workflows/workflow/store'
+import { useSidebarStore } from '@/stores/sidebar/store'
 
 const logger = createLogger('Stores')
 
@@ -199,6 +200,7 @@ export {
   useCustomToolsStore,
   useVariablesStore,
   useSubBlockStore,
+  useSidebarStore,
 }
 
 // Helper function to reset all stores

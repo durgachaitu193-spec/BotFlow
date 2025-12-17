@@ -31,7 +31,9 @@ function handleRootPathRedirects(
     if (hasActiveSession) {
       return NextResponse.redirect(new URL('/workspace', request.url))
     }
-    return NextResponse.redirect(new URL('/login', request.url))
+    // Allow root page to render (for pre-login video)
+    return null
+    // return NextResponse.redirect(new URL('/login', request.url))
   }
 
   // For root path, redirect authenticated users to workspace

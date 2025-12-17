@@ -46,7 +46,7 @@ export default function WorkflowsPage() {
   // Always show loading state until redirect happens
   // There should always be a default workflow, so we never show "no workflows found"
   return (
-    <div className='flex h-screen items-center justify-center'>
+    <div className='flex h-full items-center justify-center'>
       <div className='text-center'>
         <div className='mx-auto mb-4'>
           <Loader2 className='h-8 w-8 animate-spin text-muted-foreground' />

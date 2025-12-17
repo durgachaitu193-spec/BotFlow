@@ -1,11 +1,14 @@
 import type { NextConfig } from 'next'
+
 import { env, getEnv, isTruthy } from './lib/core/config/env'
 import { isDev, isHosted } from './lib/core/config/environment'
 import { getMainCSPPolicy, getWorkflowExecutionCSPPolicy } from './lib/core/security/csp'
 
 const nextConfig: NextConfig = {
+  turbopack: {},
   devIndicators: false,
   images: {
+    qualities: [100, 75],
     remotePatterns: [
       {
         protocol: 'https',
@@ -78,10 +81,10 @@ const nextConfig: NextConfig = {
     'thread-stream',
   ],
   experimental: {
-    turbopackSourceMaps: false,
+
     turbopackFileSystemCacheForDev: true,
   },
-  turbopack: {},
+
   ...(isDev && {
     allowedDevOrigins: [
       ...(env.NEXT_PUBLIC_APP_URL
@@ -104,7 +107,11 @@ const nextConfig: NextConfig = {
     '@t3-oss/env-nextjs',
     '@t3-oss/env-core',
     '@sim/db',
+    '@sim/ui',
   ],
+  webpack: (config) => {
+    return config
+  },
   async headers() {
     return [
       {

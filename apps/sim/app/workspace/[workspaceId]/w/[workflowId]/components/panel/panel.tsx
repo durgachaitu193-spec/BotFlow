@@ -32,7 +32,6 @@ import {
   Editor,
   Toolbar,
 } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components'
-import { WalletButton } from '@/components/wallet-button'
 import {
   usePanelResize,
   useUsageLimits,
@@ -356,7 +355,7 @@ export function Panel() {
     <>
       <aside
         ref={panelRef}
-        className='panel-container fixed inset-y-0 right-0 z-10 overflow-hidden bg-[var(--surface-1)]'
+        className='panel-container absolute inset-y-0 right-0 z-10 overflow-hidden bg-[var(--surface-1)]'
         aria-label='Workflow panel'
       >
         <div className='flex h-full flex-col border-[var(--border)] border-l pt-[14px]'>
@@ -443,7 +442,6 @@ export function Panel() {
                 )}
                 Run
               </Button>
-              <WalletButton />
             </div>
           </div>
 
@@ -524,7 +522,7 @@ export function Panel() {
 
       {/* Resize Handle */}
       <div
-        className='fixed top-0 right-[calc(var(--panel-width)-4px)] bottom-0 z-20 w-[8px] cursor-ew-resize'
+        className='absolute top-0 right-[calc(var(--panel-width)-4px)] bottom-0 z-20 w-[8px] cursor-ew-resize'
         onMouseDown={handleMouseDown}
         role='separator'
         aria-orientation='vertical'

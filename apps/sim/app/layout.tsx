@@ -12,7 +12,7 @@ import { QueryProvider } from '@/app/_shell/providers/query-provider'
 import { SessionProvider } from '@/app/_shell/providers/session-provider'
 import { ThemeProvider } from '@/app/_shell/providers/theme-provider'
 import { ZoomPrevention } from '@/app/_shell/zoom-prevention'
-import { PrivyAuthProvider } from '@/lib/privy-provider'
+import { PrivyProviderWrapper } from '@sim/ui'
 import { season } from '@/app/_styles/fonts/season/season'
 
 export const viewport: Viewport = {
@@ -189,7 +189,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <OneDollarStats />
         <PostHogProvider>
           <ThemeProvider>
-            <PrivyAuthProvider>
+            <PrivyProviderWrapper appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID}>
               <QueryProvider>
                 <SessionProvider>
                   <BrandedLayout>
@@ -198,7 +198,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   </BrandedLayout>
                 </SessionProvider>
               </QueryProvider>
-            </PrivyAuthProvider>
+            </PrivyProviderWrapper>
           </ThemeProvider>
         </PostHogProvider>
       </body>

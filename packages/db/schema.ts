@@ -41,6 +41,7 @@ export const user = pgTable('user', {
   updatedAt: timestamp('updated_at').notNull(),
   stripeCustomerId: text('stripe_customer_id'),
   isSuperUser: boolean('is_super_user').notNull().default(false),
+  userDID: text('user_did'),
 })
 
 export const session = pgTable(

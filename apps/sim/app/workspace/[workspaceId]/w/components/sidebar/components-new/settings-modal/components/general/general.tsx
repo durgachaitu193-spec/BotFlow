@@ -1,5 +1,3 @@
-'use client'
-
 import { useEffect, useRef, useState } from 'react'
 import { Camera, Check, Pencil } from 'lucide-react'
 import Image from 'next/image'
@@ -12,7 +10,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@/components/emcn/components/modal/modal'
-import { Input, Skeleton } from '@/components/ui'
+import { Input, Skeleton, Dialog, DialogContent } from '@/components/ui'
 import { usePrivy } from '@privy-io/react-auth'
 import { useSession } from '@/lib/auth/auth-client'
 import { useBrandConfig } from '@/lib/branding/branding'
@@ -23,6 +21,7 @@ import { useProfilePictureUpload } from '@/app/workspace/[workspaceId]/w/compone
 import { useGeneralSettings, useUpdateGeneralSetting } from '@/hooks/queries/general-settings'
 import { useUpdateUserProfile, useUserProfile } from '@/hooks/queries/user-profile'
 import { clearUserData } from '@/stores'
+import { ClaimDidForm } from '@/app/workspace/[workspaceId]/w/components/sidebar/components-new/settings-modal/components/claim-did-form/claim-did-form'
 
 const logger = createLogger('General')
 
@@ -71,6 +70,8 @@ export function General({ onOpenChange }: GeneralProps) {
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false)
   const [resetPasswordSuccess, setResetPasswordSuccess] = useState(false)
   const [resetPasswordError, setResetPasswordError] = useState<string | null>(null)
+
+  const [isClaimModalOpen, setIsClaimModalOpen] = useState(false)
 
   const [uploadError, setUploadError] = useState<string | null>(null)
 
@@ -291,7 +292,7 @@ export function General({ onOpenChange }: GeneralProps) {
               action: 'enable_from_settings',
               timestamp: new Date().toISOString(),
             }),
-          }).catch(() => {})
+          }).catch(() => { })
         }
       }
     }
@@ -321,9 +322,8 @@ export function General({ onOpenChange }: GeneralProps) {
                     width={36}
                     height={36}
                     unoptimized
-                    className={`h-full w-full object-cover transition-opacity duration-300 ${
-                      isUploadingProfilePicture ? 'opacity-50' : 'opacity-100'
-                    }`}
+                    className={`h-full w-full object-cover transition-opacity duration-300 ${isUploadingProfilePicture ? 'opacity-50' : 'opacity-100'
+                      }`}
                   />
                 )
               }
@@ -334,9 +334,8 @@ export function General({ onOpenChange }: GeneralProps) {
               )
             })()}
             <div
-              className={`absolute inset-0 flex items-center justify-center rounded-full bg-black/50 transition-opacity ${
-                isUploadingProfilePicture ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-              }`}
+              className={`absolute inset-0 flex items-center justify-center rounded-full bg-black/50 transition-opacity ${isUploadingProfilePicture ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                }`}
             >
               {isUploadingProfilePicture ? (
                 <div className='h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent' />
@@ -429,6 +428,30 @@ export function General({ onOpenChange }: GeneralProps) {
         </div>
       </div> */}
 
+      <div className='flex items-center justify-between border-b pb-[12px]'>
+        <div className='space-y-1'>
+          <Label>Identity Verification</Label>
+          <p className='text-[12px] text-[var(--text-muted)]'>
+            Verify your identity to deploy agents
+          </p>
+        </div>
+        {profile?.userDID ? (
+          <div className='flex items-center gap-2'>
+            <div className='flex items-center gap-1.5 rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-500'>
+              <Check className='h-3 w-3' />
+              Verified
+            </div>
+            <span className='text-xs text-[var(--text-tertiary)] font-mono'>
+              {profile.userDID.slice(0, 10)}...{profile.userDID.slice(-4)}
+            </span>
+          </div>
+        ) : (
+          <Button onClick={() => setIsClaimModalOpen(true)} variant='outline'>
+            Verify Identity
+          </Button>
+        )}
+      </div>
+
       <div className='flex items-center justify-between pt-[12px]'>
         <Label htmlFor='auto-connect'>Auto-connect on drop</Label>
         <Switch
@@ -492,6 +515,22 @@ export function General({ onOpenChange }: GeneralProps) {
         <Button onClick={handleSignOut}>Sign out</Button>
         <Button onClick={() => setShowResetPasswordModal(true)}>Reset password</Button>
       </div>
+
+      {/* Claim DID Modal */}
+      <Dialog open={isClaimModalOpen} onOpenChange={setIsClaimModalOpen}>
+        <DialogContent className='max-w-[500px] h-[600px] p-0 overflow-hidden' hideCloseButton={false}>
+          <ClaimDidForm
+            onSuccess={() => {
+              setIsClaimModalOpen(false)
+              updateProfile.reset() // Invalidate/refetch profile
+              // Force a refetch to update UI immediately
+              import('@/hooks/queries/user-profile').then(({ useUserProfile }) => {
+                // Query invalidation handles this
+              })
+            }}
+          />
+        </DialogContent>
+      </Dialog>
 
       {/* Password Reset Confirmation Modal */}
       <Modal open={showResetPasswordModal} onOpenChange={setShowResetPasswordModal}>

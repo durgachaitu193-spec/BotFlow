@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import Landing from '@/app/(landing)/landing'
+import { IntroductionClient } from '@/components/pre-login-view'
+
 
 const baseUrl = getBaseUrl()
 
@@ -40,6 +41,7 @@ export const metadata: Metadata = {
         width: 600,
         height: 600,
         alt: 'Sim Logo',
+        type: 'image/png',
       },
     ],
   },
@@ -91,5 +93,5 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
-  return <Landing />
+  return <IntroductionClient />
 }

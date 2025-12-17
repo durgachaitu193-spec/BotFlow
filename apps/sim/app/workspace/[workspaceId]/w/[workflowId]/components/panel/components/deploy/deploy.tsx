@@ -12,6 +12,7 @@ import {
 } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/deploy/hooks'
 import { useCurrentWorkflow } from '@/app/workspace/[workspaceId]/w/[workflowId]/hooks/use-current-workflow'
 import type { WorkspaceUserPermissions } from '@/hooks/use-user-permissions'
+import { useUserProfile } from '@/hooks/queries/user-profile'
 import { useWorkflowRegistry } from '@/stores/workflows/registry/store'
 import { createLogger } from '@/lib/logs/console/logger'
 
@@ -67,15 +68,22 @@ export function Deploy({ activeWorkflowId, userPermissions, className }: DeployP
     refetchDeployedState,
   })
 
+  // Fetch user profile for verification check
+  const { data: profile } = useUserProfile()
+  const isVerified = !!profile?.userDID
+
   const isEmpty = !hasBlocks()
   const canDeploy = userPermissions.canAdmin
-  const isDisabled = isDeploying || !canDeploy || isEmpty
+  const isDisabled = isDeploying || !canDeploy || isEmpty || !isVerified
 
   /**
    * Handle deploy button click - check payment status first
    */
+  /**
+   * Handle deploy button click - check payment status first
+   */
   const onDeployClick = useCallback(async () => {
-    if (!canDeploy || !activeWorkflowId) return
+    if (!canDeploy || !activeWorkflowId || !isVerified) return
 
     // Check if payment is required and not yet completed
     const paymentPaid = workflowMetadata?.deploymentPaymentPaid ?? false
@@ -91,7 +99,7 @@ export function Deploy({ activeWorkflowId, userPermissions, className }: DeployP
     if (result.shouldOpenModal) {
       setIsModalOpen(true)
     }
-  }, [canDeploy, activeWorkflowId, handleDeployClick, workflowMetadata, isDeployed])
+  }, [canDeploy, activeWorkflowId, handleDeployClick, workflowMetadata, isDeployed, isVerified])
 
   /**
    * Handle successful X402 payment
@@ -143,9 +151,13 @@ export function Deploy({ activeWorkflowId, userPermissions, className }: DeployP
    * Get tooltip text based on current state
    */
   const getTooltipText = () => {
+    if (!isVerified) {
+      return 'You must verify your identity in Settings > General to deploy agents'
+    }
     if (isEmpty) {
       return 'Cannot deploy an empty workflow'
     }
+    // ... rest of logic
     if (!canDeploy) {
       return 'Admin permissions required'
     }

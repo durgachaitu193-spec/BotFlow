@@ -456,7 +456,7 @@ export function SidebarNew() {
     <>
       {isCollapsed ? (
         /* Floating collapsed header */
-        <div className='fixed top-[14px] left-[10px] z-10 max-w-[232px] rounded-[8px] border border-[var(--border)] bg-[var(--surface-1)] px-[12px] py-[8px]'>
+        <div className='fixed top-[70px] left-[10px] z-50 max-w-[232px] rounded-[8px] border border-[var(--border)] bg-[var(--surface-1)] px-[12px] py-[8px]'>
           <WorkspaceHeader
             activeWorkspace={activeWorkspace}
             workspaceId={workspaceId}
@@ -483,7 +483,7 @@ export function SidebarNew() {
         <>
           <aside
             ref={sidebarRef}
-            className='sidebar-container fixed inset-y-0 left-0 z-10 overflow-hidden bg-[var(--surface-1)]'
+            className='sidebar-container relative h-full flex-shrink-0 z-10 overflow-hidden bg-[var(--surface-1)]'
             aria-label='Workspace sidebar'
             onClick={handleSidebarClick}
           >
@@ -611,7 +611,7 @@ export function SidebarNew() {
           {/* Resize Handle - Only visible on workflow pages */}
           {isOnWorkflowPage && (
             <div
-              className='fixed top-0 bottom-0 left-[calc(var(--sidebar-width)-4px)] z-20 w-[8px] cursor-ew-resize'
+              className='fixed top-32 bottom-0 left-[calc(var(--sidebar-width)-4px)] z-20 w-[8px] cursor-ew-resize'
               onMouseDown={handleMouseDown}
               role='separator'
               aria-orientation='vertical'

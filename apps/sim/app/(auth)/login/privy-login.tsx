@@ -292,7 +292,7 @@ export default function PrivyLogin() {
         <div className='space-y-10 text-center'>
           <div className='flex justify-center'>
             <Image
-              src='/lockup_ow.png'
+              src='/logo/lockup_ow.png'
               alt='Megalith Logo'
               width={240}
               height={80}

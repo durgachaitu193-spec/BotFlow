@@ -6,8 +6,12 @@ import { ProviderModelsLoader } from '@/app/workspace/[workspaceId]/providers/pr
 import { SettingsLoader } from '@/app/workspace/[workspaceId]/providers/settings-loader'
 import { WorkspacePermissionsProvider } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
 import { SidebarNew } from '@/app/workspace/[workspaceId]/w/components/sidebar/sidebar-new'
+import { clearUserData, useSidebarStore } from '@/stores'
+import { Navbar, LaunchpadNavbar } from '@sim/ui'
 
 export default function WorkspaceLayout({ children }: { children: React.ReactNode }) {
+  const isCollapsed = useSidebarStore((state) => state.isCollapsed)
+
   return (
     <>
       <SettingsLoader />
@@ -15,11 +19,15 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
       <GlobalCommandsProvider>
         <Tooltip.Provider delayDuration={600} skipDelayDuration={0}>
           <WorkspacePermissionsProvider>
-            {/* <LaunchpadNavbar />
-          <Navbar /> */}
-            <div className='flex min-h-screen w-full'>
-              <SidebarNew />
-              <div className='flex flex-1 flex-col'>{children}</div>
+            <div className="flex h-screen w-full flex-col overflow-hidden">
+              <LaunchpadNavbar currentApp="builder" />
+              <div className='flex flex-1 overflow-hidden'>
+                <SidebarNew />
+                <div className='flex flex-1 flex-col overflow-hidden w-full relative'>
+                  <Navbar currentApp="builder" isCollapsed={isCollapsed} onSignOut={clearUserData} />
+                  {children}
+                </div>
+              </div>
             </div>
           </WorkspacePermissionsProvider>
         </Tooltip.Provider>

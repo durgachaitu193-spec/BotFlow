@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useSession } from '@/lib/auth/auth-client'
@@ -11,6 +11,7 @@ const logger = createLogger('WorkspacePage')
 export default function WorkspacePage() {
   const router = useRouter()
   const { data: session, isPending } = useSession()
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const redirectToFirstWorkspace = async () => {
@@ -103,6 +104,7 @@ export default function WorkspacePage() {
         router.replace(`/workspace/${firstWorkspace.id}/w`)
       } catch (error) {
         logger.error('Error fetching workspaces for redirect:', error)
+        setError('Failed to load workspaces. Please try again.')
         // Don't redirect if there's an error - let the user stay on the page
       }
     }
@@ -121,6 +123,30 @@ export default function WorkspacePage() {
         <div className='flex flex-col items-center justify-center text-center align-middle'>
           <Loader2 className='h-8 w-8 animate-spin text-muted-foreground' />
         </div>
+      </div>
+    )
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className='flex h-screen w-full flex-col items-center justify-center space-y-4'>
+        <div className='text-center'>
+          <h1 className='text-2xl font-bold text-destructive'>Something went wrong</h1>
+          <p className='text-muted-foreground'>{error}</p>
+        </div>
+        <button
+          onClick={() => window.location.reload()}
+          className='rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90'
+        >
+          Try Again
+        </button>
+        <button
+          onClick={() => router.push('/login')}
+          className='text-sm text-muted-foreground hover:underline'
+        >
+          Back to Login
+        </button>
       </div>
     )
   }
