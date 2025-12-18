@@ -562,8 +562,8 @@ function getProviderConfig(providerId: string) {
 
   // Check if provider uses Basic Auth for token exchange
   const usesBasicAuth = (id: string): boolean => {
-    // Linear and Reddit use Basic Auth
-    return id === 'linear' || id === 'reddit'
+    // Linear, Reddit, and Airtable use Basic Auth
+    return id === 'linear' || id === 'reddit' || id === 'airtable' || id === 'notion'
   }
 
   const clientId = getClientId(providerId)
