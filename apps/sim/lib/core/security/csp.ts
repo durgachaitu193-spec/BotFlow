@@ -107,6 +107,8 @@ export const buildTimeCSPDirectives: CSPDirectives = {
     'https://collector.onedollarstats.com',
     // Privy authentication domains
     'https://auth.privy.io',
+    // Self-hosted Privy proxy domain (builder.megalithlabs.ai → privy.megalithlabs.ai)
+    'https://privy.megalithlabs.ai',
     'wss://relay.walletconnect.com',
     'wss://relay.walletconnect.org',
     'wss://www.walletlink.org',
@@ -190,9 +192,9 @@ export function generateRuntimeCSP(): string {
     img-src 'self' data: blob: https://*.googleusercontent.com https://*.google.com https://*.atlassian.com https://cdn.discordapp.com https://*.githubusercontent.com https://explorer-api.walletconnect.com https://*.walletconnect.com https://*.walletconnect.org ${brandLogoDomain} ${brandFaviconDomain};
     media-src 'self' blob:;
     font-src 'self' https://fonts.gstatic.com;
-    connect-src 'self' ${appUrl} ${ollamaUrl} ${socketUrl} ${socketWsUrl} https://api.browser-use.com https://api.exa.ai https://api.firecrawl.dev https://*.googleapis.com https://*.amazonaws.com https://*.s3.amazonaws.com https://*.blob.core.windows.net https://api.github.com https://github.com/* https://*.atlassian.com https://*.supabase.co https://collector.onedollarstats.com https://auth.privy.io wss://relay.walletconnect.com wss://relay.walletconnect.org wss://www.walletlink.org https://*.rpc.privy.systems https://explorer-api.walletconnect.com ${dynamicDomainsStr};
-    frame-src https://drive.google.com https://docs.google.com https://*.google.com https://auth.privy.io https://verify.walletconnect.com https://verify.walletconnect.org https://challenges.cloudflare.com;
-    child-src https://auth.privy.io https://verify.walletconnect.com https://verify.walletconnect.org;
+    connect-src 'self' ${appUrl} ${ollamaUrl} ${socketUrl} ${socketWsUrl} https://api.browser-use.com https://api.exa.ai https://api.firecrawl.dev https://*.googleapis.com https://*.amazonaws.com https://*.s3.amazonaws.com https://*.blob.core.windows.net https://api.github.com https://github.com/* https://*.atlassian.com https://*.supabase.co https://collector.onedollarstats.com https://auth.privy.io https://privy.megalithlabs.ai wss://relay.walletconnect.com wss://relay.walletconnect.org wss://www.walletlink.org https://*.rpc.privy.systems https://explorer-api.walletconnect.com ${dynamicDomainsStr};
+    frame-src https://drive.google.com https://docs.google.com https://*.google.com https://auth.privy.io https://privy.megalithlabs.ai https://verify.walletconnect.com https://verify.walletconnect.org https://challenges.cloudflare.com;
+    child-src https://auth.privy.io https://privy.megalithlabs.ai https://verify.walletconnect.com https://verify.walletconnect.org;
     frame-ancestors 'self';
     form-action 'self';
     base-uri 'self';
