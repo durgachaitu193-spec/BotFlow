@@ -49,7 +49,7 @@ export async function authenticateApiKey(inputKey: string, storedKey: string): P
       return false
     }
 
-    // If input key has legacy prefix (sim_), check both encrypted and plain text
+    // If input key has legacy prefix (megalith_), check both encrypted and plain text
     if (isLegacyApiKeyFormat(inputKey)) {
       if (isEncryptedKey(storedKey)) {
         try {
@@ -168,7 +168,7 @@ export async function getApiKeyDisplayFormat(encryptedKey: string): Promise<stri
 /**
  * Formats an API key for display showing prefix and last 4 characters
  * @param apiKey - The API key (plain text)
- * @returns string - The display format like "sk-sim-...r6AA" or "sim_...r6AA"
+ * @returns string - The display format like "sk-sim-...r6AA" or "megalith_...r6AA"
  */
 export function formatApiKeyForDisplay(apiKey: string): string {
   if (isEncryptedApiKeyFormat(apiKey)) {
@@ -177,9 +177,9 @@ export function formatApiKeyForDisplay(apiKey: string): string {
     return `sk-sim-...${last4}`
   }
   if (isLegacyApiKeyFormat(apiKey)) {
-    // For sim_ format: "sim_...r6AA"
+    // For megalith_ format: "megalith_...r6AA"
     const last4 = getApiKeyLast4(apiKey)
-    return `sim_...${last4}`
+    return `megalith_...${last4}`
   }
   // Unknown format, just show last 4
   const last4 = getApiKeyLast4(apiKey)

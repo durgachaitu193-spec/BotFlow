@@ -97,11 +97,11 @@ export async function decryptApiKey(encryptedValue: string): Promise<{ decrypted
 }
 
 /**
- * Generates a standardized API key with the 'sim_' prefix (legacy format)
+ * Generates a standardized API key with the 'megalith_' prefix (legacy format)
  * @returns A new API key string
  */
 export function generateApiKey(): string {
-  return `sim_${randomBytes(24).toString('base64url')}`
+  return `megalith_${randomBytes(24).toString('base64url')}`
 }
 
 /**
@@ -124,8 +124,8 @@ export function isEncryptedApiKeyFormat(apiKey: string): boolean {
 /**
  * Determines if an API key uses the legacy format based on prefix
  * @param apiKey - The API key to check
- * @returns true if the key uses the legacy format (sim_ prefix)
+ * @returns true if the key uses the legacy format (megalith_ prefix)
  */
 export function isLegacyApiKeyFormat(apiKey: string): boolean {
-  return apiKey.startsWith('sim_') && !apiKey.startsWith('sk-sim-')
+  return apiKey.startsWith('megalith_') && !apiKey.startsWith('sk-sim-')
 }
