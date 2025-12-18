@@ -67,10 +67,25 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
     const checkDID = async () => {
       if (walletAddress && selectedChain) {
         try {
-          const { did } = await fetchDIDForAddress(walletAddress, selectedChain)
+          const { did, username: fetchedUsername } = await fetchDIDForAddress(walletAddress, selectedChain)
           if (did) {
-            logger.info('User already has DID, proceeding...', { did })
-            onSuccess()
+            logger.info('User already has DID, updating profile...', { did })
+
+            // Update DB to ensure profile stays in sync
+            try {
+              await fetch('/api/users/me/profile', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  userDID: did,
+                  name: fetchedUsername || undefined,
+                }),
+              })
+            } catch (updateError) {
+              logger.error('Error updating profile with existing DID:', updateError)
+            }
+
+            setStep('success')
           }
         } catch (error) {
           logger.error('Error checking existing DID:', error)

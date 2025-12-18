@@ -10,7 +10,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@/components/emcn/components/modal/modal'
-import { Input, Skeleton, Dialog, DialogContent } from '@/components/ui'
+import { Input, Skeleton, Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui'
 import { usePrivy } from '@privy-io/react-auth'
 import { useSession } from '@/lib/auth/auth-client'
 import { useBrandConfig } from '@/lib/branding/branding'
@@ -519,6 +519,10 @@ export function General({ onOpenChange }: GeneralProps) {
       {/* Claim DID Modal */}
       <Dialog open={isClaimModalOpen} onOpenChange={setIsClaimModalOpen}>
         <DialogContent className='max-w-[500px] h-[600px] p-0 overflow-hidden' hideCloseButton={false}>
+          <DialogTitle className='sr-only'>Verify Identity</DialogTitle>
+          <DialogDescription className='sr-only'>
+            Setup your decentralized identity to deploy agents.
+          </DialogDescription>
           <ClaimDidForm
             onSuccess={() => {
               setIsClaimModalOpen(false)
