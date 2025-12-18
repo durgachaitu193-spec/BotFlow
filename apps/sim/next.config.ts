@@ -5,7 +5,6 @@ import { isDev, isHosted } from './lib/core/config/environment'
 import { getMainCSPPolicy, getWorkflowExecutionCSPPolicy } from './lib/core/security/csp'
 
 const nextConfig: NextConfig = {
-  turbopack: {},
   devIndicators: false,
   images: {
     qualities: [100, 75],
@@ -79,7 +78,23 @@ const nextConfig: NextConfig = {
     'pino',
     'pino-pretty',
     'thread-stream',
+    'on-exit-leak-free',
+    'pino-std-serializers',
+    'process-warning',
+    'real-require',
+    'sonic-boom',
   ],
+  turbopack: {
+    resolveAlias: {
+      'thread-stream': './lib/empty.ts',
+      'pino-pretty': './lib/empty.ts',
+      'on-exit-leak-free': './lib/empty.ts',
+      'pino-std-serializers': './lib/empty.ts',
+      'process-warning': './lib/empty.ts',
+      'real-require': './lib/empty.ts',
+      'sonic-boom': './lib/empty.ts',
+    },
+  },
   experimental: {
 
     turbopackFileSystemCacheForDev: true,
