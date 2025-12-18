@@ -10,30 +10,34 @@ const logger = createLogger('WorkspacePage')
 
 export default function WorkspacePage() {
   const router = useRouter()
-  const { data: session, isPending } = useSession()
+  const { data: session, isPending, refetch } = useSession()
   const [error, setError] = useState<string | null>(null)
+  const [isRetrying, setIsRetrying] = useState(false)
 
   useEffect(() => {
     const redirectToFirstWorkspace = async () => {
-      // Wait for session to load
       if (isPending) {
         return
       }
-
-      // If user is not authenticated, redirect to login
+      // If user is not authenticated, try one more refetch to be sure (handles race conditions)
       if (!session?.user) {
-        logger.info('User not authenticated, redirecting to login')
+        if (!isRetrying) {
+          logger.info('User session not found, retrying refetch once...')
+          setIsRetrying(true)
+          await refetch()
+          return
+        }
+
+        logger.info('User not authenticated after retry, redirecting to login')
         router.replace('/login')
         return
       }
 
       try {
-        // Check if we need to redirect a specific workflow from old URL format
         const urlParams = new URLSearchParams(window.location.search)
         const redirectWorkflowId = urlParams.get('redirect_workflow')
 
         if (redirectWorkflowId) {
-          // Try to get the workspace for this workflow
           try {
             const workflowResponse = await fetch(`/api/workflows/${redirectWorkflowId}`)
             if (workflowResponse.ok) {
@@ -53,7 +57,6 @@ export default function WorkspacePage() {
           }
         }
 
-        // Fetch user's workspaces
         const response = await fetch('/api/workspaces')
 
         if (!response.ok) {

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import type { PrivyUserData } from '@/lib/privy/types'
 import { inter } from '@/app/_styles/fonts/inter/inter'
 import { soehne } from '@/app/_styles/fonts/soehne/soehne'
+import { useSession } from '@/lib/auth/auth-client'
 
 /**
  * Transform Privy user object to our PrivyUserData structure
@@ -28,12 +29,12 @@ const transformPrivyUser = (privyUser: any): PrivyUserData => {
     })),
     wallet: privyUser.wallet
       ? {
-          address: privyUser.wallet.address,
-          walletClientType: privyUser.wallet.walletClientType,
-          chainType: privyUser.wallet.chainType,
-          createdAt: privyUser.wallet.createdAt,
-          ...privyUser.wallet,
-        }
+        address: privyUser.wallet.address,
+        walletClientType: privyUser.wallet.walletClientType,
+        chainType: privyUser.wallet.chainType,
+        createdAt: privyUser.wallet.createdAt,
+        ...privyUser.wallet,
+      }
       : undefined,
     wallets: privyUser.wallets?.map((wallet: any) => ({
       address: wallet.address,
@@ -51,6 +52,7 @@ export default function PrivyLogin() {
   const { wallets } = useWallets()
   const { createWallet } = useCreateWallet()
   const router = useRouter()
+  const { refetch } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
   const [isCreatingWallet, setIsCreatingWallet] = useState(false)
@@ -152,10 +154,10 @@ export default function PrivyLogin() {
         try {
           console.log('No wallet found, creating embedded wallet...')
           setIsCreatingWallet(true)
-          
+
           // Use createWallet function to explicitly create a wallet
           const wallet = await createWallet()
-          
+
           if (wallet?.address) {
             walletAddress = wallet.address
             console.log('Wallet created successfully:', walletAddress)
@@ -206,16 +208,13 @@ export default function PrivyLogin() {
         hasRedirected.current = false
         hasSynced.current = false
         processedUserId.current = null
-        // Surface an error so the user can manually retry.
         setError('Failed to sync account data. Please try again.')
         return
       }
-
-      // After successful sync, always go to workspace.
+      console.log('Sync successful, refetching session...')
+      await refetch()
       router.push('/workspace')
     }
-
-    // Execute immediately
     proceedWithSyncAndRedirect()
   }, [ready, authenticated, user?.id, wallets])
 

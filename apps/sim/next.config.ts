@@ -1,3 +1,4 @@
+// Triggering CSP reload
 import type { NextConfig } from 'next'
 
 import { env, getEnv, isTruthy } from './lib/core/config/env'
