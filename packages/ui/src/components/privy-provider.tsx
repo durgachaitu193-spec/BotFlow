@@ -1,7 +1,7 @@
 'use client'
 
 import { PrivyProvider } from '@privy-io/react-auth'
-import type { ReactNode } from 'react'
+import { ReactNode, useMemo } from 'react'
 
 export const BSC_TESTNET = {
     id: 97,
@@ -81,25 +81,31 @@ export function PrivyProviderWrapper({ children, appId, appUrl }: PrivyProviderW
     console.log('[PrivyProviderWrapper] Initializing with App ID:', finalAppId?.slice(0, 6) + '...')
     console.warn('[PrivyProviderWrapper] If you see 403 errors, ensure http://localhost:3000 and http://localhost:3001 are in your Privy Dashboard Allowed Domains')
 
+    const privyConfig = useMemo(() => ({
+        loginMethods: ['wallet' as const, 'email' as const, 'google' as const, 'twitter' as const, 'discord' as const, 'github' as const, 'apple' as const],
+        appearance: {
+            theme: 'dark' as const,
+            accentColor: '#0EE0C6' as const,
+            logo: appUrl ? `${appUrl}/megalith.svg` : undefined,
+            showWalletLoginFirst: true,
+            landingHeader: 'MegalithLabs',
+        },
+        embeddedWallets: {
+            ethereum: {
+                createOnLogin: 'users-without-wallets' as const,
+            },
+        },
+        supportedChains: [BSC_TESTNET, BSC_MAINNET],
+        session: {
+            redirectToAfterLogin: false,
+        },
+        storageMethod: 'localStorage' as const,
+    }), [appUrl])
+
     return (
         <PrivyProvider
             appId={finalAppId}
-            config={{
-                loginMethods: ['wallet', 'email', 'google', 'twitter', 'discord', 'github', 'apple'],
-                appearance: {
-                    theme: 'dark',
-                    accentColor: '#0EE0C6',
-                    logo: appUrl ? `${appUrl}/megalith.svg` : undefined,
-                    showWalletLoginFirst: true,
-                    landingHeader: 'MegalithLabs',
-                },
-                embeddedWallets: {
-                    ethereum: {
-                        createOnLogin: 'users-without-wallets',
-                    },
-                },
-                supportedChains: [BSC_TESTNET, BSC_MAINNET],
-            }}
+            config={privyConfig}
         >
             {children}
         </PrivyProvider>

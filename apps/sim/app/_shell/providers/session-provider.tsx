@@ -35,16 +35,29 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState<Error | null>(null)
 
-  const loadSession = useCallback(async () => {
+  const loadSession = useCallback(async (retryCount = 0) => {
     try {
       setIsPending(true)
       setError(null)
+      console.log('[SessionProvider] Fetching session...', { retryCount })
       const res = await fetch('/api/auth/session', {
         credentials: 'include',
+        cache: 'no-store', // Ensure we don't get a cached null session
       })
       const json = await res.json()
+      console.log('[SessionProvider] Session loaded:', {
+        hasUser: !!json?.data?.user,
+        userId: json?.data?.user?.id,
+      })
       setData(json?.data ?? null)
     } catch (e) {
+      console.error('[SessionProvider] Error fetching session:', e)
+      if (retryCount < 2) {
+        console.log(`[SessionProvider] Retrying fetch (${retryCount + 1})...`)
+        // Exponential backoff or simple delay
+        await new Promise((resolve) => setTimeout(resolve, 500 * (retryCount + 1)))
+        return loadSession(retryCount + 1)
+      }
       setError(e instanceof Error ? e : new Error('Failed to fetch session'))
     } finally {
       setIsPending(false)
@@ -71,7 +84,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       } else {
         posthog.reset()
       }
-    } catch {}
+    } catch { }
   }, [data, isPending])
 
   const value = useMemo<SessionHookResult>(
