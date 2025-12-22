@@ -279,7 +279,7 @@ export class DeployWorkflowClientTool extends BaseClientTool {
             ? window.location.origin
             : process.env.NEXT_PUBLIC_APP_URL || 'https://app.sim.ai'
         const endpoint = `${appUrl}/api/workflows/${workflowId}/execute`
-        const apiKeyPlaceholder = '$SIM_API_KEY'
+        const apiKeyPlaceholder = '$MEGALITH_API_KEY'
 
         // Get input format example (returns empty string if no inputs, or -d flag with example data)
         const inputExample = getInputFormatExample(false)
