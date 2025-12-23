@@ -27,7 +27,7 @@ import { ChatDeploy, type ExistingChat } from './components/chat/chat'
 import { GeneralDeploy } from './components/general/general'
 import { TemplateDeploy } from './components/template/template'
 import { AgentInfo } from './components/agent-info'
-import { registerAgent, updateAgentMetadata } from '@/lib/contracts/agentRegistry'
+import { registerAgent, updateAgentMetadata, updateDeploymentState } from '@/lib/contracts/agentRegistry'
 import { type AgentMetadata, buildAgentMetadata } from '@/lib/contracts/agentMetadata'
 
 const logger = createLogger('DeployModal')
@@ -72,6 +72,7 @@ export function DeployModal({
   const isDeployed = deploymentStatus?.isDeployed ?? isDeployedProp
   const setDeploymentStatus = useWorkflowRegistry((state) => state.setDeploymentStatus)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isUpdatingAgentOnChain, setIsUpdatingAgentOnChain] = useState(false)
   // const [isUndeploying, setIsUndeploying] = useState(false)
   const [deploymentInfo, setDeploymentInfo] = useState<WorkflowDeploymentInfo | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -436,13 +437,89 @@ export function DeployModal({
             needsRedeployment: false,
           })
         }
+
+        // Update deployment state on-chain ONLY after successful promotion
+        // Only proceed if deployment was successful
+        if (responseData.isDeployed !== false) {
+          setIsUpdatingAgentOnChain(true)
+          try {
+            // Check if agent exists for this workflow
+            const agentResponse = await fetch(`/api/agents?workflowId=${workflowId}`)
+            if (agentResponse.ok) {
+              const agentsData = await agentResponse.json()
+              if (agentsData.agents && agentsData.agents.length > 0) {
+                const existingAgent = agentsData.agents[0]
+                const walletAddress = wallets?.[0]?.address
+
+                if (walletAddress && existingAgent.agentId) {
+                  let provider: any = null
+                  try {
+                    if (wallets && wallets.length > 0) {
+                      provider = await wallets[0].getEthereumProvider()
+                    }
+                  } catch (error) {
+                    logger.error('Error getting wallet provider:', error)
+                    return // Exit early if we can't get provider
+                  }
+
+                  if (provider) {
+                    // Get current workflow state
+                    const workflowState = useWorkflowStore.getState().getWorkflowState()
+                    const deploymentStateJson = JSON.stringify({
+                      blocks: workflowState.blocks,
+                      edges: workflowState.edges,
+                      loops: workflowState.loops,
+                      parallels: workflowState.parallels,
+                    })
+
+                    try {
+                      const deploymentUpdateResult = await updateDeploymentState(
+                        walletAddress,
+                        existingAgent.agentId,
+                        deploymentStateJson,
+                        provider
+                      )
+
+                      if (deploymentUpdateResult) {
+                        logger.info('Deployment state updated on-chain after promote to live', {
+                          txHash: deploymentUpdateResult.txHash,
+                          agentId: existingAgent.agentId,
+                          version,
+                        })
+                      } else {
+                        logger.warn('Deployment state update returned no result')
+                      }
+                    } catch (onChainUpdateError) {
+                      logger.error(
+                        'Error updating deployment state on-chain after promote to live:',
+                        onChainUpdateError
+                      )
+                      // Don't throw - workflow promotion succeeded, on-chain update is non-critical
+                    }
+                  } else {
+                    logger.warn('No provider available for on-chain deployment state update')
+                  }
+                } else {
+                  logger.debug('No wallet address or agent ID, skipping on-chain deployment state update')
+                }
+              }
+            }
+          } catch (onChainError) {
+            logger.error('Error checking for agent or updating deployment state on-chain:', onChainError)
+            // Don't throw - workflow promotion succeeded, on-chain update is non-critical
+          } finally {
+            setIsUpdatingAgentOnChain(false)
+          }
+        } else {
+          logger.warn('Deployment not successful, skipping on-chain deployment state update')
+        }
       } catch (error) {
         // Rollback optimistic update on error
         setVersions(previousVersions)
         throw error
       }
     },
-    [workflowId, versions, refetchDeployedState, fetchVersions, selectedStreamingOutputs]
+    [workflowId, versions, refetchDeployedState, fetchVersions, selectedStreamingOutputs, wallets]
   )
 
   /* const handleUndeploy = async () => {
@@ -490,6 +567,16 @@ export function DeployModal({
 
       const { isDeployed: newDeployStatus, deployedAt, apiKey } = await response.json()
 
+      // Only proceed if deployment was successful
+      if (!newDeployStatus) {
+        throw new Error('Deployment was not successful')
+      }
+
+      // We know we will attempt an on-chain update for the agent after this point,
+      // so flip the on-chain loading state *before* we clear the needsRedeployment flag
+      // to avoid a visual gap where the button briefly shows "Up to date".
+      setIsUpdatingAgentOnChain(true)
+
       setDeploymentStatus(
         workflowId,
         newDeployStatus,
@@ -506,8 +593,81 @@ export function DeployModal({
       await fetchVersions()
 
       setDeploymentInfo((prev) => (prev ? { ...prev, needsRedeployment: false } : prev))
+
+      // Update deployment state on-chain ONLY after successful deployment
+      if (workflowId && newDeployStatus) {
+        try {
+          // Check if agent exists for this workflow
+          const agentResponse = await fetch(`/api/agents?workflowId=${workflowId}`)
+          if (agentResponse.ok) {
+            const agentsData = await agentResponse.json()
+            if (agentsData.agents && agentsData.agents.length > 0) {
+              const existingAgent = agentsData.agents[0]
+              const walletAddress = wallets?.[0]?.address
+
+              if (walletAddress && existingAgent.agentId) {
+                let provider: any = null
+                try {
+                  if (wallets && wallets.length > 0) {
+                    provider = await wallets[0].getEthereumProvider()
+                  }
+                } catch (error) {
+                  logger.error('Error getting wallet provider:', error)
+                  return // Exit early if we can't get provider
+                }
+
+                if (provider) {
+                  // Get current workflow state
+                  const workflowState = useWorkflowStore.getState().getWorkflowState()
+                  const deploymentStateJson = JSON.stringify({
+                    blocks: workflowState.blocks,
+                    edges: workflowState.edges,
+                    loops: workflowState.loops,
+                    parallels: workflowState.parallels,
+                  })
+
+                  try {
+                    const deploymentUpdateResult = await updateDeploymentState(
+                      walletAddress,
+                      existingAgent.agentId,
+                      deploymentStateJson,
+                      provider
+                    )
+
+                    if (deploymentUpdateResult) {
+                      logger.info('Deployment state updated on-chain after redeploy', {
+                        txHash: deploymentUpdateResult.txHash,
+                        agentId: existingAgent.agentId,
+                      })
+                    } else {
+                      logger.warn('Deployment state update returned no result')
+                    }
+                  } catch (onChainUpdateError) {
+                    logger.error(
+                      'Error updating deployment state on-chain after redeploy:',
+                      onChainUpdateError
+                    )
+                    // Don't throw - workflow deployment succeeded, on-chain update is non-critical
+                  }
+                } else {
+                  logger.warn('No provider available for on-chain deployment state update')
+                }
+              } else {
+                logger.debug('No wallet address or agent ID, skipping on-chain deployment state update')
+              }
+            }
+          }
+        } catch (onChainError) {
+          logger.error('Error checking for agent or updating deployment state on-chain:', onChainError)
+          // Don't throw - workflow deployment succeeded, on-chain update is non-critical
+        } finally {
+          setIsUpdatingAgentOnChain(false)
+        }
+      }
     } catch (error: unknown) {
       logger.error('Error redeploying workflow:', { error })
+      // Re-throw to show error to user
+      throw error
     } finally {
       setIsSubmitting(false)
     }
@@ -638,6 +798,33 @@ export function DeployModal({
               if (updateResult) {
                 logger.info('Agent metadata updated on-chain', { txHash: updateResult.txHash })
               }
+
+              // Also update deployment state on-chain
+              try {
+                const workflowState = useWorkflowStore.getState().getWorkflowState()
+                const deploymentStateJson = JSON.stringify({
+                  blocks: workflowState.blocks,
+                  edges: workflowState.edges,
+                  loops: workflowState.loops,
+                  parallels: workflowState.parallels,
+                })
+
+                const deploymentUpdateResult = await updateDeploymentState(
+                  walletAddress,
+                  existingAgent.agentId,
+                  deploymentStateJson,
+                  provider
+                )
+
+                if (deploymentUpdateResult) {
+                  logger.info('Agent deployment state updated on-chain', {
+                    txHash: deploymentUpdateResult.txHash,
+                  })
+                }
+              } catch (deploymentError) {
+                logger.error('Error updating agent deployment state on-chain:', deploymentError)
+                // Continue even if deployment state update fails
+              }
             } catch (onChainError) {
               logger.error('Error updating agent metadata on-chain:', onChainError)
               // Continue with database update even if on-chain update fails
@@ -723,6 +910,15 @@ export function DeployModal({
           }
         }
 
+        // Get current workflow state for deployment state
+        const workflowState = useWorkflowStore.getState().getWorkflowState()
+        const deploymentStateJson = JSON.stringify({
+          blocks: workflowState.blocks,
+          edges: workflowState.edges,
+          loops: workflowState.loops,
+          parallels: workflowState.parallels,
+        })
+
         // Register agent on-chain
         const registerResult = await registerAgent(
           walletAddress,
@@ -731,7 +927,8 @@ export function DeployModal({
           undefined, // chain (uses default)
           chatFormData.tokenName || '',
           chatFormData.tokenSymbol || '',
-          ipfsHash || ''
+          ipfsHash || '',
+          deploymentStateJson
         )
 
         if (!registerResult) {
@@ -946,8 +1143,8 @@ export function DeployModal({
             <GeneralFooter
               isDeployed={isDeployed}
               needsRedeployment={needsRedeployment}
-
               isSubmitting={isSubmitting}
+              isUpdatingAgentOnChain={isUpdatingAgentOnChain}
               // isUndeploying={isUndeploying}
               onDeploy={onDeploy}
               onRedeploy={handleRedeploy}
@@ -1152,6 +1349,7 @@ interface GeneralFooterProps {
   isDeployed?: boolean
   needsRedeployment: boolean
   isSubmitting: boolean
+  isUpdatingAgentOnChain: boolean
   // isUndeploying: boolean
   onDeploy: () => Promise<void>
   onRedeploy: () => Promise<void>
@@ -1162,6 +1360,7 @@ function GeneralFooter({
   isDeployed,
   needsRedeployment,
   isSubmitting,
+  isUpdatingAgentOnChain,
   // isUndeploying,
   onDeploy,
   onRedeploy,
@@ -1184,9 +1383,17 @@ function GeneralFooter({
         {/* <Button variant='default' onClick={onUndeploy} disabled={isUndeploying || isSubmitting}>
           {isUndeploying ? 'Undeploying...' : 'Undeploy'}
         </Button> */}
-        {needsRedeployment ? (
-          <Button variant='primary' onClick={onRedeploy} disabled={isSubmitting /* || isUndeploying */}>
-            {isSubmitting ? 'Updating...' : 'Update'}
+        {needsRedeployment || isUpdatingAgentOnChain ? (
+          <Button
+            variant='primary'
+            onClick={onRedeploy}
+            disabled={isSubmitting || isUpdatingAgentOnChain /* || isUndeploying */}
+          >
+            {isSubmitting
+              ? 'Updating deployment...'
+              : isUpdatingAgentOnChain
+                ? 'Updating agent on-chain...'
+                : 'Update'}
           </Button>
         ) : (
           <Button variant='secondary' disabled>

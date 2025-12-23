@@ -123,6 +123,17 @@ export default function TradeForm({ agent }: TradeFormProps) {
       const provider = await getProvider();
       if (!provider) throw new Error("No provider");
       const ethersProvider = new ethers.providers.Web3Provider(provider);
+      const network = await ethersProvider.getNetwork();
+
+      // Ensure user is connected to BSC Testnet where the token contracts are deployed
+      if (network.chainId !== 97) {
+        toast.error(
+          "Wrong network. Please switch your wallet to BSC Testnet (chainId 97) to trade this token.",
+        );
+        setIsLoading(false);
+        return;
+      }
+
       const signer = ethersProvider.getSigner();
       const contract = getDynamicBondingCurveTokenContract(
         agent.contractAddress,
