@@ -19,6 +19,7 @@ COPY apps/sim/package.json ./apps/sim/package.json
 COPY packages/db/package.json ./packages/db/package.json
 COPY packages/ui/package.json ./packages/ui/package.json
 
+
 # Install dependencies (this layer will be cached if package files don't change)
 RUN bun install --omit dev --ignore-scripts
 
