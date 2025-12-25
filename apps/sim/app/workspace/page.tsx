@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useSession } from '@/lib/auth/auth-client'
+import { usePrivy } from '@privy-io/react-auth'
 import { createLogger } from '@/lib/logs/console/logger'
 
 const logger = createLogger('WorkspacePage')
@@ -14,22 +15,44 @@ export default function WorkspacePage() {
   const [error, setError] = useState<string | null>(null)
   const [isRetrying, setIsRetrying] = useState(false)
 
+  const { ready: privyReady, authenticated: privyAuthenticated } = usePrivy()
+
   useEffect(() => {
     const redirectToFirstWorkspace = async () => {
-      if (isPending) {
+      // Don't do anything until Privy is ready
+      if (!privyReady || isPending) {
         return
       }
-      // If user is not authenticated, try one more refetch to be sure (handles race conditions)
-      if (!session?.user) {
+
+      // If user is authenticated via Privy but we don't have an app session yet,
+      // wait a bit and retry the refetch. This handles the case where the user
+      // has a valid Privy session but the app session cookie hasn't been established yet.
+      if (privyAuthenticated && !session?.user) {
         if (!isRetrying) {
-          logger.info('User session not found, retrying refetch once...')
+          logger.info('Privy authenticated but app session missing, retrying refetch...')
           setIsRetrying(true)
           await refetch()
           return
         }
+      }
 
-        logger.info('User not authenticated after retry, redirecting to login')
-        router.replace('/login')
+      // If user is truly not authenticated, redirect to login
+      // Wait a bit longer to be sure they are truly not authenticated
+      if (!session?.user) {
+        // If Privy is not ready yet, or we're still retrying, give it more time
+        if (!privyReady || isRetrying) {
+          return
+        }
+
+        // Final check: if Privy says NOT authenticated and we have no session, then redirect
+        if (!privyAuthenticated) {
+          logger.info('User not authenticated (Privy or App), redirecting to login')
+          router.replace('/login')
+        } else {
+          // If Privy IS authenticated but session is missing, try one last refetch
+          logger.info('Privy authenticated but session still missing, one final retry...')
+          await refetch()
+        }
         return
       }
 

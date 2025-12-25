@@ -11,6 +11,12 @@ export async function POST(request: NextRequest) {
     const privyUserData = body.user;
     const walletAddress = body.walletAddress as string | undefined;
 
+    console.log("[AuthSync] Syncing user:", {
+      privyId: privyUserData?.privyId,
+      walletAddress,
+      hasLinkedAccounts: !!privyUserData?.linkedAccounts?.length,
+    });
+
     const result = await syncPrivyUser(privyUserData, walletAddress);
 
     if (!result.success || !result.user) {
@@ -29,6 +35,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Set cookie for Privy authentication (expires in 30 days)
+    console.log("[AuthSync] Setting privy-user-id cookie for user:", syncedUser.id);
     response.cookies.set("privy-user-id", syncedUser.id, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
