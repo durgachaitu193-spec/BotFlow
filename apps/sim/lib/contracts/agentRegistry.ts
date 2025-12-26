@@ -27,6 +27,7 @@ const logger = createLogger('AgentRegistry')
  * @param tokenName - Optional token name (required if tokenSymbol or tokenIpfsHash provided)
  * @param tokenSymbol - Optional token symbol (required if tokenName or tokenIpfsHash provided)
  * @param tokenIpfsHash - Optional IPFS hash for token image (required if tokenName or tokenSymbol provided)
+ * @param deploymentState - Optional JSON string containing workflow blocks and triggers deployment state
  * @returns On-chain agent details if successful, null otherwise
  */
 export async function registerAgent(
@@ -36,7 +37,8 @@ export async function registerAgent(
   chain: Chain = DEFAULT_CHAIN,
   tokenName?: string,
   tokenSymbol?: string,
-  tokenIpfsHash?: string
+  tokenIpfsHash?: string,
+  deploymentState?: string
 ): Promise<{
   agentId: bigint
   agentDID: string
@@ -110,13 +112,14 @@ export async function registerAgent(
 
     // Register agent with token info
     // The contract now handles token creation and metadata update in a single transaction
-    // Both registerAgent and registerAgentWithoutDID require all 4 parameters
+    // Both registerAgent and registerAgentWithoutDID require all 5 parameters (including deploymentState)
     const functionName = 'registerAgent' // Use registerAgent (with DID) by default
-    const args: readonly [string, string, string, string] = [
+    const args: readonly [string, string, string, string, string] = [
       metadata,
       tokenName ?? '',
       tokenSymbol ?? '',
       tokenIpfsHash ?? '',
+      deploymentState ?? '',
     ]
 
     const hash = await walletClient.writeContract({
@@ -195,6 +198,7 @@ export async function registerAgent(
             tokenName: string
             tokenSymbol: string
             tokenIpfsHash: string
+            deploymentState: string
           }
 
           agentId = agentInfo.agentId
@@ -335,5 +339,139 @@ export async function updateAgentMetadata(
   } catch (error: any) {
     logger.error('Error updating agent metadata:', error)
     throw error
+  }
+}
+
+/**
+ * Update agent deployment state in the AgentIdentityRegistry contract
+ * @param walletAddress - The user's wallet address (from Privy)
+ * @param agentId - The agent ID to update
+ * @param newDeploymentState - JSON string containing updated deployment state (workflow blocks and triggers)
+ * @param provider - Ethereum provider (from Privy wallet)
+ * @param chain - The chain to interact with (defaults to BSC_TESTNET)
+ * @returns The transaction hash if successful
+ */
+export async function updateDeploymentState(
+  walletAddress: string,
+  agentId: string,
+  newDeploymentState: string,
+  provider: any,
+  chain: Chain = DEFAULT_CHAIN
+): Promise<{ txHash: string } | null> {
+  try {
+    if (!provider) {
+      throw new Error('Ethereum provider not available')
+    }
+
+    // Create wallet client
+    const walletClient = createWalletClient({
+      account: walletAddress as `0x${string}`,
+      chain,
+      transport: custom(provider),
+    })
+
+    // Create public client for waiting for transaction receipt
+    const publicClient = createPublicClient({
+      chain,
+      transport: http(chain.rpcUrls.default.http[0]),
+    })
+
+    // Check current network and switch if needed
+    try {
+      const currentChainId = await provider.request({ method: 'eth_chainId' })
+      const currentChainIdNumber = Number.parseInt(currentChainId as string, 16)
+
+      if (currentChainIdNumber !== chain.id) {
+        try {
+          await provider.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: `0x${chain.id.toString(16)}` }],
+          })
+          await new Promise((resolve) => setTimeout(resolve, 1000))
+        } catch (switchError: any) {
+          if (switchError.code === 4902) {
+            // Chain not added, try to add it
+            await provider.request({
+              method: 'wallet_addEthereumChain',
+              params: [
+                {
+                  chainId: `0x${chain.id.toString(16)}`,
+                  chainName: chain.name,
+                  nativeCurrency: chain.nativeCurrency,
+                  rpcUrls: chain.rpcUrls.default.http,
+                  blockExplorers: chain.blockExplorers
+                    ? {
+                        default: {
+                          name: chain.blockExplorers.default.name,
+                          url: chain.blockExplorers.default.url,
+                        },
+                      }
+                    : undefined,
+                },
+              ],
+            })
+            await new Promise((resolve) => setTimeout(resolve, 1000))
+          } else {
+            logger.warn(
+              'Network switch failed, but proceeding with transaction on selected network RPC'
+            )
+          }
+        }
+      }
+    } catch (error) {
+      logger.warn('Could not check current network, proceeding with transaction')
+    }
+
+    // Update agent deployment state
+    const hash = await walletClient.writeContract({
+      address: AGENT_IDENTITY_REGISTRY_ADDRESS as `0x${string}`,
+      abi: AGENT_IDENTITY_REGISTRY_ABI,
+      functionName: 'updateDeploymentState',
+      args: [BigInt(agentId), newDeploymentState],
+    })
+
+    // Wait for transaction receipt
+    await publicClient.waitForTransactionReceipt({ hash })
+
+    logger.info('Agent deployment state updated successfully', { agentId, txHash: hash })
+
+    return { txHash: hash }
+  } catch (error: any) {
+    logger.error('Error updating agent deployment state:', error)
+    throw error
+  }
+}
+
+/**
+ * Get agent deployment state from the AgentIdentityRegistry contract
+ * @param agentId - The agent ID to query
+ * @param chain - The chain to interact with (defaults to BSC_TESTNET)
+ * @returns The deployment state JSON string if successful, null otherwise
+ */
+export async function getDeploymentState(
+  agentId: string,
+  chain: Chain = DEFAULT_CHAIN
+): Promise<string | null> {
+  try {
+    // Create public client for reading
+    const publicClient = createPublicClient({
+      chain,
+      transport: http(chain.rpcUrls.default.http[0]),
+    })
+
+    // Get deployment state
+    const deploymentState = (await publicClient.readContract({
+      address: AGENT_IDENTITY_REGISTRY_ADDRESS as `0x${string}`,
+      abi: AGENT_IDENTITY_REGISTRY_ABI,
+      functionName: 'getDeploymentState',
+      args: [BigInt(agentId)],
+    })) as string
+
+    logger.info('Agent deployment state retrieved successfully', { agentId })
+
+    return deploymentState
+  } catch (error: any) {
+    logger.error('Error getting agent deployment state:', error)
+    return null
   }
 }

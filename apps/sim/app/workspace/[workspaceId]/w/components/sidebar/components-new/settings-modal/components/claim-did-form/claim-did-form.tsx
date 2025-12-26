@@ -333,15 +333,29 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
   }
 
   const handleCreateDID = async () => {
-    if (!authenticated || !user) return
+    logger.info('Create DID button clicked', {
+      authenticated,
+      hasUser: !!user,
+      username: username.trim(),
+      usernameAvailable,
+      isCheckingUsername,
+    })
+
+    if (!authenticated || !user) {
+      logger.warn('Cannot create DID: not authenticated or no user')
+      setClaimStatus('error')
+      return
+    }
 
     if (!username.trim()) {
+      logger.warn('Cannot create DID: no username provided')
       setClaimStatus('error')
       return
     }
 
     // Wait for ongoing check
     if (isCheckingUsername) {
+      logger.info('Waiting for username check to complete...')
       await new Promise((resolve) => setTimeout(resolve, 1000))
     }
 

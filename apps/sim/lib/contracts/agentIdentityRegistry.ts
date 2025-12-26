@@ -1,5 +1,5 @@
 // Agent Identity Registry Contract Configuration
-export const AGENT_IDENTITY_REGISTRY_ADDRESS = '0x449328eFeCb2990d2D5Fc67923aA7CDCa97C2620' as const
+export const AGENT_IDENTITY_REGISTRY_ADDRESS = '0xcaBCA569241042C8e16E106B887E29AA46f4e4aA' as const
 
 // Full Contract ABI for AgentIdentityRegistry
 export const AGENT_IDENTITY_REGISTRY_ABI = [
@@ -406,6 +406,11 @@ export const AGENT_IDENTITY_REGISTRY_ABI = [
             name: 'tokenIpfsHash',
             type: 'string',
           },
+          {
+            internalType: 'string',
+            name: 'deploymentState',
+            type: 'string',
+          },
         ],
         internalType: 'struct AgentIdentityRegistry.AgentInfo',
         name: '',
@@ -487,10 +492,34 @@ export const AGENT_IDENTITY_REGISTRY_ABI = [
             name: 'tokenIpfsHash',
             type: 'string',
           },
+          {
+            internalType: 'string',
+            name: 'deploymentState',
+            type: 'string',
+          },
         ],
         internalType: 'struct AgentIdentityRegistry.AgentInfo',
         name: '',
         type: 'tuple',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'agentId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getDeploymentState',
+    outputs: [
+      {
+        internalType: 'string',
+        name: 'deploymentState',
+        type: 'string',
       },
     ],
     stateMutability: 'view',
@@ -604,6 +633,11 @@ export const AGENT_IDENTITY_REGISTRY_ABI = [
           {
             internalType: 'string',
             name: 'tokenIpfsHash',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'deploymentState',
             type: 'string',
           },
         ],
@@ -755,6 +789,11 @@ export const AGENT_IDENTITY_REGISTRY_ABI = [
         name: 'tokenIpfsHash',
         type: 'string',
       },
+      {
+        internalType: 'string',
+        name: 'deploymentState',
+        type: 'string',
+      },
     ],
     name: 'registerAgent',
     outputs: [
@@ -802,6 +841,11 @@ export const AGENT_IDENTITY_REGISTRY_ABI = [
       {
         internalType: 'string',
         name: 'tokenIpfsHash',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'deploymentState',
         type: 'string',
       },
     ],
@@ -879,6 +923,24 @@ export const AGENT_IDENTITY_REGISTRY_ABI = [
       },
     ],
     name: 'updateAgentMetadata',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'agentId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: 'newDeploymentState',
+        type: 'string',
+      },
+    ],
+    name: 'updateDeploymentState',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
