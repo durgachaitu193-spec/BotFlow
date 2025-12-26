@@ -122,6 +122,7 @@ import { WealthboxBlock } from '@/blocks/blocks/wealthbox'
 import { WebflowBlock } from '@/blocks/blocks/webflow'
 import { WebhookBlock } from '@/blocks/blocks/webhook'
 import { WhatsAppBlock } from '@/blocks/blocks/whatsapp'
+import { UniswapBlock } from '@/blocks/blocks/uniswap'
 import { WikipediaBlock } from '@/blocks/blocks/wikipedia'
 import { WordPressBlock } from '@/blocks/blocks/wordpress'
 import { WorkflowBlock } from '@/blocks/blocks/workflow'
@@ -264,6 +265,7 @@ export const registry: Record<string, BlockConfig> = {
   workflow: WorkflowBlock,
   workflow_input: WorkflowInputBlock,
   x: XBlock,
+  uniswap: UniswapBlock,
   youtube: YouTubeBlock,
   zep: ZepBlock,
   zendesk: ZendeskBlock,

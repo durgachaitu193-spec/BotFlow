@@ -1180,6 +1180,13 @@ import {
   wikipediaSearchTool,
 } from '@/tools/wikipedia'
 import {
+  uniswapGetPriceTool,
+  uniswapGetTokenInfoTool,
+  uniswapGetPoolInfoTool,
+  uniswapGetQuoteTool,
+  uniswapSwapTool,
+} from '@/tools/uniswap'
+import {
   wordpressCreateCategoryTool,
   wordpressCreateCommentTool,
   wordpressCreatePageTool,
@@ -2082,6 +2089,11 @@ export const tools: Record<string, ToolConfig> = {
   wikipedia_search: wikipediaSearchTool,
   wikipedia_content: wikipediaPageContentTool,
   wikipedia_random: wikipediaRandomPageTool,
+  uniswap_get_price: uniswapGetPriceTool,
+  uniswap_get_token_info: uniswapGetTokenInfoTool,
+  uniswap_get_pool_info: uniswapGetPoolInfoTool,
+  uniswap_get_quote: uniswapGetQuoteTool,
+  uniswap_swap: uniswapSwapTool,
   wordpress_create_post: wordpressCreatePostTool,
   wordpress_update_post: wordpressUpdatePostTool,
   wordpress_delete_post: wordpressDeletePostTool,
