@@ -1,5 +1,5 @@
 // Agent Identity Registry Contract Configuration
-export const AGENT_IDENTITY_REGISTRY_ADDRESS = '0xcaBCA569241042C8e16E106B887E29AA46f4e4aA' as const
+export const AGENT_IDENTITY_REGISTRY_ADDRESS = '0xEc53F132acf831B6ECa04562D0eDa11e4ff780BE' as const
 
 // Full Contract ABI for AgentIdentityRegistry
 export const AGENT_IDENTITY_REGISTRY_ABI = [
@@ -763,8 +763,21 @@ export const AGENT_IDENTITY_REGISTRY_ABI = [
       },
     ],
     name: 'reactivateAgent',
-    outputs: [],
+    outputs: [    ],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getTokenCreationFee',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'fee',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -818,7 +831,7 @@ export const AGENT_IDENTITY_REGISTRY_ABI = [
         type: 'address',
       },
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'payable',
     type: 'function',
   },
   {
@@ -867,7 +880,7 @@ export const AGENT_IDENTITY_REGISTRY_ABI = [
         type: 'address',
       },
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'payable',
     type: 'function',
   },
   {

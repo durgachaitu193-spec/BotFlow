@@ -1,8 +1,8 @@
 // DID Registry Contract Configuration
-export const DID_REGISTRY_ADDRESS = '0xc7E89910c8FCDc37c02A43D269615833F8f5465f' as const
+export const DID_REGISTRY_ADDRESS = '0xE0579eB8cb426cD70743731Fdb94Aad2877C582D' as const
 
 // Username Registry Contract Configuration
-export const USERNAME_REGISTRY_ADDRESS = '0xe4745C559cFb78BF2b9Fa436d3D8a81F17f898d4' as const
+export const USERNAME_REGISTRY_ADDRESS = '0x9EFfBd00883006c36E146Eb2F4Ac7494498ea2C6' as const
 
 // Binance Smart Chain Mainnet (BSC Mainnet)
 export const BSC_MAINNET = {

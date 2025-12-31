@@ -12,7 +12,7 @@ import { DEFAULT_CHAIN } from './didRegistry'
 
 const logger = createLogger('TokenFactory')
 
-export const TOKEN_FACTORY_ADDRESS = '0x9A5d351d16c10cEDd984085C568018982275a7d8'
+export const TOKEN_FACTORY_ADDRESS = '0xb0ba7A078728966224dB6bdc9647bF8b68b3C1e0'
 
 export const TOKEN_FACTORY_ABI = [
   {
@@ -30,6 +30,20 @@ export const TOKEN_FACTORY_ABI = [
     inputs: [],
     name: 'MINTING_FEE',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'tokenCreationFee',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getTokenCreationFee',
+    outputs: [{ internalType: 'uint256', name: 'fee', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },

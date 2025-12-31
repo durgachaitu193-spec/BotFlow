@@ -110,9 +110,26 @@ export async function registerAgent(
       logger.warn('Could not check current network, proceeding with transaction')
     }
 
+    // Get token creation fee from the contract
+    // The contract is payable and requires the fee to be sent as value
+    let tokenCreationFee: bigint = 0n
+    try {
+      const fee = await publicClient.readContract({
+        address: AGENT_IDENTITY_REGISTRY_ADDRESS as `0x${string}`,
+        abi: AGENT_IDENTITY_REGISTRY_ABI,
+        functionName: 'getTokenCreationFee',
+      })
+      tokenCreationFee = fee as bigint
+      logger.info('Token creation fee retrieved', { fee: tokenCreationFee.toString() })
+    } catch (error) {
+      logger.error('Failed to get token creation fee', { error })
+      throw new Error('Failed to get token creation fee. Please try again.')
+    }
+
     // Register agent with token info
     // The contract now handles token creation and metadata update in a single transaction
     // Both registerAgent and registerAgentWithoutDID require all 5 parameters (including deploymentState)
+    // Both functions are now payable and require the token creation fee as value
     const functionName = 'registerAgent' // Use registerAgent (with DID) by default
     const args: readonly [string, string, string, string, string] = [
       metadata,
@@ -127,6 +144,7 @@ export async function registerAgent(
       abi: AGENT_IDENTITY_REGISTRY_ABI,
       functionName,
       args,
+      value: tokenCreationFee, // Send the token creation fee as value
     })
 
     // Wait for transaction receipt
