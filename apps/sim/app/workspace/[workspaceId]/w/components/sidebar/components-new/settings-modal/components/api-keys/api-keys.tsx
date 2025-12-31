@@ -13,7 +13,7 @@ import {
 } from '@/components/emcn/components/modal/modal'
 import { Input, Skeleton, Switch } from '@/components/ui'
 import { useSession } from '@/lib/auth/auth-client'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { useUserPermissionsContext } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
 import {
   type ApiKey,

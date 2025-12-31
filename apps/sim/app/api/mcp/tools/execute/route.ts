@@ -1,5 +1,5 @@
 import type { NextRequest } from 'next/server'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { getParsedBody, withMcpAuth } from '@/lib/mcp/middleware'
 import { mcpService } from '@/lib/mcp/service'
 import type { McpTool, McpToolCall, McpToolResult } from '@/lib/mcp/types'

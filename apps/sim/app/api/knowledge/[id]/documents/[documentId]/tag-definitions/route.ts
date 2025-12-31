@@ -10,7 +10,7 @@ import {
   getDocumentTagDefinitions,
 } from '@/lib/knowledge/tags/service'
 import type { BulkTagDefinitionsData } from '@/lib/knowledge/tags/types'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { checkDocumentAccess, checkDocumentWriteAccess } from '@/app/api/knowledge/utils'
 
 export const dynamic = 'force-dynamic'

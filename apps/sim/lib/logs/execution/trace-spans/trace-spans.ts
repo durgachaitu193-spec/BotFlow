@@ -1,6 +1,7 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { ToolCall, TraceSpan } from '@/lib/logs/types'
 import { isWorkflowBlockType } from '@/executor/consts'
+import { stripCustomToolPrefix } from '@/lib/workflows/common'
 import type { ExecutionResult } from '@/executor/types'
 
 const logger = createLogger('TraceSpans')
@@ -149,12 +150,12 @@ export function buildTraceSpans(result: ExecutionResult): {
       const t = log.output.tokens as
         | number
         | {
-            input?: number
-            output?: number
-            total?: number
-            prompt?: number
-            completion?: number
-          }
+          input?: number
+          output?: number
+          total?: number
+          prompt?: number
+          completion?: number
+        }
       if (typeof t === 'number') {
         span.tokens = t
       } else if (typeof t === 'object') {
@@ -214,7 +215,7 @@ export function buildTraceSpans(result: ExecutionResult): {
 
           if (segment.type === 'tool') {
             const matchingToolCall = toolCallsData.find(
-              (tc: { name?: string; [key: string]: unknown }) =>
+              (tc: { name?: string;[key: string]: unknown }) =>
                 tc.name === segment.name || stripCustomToolPrefix(tc.name || '') === segment.name
             )
 
@@ -229,9 +230,9 @@ export function buildTraceSpans(result: ExecutionResult): {
               input: matchingToolCall?.arguments || matchingToolCall?.input,
               output: matchingToolCall?.error
                 ? {
-                    error: matchingToolCall.error,
-                    ...(matchingToolCall.result || matchingToolCall.output || {}),
-                  }
+                  error: matchingToolCall.error,
+                  ...(matchingToolCall.result || matchingToolCall.output || {}),
+                }
                 : matchingToolCall?.result || matchingToolCall?.output,
             }
           }
@@ -471,8 +472,10 @@ function groupIterationBlocks(spans: TraceSpan[]): TraceSpan[] {
     }
   })
 
+  // Include loop/parallel spans that have errors (e.g., validation errors that blocked execution)
+  // These won't have iteration children, so they should appear directly in results
   const nonIterationContainerSpans = normalSpans.filter(
-    (span) => span.type !== 'parallel' && span.type !== 'loop'
+    (span) => (span.type !== 'parallel' && span.type !== 'loop') || span.status === 'error'
   )
 
   if (iterationSpans.length > 0) {
@@ -766,8 +769,4 @@ function ensureNestedWorkflowsProcessed(span: TraceSpan): TraceSpan {
   processedSpan.children = mergedChildren.length > 0 ? mergedChildren : undefined
 
   return processedSpan
-}
-
-export function stripCustomToolPrefix(name: string) {
-  return name.startsWith('custom_') ? name.replace('custom_', '') : name
 }

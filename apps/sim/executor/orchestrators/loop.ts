@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { buildLoopIndexCondition, DEFAULTS, EDGE } from '@/executor/consts'
 import type { DAG } from '@/executor/dag/builder'
 import type { LoopScope } from '@/executor/execution/state'
@@ -30,7 +30,7 @@ export class LoopOrchestrator {
     private dag: DAG,
     private state: BlockStateController,
     private resolver: VariableResolver
-  ) {}
+  ) { }
 
   initializeLoopScope(ctx: ExecutionContext, loopId: string): LoopScope {
     const loopConfig = this.dag.loopConfigs.get(loopId) as SerializedLoop | undefined

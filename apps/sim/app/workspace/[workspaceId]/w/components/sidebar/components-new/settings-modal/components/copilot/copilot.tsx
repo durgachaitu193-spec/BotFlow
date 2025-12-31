@@ -11,7 +11,7 @@ import {
   ModalHeader,
 } from '@/components/emcn/components/modal/modal'
 import { Input, Skeleton } from '@/components/ui'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import {
   type CopilotKey,
   useCopilotKeys,

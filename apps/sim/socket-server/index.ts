@@ -1,6 +1,6 @@
 import { createServer } from 'http'
 import { env } from '@/lib/core/config/env'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { createSocketIOServer } from '@/socket-server/config/socket'
 import { setupAllHandlers } from '@/socket-server/handlers'
 import { type AuthenticatedSocket, authenticateSocket } from '@/socket-server/middleware/auth'
@@ -68,10 +68,10 @@ io.engine.on('connection_error', (err) => {
     context: err.context,
     req: err.req
       ? {
-          url: err.req.url,
-          method: err.req.method,
-          headers: err.req.headers,
-        }
+        url: err.req.url,
+        method: err.req.method,
+        headers: err.req.headers,
+      }
       : 'No request object',
   })
 })

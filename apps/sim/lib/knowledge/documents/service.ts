@@ -11,7 +11,7 @@ import { DocumentProcessingQueue } from '@/lib/knowledge/documents/queue'
 import type { DocumentSortField, SortOrder } from '@/lib/knowledge/documents/types'
 import { generateEmbeddings } from '@/lib/knowledge/embeddings'
 import { getNextAvailableSlot } from '@/lib/knowledge/tags/service'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { DocumentProcessingPayload } from '@/background/knowledge-processing'
 
 const logger = createLogger('DocumentService')
@@ -474,7 +474,7 @@ export async function processDocumentAsync(
         if (processed.chunks.length > LARGE_DOC_CONFIG.MAX_CHUNKS_PER_DOCUMENT) {
           throw new Error(
             `Document has ${processed.chunks.length.toLocaleString()} chunks, exceeding maximum of ${LARGE_DOC_CONFIG.MAX_CHUNKS_PER_DOCUMENT.toLocaleString()}. ` +
-              `This document is unusually large and may need to be split into multiple files or preprocessed to reduce content.`
+            `This document is unusually large and may need to be split into multiple files or preprocessed to reduce content.`
           )
         }
 
@@ -1386,7 +1386,7 @@ export async function updateDocument(
   TAG_SLOTS.forEach((slot: TagSlot) => {
     const updateValue = (updateData as any)[slot]
     if (updateValue !== undefined) {
-      ;(dbUpdateData as any)[slot] = updateValue
+      ; (dbUpdateData as any)[slot] = updateValue
     }
   })
 

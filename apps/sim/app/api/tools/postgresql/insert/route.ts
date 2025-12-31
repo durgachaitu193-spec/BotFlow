@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { createPostgresConnection, executeInsert } from '@/app/api/tools/postgresql/utils'
 
 const logger = createLogger('PostgreSQLInsertAPI')

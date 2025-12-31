@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import type { Logger } from '@/lib/logs/console/logger'
+import type { Logger } from '@sim/logger'
 
 function jsonSchemaToZod(logger: Logger, jsonSchema: Record<string, any>): z.ZodTypeAny {
   if (!jsonSchema) {

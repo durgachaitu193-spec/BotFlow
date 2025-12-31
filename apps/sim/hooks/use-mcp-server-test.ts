@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useState } from 'react'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { McpTransport } from '@/lib/mcp/types'
 
 const logger = createLogger('useMcpServerTest')
@@ -63,10 +63,10 @@ export function useMcpServerTest() {
           ...config,
           headers: config.headers
             ? Object.fromEntries(
-                Object.entries(config.headers).filter(
-                  ([key, value]) => key.trim() !== '' && value.trim() !== ''
-                )
+              Object.entries(config.headers).filter(
+                ([key, value]) => key.trim() !== '' && value.trim() !== ''
               )
+            )
             : {},
         }
 

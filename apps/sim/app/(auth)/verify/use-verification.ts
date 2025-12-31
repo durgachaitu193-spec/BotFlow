@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { betterAuthClient, useSession } from '@/lib/auth/auth-client'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('useVerification')
 
@@ -171,7 +171,7 @@ export function useVerification({
         email: normalizedEmail,
         type: 'sign-in',
       })
-      .then(() => {})
+      .then(() => { })
       .catch(() => {
         setErrorMessage('Failed to resend verification code. Please try again later.')
       })

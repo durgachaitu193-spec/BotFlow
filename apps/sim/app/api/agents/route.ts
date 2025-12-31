@@ -4,7 +4,7 @@ import { and, desc, eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { getSession } from '@/lib/auth'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { generateRequestId } from '@/lib/core/utils/request'
 
 const logger = createLogger('AgentsAPI')

@@ -23,7 +23,7 @@ import {
 } from '@/components/emcn/components/modal/modal'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import {
   checkEnvVarTrigger,
   EnvVarDropdown,
@@ -926,7 +926,7 @@ try {
                     'bg-[var(--bg)]',
                     schemaError && 'border-[var(--text-error)]',
                     (schemaGeneration.isLoading || schemaGeneration.isStreaming) &&
-                      'cursor-not-allowed opacity-50'
+                    'cursor-not-allowed opacity-50'
                   )}
                   gutterClassName='bg-[var(--bg)]'
                   disabled={schemaGeneration.isLoading || schemaGeneration.isStreaming}
@@ -1006,7 +1006,7 @@ try {
                       'bg-[var(--bg)]',
                       codeError && !codeGeneration.isStreaming && 'border-[var(--text-error)]',
                       (codeGeneration.isLoading || codeGeneration.isStreaming) &&
-                        'cursor-not-allowed opacity-50'
+                      'cursor-not-allowed opacity-50'
                     )}
                     gutterClassName='bg-[var(--bg)]'
                     highlightVariables={true}

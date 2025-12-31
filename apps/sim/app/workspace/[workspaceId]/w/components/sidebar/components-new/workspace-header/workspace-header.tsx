@@ -14,7 +14,7 @@ import {
   PopoverTrigger,
   Tooltip,
 } from '@/components/emcn'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { useUserPermissionsContext } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
 import { ContextMenu } from '@/app/workspace/[workspaceId]/w/components/sidebar/components-new/workflow-list/components/context-menu/context-menu'
 import { DeleteModal } from '@/app/workspace/[workspaceId]/w/components/sidebar/components-new/workflow-list/components/delete-modal/delete-modal'
@@ -288,9 +288,8 @@ export function WorkspaceHeader({
               className='group !p-[3px] -m-[3px]'
             >
               <ChevronDown
-                className={`h-[8px] w-[12px] transition-transform duration-100 ${
-                  isWorkspaceMenuOpen ? 'rotate-180' : ''
-                }`}
+                className={`h-[8px] w-[12px] transition-transform duration-100 ${isWorkspaceMenuOpen ? 'rotate-180' : ''
+                  }`}
               />
             </Button>
           </PopoverTrigger>

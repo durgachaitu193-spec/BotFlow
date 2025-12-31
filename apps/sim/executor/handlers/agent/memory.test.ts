@@ -3,7 +3,7 @@ import { Memory } from '@/executor/handlers/agent/memory'
 import type { AgentInputs, Message } from '@/executor/handlers/agent/types'
 import type { ExecutionContext } from '@/executor/types'
 
-vi.mock('@/lib/logs/console/logger', () => ({
+vi.mock('@sim/logger', () => ({
   createLogger: () => ({
     warn: vi.fn(),
     error: vi.fn(),
@@ -232,7 +232,7 @@ describe('Memory', () => {
       }
 
       expect(() => {
-        ;(memoryService as any).buildMemoryKey(mockContext, inputs, 'test-block-id')
+        ; (memoryService as any).buildMemoryKey(mockContext, inputs, 'test-block-id')
       }).toThrow('Conversation ID is required for all memory types')
     })
 
@@ -243,7 +243,7 @@ describe('Memory', () => {
       }
 
       expect(() => {
-        ;(memoryService as any).buildMemoryKey(mockContext, inputs, 'test-block-id')
+        ; (memoryService as any).buildMemoryKey(mockContext, inputs, 'test-block-id')
       }).toThrow('Conversation ID is required for all memory types')
     })
   })

@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { getSession } from '@/lib/auth'
 import { generateRequestId } from '@/lib/core/utils/request'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { regenerateWorkflowStateIds } from '@/lib/workflows/persistence/utils'
 
 const logger = createLogger('TemplateUseAPI')

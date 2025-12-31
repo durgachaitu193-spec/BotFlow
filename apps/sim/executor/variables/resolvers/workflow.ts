@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { VariableManager } from '@/lib/workflows/variables/variable-manager'
 import { isReference, parseReferencePath, REFERENCE } from '@/executor/consts'
 import {
@@ -10,7 +10,7 @@ import {
 const logger = createLogger('WorkflowResolver')
 
 export class WorkflowResolver implements Resolver {
-  constructor(private workflowVariables: Record<string, any>) {}
+  constructor(private workflowVariables: Record<string, any>) { }
 
   canResolve(reference: string): boolean {
     if (!isReference(reference)) {

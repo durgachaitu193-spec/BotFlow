@@ -4,7 +4,7 @@ import { Combobox, Input, Label, Textarea } from '@/components/emcn/components'
 import { Slider } from '@/components/ui/slider'
 import { Switch } from '@/components/ui/switch'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { formatDisplayText } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/editor/components/sub-block/components/formatted-text'
 import {
   checkTagTrigger,
@@ -455,7 +455,7 @@ export function McpDynamicArgs({
               paramSchema.type === 'array'
                 ? `Enter JSON array, e.g. ["item1", "item2"] or comma-separated values`
                 : paramSchema.description ||
-                  `Enter ${formatParameterLabel(paramName).toLowerCase()}`
+                `Enter ${formatParameterLabel(paramName).toLowerCase()}`
             }
             disabled={disabled}
             blockId={blockId}
@@ -495,7 +495,7 @@ export function McpDynamicArgs({
               paramSchema.type === 'array'
                 ? `Enter JSON array, e.g. ["item1", "item2"] or comma-separated values`
                 : paramSchema.description ||
-                  `Enter ${formatParameterLabel(paramName).toLowerCase()}`
+                `Enter ${formatParameterLabel(paramName).toLowerCase()}`
             }
             disabled={disabled}
             isPassword={isPassword}
@@ -575,7 +575,7 @@ export function McpDynamicArgs({
                   className={cn(
                     'font-medium text-sm',
                     toolSchema.required?.includes(paramName) &&
-                      'after:ml-1 after:text-red-500 after:content-["*"]'
+                    'after:ml-1 after:text-red-500 after:content-["*"]'
                   )}
                 >
                   {formatParameterLabel(paramName)}

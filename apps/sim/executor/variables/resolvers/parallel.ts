@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { isReference, parseReferencePath, REFERENCE } from '@/executor/consts'
 import { extractBaseBlockId, extractBranchIndex } from '@/executor/utils/subflow-utils'
 import {
@@ -11,7 +11,7 @@ import type { SerializedWorkflow } from '@/serializer/types'
 const logger = createLogger('ParallelResolver')
 
 export class ParallelResolver implements Resolver {
-  constructor(private workflow: SerializedWorkflow) {}
+  constructor(private workflow: SerializedWorkflow) { }
 
   canResolve(reference: string): boolean {
     if (!isReference(reference)) {

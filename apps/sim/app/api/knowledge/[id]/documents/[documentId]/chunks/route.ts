@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { getSession } from '@/lib/auth'
 import { generateRequestId } from '@/lib/core/utils/request'
 import { batchChunkOperation, createChunk, queryChunks } from '@/lib/knowledge/chunks/service'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { getUserId } from '@/app/api/auth/oauth/utils'
 import { checkDocumentAccess, checkDocumentWriteAccess } from '@/app/api/knowledge/utils'
 import { calculateCost } from '@/providers/utils'
@@ -191,19 +191,19 @@ export async function POST(
           documentName: doc.filename,
           ...(cost
             ? {
-                cost: {
-                  input: cost.input,
-                  output: cost.output,
-                  total: cost.total,
-                  tokens: {
-                    prompt: newChunk.tokenCount,
-                    completion: 0,
-                    total: newChunk.tokenCount,
-                  },
-                  model: 'text-embedding-3-small',
-                  pricing: cost.pricing,
+              cost: {
+                input: cost.input,
+                output: cost.output,
+                total: cost.total,
+                tokens: {
+                  prompt: newChunk.tokenCount,
+                  completion: 0,
+                  total: newChunk.tokenCount,
                 },
-              }
+                model: 'text-embedding-3-small',
+                pricing: cost.pricing,
+              },
+            }
             : {}),
         },
       })

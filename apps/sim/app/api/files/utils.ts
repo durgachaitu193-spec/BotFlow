@@ -1,7 +1,7 @@
 import { existsSync } from 'fs'
 import { join, resolve, sep } from 'path'
 import { NextResponse } from 'next/server'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { UPLOAD_DIR } from '@/lib/uploads/config'
 import { sanitizeFileKey } from '@/lib/uploads/utils/file-utils'
 

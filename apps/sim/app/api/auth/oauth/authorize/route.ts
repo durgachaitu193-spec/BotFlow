@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm'
 import { cookies } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'
 import { getEnv } from '@/lib/core/config/env'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { OAUTH_PROVIDERS } from '@/lib/oauth/oauth'
 import { getBaseUrl } from '@/lib/core/utils/urls'
 
@@ -16,7 +16,7 @@ const logger = createLogger('OAuthAuthorize')
 export async function GET(request: NextRequest) {
   try {
     const cookieStore = await cookies()
-    const privyUserId = cookieStore.get('privy-user-id')?.value
+    const privyUserId = cookieStore.get('sim-privy-user-id')?.value
 
     if (!privyUserId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

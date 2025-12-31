@@ -1,5 +1,5 @@
 import { encodeSSE } from '@/lib/core/utils/sse'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { ExecutionResult } from '@/executor/types'
 
 const logger = createLogger('WorkflowStreaming')

@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import { GithubIcon } from '@/components/icons'
 import { useBrandConfig } from '@/lib/branding/branding'
 import { isHosted } from '@/lib/core/config/environment'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { soehne } from '@/app/_styles/fonts/soehne/soehne'
 import { getFormattedGitHubStars } from '@/app/(landing)/actions/github'
 
@@ -114,9 +114,8 @@ export default function Nav({ hideAuthButtons = false, variant = 'landing' }: Na
   return (
     <nav
       aria-label='Primary navigation'
-      className={`${soehne.className} flex w-full items-center justify-between px-4 ${
-        variant === 'auth' ? 'pt-[20px] sm:pt-[16.5px]' : 'pt-[12px] sm:pt-[8.5px]'
-      } pb-[21px] sm:px-8 md:px-[44px]`}
+      className={`${soehne.className} flex w-full items-center justify-between px-4 ${variant === 'auth' ? 'pt-[20px] sm:pt-[16.5px]' : 'pt-[12px] sm:pt-[8.5px]'
+        } pb-[21px] sm:px-8 md:px-[44px]`}
       itemScope
       itemType='https://schema.org/SiteNavigationElement'
     >

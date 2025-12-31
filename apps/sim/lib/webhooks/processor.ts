@@ -5,7 +5,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid'
 import { env, isTruthy } from '@/lib/core/config/env'
 import { preprocessExecution } from '@/lib/execution/preprocessing'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { convertSquareBracketsToTwiML } from '@/lib/webhooks/utils'
 import {
   handleSlackChallenge,
@@ -707,8 +707,7 @@ export async function queueWebhookExecution(
     if (useTrigger) {
       const handle = await tasks.trigger('webhook-execution', payload)
       logger.info(
-        `[${options.requestId}] Queued ${options.testMode ? 'TEST ' : ''}webhook execution task ${
-          handle.id
+        `[${options.requestId}] Queued ${options.testMode ? 'TEST ' : ''}webhook execution task ${handle.id
         } for ${foundWebhook.provider} webhook`
       )
     } else {
@@ -716,8 +715,7 @@ export async function queueWebhookExecution(
         logger.error(`[${options.requestId}] Direct webhook execution failed`, error)
       })
       logger.info(
-        `[${options.requestId}] Queued direct ${
-          options.testMode ? 'TEST ' : ''
+        `[${options.requestId}] Queued direct ${options.testMode ? 'TEST ' : ''
         }webhook execution for ${foundWebhook.provider} webhook (Trigger.dev disabled)`
       )
     }

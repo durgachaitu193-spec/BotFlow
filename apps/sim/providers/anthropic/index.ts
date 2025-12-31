@@ -1,5 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { StreamingExecution } from '@/executor/types'
 import { executeTool } from '@/tools'
 import { getProviderDefaultModel, getProviderModels } from '../models'
@@ -115,14 +115,14 @@ export const anthropicProvider: ProviderConfig = {
     // Transform tools to Anthropic format if provided
     let anthropicTools = request.tools?.length
       ? request.tools.map((tool) => ({
-          name: tool.id,
-          description: tool.description,
-          input_schema: {
-            type: 'object',
-            properties: tool.parameters.properties,
-            required: tool.parameters.required,
-          },
-        }))
+        name: tool.id,
+        description: tool.description,
+        input_schema: {
+          type: 'object',
+          properties: tool.parameters.properties,
+          required: tool.parameters.required,
+        },
+      }))
       : undefined
 
     // Set tool_choice based on usage control settings
@@ -644,13 +644,13 @@ ${fieldDescriptions}
           toolCalls:
             toolCalls.length > 0
               ? toolCalls.map((tc) => ({
-                  name: tc.name,
-                  arguments: tc.arguments as Record<string, any>,
-                  startTime: tc.startTime,
-                  endTime: tc.endTime,
-                  duration: tc.duration,
-                  result: tc.result,
-                }))
+                name: tc.name,
+                arguments: tc.arguments as Record<string, any>,
+                startTime: tc.startTime,
+                endTime: tc.endTime,
+                duration: tc.duration,
+                result: tc.result,
+              }))
               : undefined,
           toolResults: toolResults.length > 0 ? toolResults : undefined,
           timing: {
@@ -1019,9 +1019,9 @@ ${fieldDescriptions}
               toolCalls:
                 toolCalls.length > 0
                   ? {
-                      list: toolCalls,
-                      count: toolCalls.length,
-                    }
+                    list: toolCalls,
+                    count: toolCalls.length,
+                  }
                   : undefined,
               providerTiming: {
                 startTime: providerStartTimeISO,
@@ -1059,13 +1059,13 @@ ${fieldDescriptions}
         toolCalls:
           toolCalls.length > 0
             ? toolCalls.map((tc) => ({
-                name: tc.name,
-                arguments: tc.arguments as Record<string, any>,
-                startTime: tc.startTime,
-                endTime: tc.endTime,
-                duration: tc.duration,
-                result: tc.result,
-              }))
+              name: tc.name,
+              arguments: tc.arguments as Record<string, any>,
+              startTime: tc.startTime,
+              endTime: tc.endTime,
+              duration: tc.duration,
+              result: tc.result,
+            }))
             : undefined,
         toolResults: toolResults.length > 0 ? toolResults : undefined,
         timing: {

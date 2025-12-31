@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { clearUserData } from '@/stores'
 
 const logger = createLogger('WalletButton')
@@ -66,7 +66,7 @@ export function WalletButton() {
             method: 'POST',
             credentials: 'include',
           }).catch(() => {
-            // If API fails, try to clear cookie client-side as fallback
+            document.cookie = 'sim-privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
             document.cookie = 'privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
           })
 

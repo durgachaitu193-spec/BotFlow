@@ -11,7 +11,7 @@
 import { createHash, timingSafeEqual } from 'crypto'
 import type { NextRequest } from 'next/server'
 import { env } from '@/lib/core/config/env'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('AdminAuth')
 

@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { BlockType, HTTP } from '@/executor/consts'
 import type { BlockHandler, ExecutionContext } from '@/executor/types'
 import type { SerializedBlock } from '@/serializer/types'
@@ -64,7 +64,7 @@ export class ApiBlockHandler implements BlockHandler {
             if (trimmedBody.startsWith('{') || trimmedBody.startsWith('[')) {
               processedInputs.body = JSON.parse(trimmedBody)
             }
-          } catch (e) {}
+          } catch (e) { }
         } else if (processedInputs.body === null) {
           processedInputs.body = undefined
         }

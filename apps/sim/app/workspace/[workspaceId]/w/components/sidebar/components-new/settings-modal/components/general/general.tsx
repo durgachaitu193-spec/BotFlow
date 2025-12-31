@@ -16,7 +16,7 @@ import { useSession } from '@/lib/auth/auth-client'
 import { useBrandConfig } from '@/lib/branding/branding'
 import { getEnv, isTruthy } from '@/lib/core/config/env'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { useProfilePictureUpload } from '@/app/workspace/[workspaceId]/w/components/sidebar/components-new/settings-modal/hooks/use-profile-picture-upload'
 import { useGeneralSettings, useUpdateGeneralSetting } from '@/hooks/queries/general-settings'
 import { useUpdateUserProfile, useUserProfile } from '@/hooks/queries/user-profile'
@@ -185,6 +185,7 @@ export function General({ onOpenChange }: GeneralProps) {
             credentials: 'include',
           }).catch(() => {
             // If API fails, try to clear cookie client-side as fallback
+            document.cookie = 'sim-privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
             document.cookie = 'privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
           })
 

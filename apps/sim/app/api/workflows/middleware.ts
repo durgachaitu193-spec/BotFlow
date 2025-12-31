@@ -5,7 +5,7 @@ import {
   updateApiKeyLastUsed,
 } from '@/lib/api-key/service'
 import { env } from '@/lib/core/config/env'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { getWorkflowById } from '@/lib/workflows/utils'
 
 const logger = createLogger('WorkflowMiddleware')

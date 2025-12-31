@@ -1,6 +1,6 @@
 import { env } from '@/lib/core/config/env'
 import { isRetryableError, retryWithExponentialBackoff } from '@/lib/knowledge/documents/utils'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { batchByTokenLimit, getTotalTokenCount } from '@/lib/tokenization'
 
 const logger = createLogger('EmbeddingUtils')
@@ -45,13 +45,13 @@ function getEmbeddingConfig(embeddingModel = 'text-embedding-3-small'): Embeddin
 
   const headers: Record<string, string> = useAzure
     ? {
-        'api-key': azureApiKey!,
-        'Content-Type': 'application/json',
-      }
+      'api-key': azureApiKey!,
+      'Content-Type': 'application/json',
+    }
     : {
-        Authorization: `Bearer ${openaiApiKey!}`,
-        'Content-Type': 'application/json',
-      }
+      Authorization: `Bearer ${openaiApiKey!}`,
+      'Content-Type': 'application/json',
+    }
 
   return {
     useAzure,
@@ -66,14 +66,14 @@ async function callEmbeddingAPI(inputs: string[], config: EmbeddingConfig): Prom
     async () => {
       const requestBody = config.useAzure
         ? {
-            input: inputs,
-            encoding_format: 'float',
-          }
+          input: inputs,
+          encoding_format: 'float',
+        }
         : {
-            input: inputs,
-            model: config.modelName,
-            encoding_format: 'float',
-          }
+          input: inputs,
+          model: config.modelName,
+          encoding_format: 'float',
+        }
 
       const response = await fetch(config.apiUrl, {
         method: 'POST',

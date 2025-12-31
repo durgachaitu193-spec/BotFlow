@@ -139,3 +139,10 @@ export function formatDuration(durationMs: number): string {
   const remainingMinutes = minutes % 60
   return `${hours}h ${remainingMinutes}m`
 }
+
+/**
+ * Escape special regex characters in a string
+ */
+export function escapeRegExp(string: string): string {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}

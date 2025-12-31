@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation'
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@/components/emcn'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { formatFileSize, validateKnowledgeBaseFile } from '@/lib/uploads/utils/file-utils'
 import { ACCEPT_ATTRIBUTE } from '@/lib/uploads/utils/validation'
 import { getDocumentIcon } from '@/app/workspace/[workspaceId]/knowledge/components'
@@ -164,11 +164,10 @@ export function UploadModal({
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
-                className={`relative flex cursor-pointer items-center justify-center rounded-lg border-[1.5px] border-dashed p-8 text-center transition-colors ${
-                  isDragging
+                className={`relative flex cursor-pointer items-center justify-center rounded-lg border-[1.5px] border-dashed p-8 text-center transition-colors ${isDragging
                     ? 'border-[var(--brand-primary-hex)] bg-[var(--brand-primary-hex)]/5'
                     : 'border-[var(--c-575757)] hover:border-[var(--text-secondary)]'
-                }`}
+                  }`}
               >
                 <input
                   ref={fileInputRef}
@@ -195,11 +194,10 @@ export function UploadModal({
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
                   onClick={() => fileInputRef.current?.click()}
-                  className={`cursor-pointer rounded-md border border-dashed p-3 text-center transition-colors ${
-                    isDragging
+                  className={`cursor-pointer rounded-md border border-dashed p-3 text-center transition-colors ${isDragging
                       ? 'border-[var(--brand-primary-hex)] bg-[var(--brand-primary-hex)]/5'
                       : 'border-[var(--c-575757)] hover:border-[var(--text-secondary)]'
-                  }`}
+                    }`}
                 >
                   <input
                     ref={fileInputRef}

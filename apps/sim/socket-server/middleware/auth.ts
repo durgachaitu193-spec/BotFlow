@@ -3,7 +3,7 @@ import { db } from '@sim/db'
 import { user } from '@sim/db/schema'
 import { eq } from 'drizzle-orm'
 import { verifyInternalToken } from '@/lib/auth/internal'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('SocketAuth')
 

@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { quickValidateEmail } from '@/lib/messaging/email/validation'
 import { inter } from '@/app/_styles/fonts/inter/inter'
 import { soehne } from '@/app/_styles/fonts/soehne/soehne'
@@ -279,8 +279,8 @@ export default function EmailAuth({
                         className={cn(
                           'rounded-[10px] shadow-sm transition-colors focus:border-gray-400 focus:ring-2 focus:ring-gray-100',
                           showEmailValidationError &&
-                            emailErrors.length > 0 &&
-                            'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                          emailErrors.length > 0 &&
+                          'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                         )}
                         autoFocus
                       />
@@ -340,7 +340,7 @@ export default function EmailAuth({
                                 'border-gray-300 hover:border-gray-400',
                                 'focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-100',
                                 authError &&
-                                  'border-red-500 focus:border-red-500 focus:ring-red-100'
+                                'border-red-500 focus:border-red-500 focus:ring-red-100'
                               )}
                             />
                           ))}

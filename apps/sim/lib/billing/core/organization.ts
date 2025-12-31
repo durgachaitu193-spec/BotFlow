@@ -3,7 +3,7 @@ import { member, organization, subscription, user, userStats } from '@sim/db/sch
 import { and, eq } from 'drizzle-orm'
 import { getPlanPricing } from '@/lib/billing/core/billing'
 import { getEffectiveSeats, getFreeTierLimit } from '@/lib/billing/subscriptions/utils'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('OrganizationBilling')
 

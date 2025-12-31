@@ -88,7 +88,7 @@ export function Knowledge() {
 
   return (
     <>
-      <div className='flex h-screen flex-col pl-64'>
+      <div className='flex h-screen flex-col'>
         {/* Header */}
         <KnowledgeHeader breadcrumbs={breadcrumbs} />
 

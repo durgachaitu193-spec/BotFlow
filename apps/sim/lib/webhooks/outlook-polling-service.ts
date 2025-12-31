@@ -5,7 +5,7 @@ import { htmlToText } from 'html-to-text'
 import { nanoid } from 'nanoid'
 import { pollingIdempotency } from '@/lib/core/idempotency'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { getOAuthToken, refreshAccessTokenIfNeeded } from '@/app/api/auth/oauth/utils'
 
 const logger = createLogger('OutlookPollingService')
@@ -278,7 +278,7 @@ export async function pollOutlookWebhooks() {
 
     for (const webhookData of activeWebhooks) {
       const promise = enqueue(webhookData)
-        .then(() => {})
+        .then(() => { })
         .catch((err) => {
           logger.error('Unexpected error in webhook processing:', err)
           failureCount++

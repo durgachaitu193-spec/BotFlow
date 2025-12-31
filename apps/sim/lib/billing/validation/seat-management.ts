@@ -3,7 +3,7 @@ import { invitation, member, organization, subscription, user, userStats } from 
 import { and, count, eq } from 'drizzle-orm'
 import { getOrganizationSubscription } from '@/lib/billing/core/billing'
 import { getEffectiveSeats } from '@/lib/billing/subscriptions/utils'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { quickValidateEmail } from '@/lib/messaging/email/validation'
 
 const logger = createLogger('SeatManagement')

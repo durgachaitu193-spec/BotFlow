@@ -9,7 +9,7 @@ import { SSE_HEADERS } from '@/lib/core/utils/sse'
 import { getBaseUrl } from '@/lib/core/utils/urls'
 import { processInputFileFields } from '@/lib/execution/files'
 import { preprocessExecution } from '@/lib/execution/preprocessing'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { LoggingSession } from '@/lib/logs/execution/logging-session'
 import { executeWorkflowCore } from '@/lib/workflows/executor/execution-core'
 import { type ExecutionEvent, encodeSSEEvent } from '@/lib/workflows/executor/execution-events'
@@ -113,8 +113,8 @@ export async function executeWorkflow(
         onStream: streamConfig?.onStream,
         onBlockComplete: streamConfig?.onBlockComplete
           ? async (blockId: string, _blockName: string, _blockType: string, output: any) => {
-              await streamConfig.onBlockComplete!(blockId, output)
-            }
+            await streamConfig.onBlockComplete!(blockId, output)
+          }
           : undefined,
       },
       loggingSession,
@@ -161,9 +161,9 @@ export function createFilteredResult(result: any) {
     logs: undefined,
     metadata: result.metadata
       ? {
-          ...result.metadata,
-          workflowConnections: undefined,
-        }
+        ...result.metadata,
+        workflowConnections: undefined,
+      }
       : undefined,
   }
 }
@@ -339,16 +339,16 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const input =
       auth.authType === 'api_key'
         ? (() => {
-            const {
-              selectedOutputs,
-              triggerType,
-              stream,
-              useDraftState,
-              workflowStateOverride,
-              ...rest
-            } = body
-            return Object.keys(rest).length > 0 ? rest : validatedInput
-          })()
+          const {
+            selectedOutputs,
+            triggerType,
+            stream,
+            useDraftState,
+            workflowStateOverride,
+            ...rest
+          } = body
+          return Object.keys(rest).length > 0 ? rest : validatedInput
+        })()
         : validatedInput
 
     const shouldUseDraftState = useDraftState ?? auth.authType === 'session'
@@ -539,10 +539,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
           error: result.error,
           metadata: result.metadata
             ? {
-                duration: result.metadata.duration,
-                startTime: result.metadata.startTime,
-                endTime: result.metadata.endTime,
-              }
+              duration: result.metadata.duration,
+              startTime: result.metadata.startTime,
+              endTime: result.metadata.endTime,
+            }
             : undefined,
         }
 
@@ -560,10 +560,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
             error: executionResult?.error || error.message || 'Execution failed',
             metadata: executionResult?.metadata
               ? {
-                  duration: executionResult.metadata.duration,
-                  startTime: executionResult.metadata.startTime,
-                  endTime: executionResult.metadata.endTime,
-                }
+                duration: executionResult.metadata.duration,
+                startTime: executionResult.metadata.startTime,
+                endTime: executionResult.metadata.endTime,
+              }
               : undefined,
           },
           { status: 500 }
@@ -763,7 +763,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
             } finally {
               try {
                 reader.releaseLock()
-              } catch {}
+              } catch { }
             }
           }
 

@@ -7,7 +7,7 @@ import { Button, Combobox, Input, Textarea } from '@/components/emcn'
 import { AgentIcon, xIcon as XIcon } from '@/components/icons'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useSession } from '@/lib/auth/auth-client'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { CreatorProfileDetails } from '@/app/_types/creator-profile'
 import { useProfilePictureUpload } from '@/app/workspace/[workspaceId]/w/components/sidebar/components-new/settings-modal/hooks/use-profile-picture-upload'
 import {
@@ -333,11 +333,10 @@ export function TemplateProfile() {
             <div className='flex items-center gap-[10px]'>
               <div className='relative'>
                 <div
-                  className={`group relative flex h-9 w-9 flex-shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full border transition-all hover:bg-[var(--bg)] ${
-                    profilePictureUrl && !imageLoadError
+                  className={`group relative flex h-9 w-9 flex-shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full border transition-all hover:bg-[var(--bg)] ${profilePictureUrl && !imageLoadError
                       ? 'border-transparent'
                       : 'border-[var(--border)]'
-                  }`}
+                    }`}
                   onClick={handleProfilePictureClick}
                 >
                   {(() => {
@@ -349,9 +348,8 @@ export function TemplateProfile() {
                           width={36}
                           height={36}
                           unoptimized
-                          className={`h-full w-full object-cover transition-opacity duration-300 ${
-                            isUploadingProfilePicture ? 'opacity-50' : 'opacity-100'
-                          }`}
+                          className={`h-full w-full object-cover transition-opacity duration-300 ${isUploadingProfilePicture ? 'opacity-50' : 'opacity-100'
+                            }`}
                           onError={() => setImageLoadError(true)}
                         />
                       )
@@ -367,11 +365,10 @@ export function TemplateProfile() {
                     return <AgentIcon className='h-4 w-4 text-[var(--text-muted)]' />
                   })()}
                   <div
-                    className={`absolute inset-0 flex items-center justify-center rounded-full bg-black/50 transition-opacity ${
-                      isUploadingProfilePicture
+                    className={`absolute inset-0 flex items-center justify-center rounded-full bg-black/50 transition-opacity ${isUploadingProfilePicture
                         ? 'opacity-100'
                         : 'opacity-0 group-hover:opacity-100'
-                    }`}
+                      }`}
                   >
                     {isUploadingProfilePicture ? (
                       <div className='h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent' />

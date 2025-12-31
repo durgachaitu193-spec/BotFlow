@@ -5,7 +5,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { verifyCronAuth } from '@/lib/auth/internal'
 import { env, isTruthy } from '@/lib/core/config/env'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { executeScheduleJob } from '@/background/schedule-execution'
 
 export const dynamic = 'force-dynamic'

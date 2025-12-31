@@ -13,7 +13,7 @@ import type {
   TagDefinition,
   UpdateTagDefinitionData,
 } from '@/lib/knowledge/types'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('TagsService')
 

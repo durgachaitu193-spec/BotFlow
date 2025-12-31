@@ -46,7 +46,7 @@ vi.mock('@/lib/core/utils/request', () => ({
 
 describe('Chat API Utils', () => {
   beforeEach(() => {
-    vi.doMock('@/lib/logs/console/logger', () => ({
+    vi.doMock('@sim/logger', () => ({
       createLogger: vi.fn().mockReturnValue({
         info: vi.fn(),
         error: vi.fn(),

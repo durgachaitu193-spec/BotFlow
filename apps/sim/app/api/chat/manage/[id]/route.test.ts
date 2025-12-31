@@ -45,7 +45,7 @@ describe('Chat Edit API Route', () => {
       chat: { id: 'id', identifier: 'identifier', userId: 'userId' },
     }))
 
-    vi.doMock('@/lib/logs/console/logger', () => ({
+    vi.doMock('@sim/logger', () => ({
       createLogger: vi.fn().mockReturnValue({
         info: vi.fn(),
         error: vi.fn(),

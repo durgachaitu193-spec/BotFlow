@@ -5,7 +5,7 @@ import { Layout, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/emcn'
 import { Input } from '@/components/ui/input'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { CredentialRequirement } from '@/lib/workflows/credentials/credential-extractor'
 import type { CreatorProfileDetails } from '@/app/_types/creator-profile'
 import { TemplateCard, TemplateCardSkeleton } from '@/app/templates/components/template-card'
@@ -58,7 +58,6 @@ export default function Templates({
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
-  const [activeTab, setActiveTab] = useState('gallery')
   const [templates, setTemplates] = useState<Template[]>(initialTemplates)
   const [loading, setLoading] = useState(false)
 
@@ -90,10 +89,6 @@ export default function Templates({
     const query = debouncedSearchQuery.toLowerCase()
 
     return templates.filter((template) => {
-      const tabMatch =
-        activeTab === 'gallery' ? template.status === 'approved' : template.status === 'pending'
-
-      if (!tabMatch) return false
 
       if (!query) return true
 
@@ -104,7 +99,7 @@ export default function Templates({
 
       return searchableText.includes(query)
     })
-  }, [templates, activeTab, debouncedSearchQuery])
+  }, [templates, debouncedSearchQuery])
 
   /**
    * Get empty state message based on current filters
@@ -118,19 +113,11 @@ export default function Templates({
       }
     }
 
-    const messages = {
-      pending: {
-        title: 'No pending templates',
-        description: 'New submissions will appear here',
-      },
-      gallery: {
-        title: 'No templates available',
-        description: 'Templates will appear once approved',
-      },
+    return {
+      title: 'No templates available',
+      description: 'Templates will appear once created',
     }
-
-    return messages[activeTab as keyof typeof messages] || messages.gallery
-  }, [debouncedSearchQuery, activeTab])
+  }, [debouncedSearchQuery])
 
   return (
     <div className='flex h-[100vh] flex-col'>
@@ -149,7 +136,7 @@ export default function Templates({
           </div>
 
           <div className='mt-[14px] flex items-center justify-between'>
-            <div className='flex h-[32px] w-[400px] items-center gap-[6px] rounded-[8px] bg-[var(--surface-5)] px-[8px]'>
+            <div className='flex h-[32px] w-full max-w-[400px] items-center gap-[6px] rounded-[8px] bg-[var(--surface-5)] px-[8px]'>
               <Search className='h-[14px] w-[14px] text-[var(--text-subtle)]' />
               <Input
                 placeholder='Search'
@@ -158,29 +145,11 @@ export default function Templates({
                 className='flex-1 border-0 bg-transparent px-0 font-medium text-[var(--text-secondary)] text-small leading-none placeholder:text-[var(--text-subtle)] focus-visible:ring-0 focus-visible:ring-offset-0'
               />
             </div>
-            <div className='flex items-center gap-[8px]'>
-              <Button
-                variant={activeTab === 'gallery' ? 'active' : 'default'}
-                className='h-[32px] rounded-[6px]'
-                onClick={() => setActiveTab('gallery')}
-              >
-                Gallery
-              </Button>
-              {isSuperUser && (
-                <Button
-                  variant={activeTab === 'pending' ? 'active' : 'default'}
-                  className='h-[32px] rounded-[6px]'
-                  onClick={() => setActiveTab('pending')}
-                >
-                  Pending
-                </Button>
-              )}
-            </div>
           </div>
 
           <div className='mt-[24px] h-[1px] w-full border-[var(--border)] border-t' />
 
-          <div className='mt-[24px] grid grid-cols-1 gap-x-[20px] gap-y-[40px] md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          <div className='mt-[24px] grid grid-cols-1 gap-x-[20px] gap-y-[40px] md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-8'>
             {loading ? (
               Array.from({ length: 8 }).map((_, index) => (
                 <TemplateCardSkeleton key={`skeleton-${index}`} />

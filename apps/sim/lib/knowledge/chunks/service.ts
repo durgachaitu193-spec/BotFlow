@@ -10,7 +10,7 @@ import type {
   CreateChunkData,
 } from '@/lib/knowledge/chunks/types'
 import { generateEmbeddings } from '@/lib/knowledge/embeddings'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { estimateTokenCount } from '@/lib/tokenization/estimators'
 
 const logger = createLogger('ChunksService')

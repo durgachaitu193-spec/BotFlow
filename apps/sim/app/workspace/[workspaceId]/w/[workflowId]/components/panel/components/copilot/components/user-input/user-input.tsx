@@ -15,7 +15,7 @@ import { Badge, Button } from '@/components/emcn'
 import { Textarea } from '@/components/ui'
 import { useSession } from '@/lib/auth/auth-client'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import {
   AttachedFilesDisplay,
   ContextPills,
@@ -129,7 +129,7 @@ const UserInput = forwardRef<UserInputRef, UserInputProps>(
     // Controlled vs uncontrolled message state
     const message = controlledValue !== undefined ? controlledValue : internalMessage
     const setMessage =
-      controlledValue !== undefined ? onControlledChange || (() => {}) : setInternalMessage
+      controlledValue !== undefined ? onControlledChange || (() => { }) : setInternalMessage
 
     // Effective placeholder
     const effectivePlaceholder =

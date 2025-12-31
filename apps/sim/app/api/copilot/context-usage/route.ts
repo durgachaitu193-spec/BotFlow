@@ -5,7 +5,7 @@ import { getCopilotModel } from '@/lib/copilot/config'
 import { SIM_AGENT_API_URL_DEFAULT } from '@/lib/copilot/constants'
 import type { CopilotProviderConfig } from '@/lib/copilot/types'
 import { env } from '@/lib/core/config/env'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('ContextUsageAPI')
 

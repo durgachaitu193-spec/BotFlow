@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { BlockOutput } from '@/blocks/types'
 import { BlockType, CONDITION, DEFAULTS, EDGE } from '@/executor/consts'
 import type { BlockHandler, ExecutionContext } from '@/executor/types'
@@ -60,7 +60,7 @@ export class ConditionBlockHandler implements BlockHandler {
   constructor(
     private pathTracker?: any,
     private resolver?: any
-  ) {}
+  ) { }
 
   canHandle(block: SerializedBlock): boolean {
     return block.metadata?.id === BlockType.CONDITION

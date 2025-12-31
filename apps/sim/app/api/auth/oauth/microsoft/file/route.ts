@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { authorizeCredentialUse } from '@/lib/auth/credential-access'
 import { validateMicrosoftGraphId } from '@/lib/core/security/input-validation'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { getCredential, refreshAccessTokenIfNeeded } from '@/app/api/auth/oauth/utils'
 
 export const dynamic = 'force-dynamic'
@@ -91,11 +91,11 @@ export async function GET(request: NextRequest) {
       size: file.size?.toString(),
       owners: file.createdBy
         ? [
-            {
-              displayName: file.createdBy.user?.displayName || 'Unknown',
-              emailAddress: file.createdBy.user?.email || '',
-            },
-          ]
+          {
+            displayName: file.createdBy.user?.displayName || 'Unknown',
+            emailAddress: file.createdBy.user?.email || '',
+          },
+        ]
         : [],
       downloadUrl: `https://graph.microsoft.com/v1.0/me/drive/items/${file.id}/content`,
     }

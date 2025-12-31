@@ -7,7 +7,7 @@ import { calculateSubscriptionOverage, getPlanPricing } from '@/lib/billing/core
 import { getHighestPrioritySubscription } from '@/lib/billing/core/subscription'
 import { requireStripeClient } from '@/lib/billing/stripe-client'
 import { env } from '@/lib/core/config/env'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('ThresholdBilling')
 

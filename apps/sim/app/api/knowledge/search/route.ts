@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { generateRequestId } from '@/lib/core/utils/request'
 import { TAG_SLOTS } from '@/lib/knowledge/constants'
 import { getDocumentTagDefinitions } from '@/lib/knowledge/tags/service'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { estimateTokenCount } from '@/lib/tokenization/estimators'
 import { getUserId } from '@/app/api/auth/oauth/utils'
 import {
@@ -284,19 +284,19 @@ export async function POST(request: NextRequest) {
           totalResults: results.length,
           ...(cost && tokenCount
             ? {
-                cost: {
-                  input: cost.input,
-                  output: cost.output,
-                  total: cost.total,
-                  tokens: {
-                    prompt: tokenCount.count,
-                    completion: 0,
-                    total: tokenCount.count,
-                  },
-                  model: 'text-embedding-3-small',
-                  pricing: cost.pricing,
+              cost: {
+                input: cost.input,
+                output: cost.output,
+                total: cost.total,
+                tokens: {
+                  prompt: tokenCount.count,
+                  completion: 0,
+                  total: tokenCount.count,
                 },
-              }
+                model: 'text-embedding-3-small',
+                pricing: cost.pricing,
+              },
+            }
             : {}),
         },
       })

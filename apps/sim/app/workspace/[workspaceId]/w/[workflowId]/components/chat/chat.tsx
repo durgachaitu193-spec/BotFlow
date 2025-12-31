@@ -20,7 +20,7 @@ import {
   extractPathFromOutputId,
   parseOutputContentSafely,
 } from '@/lib/core/utils/response-format'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { normalizeInputFormatValue } from '@/lib/workflows/input-format-utils'
 import { StartBlockPath, TriggerUtils } from '@/lib/workflows/triggers/triggers'
 import { START_BLOCK_RESERVED_FIELDS } from '@/lib/workflows/types'
@@ -938,9 +938,8 @@ export function Chat() {
 
           {/* Combined input container */}
           <div
-            className={`rounded-[4px] border bg-[var(--surface-9)] py-0 pr-[6px] pl-[4px] transition-colors ${
-              isDragOver ? 'border-[var(--brand-secondary)]' : 'border-[var(--surface-11)]'
-            }`}
+            className={`rounded-[4px] border bg-[var(--surface-9)] py-0 pr-[6px] pl-[4px] transition-colors ${isDragOver ? 'border-[var(--brand-secondary)]' : 'border-[var(--surface-11)]'
+              }`}
           >
             {/* File thumbnails */}
             {chatFiles.length > 0 && (
@@ -1016,7 +1015,7 @@ export function Chat() {
                   className={cn(
                     '!bg-transparent cursor-pointer rounded-[6px] p-[0px]',
                     (!activeWorkflowId || isExecuting || chatFiles.length >= 15) &&
-                      'cursor-not-allowed opacity-50'
+                    'cursor-not-allowed opacity-50'
                   )}
                 >
                   <Paperclip className='!h-3.5 !w-3.5' />

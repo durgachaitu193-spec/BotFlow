@@ -13,7 +13,7 @@
 import { db } from '@sim/db'
 import { organization } from '@sim/db/schema'
 import { count } from 'drizzle-orm'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { withAdminAuth } from '@/app/api/v1/admin/middleware'
 import { internalErrorResponse, listResponse } from '@/app/api/v1/admin/responses'
 import {

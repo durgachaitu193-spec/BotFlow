@@ -66,7 +66,8 @@ export function WalletButton({ onSignOut }: WalletButtonProps) {
             method: 'POST',
             credentials: 'include',
           }).catch(() => {
-            // If API fails, try to clear cookie client-side as fallback
+            document.cookie = 'sim-privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+            document.cookie = 'launchpad-privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
             document.cookie = 'privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
           })
 
@@ -98,23 +99,31 @@ export function WalletButton({ onSignOut }: WalletButtonProps) {
   if (!authenticated) {
     return (
       <Button
-        variant='outline'
+        variant="outline"
         onClick={() => login()}
-        className='h-[32px] w-[32px] rounded-[11px] border bg-card text-card-foreground shadow-xs hover:border-[var(--brand-primary-hex)] hover:bg-[var(--brand-primary-hex)] hover:text-white z-50'
+        className="h-9 px-4 rounded-full border border-white/10 bg-white/5 text-white shadow-sm hover:bg-white/10 hover:border-white/20 transition-all duration-200 text-xs font-medium"
       >
-        <Wallet className='h-4 w-4' />
+        <Wallet className="h-3.5 w-3.5 mr-2" />
+        Connect Wallet
       </Button>
     )
   }
+
+  const truncatedAddress = walletAddress
+    ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+    : 'Connected'
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant='outline'
-          className='h-[32px] w-[32px] rounded-[11px] border bg-card text-card-foreground shadow-xs hover:border-[var(--brand-primary-hex)] hover:bg-[var(--brand-primary-hex)] hover:text-white relative z-50'
+          variant="outline"
+          className="h-9 px-4 rounded-full border border-white/10 bg-white/5 text-white shadow-sm hover:bg-white/10 hover:border-white/20 transition-all duration-200 relative z-50 text-xs font-medium"
         >
-          <Wallet className='h-4 w-4' />
+          <div className="flex items-center gap-2">
+            <div className="h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+            <span className="font-mono">{truncatedAddress}</span>
+          </div>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-72 max-w-[calc(100vw-2rem)]'>

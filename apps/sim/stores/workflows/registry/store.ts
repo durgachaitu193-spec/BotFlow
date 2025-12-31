@@ -1,9 +1,8 @@
+import { createLogger } from '@sim/logger'
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { withOptimisticUpdate } from '@/lib/core/utils/optimistic-update'
-import { createLogger } from '@/lib/logs/console/logger'
 import { buildDefaultWorkflowArtifacts } from '@/lib/workflows/defaults'
-import { API_ENDPOINTS } from '@/stores/constants'
 import { useVariablesStore } from '@/stores/panel/variables/store'
 import type {
   DeploymentStatus,
@@ -104,12 +103,12 @@ export const useWorkflowRegistry = create<WorkflowRegistry>()(
             state.hydration.phase === 'state-loading'
               ? state.hydration
               : {
-                  phase: 'metadata-ready',
-                  workspaceId,
-                  workflowId: null,
-                  requestId: null,
-                  error: null,
-                },
+                phase: 'metadata-ready',
+                workspaceId,
+                workflowId: null,
+                requestId: null,
+                error: null,
+              },
         }))
       },
 
@@ -346,16 +345,16 @@ export const useWorkflowRegistry = create<WorkflowRegistry>()(
           const nextDeploymentStatuses =
             workflowData?.isDeployed || workflowData?.deployedAt
               ? {
-                  ...get().deploymentStatuses,
-                  [workflowId]: {
-                    isDeployed: workflowData.isDeployed || false,
-                    deployedAt: workflowData.deployedAt
-                      ? new Date(workflowData.deployedAt)
-                      : undefined,
-                    apiKey: workflowData.apiKey || undefined,
-                    needsRedeployment: false,
-                  },
-                }
+                ...get().deploymentStatuses,
+                [workflowId]: {
+                  isDeployed: workflowData.isDeployed || false,
+                  deployedAt: workflowData.deployedAt
+                    ? new Date(workflowData.deployedAt)
+                    : undefined,
+                  apiKey: workflowData.apiKey || undefined,
+                  needsRedeployment: false,
+                },
+              }
               : get().deploymentStatuses
 
           const currentHydration = get().hydration
@@ -508,7 +507,6 @@ export const useWorkflowRegistry = create<WorkflowRegistry>()(
           color: getNextWorkflowColor(),
           workspaceId, // Include the workspaceId in the new workflow
           folderId: sourceWorkflow.folderId, // Include the folderId from source workflow
-          // Do not copy marketplace data
         }
 
         // Get the current workflow state to copy from
@@ -617,14 +615,14 @@ export const useWorkflowRegistry = create<WorkflowRegistry>()(
             subBlockValues: { ...useSubBlockStore.getState().workflowValues },
             workflowStoreState: isDeletingActiveWorkflow
               ? {
-                  blocks: { ...useWorkflowStore.getState().blocks },
-                  edges: [...useWorkflowStore.getState().edges],
-                  loops: { ...useWorkflowStore.getState().loops },
-                  parallels: { ...useWorkflowStore.getState().parallels },
-                  isDeployed: useWorkflowStore.getState().isDeployed,
-                  deployedAt: useWorkflowStore.getState().deployedAt,
-                  lastSaved: useWorkflowStore.getState().lastSaved,
-                }
+                blocks: { ...useWorkflowStore.getState().blocks },
+                edges: [...useWorkflowStore.getState().edges],
+                loops: { ...useWorkflowStore.getState().loops },
+                parallels: { ...useWorkflowStore.getState().parallels },
+                isDeployed: useWorkflowStore.getState().isDeployed,
+                deployedAt: useWorkflowStore.getState().deployedAt,
+                lastSaved: useWorkflowStore.getState().lastSaved,
+              }
               : null,
           }),
           optimisticUpdate: () => {
@@ -674,21 +672,6 @@ export const useWorkflowRegistry = create<WorkflowRegistry>()(
             }
 
             logger.info(`Successfully deleted workflow ${id} from database`)
-
-            fetch(API_ENDPOINTS.SCHEDULE, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                workflowId: id,
-                state: {
-                  blocks: {},
-                  edges: [],
-                  loops: {},
-                },
-              }),
-            }).catch((error) => {
-              logger.error(`Error cancelling schedule for deleted workflow ${id}:`, error)
-            })
           },
           rollback: (originalState) => {
             set({

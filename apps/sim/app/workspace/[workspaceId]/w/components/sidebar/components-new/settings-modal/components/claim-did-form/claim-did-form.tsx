@@ -16,7 +16,7 @@ import {
   DID_REGISTRY_ADDRESS,
 } from '@/lib/contracts/didRegistry'
 import { fetchDIDForAddress } from '@/lib/did/utils'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { cn } from '@/lib/utils'
 import { inter } from '@/app/_styles/fonts/inter/inter'
 import { soehne } from '@/app/_styles/fonts/soehne/soehne'

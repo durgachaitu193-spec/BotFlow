@@ -4,7 +4,7 @@ import { and, eq } from 'drizzle-orm'
 import { cookies } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'
 import { getEnv } from '@/lib/core/config/env'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { getBaseUrl } from '@/lib/core/utils/urls'
 
 const logger = createLogger('OAuthCallback')

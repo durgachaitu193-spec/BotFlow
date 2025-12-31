@@ -19,7 +19,7 @@ import { db } from '@sim/db'
 import { organization } from '@sim/db/schema'
 import { eq } from 'drizzle-orm'
 import { getOrganizationBillingData } from '@/lib/billing/core/organization'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { withAdminAuthParams } from '@/app/api/v1/admin/middleware'
 import {
   badRequestResponse,

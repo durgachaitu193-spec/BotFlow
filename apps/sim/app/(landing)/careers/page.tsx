@@ -15,7 +15,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { isHosted } from '@/lib/core/config/environment'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { quickValidateEmail } from '@/lib/messaging/email/validation'
 import { soehne } from '@/app/_styles/fonts/soehne/soehne'
 import Footer from '@/app/(landing)/components/footer/footer'
@@ -227,8 +227,8 @@ export default function CareersPage() {
                     onChange={(e) => setName(e.target.value)}
                     className={cn(
                       showErrors &&
-                        nameErrors.length > 0 &&
-                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                      nameErrors.length > 0 &&
+                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                     )}
                   />
                   {showErrors && nameErrors.length > 0 && (
@@ -252,8 +252,8 @@ export default function CareersPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     className={cn(
                       showErrors &&
-                        emailErrors.length > 0 &&
-                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                      emailErrors.length > 0 &&
+                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                     )}
                   />
                   {showErrors && emailErrors.length > 0 && (
@@ -292,8 +292,8 @@ export default function CareersPage() {
                     onChange={(e) => setPosition(e.target.value)}
                     className={cn(
                       showErrors &&
-                        positionErrors.length > 0 &&
-                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                      positionErrors.length > 0 &&
+                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                     )}
                   />
                   {showErrors && positionErrors.length > 0 && (
@@ -319,8 +319,8 @@ export default function CareersPage() {
                     onChange={(e) => setLinkedin(e.target.value)}
                     className={cn(
                       showErrors &&
-                        linkedinErrors.length > 0 &&
-                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                      linkedinErrors.length > 0 &&
+                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                     )}
                   />
                   {showErrors && linkedinErrors.length > 0 && (
@@ -343,8 +343,8 @@ export default function CareersPage() {
                     onChange={(e) => setPortfolio(e.target.value)}
                     className={cn(
                       showErrors &&
-                        portfolioErrors.length > 0 &&
-                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                      portfolioErrors.length > 0 &&
+                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                     )}
                   />
                   {showErrors && portfolioErrors.length > 0 && (
@@ -367,8 +367,8 @@ export default function CareersPage() {
                     <SelectTrigger
                       className={cn(
                         showErrors &&
-                          experienceErrors.length > 0 &&
-                          'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                        experienceErrors.length > 0 &&
+                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                       )}
                     >
                       <SelectValue placeholder='Select experience level' />
@@ -401,8 +401,8 @@ export default function CareersPage() {
                     onChange={(e) => setLocation(e.target.value)}
                     className={cn(
                       showErrors &&
-                        locationErrors.length > 0 &&
-                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                      locationErrors.length > 0 &&
+                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                     )}
                   />
                   {showErrors && locationErrors.length > 0 && (
@@ -426,8 +426,8 @@ export default function CareersPage() {
                   className={cn(
                     'min-h-[140px]',
                     showErrors &&
-                      messageErrors.length > 0 &&
-                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                    messageErrors.length > 0 &&
+                    'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                   )}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
@@ -475,8 +475,8 @@ export default function CareersPage() {
                       ref={fileInputRef}
                       className={cn(
                         showErrors &&
-                          resumeErrors.length > 0 &&
-                          'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                        resumeErrors.length > 0 &&
+                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                       )}
                     />
                   )}

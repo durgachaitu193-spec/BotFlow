@@ -15,7 +15,7 @@ import {
 } from '@/components/emcn/components/code/code'
 import { Trash } from '@/components/emcn/icons/trash'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import {
   isLikelyReferenceSegment,
   SYSTEM_REFERENCE_PREFIXES,
@@ -487,11 +487,11 @@ export function ConditionInput({
       blocks.map((block) =>
         block.id === blockId
           ? {
-              ...block,
-              value: newValue,
-              showTags: false,
-              activeSourceBlockId: null,
-            }
+            ...block,
+            value: newValue,
+            showTags: false,
+            activeSourceBlockId: null,
+          }
           : block
       )
     )
@@ -505,11 +505,11 @@ export function ConditionInput({
       blocks.map((block) =>
         block.id === blockId
           ? {
-              ...block,
-              value: newValue,
-              showEnvVars: false,
-              searchTerm: '',
-            }
+            ...block,
+            value: newValue,
+            showEnvVars: false,
+            searchTerm: '',
+          }
           : block
       )
     )
@@ -523,11 +523,11 @@ export function ConditionInput({
       blocks.map((block) =>
         block.id === blockId
           ? {
-              ...block,
-              value: newValue,
-              showTags: false,
-              activeSourceBlockId: null,
-            }
+            ...block,
+            value: newValue,
+            showTags: false,
+            activeSourceBlockId: null,
+          }
           : block
       )
     )
@@ -535,11 +535,11 @@ export function ConditionInput({
     const updatedBlocks = conditionalBlocks.map((block) =>
       block.id === blockId
         ? {
-            ...block,
-            value: newValue,
-            showTags: false,
-            activeSourceBlockId: null,
-          }
+          ...block,
+          value: newValue,
+          showTags: false,
+          activeSourceBlockId: null,
+        }
         : block
     )
     emitTagSelection(JSON.stringify(updatedBlocks))
@@ -553,11 +553,11 @@ export function ConditionInput({
       blocks.map((block) =>
         block.id === blockId
           ? {
-              ...block,
-              value: newValue,
-              showEnvVars: false,
-              searchTerm: '',
-            }
+            ...block,
+            value: newValue,
+            showEnvVars: false,
+            searchTerm: '',
+          }
           : block
       )
     )
@@ -565,11 +565,11 @@ export function ConditionInput({
     const updatedBlocks = conditionalBlocks.map((block) =>
       block.id === blockId
         ? {
-            ...block,
-            value: newValue,
-            showEnvVars: false,
-            searchTerm: '',
-          }
+          ...block,
+          value: newValue,
+          showEnvVars: false,
+          searchTerm: '',
+        }
         : block
     )
     emitTagSelection(JSON.stringify(updatedBlocks))
@@ -660,10 +660,10 @@ export function ConditionInput({
 
     if (direction === 'down' && newBlocks[targetIndex]?.title === 'else') return
 
-    ;[newBlocks[blockIndex], newBlocks[targetIndex]] = [
-      newBlocks[targetIndex],
-      newBlocks[blockIndex],
-    ]
+      ;[newBlocks[blockIndex], newBlocks[targetIndex]] = [
+        newBlocks[targetIndex],
+        newBlocks[blockIndex],
+      ]
     shouldPersistRef.current = true
     setConditionalBlocks(updateBlockTitles(newBlocks))
 
@@ -681,11 +681,11 @@ export function ConditionInput({
               blocks.map((b) =>
                 b.id === block.id
                   ? {
-                      ...b,
-                      showTags: false,
-                      showEnvVars: false,
-                      searchTerm: '',
-                    }
+                    ...b,
+                    showTags: false,
+                    showEnvVars: false,
+                    searchTerm: '',
+                  }
                   : b
               )
             )
@@ -965,10 +965,10 @@ export function ConditionInput({
                               blocks.map((b) =>
                                 b.id === block.id
                                   ? {
-                                      ...b,
-                                      showTags: false,
-                                      activeSourceBlockId: null,
-                                    }
+                                    ...b,
+                                    showTags: false,
+                                    activeSourceBlockId: null,
+                                  }
                                   : b
                               )
                             )

@@ -11,7 +11,7 @@ import { ChevronsUpDown, Wand2 } from 'lucide-react'
 import { Textarea } from '@/components/emcn'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { formatDisplayText } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/editor/components/sub-block/components/formatted-text'
 import { SubBlockInputController } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/editor/components/sub-block/components/sub-block-input-controller'
 import { useSubBlockInput } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/editor/components/sub-block/hooks/use-sub-block-input'
@@ -95,7 +95,7 @@ export function LongInput({
 }: LongInputProps) {
   // Local state for immediate UI updates during streaming
   const [localContent, setLocalContent] = useState<string>('')
-  const persistSubBlockValueRef = useRef<(value: string) => void>(() => {})
+  const persistSubBlockValueRef = useRef<(value: string) => void>(() => { })
 
   // Wand functionality - always call the hook unconditionally
   const wandHook = useWand({
@@ -298,7 +298,7 @@ export function LongInput({
         {({ ref, onChange: handleChange, onKeyDown, onDrop, onDragOver, onFocus }) => {
           const setRefs = (el: HTMLTextAreaElement | null) => {
             textareaRef.current = el
-            ;(ref as React.MutableRefObject<HTMLTextAreaElement | null>).current = el
+              ; (ref as React.MutableRefObject<HTMLTextAreaElement | null>).current = el
           }
           return (
             <div

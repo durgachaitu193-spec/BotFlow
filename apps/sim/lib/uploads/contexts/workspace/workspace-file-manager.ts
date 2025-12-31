@@ -11,7 +11,7 @@ import {
   decrementStorageUsage,
   incrementStorageUsage,
 } from '@/lib/billing/storage'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import {
   deleteFile,
   downloadFile,

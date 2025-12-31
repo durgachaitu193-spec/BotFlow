@@ -5,7 +5,7 @@ import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 import type { Server } from 'socket.io'
 import { env } from '@/lib/core/config/env'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const connectionString = env.DATABASE_URL
 const db = drizzle(
@@ -14,7 +14,7 @@ const db = drizzle(
     idle_timeout: 15,
     connect_timeout: 20,
     max: 3,
-    onnotice: () => {},
+    onnotice: () => { },
   }),
   { schema }
 )

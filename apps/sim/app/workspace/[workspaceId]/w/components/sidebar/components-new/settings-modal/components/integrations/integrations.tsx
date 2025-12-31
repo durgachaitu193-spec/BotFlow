@@ -13,7 +13,7 @@ import {
 } from '@/components/emcn/components/modal/modal'
 import { Input, Skeleton } from '@/components/ui'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { OAUTH_PROVIDERS } from '@/lib/oauth/oauth'
 import {
   type ServiceInfo,
@@ -149,7 +149,7 @@ export function Integrations({ onOpenChange, registerCloseHandler }: Integration
         }
       }
       prevConnectedIdsRef.current = currentConnected
-    } catch {}
+    } catch { }
   }, [services])
 
   // On mount, register a close handler so the parent modal can delegate close events here
@@ -165,7 +165,7 @@ export function Integrations({ onOpenChange, registerCloseHandler }: Integration
             })
           )
         }
-      } catch {}
+      } catch { }
       onOpenChange?.(open)
     }
     registerCloseHandler(handle)
@@ -322,7 +322,7 @@ export function Integrations({ onOpenChange, registerCloseHandler }: Integration
                       className={cn(
                         'flex items-center justify-between',
                         pendingService === service.id &&
-                          '-m-[8px] rounded-[8px] bg-[var(--bg)] p-[8px]'
+                        '-m-[8px] rounded-[8px] bg-[var(--bg)] p-[8px]'
                       )}
                       ref={pendingService === service.id ? pendingServiceRef : undefined}
                     >

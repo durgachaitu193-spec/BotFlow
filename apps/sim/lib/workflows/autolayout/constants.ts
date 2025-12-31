@@ -17,6 +17,13 @@ export const DEFAULT_HORIZONTAL_SPACING = 550
  * Vertical spacing between blocks in the same layer
  */
 export const DEFAULT_VERTICAL_SPACING = 200
+/**
+ * Default offset when duplicating blocks
+ */
+export const DEFAULT_DUPLICATE_OFFSET = {
+  x: 180,
+  y: 20,
+} as const
 
 /**
  * General container padding for layout calculations

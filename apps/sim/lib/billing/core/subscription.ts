@@ -11,7 +11,7 @@ import {
 import type { UserSubscriptionState } from '@/lib/billing/types'
 import { isProd } from '@/lib/core/config/environment'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('SubscriptionCore')
 

@@ -10,7 +10,7 @@ import {
   PopoverTrigger,
   Tooltip,
 } from '@/components/emcn'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { filterButtonClass } from '@/app/workspace/[workspaceId]/knowledge/components/shared'
 import { useKnowledgeStore } from '@/stores/knowledge/store'
 

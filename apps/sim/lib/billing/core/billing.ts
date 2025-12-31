@@ -8,7 +8,7 @@ import {
   getProTierLimit,
   getTeamTierLimitPerSeat,
 } from '@/lib/billing/subscriptions/utils'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('Billing')
 
@@ -328,9 +328,9 @@ export async function getSimplifiedBillingSummary(
       // Calculate days remaining in billing period
       const daysRemaining = usageData.billingPeriodEnd
         ? Math.max(
-            0,
-            Math.ceil((usageData.billingPeriodEnd.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
-          )
+          0,
+          Math.ceil((usageData.billingPeriodEnd.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+        )
         : 0
 
       return {
@@ -451,9 +451,9 @@ export async function getSimplifiedBillingSummary(
     // Calculate days remaining in billing period
     const daysRemaining = usageData.billingPeriodEnd
       ? Math.max(
-          0,
-          Math.ceil((usageData.billingPeriodEnd.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
-        )
+        0,
+        Math.ceil((usageData.billingPeriodEnd.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+      )
       : 0
 
     return {

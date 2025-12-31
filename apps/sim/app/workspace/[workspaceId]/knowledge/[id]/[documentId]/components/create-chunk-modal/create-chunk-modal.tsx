@@ -11,7 +11,7 @@ import {
   ModalHeader,
 } from '@/components/emcn/components/modal/modal'
 import { Label } from '@/components/ui/label'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { ChunkData, DocumentData } from '@/stores/knowledge/store'
 
 const logger = createLogger('CreateChunkModal')

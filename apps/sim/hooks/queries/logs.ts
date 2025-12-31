@@ -332,9 +332,9 @@ export function useExecutionsMetrics(
 }
 
 interface DashboardLogsFilters {
-  workspaceId: string
   startDate: string
   endDate: string
+  level?: string
   workflowIds?: string[]
   folderIds?: string[]
   triggers?: string[]
@@ -348,6 +348,7 @@ interface DashboardLogsPage {
 }
 
 async function fetchDashboardLogsPage(
+  workspaceId: string,
   filters: DashboardLogsFilters,
   page: number,
   workflowId?: string
@@ -355,12 +356,16 @@ async function fetchDashboardLogsPage(
   const params = new URLSearchParams({
     limit: filters.limit.toString(),
     offset: ((page - 1) * filters.limit).toString(),
-    workspaceId: filters.workspaceId,
+    workspaceId: workspaceId,
     startDate: filters.startDate,
     endDate: filters.endDate,
     order: 'desc',
     details: 'full',
   })
+
+  if (filters.level && filters.level !== 'all') {
+    params.set('level', filters.level)
+  }
 
   if (workflowId) {
     params.set('workflowIds', workflowId)
@@ -395,16 +400,19 @@ async function fetchDashboardLogsPage(
 
 interface UseDashboardLogsOptions {
   enabled?: boolean
+  refetchInterval?: number | false
 }
 
 export function useGlobalDashboardLogs(
+  workspaceId: string | undefined,
   filters: DashboardLogsFilters,
   options?: UseDashboardLogsOptions
 ) {
   return useInfiniteQuery({
-    queryKey: logKeys.globalLogs(filters.workspaceId, filters),
-    queryFn: ({ pageParam }) => fetchDashboardLogsPage(filters, pageParam),
-    enabled: Boolean(filters.workspaceId) && (options?.enabled ?? true),
+    queryKey: logKeys.globalLogs(workspaceId, filters),
+    queryFn: ({ pageParam }) => fetchDashboardLogsPage(workspaceId as string, filters, pageParam),
+    enabled: Boolean(workspaceId) && (options?.enabled ?? true),
+    refetchInterval: options?.refetchInterval ?? false,
     staleTime: 10 * 1000, // Slightly stale (10 seconds)
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextPage,
@@ -412,14 +420,17 @@ export function useGlobalDashboardLogs(
 }
 
 export function useWorkflowDashboardLogs(
+  workspaceId: string | undefined,
   workflowId: string | undefined,
   filters: DashboardLogsFilters,
   options?: UseDashboardLogsOptions
 ) {
   return useInfiniteQuery({
-    queryKey: logKeys.workflowLogs(filters.workspaceId, workflowId, filters),
-    queryFn: ({ pageParam }) => fetchDashboardLogsPage(filters, pageParam, workflowId),
-    enabled: Boolean(filters.workspaceId) && Boolean(workflowId) && (options?.enabled ?? true),
+    queryKey: logKeys.workflowLogs(workspaceId, workflowId, filters),
+    queryFn: ({ pageParam }) =>
+      fetchDashboardLogsPage(workspaceId as string, filters, pageParam, workflowId),
+    enabled: Boolean(workspaceId) && Boolean(workflowId) && (options?.enabled ?? true),
+    refetchInterval: options?.refetchInterval ?? false,
     staleTime: 10 * 1000, // Slightly stale (10 seconds)
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextPage,

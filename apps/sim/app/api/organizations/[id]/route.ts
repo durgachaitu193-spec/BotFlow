@@ -8,7 +8,7 @@ import {
   getOrganizationSeatAnalytics,
   getOrganizationSeatInfo,
 } from '@/lib/billing/validation/seat-management'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('OrganizationAPI')
 

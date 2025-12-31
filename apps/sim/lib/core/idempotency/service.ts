@@ -3,7 +3,7 @@ import { db } from '@sim/db'
 import { idempotencyKey } from '@sim/db/schema'
 import { and, eq } from 'drizzle-orm'
 import { getRedisClient } from '@/lib/core/config/redis'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { extractProviderIdentifierFromBody } from '@/lib/webhooks/provider-utils'
 
 const logger = createLogger('IdempotencyService')

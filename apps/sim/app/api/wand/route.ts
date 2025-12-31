@@ -7,7 +7,7 @@ import { checkAndBillOverageThreshold } from '@/lib/billing/threshold-billing'
 import { env } from '@/lib/core/config/env'
 import { getCostMultiplier, isBillingEnabled } from '@/lib/core/config/environment'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { getModelPricing } from '@/providers/utils'
 
 export const dynamic = 'force-dynamic'
@@ -26,14 +26,14 @@ const useWandAzure = azureApiKey && azureEndpoint && azureApiVersion
 
 const client = useWandAzure
   ? new AzureOpenAI({
-      apiKey: azureApiKey,
-      apiVersion: azureApiVersion,
-      endpoint: azureEndpoint,
-    })
+    apiKey: azureApiKey,
+    apiVersion: azureApiVersion,
+    endpoint: azureEndpoint,
+  })
   : openaiApiKey
     ? new OpenAI({
-        apiKey: openaiApiKey,
-      })
+      apiKey: openaiApiKey,
+    })
     : null
 
 if (!useWandAzure && !openaiApiKey) {

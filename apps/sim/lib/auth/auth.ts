@@ -14,7 +14,6 @@ import {
   organization,
 } from 'better-auth/plugins'
 import { and, eq } from 'drizzle-orm'
-import { headers } from 'next/headers'
 import Stripe from 'stripe'
 import {
   getEmailSubject,
@@ -41,7 +40,7 @@ import {
 import { env, isTruthy } from '@/lib/core/config/env'
 import { isBillingEnabled, isEmailVerificationEnabled } from '@/lib/core/config/environment'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { sendEmail } from '@/lib/messaging/email/mailer'
 import { getFromEmailAddress } from '@/lib/messaging/email/utils'
 import { quickValidateEmail } from '@/lib/messaging/email/validation'
@@ -274,7 +273,7 @@ export const auth = betterAuth({
             })
             throw new Error(
               validation.reason ||
-                "We are unable to deliver the verification email to that address. Please make sure it's valid and able to receive emails."
+              "We are unable to deliver the verification email to that address. Please make sure it's valid and able to receive emails."
             )
           }
 
@@ -1811,295 +1810,295 @@ export const auth = betterAuth({
     // Only include the Stripe plugin when billing is enabled
     ...(isBillingEnabled && stripeClient
       ? [
-          stripe({
-            stripeClient,
-            stripeWebhookSecret: env.STRIPE_WEBHOOK_SECRET || '',
-            createCustomerOnSignUp: true,
-            onCustomerCreate: async ({ stripeCustomer, user }) => {
-              logger.info('[onCustomerCreate] Stripe customer created', {
-                stripeCustomerId: stripeCustomer.id,
-                userId: user.id,
-              })
+        stripe({
+          stripeClient,
+          stripeWebhookSecret: env.STRIPE_WEBHOOK_SECRET || '',
+          createCustomerOnSignUp: true,
+          onCustomerCreate: async ({ stripeCustomer, user }) => {
+            logger.info('[onCustomerCreate] Stripe customer created', {
+              stripeCustomerId: stripeCustomer.id,
+              userId: user.id,
+            })
+          },
+          subscription: {
+            enabled: true,
+            plans: getPlans(),
+            authorizeReference: async ({ user, referenceId }) => {
+              return await authorizeSubscriptionReference(user.id, referenceId)
             },
-            subscription: {
-              enabled: true,
-              plans: getPlans(),
-              authorizeReference: async ({ user, referenceId }) => {
-                return await authorizeSubscriptionReference(user.id, referenceId)
-              },
-              getCheckoutSessionParams: async ({ plan, subscription }) => {
-                if (plan.name === 'team') {
-                  return {
-                    params: {
-                      allow_promotion_codes: true,
-                      line_items: [
-                        {
-                          price: plan.priceId,
-                          quantity: subscription?.seats || 1,
-                          adjustable_quantity: {
-                            enabled: true,
-                            minimum: 1,
-                            maximum: 50,
-                          },
-                        },
-                      ],
-                    },
-                  }
-                }
-
+            getCheckoutSessionParams: async ({ plan, subscription }) => {
+              if (plan.name === 'team') {
                 return {
                   params: {
                     allow_promotion_codes: true,
+                    line_items: [
+                      {
+                        price: plan.priceId,
+                        quantity: subscription?.seats || 1,
+                        adjustable_quantity: {
+                          enabled: true,
+                          minimum: 1,
+                          maximum: 50,
+                        },
+                      },
+                    ],
                   },
                 }
-              },
-              onSubscriptionComplete: async ({
-                subscription,
-              }: {
-                event: Stripe.Event
-                stripeSubscription: Stripe.Subscription
-                subscription: any
-              }) => {
-                logger.info('[onSubscriptionComplete] Subscription created', {
-                  subscriptionId: subscription.id,
-                  referenceId: subscription.referenceId,
-                  plan: subscription.plan,
-                  status: subscription.status,
-                })
+              }
 
-                await handleSubscriptionCreated(subscription)
-
-                await syncSubscriptionUsageLimits(subscription)
-
-                await sendPlanWelcomeEmail(subscription)
-              },
-              onSubscriptionUpdate: async ({
-                event,
-                subscription,
-              }: {
-                event: Stripe.Event
-                subscription: any
-              }) => {
-                logger.info('[onSubscriptionUpdate] Subscription updated', {
-                  subscriptionId: subscription.id,
-                  status: subscription.status,
-                  plan: subscription.plan,
-                })
-
-                try {
-                  await syncSubscriptionUsageLimits(subscription)
-                } catch (error) {
-                  logger.error('[onSubscriptionUpdate] Failed to sync usage limits', {
-                    subscriptionId: subscription.id,
-                    referenceId: subscription.referenceId,
-                    error,
-                  })
-                }
-
-                // Sync seat count from Stripe subscription quantity for team plans
-                if (subscription.plan === 'team') {
-                  try {
-                    const stripeSubscription = event.data.object as Stripe.Subscription
-                    const quantity = stripeSubscription.items?.data?.[0]?.quantity || 1
-
-                    const result = await syncSeatsFromStripeQuantity(
-                      subscription.id,
-                      subscription.seats,
-                      quantity
-                    )
-
-                    if (result.synced) {
-                      logger.info('[onSubscriptionUpdate] Synced seat count from Stripe', {
-                        subscriptionId: subscription.id,
-                        referenceId: subscription.referenceId,
-                        previousSeats: result.previousSeats,
-                        newSeats: result.newSeats,
-                      })
-                    }
-                  } catch (error) {
-                    logger.error('[onSubscriptionUpdate] Failed to sync seat count', {
-                      subscriptionId: subscription.id,
-                      referenceId: subscription.referenceId,
-                      error,
-                    })
-                  }
-                }
-              },
-              onSubscriptionDeleted: async ({
-                subscription,
-              }: {
-                event: Stripe.Event
-                stripeSubscription: Stripe.Subscription
-                subscription: any
-              }) => {
-                logger.info('[onSubscriptionDeleted] Subscription deleted', {
-                  subscriptionId: subscription.id,
-                  referenceId: subscription.referenceId,
-                })
-
-                try {
-                  await handleSubscriptionDeleted(subscription)
-
-                  // Reset usage limits to free tier
-                  await syncSubscriptionUsageLimits(subscription)
-
-                  logger.info('[onSubscriptionDeleted] Reset usage limits to free tier', {
-                    subscriptionId: subscription.id,
-                    referenceId: subscription.referenceId,
-                  })
-                } catch (error) {
-                  logger.error('[onSubscriptionDeleted] Failed to handle subscription deletion', {
-                    subscriptionId: subscription.id,
-                    referenceId: subscription.referenceId,
-                    error,
-                  })
-                }
-              },
+              return {
+                params: {
+                  allow_promotion_codes: true,
+                },
+              }
             },
-            onEvent: async (event: Stripe.Event) => {
-              logger.info('[onEvent] Received Stripe webhook', {
-                eventId: event.id,
-                eventType: event.type,
+            onSubscriptionComplete: async ({
+              subscription,
+            }: {
+              event: Stripe.Event
+              stripeSubscription: Stripe.Subscription
+              subscription: any
+            }) => {
+              logger.info('[onSubscriptionComplete] Subscription created', {
+                subscriptionId: subscription.id,
+                referenceId: subscription.referenceId,
+                plan: subscription.plan,
+                status: subscription.status,
+              })
+
+              await handleSubscriptionCreated(subscription)
+
+              await syncSubscriptionUsageLimits(subscription)
+
+              await sendPlanWelcomeEmail(subscription)
+            },
+            onSubscriptionUpdate: async ({
+              event,
+              subscription,
+            }: {
+              event: Stripe.Event
+              subscription: any
+            }) => {
+              logger.info('[onSubscriptionUpdate] Subscription updated', {
+                subscriptionId: subscription.id,
+                status: subscription.status,
+                plan: subscription.plan,
               })
 
               try {
-                switch (event.type) {
-                  case 'invoice.payment_succeeded': {
-                    await handleInvoicePaymentSucceeded(event)
-                    break
-                  }
-                  case 'invoice.payment_failed': {
-                    await handleInvoicePaymentFailed(event)
-                    break
-                  }
-                  case 'invoice.finalized': {
-                    await handleInvoiceFinalized(event)
-                    break
-                  }
-                  case 'customer.subscription.created': {
-                    await handleManualEnterpriseSubscription(event)
-                    break
-                  }
-                  // Note: customer.subscription.deleted is handled by better-auth's onSubscriptionDeleted callback above
-                  default:
-                    logger.info('[onEvent] Ignoring unsupported webhook event', {
-                      eventId: event.id,
-                      eventType: event.type,
-                    })
-                    break
-                }
-
-                logger.info('[onEvent] Successfully processed webhook', {
-                  eventId: event.id,
-                  eventType: event.type,
-                })
+                await syncSubscriptionUsageLimits(subscription)
               } catch (error) {
-                logger.error('[onEvent] Failed to process webhook', {
-                  eventId: event.id,
-                  eventType: event.type,
+                logger.error('[onSubscriptionUpdate] Failed to sync usage limits', {
+                  subscriptionId: subscription.id,
+                  referenceId: subscription.referenceId,
                   error,
                 })
-                throw error
               }
-            },
-          }),
-          organization({
-            allowUserToCreateOrganization: async (user) => {
-              const dbSubscriptions = await db
-                .select()
-                .from(schema.subscription)
-                .where(eq(schema.subscription.referenceId, user.id))
 
-              const hasTeamPlan = dbSubscriptions.some(
-                (sub) =>
-                  sub.status === 'active' && (sub.plan === 'team' || sub.plan === 'enterprise')
-              )
+              // Sync seat count from Stripe subscription quantity for team plans
+              if (subscription.plan === 'team') {
+                try {
+                  const stripeSubscription = event.data.object as Stripe.Subscription
+                  const quantity = stripeSubscription.items?.data?.[0]?.quantity || 1
 
-              return hasTeamPlan
-            },
-            // Set a fixed membership limit of 50, but the actual limit will be enforced in the invitation flow
-            membershipLimit: 50,
-            // Validate seat limits before sending invitations
-            beforeInvite: async ({ organization }: { organization: { id: string } }) => {
-              const subscriptions = await db
-                .select()
-                .from(schema.subscription)
-                .where(
-                  and(
-                    eq(schema.subscription.referenceId, organization.id),
-                    eq(schema.subscription.status, 'active')
+                  const result = await syncSeatsFromStripeQuantity(
+                    subscription.id,
+                    subscription.seats,
+                    quantity
                   )
-                )
 
-              const teamOrEnterpriseSubscription = subscriptions.find(
-                (sub) => sub.plan === 'team' || sub.plan === 'enterprise'
-              )
-
-              if (!teamOrEnterpriseSubscription) {
-                throw new Error('No active team or enterprise subscription for this organization')
-              }
-
-              const members = await db
-                .select()
-                .from(schema.member)
-                .where(eq(schema.member.organizationId, organization.id))
-
-              const pendingInvites = await db
-                .select()
-                .from(schema.invitation)
-                .where(
-                  and(
-                    eq(schema.invitation.organizationId, organization.id),
-                    eq(schema.invitation.status, 'pending')
-                  )
-                )
-
-              const totalCount = members.length + pendingInvites.length
-              const seatLimit = teamOrEnterpriseSubscription.seats || 1
-
-              if (totalCount >= seatLimit) {
-                throw new Error(`Organization has reached its seat limit of ${seatLimit}`)
-              }
-            },
-            sendInvitationEmail: async (data: any) => {
-              try {
-                const { invitation, organization, inviter } = data
-
-                const inviteUrl = `${getBaseUrl()}/invite/${invitation.id}`
-                const inviterName = inviter.user?.name || 'A team member'
-
-                const html = await renderInvitationEmail(
-                  inviterName,
-                  organization.name,
-                  inviteUrl,
-                  invitation.email
-                )
-
-                const result = await sendEmail({
-                  to: invitation.email,
-                  subject: `${inviterName} has invited you to join ${organization.name} on Sim`,
-                  html,
-                  from: getFromEmailAddress(),
-                  emailType: 'transactional',
-                })
-
-                if (!result.success) {
-                  logger.error('Failed to send organization invitation email:', result.message)
+                  if (result.synced) {
+                    logger.info('[onSubscriptionUpdate] Synced seat count from Stripe', {
+                      subscriptionId: subscription.id,
+                      referenceId: subscription.referenceId,
+                      previousSeats: result.previousSeats,
+                      newSeats: result.newSeats,
+                    })
+                  }
+                } catch (error) {
+                  logger.error('[onSubscriptionUpdate] Failed to sync seat count', {
+                    subscriptionId: subscription.id,
+                    referenceId: subscription.referenceId,
+                    error,
+                  })
                 }
-              } catch (error) {
-                logger.error('Error sending invitation email', { error })
               }
             },
-            organizationCreation: {
-              afterCreate: async ({ organization, user }) => {
-                logger.info('[organizationCreation.afterCreate] Organization created', {
-                  organizationId: organization.id,
-                  creatorId: user.id,
+            onSubscriptionDeleted: async ({
+              subscription,
+            }: {
+              event: Stripe.Event
+              stripeSubscription: Stripe.Subscription
+              subscription: any
+            }) => {
+              logger.info('[onSubscriptionDeleted] Subscription deleted', {
+                subscriptionId: subscription.id,
+                referenceId: subscription.referenceId,
+              })
+
+              try {
+                await handleSubscriptionDeleted(subscription)
+
+                // Reset usage limits to free tier
+                await syncSubscriptionUsageLimits(subscription)
+
+                logger.info('[onSubscriptionDeleted] Reset usage limits to free tier', {
+                  subscriptionId: subscription.id,
+                  referenceId: subscription.referenceId,
                 })
-              },
+              } catch (error) {
+                logger.error('[onSubscriptionDeleted] Failed to handle subscription deletion', {
+                  subscriptionId: subscription.id,
+                  referenceId: subscription.referenceId,
+                  error,
+                })
+              }
             },
-          }),
-        ]
+          },
+          onEvent: async (event: Stripe.Event) => {
+            logger.info('[onEvent] Received Stripe webhook', {
+              eventId: event.id,
+              eventType: event.type,
+            })
+
+            try {
+              switch (event.type) {
+                case 'invoice.payment_succeeded': {
+                  await handleInvoicePaymentSucceeded(event)
+                  break
+                }
+                case 'invoice.payment_failed': {
+                  await handleInvoicePaymentFailed(event)
+                  break
+                }
+                case 'invoice.finalized': {
+                  await handleInvoiceFinalized(event)
+                  break
+                }
+                case 'customer.subscription.created': {
+                  await handleManualEnterpriseSubscription(event)
+                  break
+                }
+                // Note: customer.subscription.deleted is handled by better-auth's onSubscriptionDeleted callback above
+                default:
+                  logger.info('[onEvent] Ignoring unsupported webhook event', {
+                    eventId: event.id,
+                    eventType: event.type,
+                  })
+                  break
+              }
+
+              logger.info('[onEvent] Successfully processed webhook', {
+                eventId: event.id,
+                eventType: event.type,
+              })
+            } catch (error) {
+              logger.error('[onEvent] Failed to process webhook', {
+                eventId: event.id,
+                eventType: event.type,
+                error,
+              })
+              throw error
+            }
+          },
+        }),
+        organization({
+          allowUserToCreateOrganization: async (user) => {
+            const dbSubscriptions = await db
+              .select()
+              .from(schema.subscription)
+              .where(eq(schema.subscription.referenceId, user.id))
+
+            const hasTeamPlan = dbSubscriptions.some(
+              (sub) =>
+                sub.status === 'active' && (sub.plan === 'team' || sub.plan === 'enterprise')
+            )
+
+            return hasTeamPlan
+          },
+          // Set a fixed membership limit of 50, but the actual limit will be enforced in the invitation flow
+          membershipLimit: 50,
+          // Validate seat limits before sending invitations
+          beforeInvite: async ({ organization }: { organization: { id: string } }) => {
+            const subscriptions = await db
+              .select()
+              .from(schema.subscription)
+              .where(
+                and(
+                  eq(schema.subscription.referenceId, organization.id),
+                  eq(schema.subscription.status, 'active')
+                )
+              )
+
+            const teamOrEnterpriseSubscription = subscriptions.find(
+              (sub) => sub.plan === 'team' || sub.plan === 'enterprise'
+            )
+
+            if (!teamOrEnterpriseSubscription) {
+              throw new Error('No active team or enterprise subscription for this organization')
+            }
+
+            const members = await db
+              .select()
+              .from(schema.member)
+              .where(eq(schema.member.organizationId, organization.id))
+
+            const pendingInvites = await db
+              .select()
+              .from(schema.invitation)
+              .where(
+                and(
+                  eq(schema.invitation.organizationId, organization.id),
+                  eq(schema.invitation.status, 'pending')
+                )
+              )
+
+            const totalCount = members.length + pendingInvites.length
+            const seatLimit = teamOrEnterpriseSubscription.seats || 1
+
+            if (totalCount >= seatLimit) {
+              throw new Error(`Organization has reached its seat limit of ${seatLimit}`)
+            }
+          },
+          sendInvitationEmail: async (data: any) => {
+            try {
+              const { invitation, organization, inviter } = data
+
+              const inviteUrl = `${getBaseUrl()}/invite/${invitation.id}`
+              const inviterName = inviter.user?.name || 'A team member'
+
+              const html = await renderInvitationEmail(
+                inviterName,
+                organization.name,
+                inviteUrl,
+                invitation.email
+              )
+
+              const result = await sendEmail({
+                to: invitation.email,
+                subject: `${inviterName} has invited you to join ${organization.name} on Sim`,
+                html,
+                from: getFromEmailAddress(),
+                emailType: 'transactional',
+              })
+
+              if (!result.success) {
+                logger.error('Failed to send organization invitation email:', result.message)
+              }
+            } catch (error) {
+              logger.error('Error sending invitation email', { error })
+            }
+          },
+          organizationCreation: {
+            afterCreate: async ({ organization, user }) => {
+              logger.info('[organizationCreation.afterCreate] Organization created', {
+                organizationId: organization.id,
+                creatorId: user.id,
+              })
+            },
+          },
+        }),
+      ]
       : []),
   ],
   pages: {

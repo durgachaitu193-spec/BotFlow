@@ -3,7 +3,7 @@ import { member, permissions, user, workspace } from '@sim/db/schema'
 import { and, eq, or } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('OrganizationWorkspacesAPI')
 

@@ -1,6 +1,6 @@
 import { ChartBarIcon } from '@/components/icons'
 import { isHosted } from '@/lib/core/config/environment'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { BlockConfig, ParamType } from '@/blocks/types'
 import type { ProviderId } from '@/providers/types'
 import {
@@ -206,15 +206,15 @@ export const EvaluatorBlock: BlockConfig<EvaluatorResponse> = {
       required: true,
       condition: isHosted
         ? {
-            field: 'model',
-            value: getHostedModels(),
-            not: true, // Show for all models EXCEPT those listed
-          }
+          field: 'model',
+          value: getHostedModels(),
+          not: true, // Show for all models EXCEPT those listed
+        }
         : () => ({
-            field: 'model',
-            value: getCurrentOllamaModels(),
-            not: true, // Show for all models EXCEPT Ollama models
-          }),
+          field: 'model',
+          value: getCurrentOllamaModels(),
+          not: true, // Show for all models EXCEPT Ollama models
+        }),
     },
     {
       id: 'azureEndpoint',

@@ -1,9 +1,10 @@
 import { db } from '@sim/db'
 import { copilotChats, document, knowledgeBase, templates } from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import { and, eq, isNull } from 'drizzle-orm'
-import { createLogger } from '@/lib/logs/console/logger'
 import { loadWorkflowFromNormalizedTables } from '@/lib/workflows/persistence/utils'
 import { sanitizeForCopilot } from '@/lib/workflows/sanitization/json-sanitizer'
+import { escapeRegExp } from '@/lib/core/utils/formatting'
 import type { ChatContext } from '@/stores/panel/copilot/types'
 
 export type AgentContextType =
@@ -151,10 +152,6 @@ export async function processContextsServer(
     kinds: Array.from(filtered.reduce((s, r) => s.add(r.type), new Set<string>())),
   })
   return filtered
-}
-
-function escapeRegExp(input: string): string {
-  return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
 function sanitizeMessageForDocs(rawMessage: string, contexts: ChatContext[] | undefined): string {
@@ -519,9 +516,9 @@ async function processExecutionLogFromDb(
       // Include trace spans and any available details without being huge
       executionData: log.executionData
         ? {
-            traceSpans: (log.executionData as any).traceSpans || undefined,
-            errorDetails: (log.executionData as any).errorDetails || undefined,
-          }
+          traceSpans: (log.executionData as any).traceSpans || undefined,
+          errorDetails: (log.executionData as any).errorDetails || undefined,
+        }
         : undefined,
       cost: log.cost || undefined,
     }

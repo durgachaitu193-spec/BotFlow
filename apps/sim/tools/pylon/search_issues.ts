@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { ToolConfig } from '@/tools/types'
 import { buildPylonUrl, handlePylonError } from './types'
 
@@ -28,97 +28,97 @@ export interface PylonSearchIssuesResponse {
 }
 
 export const pylonSearchIssuesTool: ToolConfig<PylonSearchIssuesParams, PylonSearchIssuesResponse> =
-  {
-    id: 'pylon_search_issues',
-    name: 'Search Issues in Pylon',
-    description: 'Query issues using filters',
-    version: '1.0.0',
+{
+  id: 'pylon_search_issues',
+  name: 'Search Issues in Pylon',
+  description: 'Query issues using filters',
+  version: '1.0.0',
 
-    params: {
-      apiToken: {
-        type: 'string',
-        required: true,
-        visibility: 'hidden',
-        description: 'Pylon API token',
-      },
-      filter: {
-        type: 'string',
-        required: true,
-        visibility: 'user-only',
-        description: 'Filter criteria as JSON string',
-      },
-      cursor: {
-        type: 'string',
-        required: false,
-        visibility: 'user-only',
-        description: 'Pagination cursor for next page of results',
-      },
-      limit: {
-        type: 'number',
-        required: false,
-        visibility: 'user-only',
-        description: 'Maximum number of results to return',
-      },
+  params: {
+    apiToken: {
+      type: 'string',
+      required: true,
+      visibility: 'hidden',
+      description: 'Pylon API token',
     },
+    filter: {
+      type: 'string',
+      required: true,
+      visibility: 'user-only',
+      description: 'Filter criteria as JSON string',
+    },
+    cursor: {
+      type: 'string',
+      required: false,
+      visibility: 'user-only',
+      description: 'Pagination cursor for next page of results',
+    },
+    limit: {
+      type: 'number',
+      required: false,
+      visibility: 'user-only',
+      description: 'Maximum number of results to return',
+    },
+  },
 
-    request: {
-      url: () => buildPylonUrl('/issues/search'),
-      method: 'POST',
-      headers: (params) => ({
-        Authorization: `Bearer ${params.apiToken}`,
-        'Content-Type': 'application/json',
-      }),
-      body: (params) => {
-        const body: any = {}
+  request: {
+    url: () => buildPylonUrl('/issues/search'),
+    method: 'POST',
+    headers: (params) => ({
+      Authorization: `Bearer ${params.apiToken}`,
+      'Content-Type': 'application/json',
+    }),
+    body: (params) => {
+      const body: any = {}
 
-        if (params.filter) {
-          try {
-            body.filter = JSON.parse(params.filter)
-          } catch (error) {
-            logger.warn('Failed to parse filter', { error })
-          }
+      if (params.filter) {
+        try {
+          body.filter = JSON.parse(params.filter)
+        } catch (error) {
+          logger.warn('Failed to parse filter', { error })
         }
-
-        if (params.cursor) body.cursor = params.cursor
-        if (params.limit !== undefined) body.limit = params.limit
-
-        return body
-      },
-    },
-
-    transformResponse: async (response: Response) => {
-      if (!response.ok) {
-        const data = await response.json()
-        handlePylonError(data, response.status, 'search_issues')
       }
 
+      if (params.cursor) body.cursor = params.cursor
+      if (params.limit !== undefined) body.limit = params.limit
+
+      return body
+    },
+  },
+
+  transformResponse: async (response: Response) => {
+    if (!response.ok) {
       const data = await response.json()
+      handlePylonError(data, response.status, 'search_issues')
+    }
 
-      return {
-        success: true,
-        output: {
-          issues: data.data || [],
-          pagination: data.pagination,
-          metadata: {
-            operation: 'search_issues' as const,
-            totalReturned: data.data?.length || 0,
-          },
-          success: true,
-        },
-      }
-    },
+    const data = await response.json()
 
-    outputs: {
-      success: { type: 'boolean', description: 'Operation success status' },
+    return {
+      success: true,
       output: {
-        type: 'object',
-        description: 'Search results',
-        properties: {
-          issues: { type: 'array', description: 'Array of issue objects' },
-          pagination: { type: 'object', description: 'Pagination metadata' },
-          metadata: { type: 'object', description: 'Operation metadata' },
-          success: { type: 'boolean', description: 'Operation success' },
+        issues: data.data || [],
+        pagination: data.pagination,
+        metadata: {
+          operation: 'search_issues' as const,
+          totalReturned: data.data?.length || 0,
         },
+        success: true,
+      },
+    }
+  },
+
+  outputs: {
+    success: { type: 'boolean', description: 'Operation success status' },
+    output: {
+      type: 'object',
+      description: 'Search results',
+      properties: {
+        issues: { type: 'array', description: 'Array of issue objects' },
+        pagination: { type: 'object', description: 'Pagination metadata' },
+        metadata: { type: 'object', description: 'Operation metadata' },
+        success: { type: 'boolean', description: 'Operation success' },
       },
     },
-  }
+  },
+}

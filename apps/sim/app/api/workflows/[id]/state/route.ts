@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { getSession } from '@/lib/auth'
 import { env } from '@/lib/core/config/env'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { extractAndPersistCustomTools } from '@/lib/workflows/persistence/custom-tools-persistence'
 import { saveWorkflowToNormalizedTables } from '@/lib/workflows/persistence/utils'
 import { sanitizeAgentToolsInBlocks } from '@/lib/workflows/sanitization/validation'
@@ -150,7 +150,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       accessContext?.isOwner ||
       (workflowData.workspaceId
         ? accessContext?.workspacePermission === 'write' ||
-          accessContext?.workspacePermission === 'admin'
+        accessContext?.workspacePermission === 'admin'
         : false)
 
     if (!canUpdate) {

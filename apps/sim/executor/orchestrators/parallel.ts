@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { DAG } from '@/executor/dag/builder'
 import type { ParallelScope } from '@/executor/execution/state'
 import type { BlockStateWriter } from '@/executor/execution/types'
@@ -32,7 +32,7 @@ export class ParallelOrchestrator {
   constructor(
     private dag: DAG,
     private state: BlockStateWriter
-  ) {}
+  ) { }
 
   initializeParallelScope(
     ctx: ExecutionContext,

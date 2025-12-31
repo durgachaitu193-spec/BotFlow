@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm'
 import type { NextRequest } from 'next/server'
 import { authenticateApiKeyFromHeader, updateApiKeyLastUsed } from '@/lib/api-key/service'
 import { verifyInternalToken } from '@/lib/auth/internal'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('HybridAuth')
 
@@ -103,7 +103,7 @@ export async function checkHybridAuth(
     }
 
     // 2. Try Privy cookie auth (for web UI)
-    const privyUserId = request.cookies.get('privy-user-id')?.value
+    const privyUserId = request.cookies.get('sim-privy-user-id')?.value
     if (privyUserId) {
       const [privyUser] = await db
         .select({ id: user.id })

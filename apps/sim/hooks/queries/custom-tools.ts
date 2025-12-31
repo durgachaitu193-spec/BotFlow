@@ -1,5 +1,5 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { useCustomToolsStore } from '@/stores/custom-tools/store'
 import type { CustomToolDefinition, CustomToolSchema } from '@/stores/custom-tools/types'
 
@@ -274,11 +274,11 @@ export function useUpdateCustomTool() {
           previousTools.map((tool) =>
             tool.id === toolId
               ? {
-                  ...tool,
-                  title: updates.title ?? tool.title,
-                  schema: updates.schema ?? tool.schema,
-                  code: updates.code ?? tool.code,
-                }
+                ...tool,
+                title: updates.title ?? tool.title,
+                schema: updates.schema ?? tool.schema,
+                code: updates.code ?? tool.code,
+              }
               : tool
           )
         )

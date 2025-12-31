@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui'
 import { MAX_TAG_SLOTS, type TagSlot } from '@/lib/knowledge/constants'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { useKnowledgeBaseTagDefinitions } from '@/hooks/use-knowledge-base-tag-definitions'
 import { useNextAvailableSlot } from '@/hooks/use-next-available-slot'
 import { type TagDefinitionInput, useTagDefinitions } from '@/hooks/use-tag-definitions'
@@ -223,24 +223,24 @@ export function DocumentTagEntry({
         const updatedTags =
           editingTagIndex !== null
             ? tags.map((tag, index) =>
-                index === editingTagIndex
-                  ? {
-                      ...tag,
-                      displayName: editForm.displayName,
-                      fieldType: editForm.fieldType,
-                      value: editForm.value,
-                    }
-                  : tag
-              )
-            : [
-                ...tags,
-                {
-                  slot: targetSlot,
+              index === editingTagIndex
+                ? {
+                  ...tag,
                   displayName: editForm.displayName,
                   fieldType: editForm.fieldType,
                   value: editForm.value,
-                },
-              ]
+                }
+                : tag
+            )
+            : [
+              ...tags,
+              {
+                slot: targetSlot,
+                displayName: editForm.displayName,
+                fieldType: editForm.fieldType,
+                value: editForm.value,
+              },
+            ]
         await onSave(updatedTags)
       }
 

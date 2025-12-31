@@ -4,7 +4,7 @@ import { checkServerSideUsageLimits } from '@/lib/billing'
 import { getHighestPrioritySubscription } from '@/lib/billing/core/subscription'
 import { getEffectiveCurrentPeriodCost } from '@/lib/billing/core/usage'
 import { getUserStorageLimit, getUserStorageUsage } from '@/lib/billing/storage'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { createErrorResponse } from '@/app/api/workflows/utils'
 import { RateLimiter } from '@/services/queue'
 

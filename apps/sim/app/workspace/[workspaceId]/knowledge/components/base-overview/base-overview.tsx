@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Check, Copy, LibraryBig } from 'lucide-react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('BaseOverviewComponent')
 

@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { buildTraceSpans } from '@/lib/logs/execution/trace-spans/trace-spans'
 import type { TraceSpan } from '@/lib/logs/types'
 import type { BlockOutput } from '@/blocks/types'
@@ -353,8 +353,8 @@ export class WorkflowBlockHandler implements BlockHandler {
 
     const transformedChildren = Array.isArray(span.children)
       ? span.children.map((childSpan) =>
-          this.transformSpanForChildWorkflow(childSpan, childWorkflowName)
-        )
+        this.transformSpanForChildWorkflow(childSpan, childWorkflowName)
+      )
       : undefined
 
     return {

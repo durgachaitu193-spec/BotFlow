@@ -35,8 +35,8 @@ export async function POST(request: NextRequest) {
     });
 
     // Set cookie for Privy authentication (expires in 30 days)
-    console.log("[AuthSync] Setting privy-user-id cookie for user:", syncedUser.id);
-    response.cookies.set("privy-user-id", syncedUser.id, {
+    console.log("[AuthSync] Setting launchpad-privy-user-id cookie for user:", syncedUser.id);
+    response.cookies.set("launchpad-privy-user-id", syncedUser.id, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",

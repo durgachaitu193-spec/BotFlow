@@ -2,7 +2,7 @@ import { EmailClient, type EmailMessage } from '@azure/communication-email'
 import { Resend } from 'resend'
 import { env } from '@/lib/core/config/env'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { generateUnsubscribeToken, isUnsubscribed } from '@/lib/messaging/email/unsubscribe'
 import { getFromEmailAddress } from '@/lib/messaging/email/utils'
 
@@ -249,13 +249,13 @@ async function sendWithAzure(data: ProcessedEmailData): Promise<SendEmailResult>
     senderAddress: senderEmailOnly,
     content: data.html
       ? {
-          subject: data.subject,
-          html: data.html,
-        }
+        subject: data.subject,
+        html: data.html,
+      }
       : {
-          subject: data.subject,
-          plainText: data.text!,
-        },
+        subject: data.subject,
+        plainText: data.text!,
+      },
     recipients: {
       to: Array.isArray(data.to)
         ? data.to.map((email) => ({ address: email }))

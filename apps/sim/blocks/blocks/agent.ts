@@ -1,6 +1,6 @@
 import { AgentIcon } from '@/components/icons'
 import { isHosted } from '@/lib/core/config/environment'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { BlockConfig } from '@/blocks/types'
 import { AuthMode } from '@/blocks/types'
 import {
@@ -183,15 +183,15 @@ export const AgentBlock: BlockConfig<AgentResponse> = {
       // Hide API key for hosted models, Ollama models, and vLLM models
       condition: isHosted
         ? {
-            field: 'model',
-            value: getHostedModels(),
-            not: true, // Show for all models EXCEPT those listed
-          }
+          field: 'model',
+          value: getHostedModels(),
+          not: true, // Show for all models EXCEPT those listed
+        }
         : () => ({
-            field: 'model',
-            value: [...getCurrentOllamaModels(), ...getCurrentVLLMModels()],
-            not: true, // Show for all models EXCEPT Ollama and vLLM models
-          }),
+          field: 'model',
+          value: [...getCurrentOllamaModels(), ...getCurrentVLLMModels()],
+          not: true, // Show for all models EXCEPT Ollama and vLLM models
+        }),
     },
     {
       id: 'memoryType',

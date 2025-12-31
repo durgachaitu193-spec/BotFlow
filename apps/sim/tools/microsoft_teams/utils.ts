@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { MicrosoftTeamsAttachment } from '@/tools/microsoft_teams/types'
 import type { ToolFileData } from '@/tools/types'
 
@@ -20,20 +20,20 @@ export interface TeamsMention {
   id: number
   mentionText: string
   mentioned:
-    | {
-        user: {
-          id: string
-          displayName: string
-          userIdentityType?: string
-        }
-      }
-    | {
-        application: {
-          displayName: string
-          id: string
-          applicationIdentityType: 'bot'
-        }
-      }
+  | {
+    user: {
+      id: string
+      displayName: string
+      userIdentityType?: string
+    }
+  }
+  | {
+    application: {
+      displayName: string
+      id: string
+      applicationIdentityType: 'bot'
+    }
+  }
 }
 
 /**

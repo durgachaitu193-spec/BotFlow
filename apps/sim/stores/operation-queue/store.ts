@@ -1,5 +1,5 @@
+import { createLogger } from '@sim/logger'
 import { create } from 'zustand'
-import { createLogger } from '@/lib/logs/console/logger'
 
 const logger = createLogger('OperationQueue')
 
@@ -15,7 +15,6 @@ export interface QueuedOperation {
   retryCount: number
   status: 'pending' | 'processing' | 'confirmed' | 'failed'
   userId: string
-  immediate?: boolean // Flag for immediate processing (skips debouncing)
 }
 
 interface OperationQueueState {
@@ -312,8 +311,8 @@ export const useOperationQueueStore = create<OperationQueueState>((set, get) => 
 
     const nextOperation = currentRegisteredWorkflowId
       ? state.operations.find(
-          (op) => op.status === 'pending' && op.workflowId === currentRegisteredWorkflowId
-        )
+        (op) => op.status === 'pending' && op.workflowId === currentRegisteredWorkflowId
+      )
       : state.operations.find((op) => op.status === 'pending')
     if (!nextOperation) {
       return

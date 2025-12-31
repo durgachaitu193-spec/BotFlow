@@ -1,5 +1,5 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type {
   ChunkData,
   ChunksPagination,
@@ -102,11 +102,11 @@ export async function fetchKnowledgeDocuments({
   const documents: DocumentData[] = result.data?.documents ?? result.data ?? []
   const pagination: DocumentsPagination = result.data?.pagination ??
     result.pagination ?? {
-      total: documents.length,
-      limit,
-      offset,
-      hasMore: false,
-    }
+    total: documents.length,
+    limit,
+    offset,
+    hasMore: false,
+  }
 
   return {
     documents,

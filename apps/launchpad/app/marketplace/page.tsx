@@ -1,21 +1,59 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, LayoutGrid, Sparkles, Zap, Box } from "lucide-react";
-import { templates } from "@/lib/templatesData";
+import { templates as staticTemplates } from "@/lib/templatesData";
 import TemplateCard from "@/components/TemplateCard";
+import { nextApiFetch } from "@/global/utils/nextApiFetch";
 
 export default function MarketplacePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [apiTemplates, setApiTemplates] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchTemplates() {
+      try {
+        const { data, error } = await nextApiFetch<{ data: any[] }>({
+          url: "/api/templates",
+        });
+
+        if (data && data.data) {
+          const mappedTemplates = data.data.map((t) => ({
+            id: t.id,
+            title: t.name,
+            description: t.details?.tagline || t.name,
+            author: t.creator?.name || "Unknown",
+            stars: t.stars || 0,
+            forks: t.views || 0, // Using views as forks
+            tags: t.tags || [],
+            updatedAt: new Date(t.updatedAt).toLocaleDateString(),
+            credentials: t.requiredCredentials || [],
+            flowData: t.state || { nodes: [], edges: [] },
+            icon: Box, // Default icon for API templates
+          }));
+          setApiTemplates(mappedTemplates);
+        }
+      } catch (err) {
+        console.error("Failed to fetch templates:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchTemplates();
+  }, []);
+
+  const templates = [...apiTemplates];
 
   const filteredTemplates = templates.filter(
     (template) =>
       template.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       template.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      template.tags.some((tag) =>
+      template.tags.some((tag: string) =>
         tag.toLowerCase().includes(searchQuery.toLowerCase()),
       ),
   );
@@ -136,13 +174,26 @@ export default function MarketplacePage() {
         </motion.div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 perspective-1000">
           <AnimatePresence mode="popLayout">
-            {filteredTemplates.map((template, index) => (
-              <TemplateCard
-                key={template.id}
-                template={template}
-                index={index}
-              />
-            ))}
+            {isLoading ? (
+              // Loading state
+              Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="h-64 rounded-xl border border-white/5 bg-bg-card/40 animate-pulse flex flex-col p-5">
+                  <div className="h-12 w-12 rounded-xl bg-white/5 mb-4" />
+                  <div className="h-4 w-3/4 bg-white/5 rounded mb-2" />
+                  <div className="h-3 w-full bg-white/5 rounded mb-1" />
+                  <div className="h-3 w-full bg-white/5 rounded mb-4" />
+                  <div className="mt-auto h-8 bg-white/5 rounded" />
+                </div>
+              ))
+            ) : filteredTemplates.length > 0 ? (
+              filteredTemplates.map((template, index) => (
+                <TemplateCard
+                  key={template.id}
+                  template={template}
+                  index={index}
+                />
+              ))
+            ) : null}
           </AnimatePresence>
         </div>
 

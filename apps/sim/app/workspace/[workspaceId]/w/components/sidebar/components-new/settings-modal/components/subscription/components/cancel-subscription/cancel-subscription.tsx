@@ -7,7 +7,7 @@ import { useSession, useSubscription } from '@/lib/auth/auth-client'
 import { getSubscriptionStatus } from '@/lib/billing/client/utils'
 import { cn } from '@/lib/core/utils/cn'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { organizationKeys, useOrganizations } from '@/hooks/queries/organization'
 import { subscriptionKeys, useSubscriptionData } from '@/hooks/queries/subscription'
 
@@ -235,8 +235,8 @@ export function CancelSubscription({ subscription, subscriptionData }: CancelSub
               {isCancelAtPeriodEnd
                 ? 'Your subscription is set to cancel at the end of the billing period. Would you like to keep your subscription active?'
                 : `You'll be redirected to Stripe to manage your subscription. You'll keep access until ${formatDate(
-                    periodEndDate
-                  )}, then downgrade to free plan.`}{' '}
+                  periodEndDate
+                )}, then downgrade to free plan.`}{' '}
               {!isCancelAtPeriodEnd && (
                 <span className='text-[var(--text-error)]'>This action cannot be undone.</span>
               )}

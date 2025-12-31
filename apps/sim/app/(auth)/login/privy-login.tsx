@@ -52,7 +52,7 @@ export default function PrivyLogin() {
   const { wallets } = useWallets()
   const { createWallet } = useCreateWallet()
   const router = useRouter()
-  const { refetch } = useSession()
+  const { data, refetch } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
   const [isCreatingWallet, setIsCreatingWallet] = useState(false)
@@ -62,6 +62,7 @@ export default function PrivyLogin() {
   const hasSynced = useRef(false)
   const isProcessing = useRef(false)
   const processedUserId = useRef<string | null>(null)
+  const lastRedirectAttempt = useRef<number>(0)
 
   // Get wallet address - simple approach
   const getWalletAddress = (): string | undefined => {
@@ -131,92 +132,87 @@ export default function PrivyLogin() {
 
   // Handle sync + redirect after authentication
   useEffect(() => {
-    // Prevent multiple redirects - check if we've already processed this user
-    if (hasRedirected.current || isProcessing.current) return
-    if (processedUserId.current === user?.id) return
-
     // Wait for Privy readiness and auth
-    if (!ready) return
-    if (!authenticated || !user?.id) return
+    if (!ready || !authenticated || !user?.id) return
 
-    // Mark as processing immediately to prevent re-execution
-    isProcessing.current = true
-    hasRedirected.current = true
-    processedUserId.current = user.id
+    const userId = user.id
+    const now = Date.now()
+
+    // If we're already processing this exact user, don't start again
+    // Unless much time has passed (recovery case)
+    if (isProcessing.current && processedUserId.current === userId && now - lastRedirectAttempt.current < 10000) {
+      return
+    }
 
     // Async function to handle sync and redirect
     const proceedWithSyncAndRedirect = async () => {
-      // Check if user has a wallet
-      let walletAddress = getWalletAddress()
+      try {
+        isProcessing.current = true
+        processedUserId.current = userId
+        lastRedirectAttempt.current = now
 
-      // If no wallet exists, create one explicitly
-      if (!walletAddress) {
-        try {
-          console.log('No wallet found, creating embedded wallet...')
-          setIsCreatingWallet(true)
+        // 1. Check if we already have a session for this user
+        const currentSessionUserId = data?.user?.id || data?.session?.userId
 
-          // Use createWallet function to explicitly create a wallet
-          const wallet = await createWallet()
-
-          if (wallet?.address) {
-            walletAddress = wallet.address
-            console.log('Wallet created successfully:', walletAddress)
-          } else {
-            // Wait a bit for wallet to be available in wallets array
-            await new Promise((resolve) => setTimeout(resolve, 1000))
-            walletAddress = getWalletAddress()
-          }
-        } catch (error) {
-          console.error('Error creating wallet:', error)
-          // Continue without wallet - user can still be synced
-          setError('Failed to create wallet. Please try again.')
-          isProcessing.current = false
-          hasRedirected.current = false
-          hasSynced.current = false
-          processedUserId.current = null
-          setIsCreatingWallet(false)
+        if (currentSessionUserId === userId) {
+          console.log('Session already active for user, redirecting to workspace')
+          router.push('/workspace')
           return
-        } finally {
-          setIsCreatingWallet(false)
-        }
-      }
-
-      // If still no wallet after creation attempt, wait a bit more
-      if (!walletAddress) {
-        console.log('Waiting for wallet to be available...')
-        let attempts = 0
-        const maxAttempts = 10 // Wait up to 5 seconds (10 * 500ms)
-
-        while (!walletAddress && attempts < maxAttempts) {
-          await new Promise((resolve) => setTimeout(resolve, 500))
-          walletAddress = getWalletAddress()
-          attempts++
         }
 
-        if (!walletAddress && attempts >= maxAttempts) {
-          console.warn('Wallet not available after creation attempt, proceeding without wallet address')
+        // 2. We don't have a session, so we need to sync
+        let walletAddress = getWalletAddress()
+
+        // If no wallet exists, create one explicitly
+        if (!walletAddress) {
+          try {
+            console.log('No wallet found, creating embedded wallet...')
+            setIsCreatingWallet(true)
+            const wallet = await createWallet()
+            if (wallet?.address) {
+              walletAddress = wallet.address
+            } else {
+              await new Promise((resolve) => setTimeout(resolve, 1000))
+              walletAddress = getWalletAddress()
+            }
+          } catch (error) {
+            console.error('Error creating wallet:', error)
+            setError('Failed to create wallet. Proceeding without one.')
+          } finally {
+            setIsCreatingWallet(false)
+          }
         }
-      }
 
-      // Sync user data to database (with wallet address)
-      const syncResult = await syncPrivyUser(user, walletAddress)
+        // Sync user data to database
+        console.log('Syncing user with wallet:', walletAddress)
+        const syncSuccess = await syncPrivyUser(user, walletAddress)
 
-      if (!syncResult) {
-        console.error('Sync failed, cannot redirect')
-        // Reset processing flags so user can retry
+        if (!syncSuccess) {
+          console.error('Sync failed')
+          setError('Failed to sync account data. Please refresh and try again.')
+          return
+        }
+
+        // 3. After sync, refetch the session
+        console.log('Sync successful, refetching session...')
+        await refetch()
+
+        // Wait a bit for the cookie/state to settle
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+
+        // 4. Finally redirect
+        console.log('Redirecting to workspace')
+        router.push('/workspace')
+      } catch (err) {
+        console.error('Unexpected error in login flow:', err)
+        setError('An unexpected error occurred. Please try again.')
+      } finally {
         isProcessing.current = false
-        hasRedirected.current = false
-        hasSynced.current = false
-        processedUserId.current = null
-        setError('Failed to sync account data. Please try again.')
-        return
       }
-      console.log('Sync successful, refetching session...')
-      await refetch()
-      router.push('/workspace')
     }
+
     proceedWithSyncAndRedirect()
-  }, [ready, authenticated, user?.id, wallets])
+  }, [ready, authenticated, user?.id, wallets, data?.user?.id])
 
   const handleLogin = async () => {
     try {

@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { useCopilotStore } from '@/stores/panel/copilot/store'
 import { usePanelStore } from '@/stores/panel/store'
 
@@ -42,9 +42,7 @@ export function openCopilotWithMessage(message: string): void {
       return
     }
 
-    const messageWithInstructions = `${trimmedMessage}\n\nPlease fix this.`
-
-    void copilotStore.sendMessage(messageWithInstructions, { stream: true }).catch((error) => {
+    void copilotStore.sendMessage(trimmedMessage, { stream: true }).catch((error) => {
       logger.error('Failed to send message to copilot', { error })
     })
 

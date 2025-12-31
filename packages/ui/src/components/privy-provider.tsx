@@ -97,6 +97,8 @@ export function PrivyProviderWrapper({ children, appId, appUrl }: PrivyProviderW
         },
         supportedChains: [BSC_TESTNET, BSC_MAINNET],
         session: {
+            duration: '30d' as const,
+            renew: true,
             redirectToAfterLogin: false,
         },
         storageMethod: 'localStorage' as const,

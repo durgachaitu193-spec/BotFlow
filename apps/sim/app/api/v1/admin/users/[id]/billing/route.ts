@@ -23,7 +23,7 @@ import { member, organization, subscription, user, userStats } from '@sim/db/sch
 import { eq, or } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
 import { getHighestPrioritySubscription } from '@/lib/billing/core/subscription'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { withAdminAuthParams } from '@/app/api/v1/admin/middleware'
 import {
   badRequestResponse,
@@ -81,9 +81,9 @@ export const GET = withAdminAuthParams<RouteParams>(async (_, context) => {
       .where(
         orgIds.length > 0
           ? or(
-              eq(subscription.referenceId, userId),
-              ...orgIds.map((orgId) => eq(subscription.referenceId, orgId))
-            )
+            eq(subscription.referenceId, userId),
+            ...orgIds.map((orgId) => eq(subscription.referenceId, orgId))
+          )
           : eq(subscription.referenceId, userId)
       )
 
@@ -238,10 +238,10 @@ export const PATCH = withAdminAuthParams<RouteParams>(async (request, context) =
       reason,
       previousValues: existingStats
         ? {
-            currentUsageLimit: existingStats.currentUsageLimit,
-            billingBlocked: existingStats.billingBlocked,
-            currentPeriodCost: existingStats.currentPeriodCost,
-          }
+          currentUsageLimit: existingStats.currentUsageLimit,
+          billingBlocked: existingStats.billingBlocked,
+          currentPeriodCost: existingStats.currentPeriodCost,
+        }
         : null,
       newValues: updateData,
       isTeamMember: !!orgMembership,

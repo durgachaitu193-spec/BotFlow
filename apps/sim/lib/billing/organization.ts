@@ -2,7 +2,7 @@ import { db } from '@sim/db'
 import * as schema from '@sim/db/schema'
 import { and, eq } from 'drizzle-orm'
 import { syncUsageLimitsFromSubscription } from '@/lib/billing/core/usage'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('BillingOrganization')
 

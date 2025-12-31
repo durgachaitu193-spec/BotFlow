@@ -2,7 +2,7 @@ import type { NextRequest } from 'next/server'
 import { checkHybridAuth } from '@/lib/auth/hybrid'
 import { env } from '@/lib/core/config/env'
 import { validateAlphanumericId } from '@/lib/core/security/input-validation'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('ProxyTTSStreamAPI')
 
@@ -83,21 +83,21 @@ export async function POST(request: NextRequest) {
     const writer = writable.getWriter()
     const reader = response.body.getReader()
 
-    ;(async () => {
-      try {
-        while (true) {
-          const { done, value } = await reader.read()
-          if (done) {
-            await writer.close()
-            break
+      ; (async () => {
+        try {
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) {
+              await writer.close()
+              break
+            }
+            writer.write(value).catch(logger.error)
           }
-          writer.write(value).catch(logger.error)
+        } catch (error) {
+          logger.error('Error during Stream streaming:', error)
+          await writer.abort(error)
         }
-      } catch (error) {
-        logger.error('Error during Stream streaming:', error)
-        await writer.abort(error)
-      }
-    })()
+      })()
 
     return new Response(readable, {
       headers: {

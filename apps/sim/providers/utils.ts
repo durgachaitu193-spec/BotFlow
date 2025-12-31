@@ -1,6 +1,6 @@
 import { getEnv, isTruthy } from '@/lib/core/config/env'
 import { isHosted } from '@/lib/core/config/environment'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { anthropicProvider } from '@/providers/anthropic'
 import { azureOpenAIProvider } from '@/providers/azure-openai'
 import { cerebrasProvider } from '@/providers/cerebras'
@@ -290,8 +290,8 @@ export function generateStructuredOutputInstructions(responseFormat: any): strin
     if (field.type === 'object' && field.properties) {
       return `{
     ${Object.entries(field.properties)
-      .map(([key, prop]: [string, any]) => `"${key}": ${prop.type === 'number' ? '0' : '"value"'}`)
-      .join(',\n    ')}
+          .map(([key, prop]: [string, any]) => `"${key}": ${prop.type === 'number' ? '0' : '"value"'}`)
+          .join(',\n    ')}
   }`
     }
     return field.type === 'string'
@@ -687,12 +687,12 @@ export function prepareToolsWithUsageControl(
 ): {
   tools: any[] | undefined
   toolChoice:
-    | 'auto'
-    | 'none'
-    | { type: 'function'; function: { name: string } }
-    | { type: 'tool'; name: string }
-    | { type: 'any'; any: { model: string; name: string } }
-    | undefined
+  | 'auto'
+  | 'none'
+  | { type: 'function'; function: { name: string } }
+  | { type: 'tool'; name: string }
+  | { type: 'any'; any: { model: string; name: string } }
+  | undefined
   toolConfig?: {
     // Add toolConfig for Google's format
     functionCallingConfig: {
@@ -754,11 +754,11 @@ export function prepareToolsWithUsageControl(
   // For Google, we'll use a separate toolConfig object
   let toolConfig:
     | {
-        functionCallingConfig: {
-          mode: 'AUTO' | 'ANY' | 'NONE'
-          allowedFunctionNames?: string[]
-        }
+      functionCallingConfig: {
+        mode: 'AUTO' | 'ANY' | 'NONE'
+        allowedFunctionNames?: string[]
       }
+    }
     | undefined
 
   if (forcedTools.length > 0) {
@@ -839,11 +839,11 @@ export function trackForcedToolUsage(
   hasUsedForcedTool: boolean
   usedForcedTools: string[]
   nextToolChoice?:
-    | 'auto'
-    | { type: 'function'; function: { name: string } }
-    | { type: 'tool'; name: string }
-    | { type: 'any'; any: { model: string; name: string } }
-    | null
+  | 'auto'
+  | { type: 'function'; function: { name: string } }
+  | { type: 'tool'; name: string }
+  | { type: 'any'; any: { model: string; name: string } }
+  | null
   nextToolConfig?: {
     functionCallingConfig: {
       mode: 'AUTO' | 'ANY' | 'NONE'
@@ -856,11 +856,11 @@ export function trackForcedToolUsage(
   let nextToolChoice = originalToolChoice
   let nextToolConfig:
     | {
-        functionCallingConfig: {
-          mode: 'AUTO' | 'ANY' | 'NONE'
-          allowedFunctionNames?: string[]
-        }
+      functionCallingConfig: {
+        mode: 'AUTO' | 'ANY' | 'NONE'
+        allowedFunctionNames?: string[]
       }
+    }
     | undefined
 
   const updatedUsedForcedTools = [...usedForcedTools]
@@ -882,8 +882,8 @@ export function trackForcedToolUsage(
     // For other providers
     forcedToolNames = [
       originalToolChoice?.function?.name ||
-        originalToolChoice?.name ||
-        originalToolChoice?.any?.name,
+      originalToolChoice?.name ||
+      originalToolChoice?.any?.name,
     ].filter(Boolean)
   }
 
@@ -1022,13 +1022,13 @@ export function prepareToolExecution(
     ...toolParams,
     ...(request.workflowId
       ? {
-          _context: {
-            workflowId: request.workflowId,
-            ...(request.workspaceId ? { workspaceId: request.workspaceId } : {}),
-            ...(request.chatId ? { chatId: request.chatId } : {}),
-            ...(request.userId ? { userId: request.userId } : {}),
-          },
-        }
+        _context: {
+          workflowId: request.workflowId,
+          ...(request.workspaceId ? { workspaceId: request.workspaceId } : {}),
+          ...(request.chatId ? { chatId: request.chatId } : {}),
+          ...(request.userId ? { userId: request.userId } : {}),
+        },
+      }
       : {}),
     ...(request.environmentVariables ? { envVars: request.environmentVariables } : {}),
     ...(request.workflowVariables ? { workflowVariables: request.workflowVariables } : {}),

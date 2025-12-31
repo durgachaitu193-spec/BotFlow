@@ -3,7 +3,7 @@ import { Server } from 'socket.io'
 import { env } from '@/lib/core/config/env'
 import { isProd } from '@/lib/core/config/environment'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('SocketIOConfig')
 

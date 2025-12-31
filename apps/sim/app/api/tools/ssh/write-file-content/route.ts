@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto'
 import { type NextRequest, NextResponse } from 'next/server'
 import type { Client, SFTPWrapper } from 'ssh2'
 import { z } from 'zod'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { createSSHConnection, sanitizePath } from '@/app/api/tools/ssh/utils'
 
 const logger = createLogger('SSHWriteFileContentAPI')

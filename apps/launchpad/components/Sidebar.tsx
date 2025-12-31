@@ -19,7 +19,7 @@ import clsx from "clsx";
 
 const navItems = [
   { name: "Overview", href: "/", icon: User },
-  // { name: "Marketplace", href: "/marketplace", icon: ShoppingBag },
+  { name: "Marketplace", href: "/marketplace", icon: ShoppingBag },
   { name: "Agents", href: "/explore", icon: Activity },
   { name: "Network Graph", href: "/network", icon: Globe },
   // { name: "Docs", href: "/docs", icon: FileText },

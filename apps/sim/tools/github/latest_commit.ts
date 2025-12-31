@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { LatestCommitParams, LatestCommitResponse } from '@/tools/github/types'
 import type { ToolConfig } from '@/tools/types'
 
@@ -115,10 +115,10 @@ export const latestCommitTool: ToolConfig<LatestCommitParams, LatestCommitRespon
           },
           stats: data.stats
             ? {
-                additions: data.stats.additions,
-                deletions: data.stats.deletions,
-                total: data.stats.total,
-              }
+              additions: data.stats.additions,
+              deletions: data.stats.deletions,
+              total: data.stats.total,
+            }
             : undefined,
           files: fileDetailsWithContent.length > 0 ? fileDetailsWithContent : undefined,
         },

@@ -7,7 +7,7 @@ import {
   getKnowledgeBaseById,
   updateKnowledgeBase,
 } from '@/lib/knowledge/service'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { checkKnowledgeBaseAccess, checkKnowledgeBaseWriteAccess } from '@/app/api/knowledge/utils'
 
 const logger = createLogger('KnowledgeBaseByIdAPI')

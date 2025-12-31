@@ -10,7 +10,7 @@ import { cookies } from 'next/headers'
 export async function getSession() {
   try {
     const cookieStore = await cookies()
-    const privyUserId = cookieStore.get('privy-user-id')?.value
+    const privyUserId = cookieStore.get('sim-privy-user-id')?.value
 
     if (!privyUserId) {
       return null

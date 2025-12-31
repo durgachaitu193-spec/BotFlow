@@ -6,7 +6,7 @@ import {
   decodeEventLog,
   http,
 } from 'viem'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import {
   AGENT_IDENTITY_REGISTRY_ABI,
   AGENT_IDENTITY_REGISTRY_ADDRESS,
@@ -89,11 +89,11 @@ export async function registerAgent(
                   rpcUrls: chain.rpcUrls.default.http,
                   blockExplorers: chain.blockExplorers
                     ? {
-                        default: {
-                          name: chain.blockExplorers.default.name,
-                          url: chain.blockExplorers.default.url,
-                        },
-                      }
+                      default: {
+                        name: chain.blockExplorers.default.name,
+                        url: chain.blockExplorers.default.url,
+                      },
+                    }
                     : undefined,
                 },
               ],
@@ -301,11 +301,11 @@ export async function updateAgentMetadata(
                   rpcUrls: chain.rpcUrls.default.http,
                   blockExplorers: chain.blockExplorers
                     ? {
-                        default: {
-                          name: chain.blockExplorers.default.name,
-                          url: chain.blockExplorers.default.url,
-                        },
-                      }
+                      default: {
+                        name: chain.blockExplorers.default.name,
+                        url: chain.blockExplorers.default.url,
+                      },
+                    }
                     : undefined,
                 },
               ],
@@ -401,11 +401,11 @@ export async function updateDeploymentState(
                   rpcUrls: chain.rpcUrls.default.http,
                   blockExplorers: chain.blockExplorers
                     ? {
-                        default: {
-                          name: chain.blockExplorers.default.name,
-                          url: chain.blockExplorers.default.url,
-                        },
-                      }
+                      default: {
+                        name: chain.blockExplorers.default.name,
+                        url: chain.blockExplorers.default.url,
+                      },
+                    }
                     : undefined,
                 },
               ],

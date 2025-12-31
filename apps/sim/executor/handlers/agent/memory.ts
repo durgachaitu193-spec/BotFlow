@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { getAccurateTokenCount } from '@/lib/tokenization/estimators'
 import type { AgentInputs, Message } from '@/executor/handlers/agent/types'
 import type { ExecutionContext } from '@/executor/types'
@@ -176,7 +176,7 @@ export class Memory {
     if (!conversationId || conversationId.trim() === '') {
       throw new Error(
         'Conversation ID is required for all memory types. ' +
-          'Please provide a unique identifier (e.g., user-123, session-abc, customer-456).'
+        'Please provide a unique identifier (e.g., user-123, session-abc, customer-456).'
       )
     }
 

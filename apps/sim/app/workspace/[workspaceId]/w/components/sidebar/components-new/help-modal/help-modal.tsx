@@ -17,7 +17,7 @@ import {
 } from '@/components/emcn/components/modal/modal'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('HelpModal')
 

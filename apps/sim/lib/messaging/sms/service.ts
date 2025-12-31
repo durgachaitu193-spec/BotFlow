@@ -1,6 +1,6 @@
 import { Twilio } from 'twilio'
 import { env } from '@/lib/core/config/env'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('SMSService')
 
@@ -43,9 +43,9 @@ const twilioPhoneNumber = env.TWILIO_PHONE_NUMBER
 
 const twilioClient =
   twilioAccountSid &&
-  twilioAuthToken &&
-  twilioAccountSid.trim() !== '' &&
-  twilioAuthToken.trim() !== ''
+    twilioAuthToken &&
+    twilioAccountSid.trim() !== '' &&
+    twilioAuthToken.trim() !== ''
     ? new Twilio(twilioAccountSid, twilioAuthToken)
     : null
 

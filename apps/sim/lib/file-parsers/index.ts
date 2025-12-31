@@ -1,7 +1,7 @@
 import { existsSync } from 'fs'
 import path from 'path'
 import type { FileParseResult, FileParser, SupportedFileType } from '@/lib/file-parsers/types'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('FileParser')
 

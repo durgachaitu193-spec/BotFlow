@@ -14,8 +14,6 @@ export interface WorkflowMetadata {
   color: string
   workspaceId?: string
   folderId?: string | null
-  deploymentPaymentPaid?: boolean
-  deploymentPaymentPaidAt?: Date
 }
 
 export type HydrationPhase =

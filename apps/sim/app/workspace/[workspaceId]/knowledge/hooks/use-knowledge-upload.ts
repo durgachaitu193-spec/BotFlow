@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('KnowledgeUpload')
 
@@ -882,10 +882,10 @@ export function useKnowledgeUpload(options: UseKnowledgeUploadOptions = {}) {
               fileStatuses: prev.fileStatuses?.map((fs, idx) =>
                 idx === fileIndex
                   ? {
-                      ...fs,
-                      status: 'failed' as const,
-                      error: getErrorMessage(error),
-                    }
+                    ...fs,
+                    status: 'failed' as const,
+                    error: getErrorMessage(error),
+                  }
                   : fs
               ),
             }))

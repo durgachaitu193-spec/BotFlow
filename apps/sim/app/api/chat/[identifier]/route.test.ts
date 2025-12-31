@@ -76,9 +76,9 @@ vi.mock('@/app/api/workflows/[id]/execute/route', () => ({
     logs: undefined,
     metadata: result.metadata
       ? {
-          ...result.metadata,
-          workflowConnections: undefined,
-        }
+        ...result.metadata,
+        workflowConnections: undefined,
+      }
       : undefined,
   })),
 }))
@@ -133,7 +133,7 @@ describe('Chat Identifier API Route', () => {
       validateAuthToken: vi.fn().mockReturnValue(true),
     }))
 
-    vi.doMock('@/lib/logs/console/logger', () => ({
+    vi.doMock('@sim/logger', () => ({
       createLogger: vi.fn().mockReturnValue({
         debug: vi.fn(),
         info: vi.fn(),

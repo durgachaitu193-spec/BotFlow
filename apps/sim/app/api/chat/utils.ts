@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm'
 import type { NextRequest, NextResponse } from 'next/server'
 import { isDev } from '@/lib/core/config/environment'
 import { decryptSecret } from '@/lib/core/security/encryption'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { hasAdminPermission } from '@/lib/workspaces/permissions/utils'
 
 const logger = createLogger('ChatAuthUtils')

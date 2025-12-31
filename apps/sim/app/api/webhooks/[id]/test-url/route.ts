@@ -4,7 +4,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { generateRequestId } from '@/lib/core/utils/request'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { signTestWebhookToken } from '@/lib/webhooks/test-tokens'
 import { getUserEntityPermissions } from '@/lib/workspaces/permissions/utils'
 

@@ -14,7 +14,7 @@ import { useCurrentWorkflow } from '@/app/workspace/[workspaceId]/w/[workflowId]
 import type { WorkspaceUserPermissions } from '@/hooks/use-user-permissions'
 import { useUserProfile } from '@/hooks/queries/user-profile'
 import { useWorkflowRegistry } from '@/stores/workflows/registry/store'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('Deploy')
 

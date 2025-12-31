@@ -2,7 +2,7 @@ import { db } from '@sim/db'
 import { account, workflow } from '@sim/db/schema'
 import { and, desc, eq } from 'drizzle-orm'
 import { getSession } from '@/lib/auth'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { refreshOAuthToken } from '@/lib/oauth/oauth'
 
 const logger = createLogger('OAuthUtilsAPI')

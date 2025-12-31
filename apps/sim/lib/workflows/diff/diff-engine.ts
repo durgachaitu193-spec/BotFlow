@@ -1,6 +1,6 @@
 import type { Edge } from 'reactflow'
 import { v4 as uuidv4 } from 'uuid'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { BlockWithDiff } from '@/lib/workflows/diff/types'
 import { mergeSubblockState } from '@/stores/workflows/utils'
 import type { BlockState, WorkflowState } from '@/stores/workflows/workflow/types'
@@ -436,10 +436,10 @@ export class WorkflowDiffEngine {
             : [],
           edge_diff: result.diff.diffAnalysis.edge_diff
             ? {
-                new_edges_count: result.diff.diffAnalysis.edge_diff.new_edges.length,
-                deleted_edges_count: result.diff.diffAnalysis.edge_diff.deleted_edges.length,
-                unchanged_edges_count: result.diff.diffAnalysis.edge_diff.unchanged_edges.length,
-              }
+              new_edges_count: result.diff.diffAnalysis.edge_diff.new_edges.length,
+              deleted_edges_count: result.diff.diffAnalysis.edge_diff.deleted_edges.length,
+              unchanged_edges_count: result.diff.diffAnalysis.edge_diff.unchanged_edges.length,
+            }
             : null,
         })
       } else {
@@ -559,16 +559,16 @@ export class WorkflowDiffEngine {
         // Merge with existing block if found, otherwise use proposed
         const finalBlock: BlockState & BlockWithDiff = existingBlock
           ? {
-              ...existingBlock,
-              ...proposedBlock,
-              id: finalId,
-              // Preserve position from proposed or fallback to existing
-              position: proposedBlock.position || existingBlock.position,
-            }
+            ...existingBlock,
+            ...proposedBlock,
+            id: finalId,
+            // Preserve position from proposed or fallback to existing
+            position: proposedBlock.position || existingBlock.position,
+          }
           : {
-              ...proposedBlock,
-              id: finalId,
-            }
+            ...proposedBlock,
+            id: finalId,
+          }
 
         // Update parentId in data if it exists and has been remapped
         if (finalBlock.data?.parentId && idMap[finalBlock.data.parentId]) {
@@ -883,7 +883,7 @@ export class WorkflowDiffEngine {
               for (const changedField of fieldDiff.changed_fields) {
                 if (block.subBlocks?.[changedField]) {
                   // Add a diff marker to the subblock itself
-                  ;(block.subBlocks[changedField] as any).is_diff = 'changed'
+                  ; (block.subBlocks[changedField] as any).is_diff = 'changed'
                 }
               }
             }
@@ -1104,7 +1104,7 @@ export function stripWorkflowDiffMarkers(state: WorkflowState): WorkflowState {
     if (cleanBlock.subBlocks) {
       Object.values(cleanBlock.subBlocks).forEach((subBlock) => {
         if (subBlock && typeof subBlock === 'object') {
-          ;(subBlock as any).is_diff = undefined
+          ; (subBlock as any).is_diff = undefined
         }
       })
     }

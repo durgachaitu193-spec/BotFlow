@@ -16,7 +16,7 @@ import {
   ModalTabsTrigger,
 } from '@/components/emcn/components/modal/modal'
 import { getEnv } from '@/lib/core/config/env'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { getInputFormatExample as getInputFormatExampleUtil } from '@/lib/workflows/operations/deployment-utils'
 import type { WorkflowDeploymentVersionResponse } from '@/lib/workflows/persistence/utils'
 import { useWorkflowRegistry } from '@/stores/workflows/registry/store'
@@ -1303,40 +1303,31 @@ interface TemplateStatusBadgeProps {
   stars?: number
 }
 
-function TemplateStatusBadge({ status, views, stars }: TemplateStatusBadgeProps) {
-  const isPending = status === 'pending'
-  const label = isPending ? 'Under review' : 'Live'
+function TemplateStatusBadge({ views, stars }: TemplateStatusBadgeProps) {
+  const label = 'Live'
 
   const statsText =
-    status === 'approved' && views !== undefined && views > 0
+    views !== undefined && views > 0
       ? `${views} views${stars !== undefined && stars > 0 ? ` • ${stars} stars` : ''}`
       : null
 
   return (
     <div
       className={clsx(
-        'flex h-[24px] items-center justify-start gap-[8px] rounded-[6px] border px-[9px]',
-        isPending ? 'border-[#A16207] bg-[#452C0F]' : 'border-[#22703D] bg-[#14291B]'
+        'flex h-[24px] items-center justify-start gap-[8px] rounded-[6px] border border-[#22703D] bg-[#14291B] px-[9px]'
       )}
     >
       <div
-        className='h-[6px] w-[6px] rounded-[2px]'
-        style={{
-          backgroundColor: isPending ? '#EAB308' : '#4ADE80',
-        }}
+        className='h-[6px] w-[6px] rounded-[2px] bg-[#4ADE80]'
       />
       <span
-        className='font-medium text-[11.5px]'
-        style={{
-          color: isPending ? '#EAB308' : '#86EFAC',
-        }}
+        className='font-medium text-[11.5px] text-[#86EFAC]'
       >
         {label}
       </span>
       {statsText && (
         <span
-          className='font-medium text-[11.5px]'
-          style={{ color: isPending ? '#EAB308' : '#86EFAC' }}
+          className='font-medium text-[11.5px] text-[#86EFAC]'
         >
           • {statsText}
         </span>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { betterAuthClient, useSession } from '@/lib/auth/auth-client'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { getErrorMessage } from '@/app/invite/[id]/utils'
 import { InviteLayout, InviteStatusCard } from '@/app/invite/components'
 
@@ -205,31 +205,31 @@ export default function Invite() {
           actions={[
             ...(isNewUser
               ? [
-                  {
-                    label: 'Create an account',
-                    onClick: () =>
-                      router.push(`/signup?callbackUrl=${callbackUrl}&invite_flow=true`),
-                  },
-                  {
-                    label: 'I already have an account',
-                    onClick: () =>
-                      router.push(`/login?callbackUrl=${callbackUrl}&invite_flow=true`),
-                    variant: 'outline' as const,
-                  },
-                ]
+                {
+                  label: 'Create an account',
+                  onClick: () =>
+                    router.push(`/signup?callbackUrl=${callbackUrl}&invite_flow=true`),
+                },
+                {
+                  label: 'I already have an account',
+                  onClick: () =>
+                    router.push(`/login?callbackUrl=${callbackUrl}&invite_flow=true`),
+                  variant: 'outline' as const,
+                },
+              ]
               : [
-                  {
-                    label: 'Sign in',
-                    onClick: () =>
-                      router.push(`/login?callbackUrl=${callbackUrl}&invite_flow=true`),
-                  },
-                  {
-                    label: 'Create an account',
-                    onClick: () =>
-                      router.push(`/signup?callbackUrl=${callbackUrl}&invite_flow=true&new=true`),
-                    variant: 'outline' as const,
-                  },
-                ]),
+                {
+                  label: 'Sign in',
+                  onClick: () =>
+                    router.push(`/login?callbackUrl=${callbackUrl}&invite_flow=true`),
+                },
+                {
+                  label: 'Create an account',
+                  onClick: () =>
+                    router.push(`/signup?callbackUrl=${callbackUrl}&invite_flow=true&new=true`),
+                  variant: 'outline' as const,
+                },
+              ]),
             {
               label: 'Return to Home',
               onClick: () => router.push('/'),

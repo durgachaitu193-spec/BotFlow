@@ -1,5 +1,5 @@
 import { MicrosoftSharepointIcon } from '@/components/icons'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { BlockConfig } from '@/blocks/types'
 import { AuthMode } from '@/blocks/types'
 import type { SharepointResponse } from '@/tools/sharepoint/types'
@@ -309,7 +309,7 @@ export const SharepointBlock: BlockConfig<SharepointResponse> = {
                   ? Object.keys(parsedItemFields)
                   : [],
             })
-          } catch {}
+          } catch { }
         }
 
         // Handle file upload files parameter

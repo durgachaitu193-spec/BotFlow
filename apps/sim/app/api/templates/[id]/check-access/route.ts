@@ -3,7 +3,7 @@ import { db } from '@sim/db'
 import { templates, templatePurchases, templateCreators } from '@sim/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { getSession } from '@/lib/auth'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('TemplateCheckAccess')
 

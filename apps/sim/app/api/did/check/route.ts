@@ -5,7 +5,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { DEFAULT_CHAIN } from '@/lib/contracts/didRegistry'
 import { fetchDIDForAddress } from '@/lib/did/utils'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('DIDCheckAPI')
 

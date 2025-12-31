@@ -1,49 +1,35 @@
 <p align="center">
-  <a href="https://sim.ai" target="_blank" rel="noopener noreferrer">
-    <img src="apps/sim/public/logo/reverse/text/large.png" alt="Sim Logo" width="500"/>
+  <a href="https://megalithlabs.ai" target="_blank" rel="noopener noreferrer">
+    <img src="apps/sim/public/logo/megalith.png" alt="Megalithlabs Logo" width="500"/>
   </a>
 </p>
 
 <p align="center">Build and deploy AI agent workflows in minutes.</p>
 
 <p align="center">
-  <a href="https://sim.ai" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/sim.ai-6F3DFA" alt="Sim.ai"></a>
-  <a href="https://discord.gg/Hr4UWYEcTT" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Discord-Join%20Server-5865F2?logo=discord&logoColor=white" alt="Discord"></a>
-  <a href="https://x.com/simdotai" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/twitter/follow/simstudioai?style=social" alt="Twitter"></a>
-  <a href="https://docs.sim.ai" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Docs-6F3DFA.svg" alt="Documentation"></a>
+  <a href="https://megalithlabs.ai" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/megalithlabs.ai-FF7D3D.svg?color=%23FF7D3D
+  " alt="MegalithLabs.ai"></a>
+  <!-- <a href="https://discord.gg/Hr4UWYEcTT" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Discord-Join%20Server-5865F2?logo=discord&logoColor=white" alt="Discord"></a> -->
+ <a href="https://x.com/Megalith_Ai" target="_blank" rel="noopener noreferrer">
+  <img src="https://img.shields.io/twitter/follow/Megalith_Ai?style=social" alt="Twitter">
+</a>
+  <a href="https://docs.megalithlabs.ai" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Docs-FF7D3D.svg?color=%23FF7D3D" alt="Documentation"></a>
 </p>
 
-### Build Workflows with Ease
-Design agent workflows visually on a canvas—connect agents, tools, and blocks, then run them instantly.
-
-<p align="center">
-  <img src="apps/sim/public/static/workflow.gif" alt="Workflow Builder Demo" width="800"/>
-</p>
-
-### Supercharge with Copilot
-Leverage Copilot to generate nodes, fix errors, and iterate on flows directly from natural language.
-
-<p align="center">
-  <img src="apps/sim/public/static/copilot.gif" alt="Copilot Demo" width="800"/>
-</p>
-
-### Integrate Vector Databases
-Upload documents to a vector store and let agents answer questions grounded in your specific content.
-
-<p align="center">
-  <img src="apps/sim/public/static/knowledge.gif" alt="Knowledge Uploads and Retrieval Demo" width="800"/>
-</p>
+<!-- <p align="center">
+  <img src="apps/megalith/public/static/demo.gif" alt="Megalithlabs Demo" width="800"/>
+</p> -->
 
 ## Quickstart
 
-### Cloud-hosted: [sim.ai](https://sim.ai)
+### Cloud-hosted: [Megalithlabs.ai](https://megalithlabs.ai)
 
-<a href="https://sim.ai" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/sim.ai-6F3DFA?logo=data:image/svg%2bxml;base64,PHN2ZyB3aWR0aD0iNjE2IiBoZWlnaHQ9IjYxNiIgdmlld0JveD0iMCAwIDYxNiA2MTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF8xMTU5XzMxMykiPgo8cGF0aCBkPSJNNjE2IDBIMFY2MTZINjE2VjBaIiBmaWxsPSIjNkYzREZBIi8+CjxwYXRoIGQ9Ik04MyAzNjUuNTY3SDExM0MxMTMgMzczLjgwNSAxMTYgMzgwLjM3MyAxMjIgMzg1LjI3MkMxMjggMzg5Ljk0OCAxMzYuMTExIDM5Mi4yODUgMTQ2LjMzMyAzOTIuMjg1QzE1Ny40NDQgMzkyLjI4NSAxNjYgMzkwLjE3MSAxNzIgMzg1LjkzOUMxNzcuOTk5IDM4MS40ODcgMTgxIDM3NS41ODYgMTgxIDM2OC4yMzlDMTgxIDM2Mi44OTUgMTc5LjMzMyAzNTguNDQyIDE3NiAzNTQuODhDMTcyLjg4OSAzNTEuMzE4IDE2Ny4xMTEgMzQ4LjQyMiAxNTguNjY3IDM0Ni4xOTZMMTMwIDMzOS41MTdDMTE1LjU1NSAzMzUuOTU1IDEwNC43NzggMzMwLjQ5OSA5Ny42NjY1IDMyMy4xNTFDOTAuNzc3NSAzMTUuODA0IDg3LjMzMzQgMzA2LjExOSA4Ny4zMzM0IDI5NC4wOTZDODcuMzMzNCAyODQuMDc2IDg5Ljg4OSAyNzUuMzkyIDk0Ljk5OTYgMjY4LjA0NUMxMDAuMzMzIDI2MC42OTcgMTA3LjU1NSAyNTUuMDIgMTE2LjY2NiAyNTEuMDEyQzEyNiAyNDcuMDA0IDEzNi42NjcgMjQ1IDE0OC42NjYgMjQ1QzE2MC42NjcgMjQ1IDE3MSAyNDcuMTE2IDE3OS42NjcgMjUxLjM0NkMxODguNTU1IDI1NS41NzYgMTk1LjQ0NCAyNjEuNDc3IDIwMC4zMzMgMjY5LjA0N0MyMDUuNDQ0IDI3Ni42MTcgMjA4LjExMSAyODUuNjM0IDIwOC4zMzMgMjk2LjA5OUgxNzguMzMzQzE3OC4xMTEgMjg3LjYzOCAxNzUuMzMzIDI4MS4wNyAxNjkuOTk5IDI3Ni4zOTRDMTY0LjY2NiAyNzEuNzE5IDE1Ny4yMjIgMjY5LjM4MSAxNDcuNjY3IDI2OS4zODFDMTM3Ljg4OSAyNjkuMzgxIDEzMC4zMzMgMjcxLjQ5NiAxMjUgMjc1LjcyNkMxMTkuNjY2IDI3OS45NTcgMTE3IDI4NS43NDYgMTE3IDI5My4wOTNDMTE3IDMwNC4wMDMgMTI1IDMxMS40NjIgMTQxIDMxNS40N0wxNjkuNjY3IDMyMi40ODNDMTgzLjQ0NSAzMjUuNiAxOTMuNzc4IDMzMC43MjIgMjAwLjY2NyAzMzcuODQ3QzIwNy41NTUgMzQ0Ljc0OSAyMTEgMzU0LjIxMiAyMTEgMzY2LjIzNUMyMTEgMzc2LjQ3NyAyMDguMjIyIDM4NS40OTQgMjAyLjY2NiAzOTMuMjg3QzE5Ny4xMTEgNDAwLjg1NyAxODkuNDQ0IDQwNi43NTggMTc5LjY2NyA0MTAuOTg5QzE3MC4xMTEgNDE0Ljk5NiAxNTguNzc4IDQxNyAxNDUuNjY3IDQxN0MxMjYuNTU1IDQxNyAxMTEuMzMzIDQxMi4zMjUgOTkuOTk5NyA0MDIuOTczQzg4LjY2NjggMzkzLjYyMSA4MyAzODEuMTUzIDgzIDM2NS41NjdaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMjMyLjI5MSA0MTNWMjUwLjA4MkMyNDQuNjg0IDI1NC42MTQgMjUwLjE0OCAyNTQuNjE0IDI2My4zNzEgMjUwLjA4MlY0MTNIMjMyLjI5MVpNMjQ3LjUgMjM5LjMxM0MyNDEuOTkgMjM5LjMxMyAyMzcuMTQgMjM3LjMxMyAyMzIuOTUyIDIzMy4zMTZDMjI4Ljk4NCAyMjkuMDk1IDIyNyAyMjQuMjA5IDIyNyAyMTguNjU2QzIyNyAyMTIuODgyIDIyOC45ODQgMjA3Ljk5NSAyMzIuOTUyIDIwMy45OTdDMjM3LjE0IDE5OS45OTkgMjQxLjk5IDE5OCAyNDcuNSAxOThDMjUzLjIzMSAxOTggMjU4LjA4IDE5OS45OTkgMjYyLjA0OSAyMDMuOTk3QzI2Ni4wMTYgMjA3Ljk5NSAyNjggMjEyLjg4MiAyNjggMjE4LjY1NkMyNjggMjI0LjIwOSAyNjYuMDE2IDIyOS4wOTUgMjYyLjA0OSAyMzMuMzE2QzI1OC4wOCAyMzcuMzEzIDI1My4yMzEgMjM5LjMxMyAyNDcuNSAyMzkuMzEzWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTMxOS4zMzMgNDEzSDI4OFYyNDkuNjc2SDMxNlYyNzcuMjMzQzMxOS4zMzMgMjY4LjEwNCAzMjUuNzc4IDI2MC4zNjQgMzM0LjY2NyAyNTQuMzUyQzM0My43NzggMjQ4LjExNyAzNTQuNzc4IDI0NSAzNjcuNjY3IDI0NUMzODIuMTExIDI0NSAzOTQuMTEyIDI0OC44OTcgNDAzLjY2NyAyNTYuNjlDNDEzLjIyMiAyNjQuNDg0IDQxOS40NDQgMjc0LjgzNyA0MjIuMzM0IDI4Ny43NTJINDE2LjY2N0M0MTguODg5IDI3NC44MzcgNDI1IDI2NC40ODQgNDM1IDI1Ni42OUM0NDUgMjQ4Ljg5NyA0NTcuMzM0IDI0NSA0NzIgMjQ1QzQ5MC42NjYgMjQ1IDUwNS4zMzQgMjUwLjQ1NSA1MTYgMjYxLjM2NkM1MjYuNjY3IDI3Mi4yNzYgNTMyIDI4Ny4xOTUgNTMyIDMwNi4xMjFWNDEzSDUwMS4zMzNWMzEzLjgwNEM1MDEuMzMzIDMwMC44ODkgNDk4IDI5MC45ODEgNDkxLjMzMyAyODQuMDc4QzQ4NC44ODkgMjc2Ljk1MiA0NzYuMTExIDI3My4zOSA0NjUgMjczLjM5QzQ1Ny4yMjIgMjczLjM5IDQ1MC4zMzMgMjc1LjE3MSA0NDQuMzM0IDI3OC43MzRDNDM4LjU1NiAyODIuMDc0IDQzNCAyODYuOTcyIDQzMC42NjcgMjkzLjQzQzQyNy4zMzMgMjk5Ljg4NyA0MjUuNjY3IDMwNy40NTcgNDI1LjY2NyAzMTYuMTQxVjQxM0gzOTQuNjY3VjMxMy40NjlDMzk0LjY2NyAzMDAuNTU1IDM5MS40NDUgMjkwLjc1OCAzODUgMjg0LjA3OEMzNzguNTU2IDI3Ny4xNzUgMzY5Ljc3OCAyNzMuNzI0IDM1OC42NjcgMjczLjcyNEMzNTAuODg5IDI3My43MjQgMzQ0IDI3NS41MDUgMzM4IDI3OS4wNjhDMzMyLjIyMiAyODIuNDA4IDMyNy42NjcgMjg3LjMwNyAzMjQuMzMzIDI5My43NjNDMzIxIDI5OS45OTggMzE5LjMzMyAzMDcuNDU3IDMxOS4zMzMgMzE2LjE0MVY0MTNaIiBmaWxsPSJ3aGl0ZSIvPgo8L2c+CjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzExNTlfMzEzIj4KPHJlY3Qgd2lkdGg9IjYxNiIgaGVpZ2h0PSI2MTYiIGZpbGw9IndoaXRlIi8+CjwvY2xpcFBhdGg+CjwvZGVmcz4KPC9zdmc+Cg==&logoColor=white" alt="Sim.ai"></a>
+<a href="https://megalithlabs.ai" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/megalithlabs.ai-FF7D3D?color=%23FF7D3D&logo=data:image/png;base64,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" alt="megalithlabs.ai"></a>
 
 ### Self-hosted: NPM Package
 
 ```bash
-npx simstudio
+npx megalithlabsstudio
 ```
 → http://localhost:3000
 
@@ -54,19 +40,19 @@ Docker must be installed and running on your machine.
 
 | Flag | Description |
 |------|-------------|
-| `-p, --port <port>` | Port to run Sim on (default `3000`) |
+| `-p, --port <port>` | Port to run Megalith on (default `3000`) |
 | `--no-pull` | Skip pulling latest Docker images |
 
 ### Self-hosted: Docker Compose
 
 ```bash
 # Clone the repository
-git clone https://github.com/simstudioai/sim.git
+git clone https://github.com/MegalithLabs/agent-builder.git
 
 # Navigate to the project directory
-cd sim
+cd megalith
 
-# Start Sim
+# Start Megalith
 docker compose -f docker-compose.prod.yml up -d
 ```
 
@@ -74,7 +60,7 @@ Access the application at [http://localhost:3000/](http://localhost:3000/)
 
 #### Using Local Models with Ollama
 
-Run Sim with local AI models using [Ollama](https://ollama.ai) - no external APIs required:
+Run Megalith with local AI models using [Ollama](https://ollama.ai) - no external APIs required:
 
 ```bash
 # Start with GPU support (automatically downloads gemma3:4b model)
@@ -93,7 +79,7 @@ docker compose -f docker-compose.ollama.yml exec ollama ollama pull llama3.1:8b
 
 1. Open VS Code with the [Remote - Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 2. Open the project and click "Reopen in Container" when prompted
-3. Run `bun run dev:full` in the terminal or use the `sim-start` alias
+3. Run `bun run dev:full` in the terminal or use the `megalith-start` alias
    - This starts both the main application and the realtime socket server
 
 ### Self-hosted: Manual Setup
@@ -102,13 +88,13 @@ docker compose -f docker-compose.ollama.yml exec ollama ollama pull llama3.1:8b
 - [Bun](https://bun.sh/) runtime
 - PostgreSQL 12+ with [pgvector extension](https://github.com/pgvector/pgvector) (required for AI embeddings)
 
-**Note:** Sim uses vector embeddings for AI features like knowledge bases and semantic search, which requires the `pgvector` PostgreSQL extension.
+**Note:** Megalith uses vector embeddings for AI features like knowledge bases and semantic search, which requires the `pgvector` PostgreSQL extension.
 
 1. Clone and install dependencies:
 
 ```bash
-git clone https://github.com/simstudioai/sim.git
-cd sim
+git clone https://github.com/MegalithLabs/agent-builder.git
+cd megalith
 bun install
 ```
 
@@ -119,9 +105,9 @@ You need PostgreSQL with the `vector` extension for embedding support. Choose on
 **Option A: Using Docker (Recommended)**
 ```bash
 # Start PostgreSQL with pgvector extension
-docker run --name simstudio-db \
+docker run --name megalithstudio-db \
   -e POSTGRES_PASSWORD=your_password \
-  -e POSTGRES_DB=simstudio \
+  -e POSTGRES_DB=megalithstudio \
   -p 5432:5432 -d \
   pgvector/pgvector:pg17
 ```
@@ -133,13 +119,13 @@ docker run --name simstudio-db \
 3. Set up environment:
 
 ```bash
-cd apps/sim
+cd apps/megalith
 cp .env.example .env  # Configure with required variables (DATABASE_URL, BETTER_AUTH_SECRET, BETTER_AUTH_URL)
 ```
 
 Update your `.env` file with the database URL:
 ```bash
-DATABASE_URL="postgresql://postgres:your_password@localhost:5432/simstudio"
+DATABASE_URL="postgresql://postgres:your_password@localhost:5432/megalithstudio"
 ```
 
 4. Set up the database:
@@ -152,7 +138,7 @@ cp .env.example .env
 
 Update your `packages/db/.env` file with the database URL:
 ```bash
-DATABASE_URL="postgresql://postgres:your_password@localhost:5432/simstudio"
+DATABASE_URL="postgresql://postgres:your_password@localhost:5432/megalithstudio"
 ```
 
 Then run the migrations:
@@ -177,18 +163,18 @@ Next.js app (from project root):
 bun run dev
 ```
 
-Realtime socket server (from `apps/sim` directory in a separate terminal):
+Realtime socket server (from `apps/megalith` directory in a separate terminal):
 ```bash
-cd apps/sim
+cd apps/megalith
 bun run dev:sockets
 ```
 
 ## Copilot API Keys
 
-Copilot is a Sim-managed service. To use Copilot on a self-hosted instance:
+Copilot is a MegalithLabs-managed service. To use Copilot on a self-hosted instance:
 
-- Go to https://sim.ai → Settings → Copilot and generate a Copilot API key
-- Set `COPILOT_API_KEY` environment variable in your self-hosted apps/sim/.env file to that value
+- Go to https://megalithlabs.ai → Settings → Copilot and generate a Copilot API key
+- Set `COPILOT_API_KEY` environment variable in your self-hosted apps/megalith/.env file to that value
 
 ## Tech Stack
 
@@ -213,4 +199,4 @@ We welcome contributions! Please see our [Contributing Guide](.github/CONTRIBUTI
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
-<p align="center">Made with ❤️ by the Sim Team</p>
+<p align="center">Made with ❤️ by the MegalithLabs</p>

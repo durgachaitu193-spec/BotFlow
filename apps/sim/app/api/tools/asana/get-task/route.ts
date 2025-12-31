@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { validateAlphanumericId } from '@/lib/core/security/input-validation'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -79,16 +79,16 @@ export async function POST(request: Request) {
           completed: task.completed || false,
           assignee: task.assignee
             ? {
-                gid: task.assignee.gid,
-                name: task.assignee.name,
-              }
+              gid: task.assignee.gid,
+              name: task.assignee.name,
+            }
             : undefined,
           created_by: task.created_by
             ? {
-                gid: task.created_by.gid,
-                resource_type: task.created_by.resource_type,
-                name: task.created_by.name,
-              }
+              gid: task.created_by.gid,
+              resource_type: task.created_by.resource_type,
+              name: task.created_by.name,
+            }
             : undefined,
           due_on: task.due_on || undefined,
           created_at: task.created_at,
@@ -191,16 +191,16 @@ export async function POST(request: Request) {
           completed: task.completed || false,
           assignee: task.assignee
             ? {
-                gid: task.assignee.gid,
-                name: task.assignee.name,
-              }
+              gid: task.assignee.gid,
+              name: task.assignee.name,
+            }
             : undefined,
           created_by: task.created_by
             ? {
-                gid: task.created_by.gid,
-                resource_type: task.created_by.resource_type,
-                name: task.created_by.name,
-              }
+              gid: task.created_by.gid,
+              resource_type: task.created_by.resource_type,
+              name: task.created_by.name,
+            }
             : undefined,
           due_on: task.due_on || undefined,
           created_at: task.created_at,

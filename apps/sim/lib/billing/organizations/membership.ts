@@ -17,7 +17,7 @@ import {
 import { and, eq, sql } from 'drizzle-orm'
 import { requireStripeClient } from '@/lib/billing/stripe-client'
 import { validateSeatAvailability } from '@/lib/billing/validation/seat-management'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('OrganizationMembership')
 

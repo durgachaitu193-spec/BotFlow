@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { auth } from '@/lib/auth'
 import { env } from '@/lib/core/config/env'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('SSO-Register')
 
@@ -235,15 +235,15 @@ export async function POST(request: NextRequest) {
           ...providerConfig,
           oidcConfig: providerConfig.oidcConfig
             ? {
-                ...providerConfig.oidcConfig,
-                clientSecret: '[REDACTED]',
-              }
+              ...providerConfig.oidcConfig,
+              clientSecret: '[REDACTED]',
+            }
             : undefined,
           samlConfig: providerConfig.samlConfig
             ? {
-                ...providerConfig.samlConfig,
-                cert: '[REDACTED]',
-              }
+              ...providerConfig.samlConfig,
+              cert: '[REDACTED]',
+            }
             : undefined,
         },
         null,

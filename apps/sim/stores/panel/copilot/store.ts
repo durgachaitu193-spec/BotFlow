@@ -1,5 +1,6 @@
 'use client'
 
+import { createLogger } from '@sim/logger'
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { type CopilotChat, sendStreamingMessage } from '@/lib/copilot/api'
@@ -8,6 +9,8 @@ import type {
   ClientToolDisplay,
 } from '@/lib/copilot/tools/client/base-tool'
 import { ClientToolCallState } from '@/lib/copilot/tools/client/base-tool'
+import { GetBlockConfigClientTool } from '@/lib/copilot/tools/client/blocks/get-block-config'
+import { GetBlockOptionsClientTool } from '@/lib/copilot/tools/client/blocks/get-block-options'
 import { GetBlocksAndToolsClientTool } from '@/lib/copilot/tools/client/blocks/get-blocks-and-tools'
 import { GetBlocksMetadataClientTool } from '@/lib/copilot/tools/client/blocks/get-blocks-metadata'
 import { GetTriggerBlocksClientTool } from '@/lib/copilot/tools/client/blocks/get-trigger-blocks'
@@ -32,20 +35,26 @@ import { SearchDocumentationClientTool } from '@/lib/copilot/tools/client/other/
 import { SearchErrorsClientTool } from '@/lib/copilot/tools/client/other/search-errors'
 import { SearchOnlineClientTool } from '@/lib/copilot/tools/client/other/search-online'
 import { SearchPatternsClientTool } from '@/lib/copilot/tools/client/other/search-patterns'
+import { SleepClientTool } from '@/lib/copilot/tools/client/other/sleep'
 import { createExecutionContext, getTool } from '@/lib/copilot/tools/client/registry'
 import { GetCredentialsClientTool } from '@/lib/copilot/tools/client/user/get-credentials'
 import { SetEnvironmentVariablesClientTool } from '@/lib/copilot/tools/client/user/set-environment-variables'
 import { CheckDeploymentStatusClientTool } from '@/lib/copilot/tools/client/workflow/check-deployment-status'
 import { DeployWorkflowClientTool } from '@/lib/copilot/tools/client/workflow/deploy-workflow'
 import { EditWorkflowClientTool } from '@/lib/copilot/tools/client/workflow/edit-workflow'
+import { GetBlockOutputsClientTool } from '@/lib/copilot/tools/client/workflow/get-block-outputs'
+import { GetBlockUpstreamReferencesClientTool } from '@/lib/copilot/tools/client/workflow/get-block-upstream-references'
 import { GetUserWorkflowClientTool } from '@/lib/copilot/tools/client/workflow/get-user-workflow'
 import { GetWorkflowConsoleClientTool } from '@/lib/copilot/tools/client/workflow/get-workflow-console'
 import { GetWorkflowDataClientTool } from '@/lib/copilot/tools/client/workflow/get-workflow-data'
 import { GetWorkflowFromNameClientTool } from '@/lib/copilot/tools/client/workflow/get-workflow-from-name'
 import { ListUserWorkflowsClientTool } from '@/lib/copilot/tools/client/workflow/list-user-workflows'
+import { ManageCustomToolClientTool } from '@/lib/copilot/tools/client/workflow/manage-custom-tool'
+import { ManageMcpToolClientTool } from '@/lib/copilot/tools/client/workflow/manage-mcp-tool'
 import { RunWorkflowClientTool } from '@/lib/copilot/tools/client/workflow/run-workflow'
 import { SetGlobalWorkflowVariablesClientTool } from '@/lib/copilot/tools/client/workflow/set-global-workflow-variables'
-import { createLogger } from '@/lib/logs/console/logger'
+import { getQueryClient } from '@/app/_shell/providers/query-provider'
+import { subscriptionKeys } from '@/hooks/queries/subscription'
 import type {
   ChatContext,
   CopilotMessage,
@@ -65,7 +74,7 @@ try {
   if (diffStore?.hasActiveDiff) {
     diffStore.clearDiff()
   }
-} catch {}
+} catch { }
 
 // Known class-based client tools: map tool name -> instantiator
 const CLIENT_TOOL_INSTANTIATORS: Record<string, (id: string) => any> = {
@@ -73,6 +82,8 @@ const CLIENT_TOOL_INSTANTIATORS: Record<string, (id: string) => any> = {
   get_workflow_console: (id) => new GetWorkflowConsoleClientTool(id),
   get_blocks_and_tools: (id) => new GetBlocksAndToolsClientTool(id),
   get_blocks_metadata: (id) => new GetBlocksMetadataClientTool(id),
+  get_block_options: (id) => new GetBlockOptionsClientTool(id),
+  get_block_config: (id) => new GetBlockConfigClientTool(id),
   get_trigger_blocks: (id) => new GetTriggerBlocksClientTool(id),
   search_online: (id) => new SearchOnlineClientTool(id),
   search_documentation: (id) => new SearchDocumentationClientTool(id),
@@ -100,6 +111,11 @@ const CLIENT_TOOL_INSTANTIATORS: Record<string, (id: string) => any> = {
   deploy_workflow: (id) => new DeployWorkflowClientTool(id),
   check_deployment_status: (id) => new CheckDeploymentStatusClientTool(id),
   navigate_ui: (id) => new NavigateUIClientTool(id),
+  manage_custom_tool: (id) => new ManageCustomToolClientTool(id),
+  manage_mcp_tool: (id) => new ManageMcpToolClientTool(id),
+  sleep: (id) => new SleepClientTool(id),
+  get_block_outputs: (id) => new GetBlockOutputsClientTool(id),
+  get_block_upstream_references: (id) => new GetBlockUpstreamReferencesClientTool(id),
 }
 
 // Read-only static metadata for class-based tools (no instances)
@@ -108,6 +124,8 @@ export const CLASS_TOOL_METADATA: Record<string, BaseClientToolMetadata | undefi
   get_workflow_console: (GetWorkflowConsoleClientTool as any)?.metadata,
   get_blocks_and_tools: (GetBlocksAndToolsClientTool as any)?.metadata,
   get_blocks_metadata: (GetBlocksMetadataClientTool as any)?.metadata,
+  get_block_options: (GetBlockOptionsClientTool as any)?.metadata,
+  get_block_config: (GetBlockConfigClientTool as any)?.metadata,
   get_trigger_blocks: (GetTriggerBlocksClientTool as any)?.metadata,
   search_online: (SearchOnlineClientTool as any)?.metadata,
   search_documentation: (SearchDocumentationClientTool as any)?.metadata,
@@ -135,6 +153,11 @@ export const CLASS_TOOL_METADATA: Record<string, BaseClientToolMetadata | undefi
   deploy_workflow: (DeployWorkflowClientTool as any)?.metadata,
   check_deployment_status: (CheckDeploymentStatusClientTool as any)?.metadata,
   navigate_ui: (NavigateUIClientTool as any)?.metadata,
+  manage_custom_tool: (ManageCustomToolClientTool as any)?.metadata,
+  manage_mcp_tool: (ManageMcpToolClientTool as any)?.metadata,
+  sleep: (SleepClientTool as any)?.metadata,
+  get_block_outputs: (GetBlockOutputsClientTool as any)?.metadata,
+  get_block_upstream_references: (GetBlockUpstreamReferencesClientTool as any)?.metadata,
 }
 
 function ensureClientToolInstance(toolName: string | undefined, toolCallId: string | undefined) {
@@ -146,7 +169,7 @@ function ensureClientToolInstance(toolName: string | undefined, toolCallId: stri
       const inst = make(toolCallId)
       registerClientTool(toolCallId, inst)
     }
-  } catch {}
+  } catch { }
 }
 
 // Constants
@@ -199,14 +222,14 @@ function resolveToolDisplay(
       const cand = meta?.[key]
       if (cand?.text || cand?.icon) return { text: cand.text, icon: cand.icon }
     }
-  } catch {}
+  } catch { }
   // Humanized fallback as last resort
   try {
     if (toolName) {
       const text = toolName.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
       return { text, icon: undefined as any }
     }
-  } catch {}
+  } catch { }
   return undefined
 }
 
@@ -235,6 +258,20 @@ function isBackgroundState(state: any): boolean {
   } catch {
     return state === 'background'
   }
+}
+
+/**
+ * Checks if a tool call state is terminal (success, error, rejected, aborted, review, or background)
+ */
+function isTerminalState(state: any): boolean {
+  return (
+    state === ClientToolCallState.success ||
+    state === ClientToolCallState.error ||
+    state === ClientToolCallState.rejected ||
+    state === ClientToolCallState.aborted ||
+    isReviewState(state) ||
+    isBackgroundState(state)
+  )
 }
 
 // Helper: abort all in-progress client tools and update inline blocks
@@ -297,7 +334,7 @@ function abortAllInProgressTools(set: any, get: () => CopilotStore) {
         return { messages: msgs }
       })
     }
-  } catch {}
+  } catch { }
 }
 
 // Normalize loaded messages so assistant messages render correctly from DB
@@ -321,81 +358,81 @@ function normalizeMessagesForUI(messages: CopilotMessage[]): CopilotMessage[] {
       // Use existing contentBlocks ordering if present; otherwise only render text content
       const blocks: any[] = Array.isArray(message.contentBlocks)
         ? (message.contentBlocks as any[]).map((b: any) => {
-            if (b?.type === 'tool_call' && b.toolCall) {
-              // Ensure client tool instance is registered for this tool call
-              ensureClientToolInstance(b.toolCall?.name, b.toolCall?.id)
+          if (b?.type === 'tool_call' && b.toolCall) {
+            // Ensure client tool instance is registered for this tool call
+            ensureClientToolInstance(b.toolCall?.name, b.toolCall?.id)
 
-              return {
-                ...b,
-                toolCall: {
-                  ...b.toolCall,
-                  state:
-                    isRejectedState(b.toolCall?.state) ||
+            return {
+              ...b,
+              toolCall: {
+                ...b.toolCall,
+                state:
+                  isRejectedState(b.toolCall?.state) ||
                     isReviewState(b.toolCall?.state) ||
                     isBackgroundState(b.toolCall?.state) ||
                     b.toolCall?.state === ClientToolCallState.success ||
                     b.toolCall?.state === ClientToolCallState.error ||
                     b.toolCall?.state === ClientToolCallState.aborted
-                      ? b.toolCall.state
-                      : ClientToolCallState.rejected,
-                  display: resolveToolDisplay(
-                    b.toolCall?.name,
-                    (isRejectedState(b.toolCall?.state) ||
+                    ? b.toolCall.state
+                    : ClientToolCallState.rejected,
+                display: resolveToolDisplay(
+                  b.toolCall?.name,
+                  (isRejectedState(b.toolCall?.state) ||
                     isReviewState(b.toolCall?.state) ||
                     isBackgroundState(b.toolCall?.state) ||
                     b.toolCall?.state === ClientToolCallState.success ||
                     b.toolCall?.state === ClientToolCallState.error ||
                     b.toolCall?.state === ClientToolCallState.aborted
-                      ? (b.toolCall?.state as any)
-                      : ClientToolCallState.rejected) as any,
-                    b.toolCall?.id,
-                    b.toolCall?.params
-                  ),
-                },
-              }
+                    ? (b.toolCall?.state as any)
+                    : ClientToolCallState.rejected) as any,
+                  b.toolCall?.id,
+                  b.toolCall?.params
+                ),
+              },
             }
-            if (b?.type === TEXT_BLOCK_TYPE && typeof b.content === 'string') {
-              return {
-                ...b,
-                content: stripTodoTags(b.content),
-              }
+          }
+          if (b?.type === TEXT_BLOCK_TYPE && typeof b.content === 'string') {
+            return {
+              ...b,
+              content: stripTodoTags(b.content),
             }
-            return b
-          })
+          }
+          return b
+        })
         : []
 
       // Prepare toolCalls with display for non-block UI components, but do not fabricate blocks
       const updatedToolCalls = Array.isArray((message as any).toolCalls)
         ? (message as any).toolCalls.map((tc: any) => {
-            // Ensure client tool instance is registered for this tool call
-            ensureClientToolInstance(tc?.name, tc?.id)
+          // Ensure client tool instance is registered for this tool call
+          ensureClientToolInstance(tc?.name, tc?.id)
 
-            return {
-              ...tc,
-              state:
-                isRejectedState(tc?.state) ||
+          return {
+            ...tc,
+            state:
+              isRejectedState(tc?.state) ||
                 isReviewState(tc?.state) ||
                 isBackgroundState(tc?.state) ||
                 tc?.state === ClientToolCallState.success ||
                 tc?.state === ClientToolCallState.error ||
                 tc?.state === ClientToolCallState.aborted
-                  ? tc.state
-                  : ClientToolCallState.rejected,
-              display: resolveToolDisplay(
-                tc?.name,
-                (isRejectedState(tc?.state) ||
+                ? tc.state
+                : ClientToolCallState.rejected,
+            display: resolveToolDisplay(
+              tc?.name,
+              (isRejectedState(tc?.state) ||
                 isReviewState(tc?.state) ||
                 isBackgroundState(tc?.state) ||
                 tc?.state === ClientToolCallState.success ||
                 tc?.state === ClientToolCallState.error ||
                 tc?.state === ClientToolCallState.aborted
-                  ? (tc?.state as any)
-                  : ClientToolCallState.rejected) as any,
-                tc?.id,
-                tc?.params
-              ),
-            }
-          })
+                ? (tc?.state as any)
+                : ClientToolCallState.rejected) as any,
+              tc?.id,
+              tc?.params
+            ),
+          }
+        })
         : (message as any).toolCalls
 
       const sanitizedContent = stripTodoTags(message.content || '')
@@ -408,10 +445,10 @@ function normalizeMessagesForUI(messages: CopilotMessage[]): CopilotMessage[] {
           ? { contentBlocks: blocks }
           : sanitizedContent.trim()
             ? {
-                contentBlocks: [
-                  { type: TEXT_BLOCK_TYPE, content: sanitizedContent, timestamp: Date.now() },
-                ],
-              }
+              contentBlocks: [
+                { type: TEXT_BLOCK_TYPE, content: sanitizedContent, timestamp: Date.now() },
+              ],
+            }
             : {}),
       }
     })
@@ -450,9 +487,9 @@ const contentBlockPool = new ObjectPool(
     obj.type = ''
     obj.content = ''
     obj.timestamp = 0
-    ;(obj as any).toolCall = null
-    ;(obj as any).startTime = undefined
-    ;(obj as any).duration = undefined
+      ; (obj as any).toolCall = null
+      ; (obj as any).startTime = undefined
+      ; (obj as any).duration = undefined
   }
 )
 
@@ -494,10 +531,10 @@ function createUserMessage(
     ...(contexts && contexts.length > 0 && { contexts }),
     ...(contexts &&
       contexts.length > 0 && {
-        contentBlocks: [
-          { type: 'contexts', contexts: contexts as any, timestamp: Date.now() },
-        ] as any,
-      }),
+      contentBlocks: [
+        { type: 'contexts', contexts: contexts as any, timestamp: Date.now() },
+      ] as any,
+    }),
   }
 }
 
@@ -510,7 +547,11 @@ function createStreamingMessage(): CopilotMessage {
   }
 }
 
-function createErrorMessage(messageId: string, content: string): CopilotMessage {
+function createErrorMessage(
+  messageId: string,
+  content: string,
+  errorType?: 'usage_limit' | 'unauthorized' | 'forbidden' | 'rate_limit' | 'upgrade_required'
+): CopilotMessage {
   return {
     id: messageId,
     role: 'assistant',
@@ -523,6 +564,7 @@ function createErrorMessage(messageId: string, content: string): CopilotMessage 
         timestamp: Date.now(),
       },
     ],
+    errorType,
   }
 }
 
@@ -565,21 +607,21 @@ function validateMessagesForLLM(messages: CopilotMessage[]): any[] {
         timestamp: msg.timestamp,
         ...(Array.isArray((msg as any).toolCalls) &&
           (msg as any).toolCalls.length > 0 && {
-            toolCalls: (msg as any).toolCalls,
-          }),
+          toolCalls: (msg as any).toolCalls,
+        }),
         ...(Array.isArray(msg.contentBlocks) &&
           msg.contentBlocks.length > 0 && {
-            // Persist full contentBlocks including thinking so history can render it
-            contentBlocks: msg.contentBlocks,
-          }),
+          // Persist full contentBlocks including thinking so history can render it
+          contentBlocks: msg.contentBlocks,
+        }),
         ...(msg.fileAttachments &&
           msg.fileAttachments.length > 0 && {
-            fileAttachments: msg.fileAttachments,
-          }),
+          fileAttachments: msg.fileAttachments,
+        }),
         ...((msg as any).contexts &&
           Array.isArray((msg as any).contexts) && {
-            contexts: (msg as any).contexts,
-          }),
+          contexts: (msg as any).contexts,
+        }),
       }
     })
     .filter((m) => {
@@ -670,7 +712,7 @@ const sseHandlers: Record<string, SSEHandler> = {
             if (todoId) {
               get().updatePlanTodoStatus(todoId, 'completed')
             }
-          } catch {}
+          } catch { }
         }
 
         // If mark_todo_in_progress succeeded, set todo executing in planTodos
@@ -685,7 +727,7 @@ const sseHandlers: Record<string, SSEHandler> = {
             if (todoId) {
               get().updatePlanTodoStatus(todoId, 'executing')
             }
-          } catch {}
+          } catch { }
         }
       }
 
@@ -721,7 +763,7 @@ const sseHandlers: Record<string, SSEHandler> = {
         }
       }
       updateStreamingMessage(set, context)
-    } catch {}
+    } catch { }
   },
   tool_error: (data, context, get, set) => {
     try {
@@ -783,7 +825,7 @@ const sseHandlers: Record<string, SSEHandler> = {
         }
       }
       updateStreamingMessage(set, context)
-    } catch {}
+    } catch { }
   },
   tool_generating: (data, context, get, set) => {
     const { toolCallId, toolName } = data
@@ -836,18 +878,18 @@ const sseHandlers: Record<string, SSEHandler> = {
     const existing = toolCallsById[id]
     const next: CopilotToolCall = existing
       ? {
-          ...existing,
-          state: ClientToolCallState.pending,
-          ...(args ? { params: args } : {}),
-          display: resolveToolDisplay(name, ClientToolCallState.pending, id, args),
-        }
+        ...existing,
+        state: ClientToolCallState.pending,
+        ...(args ? { params: args } : {}),
+        display: resolveToolDisplay(name, ClientToolCallState.pending, id, args),
+      }
       : {
-          id,
-          name: name || 'unknown_tool',
-          state: ClientToolCallState.pending,
-          ...(args ? { params: args } : {}),
-          display: resolveToolDisplay(name, ClientToolCallState.pending, id, args),
-        }
+        id,
+        name: name || 'unknown_tool',
+        state: ClientToolCallState.pending,
+        ...(args ? { params: args } : {}),
+        display: resolveToolDisplay(name, ClientToolCallState.pending, id, args),
+      }
     const updated = { ...toolCallsById, [id]: next }
     set({ toolCallsById: updated })
     logger.info('[toolCallsById] → pending', { id, name, params: args })
@@ -879,6 +921,12 @@ const sseHandlers: Record<string, SSEHandler> = {
           const ctx = createExecutionContext({ toolCallId: id, toolName: name || 'unknown_tool' })
           // Defer executing transition by a tick to let pending render
           setTimeout(() => {
+            // Guard against duplicate execution - check if already executing or terminal
+            const currentState = get().toolCallsById[id]?.state
+            if (currentState === ClientToolCallState.executing || isTerminalState(currentState)) {
+              return
+            }
+
             const executingMap = { ...get().toolCallsById }
             executingMap[id] = {
               ...executingMap[id],
@@ -947,7 +995,7 @@ const sseHandlers: Record<string, SSEHandler> = {
                       data: result?.data,
                     }),
                   })
-                } catch {}
+                } catch { }
               })
               .catch((e) => {
                 const errorMap = { ...get().toolCallsById }
@@ -981,6 +1029,12 @@ const sseHandlers: Record<string, SSEHandler> = {
       const hasInterrupt = !!inst?.getInterruptDisplays?.()
       if (!hasInterrupt && typeof inst?.execute === 'function') {
         setTimeout(() => {
+          // Guard against duplicate execution - check if already executing or terminal
+          const currentState = get().toolCallsById[id]?.state
+          if (currentState === ClientToolCallState.executing || isTerminalState(currentState)) {
+            return
+          }
+
           const executingMap = { ...get().toolCallsById }
           executingMap[id] = {
             ...executingMap[id],
@@ -1015,7 +1069,7 @@ const sseHandlers: Record<string, SSEHandler> = {
         }, 0)
         return
       }
-    } catch {}
+    } catch { }
 
     // Integration tools: Check if auto-allowed, otherwise wait for user confirmation
     // This handles tools like google_calendar_*, exa_*, etc. that aren't in the client registry
@@ -1052,7 +1106,7 @@ const sseHandlers: Record<string, SSEHandler> = {
         context.currentThinkingBlock.type = THINKING_BLOCK_TYPE
         context.currentThinkingBlock.content = ''
         context.currentThinkingBlock.timestamp = Date.now()
-        ;(context.currentThinkingBlock as any).startTime = Date.now()
+          ; (context.currentThinkingBlock as any).startTime = Date.now()
         context.contentBlocks.push(context.currentThinkingBlock)
       }
       context.isInThinkingBlock = true
@@ -1062,7 +1116,7 @@ const sseHandlers: Record<string, SSEHandler> = {
     }
     if (phase === 'end') {
       if (context.currentThinkingBlock) {
-        ;(context.currentThinkingBlock as any).duration =
+        ; (context.currentThinkingBlock as any).duration =
           Date.now() - ((context.currentThinkingBlock as any).startTime || Date.now())
       }
       context.isInThinkingBlock = false
@@ -1080,7 +1134,7 @@ const sseHandlers: Record<string, SSEHandler> = {
       context.currentThinkingBlock.type = THINKING_BLOCK_TYPE
       context.currentThinkingBlock.content = chunk
       context.currentThinkingBlock.timestamp = Date.now()
-      ;(context.currentThinkingBlock as any).startTime = Date.now()
+        ; (context.currentThinkingBlock as any).startTime = Date.now()
       context.contentBlocks.push(context.currentThinkingBlock)
     }
     context.isInThinkingBlock = true
@@ -1372,10 +1426,10 @@ const sseHandlers: Record<string, SSEHandler> = {
       messages: state.messages.map((msg) =>
         msg.id === context.messageId
           ? {
-              ...msg,
-              content: context.accumulatedContent || 'An error occurred.',
-              error: data.error,
-            }
+            ...msg,
+            content: context.accumulatedContent || 'An error occurred.',
+            error: data.error,
+          }
           : msg
       ),
     }))
@@ -1417,7 +1471,7 @@ const sseHandlers: Record<string, SSEHandler> = {
     context.currentTextBlock = null
     updateStreamingMessage(set, context)
   },
-  default: () => {},
+  default: () => { },
 }
 
 // Debounced UI update queue for smoother streaming
@@ -1581,7 +1635,7 @@ export const useCopilotStore = create<CopilotStore>()(
       abortAllInProgressTools(set, get)
       try {
         useWorkflowDiffStore.getState().clearDiff()
-      } catch {}
+      } catch { }
 
       set({
         ...initialState,
@@ -1615,7 +1669,7 @@ export const useCopilotStore = create<CopilotStore>()(
       abortAllInProgressTools(set, get)
       try {
         useWorkflowDiffStore.getState().clearDiff()
-      } catch {}
+      } catch { }
 
       // Restore plan content and config (mode/model) from selected chat
       const planArtifact = chat.planArtifact || ''
@@ -1666,9 +1720,9 @@ export const useCopilotStore = create<CopilotStore>()(
                 model: previousModel,
               },
             }),
-          }).catch(() => {})
+          }).catch(() => { })
         }
-      } catch {}
+      } catch { }
 
       // Refresh selected chat from server to ensure we have latest messages/tool calls
       try {
@@ -1703,13 +1757,13 @@ export const useCopilotStore = create<CopilotStore>()(
             })
             try {
               await get().loadMessageCheckpoints(latestChat.id)
-            } catch {}
+            } catch { }
             // Fetch context usage for the selected chat
             logger.info('[Context Usage] Chat selected, fetching usage')
             await get().fetchContextUsage()
           }
         }
-      } catch {}
+      } catch { }
     },
 
     createNewChat: async () => {
@@ -1720,7 +1774,7 @@ export const useCopilotStore = create<CopilotStore>()(
       abortAllInProgressTools(set, get)
       try {
         useWorkflowDiffStore.getState().clearDiff()
-      } catch {}
+      } catch { }
 
       // Background-save the current chat before clearing (optimistic)
       try {
@@ -1740,9 +1794,9 @@ export const useCopilotStore = create<CopilotStore>()(
                 model: selectedModel,
               },
             }),
-          }).catch(() => {})
+          }).catch(() => { })
         }
-      } catch {}
+      } catch { }
 
       logger.info('[Context Usage] New chat created, clearing context usage')
       set({
@@ -1856,7 +1910,7 @@ export const useCopilotStore = create<CopilotStore>()(
               }
               try {
                 await get().loadMessageCheckpoints(updatedCurrentChat.id)
-              } catch {}
+              } catch { }
             } else if (!isSendingMessage && !suppressAutoSelect) {
               const mostRecentChat: CopilotChat = data.chats[0]
               const normalizedMessages = normalizeMessagesForUI(mostRecentChat.messages || [])
@@ -1896,7 +1950,7 @@ export const useCopilotStore = create<CopilotStore>()(
               })
               try {
                 await get().loadMessageCheckpoints(mostRecentChat.id)
-              } catch {}
+              } catch { }
             }
           } else {
             set({ currentChat: null, messages: [] })
@@ -1977,14 +2031,14 @@ export const useCopilotStore = create<CopilotStore>()(
             contextsCount: Array.isArray(contexts) ? contexts.length : 0,
             contextsPreview: Array.isArray(contexts)
               ? contexts.map((c: any) => ({
-                  kind: c?.kind,
-                  chatId: (c as any)?.chatId,
-                  workflowId: (c as any)?.workflowId,
-                  label: (c as any)?.label,
-                }))
+                kind: c?.kind,
+                chatId: (c as any)?.chatId,
+                workflowId: (c as any)?.workflowId,
+                label: (c as any)?.label,
+              }))
               : undefined,
           })
-        } catch {}
+        } catch { }
 
         // Prepend design document to message if available
         const { streamingPlanContent } = get()
@@ -2031,23 +2085,35 @@ export const useCopilotStore = create<CopilotStore>()(
 
           // Check for specific status codes and provide custom messages
           let errorContent = result.error || 'Failed to send message'
+          let errorType:
+            | 'usage_limit'
+            | 'unauthorized'
+            | 'forbidden'
+            | 'rate_limit'
+            | 'upgrade_required'
+            | undefined
           if (result.status === 401) {
             errorContent =
               '_Unauthorized request. You need a valid API key to use the copilot. You can get one by going to [sim.ai](https://sim.ai) settings and generating one there._'
+            errorType = 'unauthorized'
           } else if (result.status === 402) {
             errorContent =
-              '_Usage limit exceeded. To continue using this service, upgrade your plan or top up on credits._'
+              '_Usage limit exceeded. To continue using this service, upgrade your plan or increase your usage limit to:_'
+            errorType = 'usage_limit'
           } else if (result.status === 403) {
             errorContent =
               '_Provider config not allowed for non-enterprise users. Please remove the provider config and try again_'
+            errorType = 'forbidden'
           } else if (result.status === 426) {
             errorContent =
               '_Please upgrade to the latest version of the Sim platform to continue using the copilot._'
+            errorType = 'upgrade_required'
           } else if (result.status === 429) {
             errorContent = '_Provider rate limit exceeded. Please try again later._'
+            errorType = 'rate_limit'
           }
 
-          const errorMessage = createErrorMessage(streamingMessage.id, errorContent)
+          const errorMessage = createErrorMessage(streamingMessage.id, errorContent, errorType)
           set((state) => ({
             messages: state.messages.map((m) => (m.id === streamingMessage.id ? errorMessage : m)),
             error: errorContent,
@@ -2123,8 +2189,8 @@ export const useCopilotStore = create<CopilotStore>()(
                   model: selectedModel,
                 },
               }),
-            }).catch(() => {})
-          } catch {}
+            }).catch(() => { })
+          } catch { }
         }
 
         // Fetch context usage after abort
@@ -2226,7 +2292,23 @@ export const useCopilotStore = create<CopilotStore>()(
           display: resolveToolDisplay(current.name, norm, id, current.params),
         }
         set({ toolCallsById: map })
-      } catch {}
+      } catch { }
+    },
+
+    updateToolCallParams: (toolCallId: string, params: Record<string, any>) => {
+      try {
+        if (!toolCallId) return
+        const map = { ...get().toolCallsById }
+        const current = map[toolCallId]
+        if (!current) return
+        const updatedParams = { ...current.params, ...params }
+        map[toolCallId] = {
+          ...current,
+          params: updatedParams,
+          display: resolveToolDisplay(current.name, current.state, toolCallId, updatedParams),
+        }
+        set({ toolCallsById: map })
+      } catch { }
     },
     updatePreviewToolCallState: (
       toolCallState: 'accepted' | 'rejected' | 'error',
@@ -2332,15 +2414,15 @@ export const useCopilotStore = create<CopilotStore>()(
                   : 500,
             message: toolCallState,
           }),
-        }).catch(() => {})
-      } catch {}
+        }).catch(() => { })
+      } catch { }
     },
 
     sendDocsMessage: async (query: string) => {
       await get().sendMessage(query)
     },
 
-    saveChatMessages: async (_chatId: string) => {},
+    saveChatMessages: async (_chatId: string) => { },
 
     loadCheckpoints: async (_chatId: string) => set({ checkpoints: [] }),
 
@@ -2392,7 +2474,7 @@ export const useCopilotStore = create<CopilotStore>()(
           // Clear any active diff preview
           try {
             useWorkflowDiffStore.getState().clearDiff()
-          } catch {}
+          } catch { }
 
           // Apply to main workflow store
           useWorkflowStore.setState({
@@ -2436,14 +2518,6 @@ export const useCopilotStore = create<CopilotStore>()(
     getCheckpointsForMessage: (messageId: string) => {
       const { messageCheckpoints } = get()
       return messageCheckpoints[messageId] || []
-    },
-
-    // Preview YAML (stubbed/no-op)
-    setPreviewYaml: async (_yamlContent: string) => {},
-    clearPreviewYaml: async () => {
-      set((state) => ({
-        currentChat: state.currentChat ? { ...state.currentChat, previewYaml: null } : null,
-      }))
     },
 
     // Handle streaming response
@@ -2527,10 +2601,10 @@ export const useCopilotStore = create<CopilotStore>()(
           messages: state.messages.map((msg) =>
             msg.id === assistantMessageId
               ? {
-                  ...msg,
-                  content: finalContent,
-                  contentBlocks: sanitizedContentBlocks,
-                }
+                ...msg,
+                content: finalContent,
+                contentBlocks: sanitizedContentBlocks,
+              }
               : msg
           ),
           isSendingMessage: false,
@@ -2572,17 +2646,23 @@ export const useCopilotStore = create<CopilotStore>()(
                 config,
               },
             })
-          } catch {}
+          } catch { }
         }
 
         // Post copilot_stats record (input/output tokens can be null for now)
         try {
           // Removed: stats sending now occurs only on accept/reject with minimal payload
-        } catch {}
+        } catch { }
 
         // Fetch context usage after response completes
         logger.info('[Context Usage] Stream completed, fetching usage')
         await get().fetchContextUsage()
+
+        // Invalidate subscription queries to update usage
+        setTimeout(() => {
+          const queryClient = getQueryClient()
+          queryClient.invalidateQueries({ queryKey: subscriptionKeys.all })
+        }, 1000)
       } finally {
         clearTimeout(timeoutId)
       }
@@ -2597,7 +2677,6 @@ export const useCopilotStore = create<CopilotStore>()(
         model: selectedModel,
         messages: get().messages,
         messageCount: get().messages.length,
-        previewYaml: null,
         planArtifact: streamingPlanContent || null,
         config: {
           mode,
@@ -2610,7 +2689,7 @@ export const useCopilotStore = create<CopilotStore>()(
       abortAllInProgressTools(set, get)
       try {
         useWorkflowDiffStore.getState().clearDiff()
-      } catch {}
+      } catch { }
 
       set({
         currentChat: newChat,
@@ -2627,7 +2706,7 @@ export const useCopilotStore = create<CopilotStore>()(
     clearError: () => set({ error: null }),
     clearSaveError: () => set({ saveError: null }),
     clearCheckpointError: () => set({ checkpointError: null }),
-    retrySave: async (_chatId: string) => {},
+    retrySave: async (_chatId: string) => { },
 
     cleanup: () => {
       const { isSendingMessage } = get()
@@ -2640,7 +2719,7 @@ export const useCopilotStore = create<CopilotStore>()(
       // Clear any diff on cleanup
       try {
         useWorkflowDiffStore.getState().clearDiff()
-      } catch {}
+      } catch { }
     },
 
     reset: () => {
@@ -2754,10 +2833,6 @@ export const useCopilotStore = create<CopilotStore>()(
         }
       }
     },
-
-    // Diff updates are out of scope for minimal store
-    updateDiffStore: async (_yamlContent: string) => {},
-    updateDiffStoreWithWorkflowState: async (_workflowState: any) => {},
 
     setSelectedModel: async (model) => {
       logger.info('[Context Usage] Model changed', { from: get().selectedModel, to: model })
@@ -2914,12 +2989,12 @@ export const useCopilotStore = create<CopilotStore>()(
               data: success
                 ? result.result?.output
                 : {
-                    error: result.result?.error || result.error,
-                    output: result.result?.output,
-                  },
+                  error: result.result?.error || result.error,
+                  output: result.result?.output,
+                },
             }),
           })
-        } catch {}
+        } catch { }
       } catch (e) {
         const errorMap = { ...get().toolCallsById }
         // Do not override terminal review/rejected
@@ -2968,7 +3043,7 @@ export const useCopilotStore = create<CopilotStore>()(
           message: 'Tool execution skipped by user',
           data: { skipped: true },
         }),
-      }).catch(() => {})
+      }).catch(() => { })
     },
 
     loadAutoAllowedTools: async () => {
@@ -3077,4 +3152,4 @@ try {
     }
     useCopilotStore.setState({ toolCallsById: updated })
   })
-} catch {}
+} catch { }

@@ -2,11 +2,11 @@
 
 import React from "react";
 import Sidebar from "@/components/Sidebar";
-import { LaunchpadNavbar, Navbar, type NavbarProps } from "@sim/ui";
+import { LaunchpadNavbar, type LaunchpadNavbarProps } from "@sim/ui";
 import CreateToken from "@/create/components/createToken";
 import clsx from "clsx";
 
-interface DashboardLayoutProps extends Partial<NavbarProps> {
+interface DashboardLayoutProps extends LaunchpadNavbarProps {
   children: React.ReactNode;
 }
 
@@ -22,7 +22,11 @@ export default function DashboardLayout({
 
   return (
     <div className="flex flex-col min-h-screen bg-bg-deep text-text-primary">
-      <LaunchpadNavbar currentApp="launchpad" />
+      <LaunchpadNavbar
+        currentApp={currentApp || "launchpad"}
+        onSwitchApp={onSwitchApp}
+        onSignOut={onSignOut}
+      />
       <div className="flex flex-1 relative">
         <Sidebar
           isCollapsed={isCollapsed}
@@ -39,13 +43,6 @@ export default function DashboardLayout({
             "pl-0",
           )}
         >
-          <Navbar
-            onMenuClick={() => setIsMobileMenuOpen(true)}
-            currentApp={currentApp}
-            onSwitchApp={onSwitchApp}
-            isCollapsed={isCollapsed}
-            onSignOut={onSignOut}
-          />
           <main className="flex-1 p-4 md:p-6 overflow-x-hidden w-full">
             {children}
           </main>

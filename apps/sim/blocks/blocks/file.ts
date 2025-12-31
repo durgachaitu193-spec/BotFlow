@@ -1,5 +1,5 @@
 import { DocumentIcon } from '@/components/icons'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { BlockConfig, SubBlockType } from '@/blocks/types'
 import type { FileParserOutput } from '@/tools/file/types'
 

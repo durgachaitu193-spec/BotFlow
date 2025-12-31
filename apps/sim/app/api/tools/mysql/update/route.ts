@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { buildUpdateQuery, createMySQLConnection, executeQuery } from '@/app/api/tools/mysql/utils'
 
 const logger = createLogger('MySQLUpdateAPI')

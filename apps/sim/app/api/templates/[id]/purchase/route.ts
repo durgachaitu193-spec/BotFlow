@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@sim/db'
 import { templatePurchases } from '@sim/db/schema'
 import { getSession } from '@/lib/auth'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { z } from 'zod'
 import { v4 as uuidv4 } from 'uuid'
 

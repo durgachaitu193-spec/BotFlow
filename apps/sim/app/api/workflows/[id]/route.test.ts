@@ -26,7 +26,7 @@ describe('Workflow By ID API Route', () => {
       randomUUID: vi.fn().mockReturnValue('mock-request-id-12345678'),
     })
 
-    vi.doMock('@/lib/logs/console/logger', () => ({
+    vi.doMock('@sim/logger', () => ({
       createLogger: vi.fn().mockReturnValue(mockLogger),
     }))
 

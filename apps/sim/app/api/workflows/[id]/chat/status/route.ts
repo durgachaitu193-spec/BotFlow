@@ -2,7 +2,7 @@ import { db } from '@sim/db'
 import { chat } from '@sim/db/schema'
 import { eq } from 'drizzle-orm'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { createErrorResponse, createSuccessResponse } from '@/app/api/workflows/utils'
 
 const logger = createLogger('ChatStatusAPI')
@@ -32,9 +32,9 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
     const deploymentInfo =
       deploymentResults.length > 0
         ? {
-            id: deploymentResults[0].id,
-            identifier: deploymentResults[0].identifier,
-          }
+          id: deploymentResults[0].id,
+          identifier: deploymentResults[0].identifier,
+        }
         : null
 
     return createSuccessResponse({

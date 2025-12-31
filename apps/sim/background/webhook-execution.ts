@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'
 import { IdempotencyService, webhookIdempotency } from '@/lib/core/idempotency'
 import { processExecutionFiles } from '@/lib/execution/files'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { LoggingSession } from '@/lib/logs/execution/logging-session'
 import { buildTraceSpans } from '@/lib/logs/execution/trace-spans/trace-spans'
 import { WebhookAttachmentProcessor } from '@/lib/webhooks/attachment-processor'
@@ -308,10 +308,10 @@ async function executeWebhookJobInternal(
       webhookRows.length > 0
         ? webhookRows[0]
         : {
-            provider: payload.provider,
-            blockId: payload.blockId,
-            providerConfig: {},
-          }
+          provider: payload.provider,
+          blockId: payload.blockId,
+          providerConfig: {},
+        }
 
     const mockWorkflow = {
       id: payload.workflowId,

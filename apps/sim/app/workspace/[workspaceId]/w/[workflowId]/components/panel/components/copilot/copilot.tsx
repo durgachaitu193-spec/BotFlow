@@ -21,7 +21,7 @@ import {
   PopoverTrigger,
 } from '@/components/emcn'
 import { Trash } from '@/components/emcn/icons/trash'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import {
   CopilotMessage,
   PlanModeSection,
@@ -512,9 +512,8 @@ export const Copilot = forwardRef<CopilotRef, CopilotProps>(({ panelWidth }, ref
                     className='h-full overflow-y-auto overflow-x-hidden px-[8px]'
                   >
                     <div
-                      className={`w-full max-w-full space-y-4 overflow-hidden py-[8px] ${
-                        showPlanTodos && planTodos.length > 0 ? 'pb-14' : 'pb-10'
-                      }`}
+                      className={`w-full max-w-full space-y-4 overflow-hidden py-[8px] ${showPlanTodos && planTodos.length > 0 ? 'pb-14' : 'pb-10'
+                        }`}
                     >
                       {messages.map((message, index) => {
                         // Determine if this message should be dimmed

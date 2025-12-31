@@ -13,7 +13,7 @@ import {
 } from '@/components/emcn/components/modal/modal'
 import { Input, Skeleton } from '@/components/ui'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { CustomToolModal } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/editor/components/sub-block/components/tool-input/components/custom-tool-modal/custom-tool-modal'
 import { useCustomTools, useDeleteCustomTool } from '@/hooks/queries/custom-tools'
 
@@ -203,16 +203,16 @@ export function CustomTools() {
           }
         }}
         onSave={handleToolSaved}
-        onDelete={() => {}}
+        onDelete={() => { }}
         blockId=''
         initialValues={
           editingTool
             ? (() => {
-                const tool = tools.find((t) => t.id === editingTool)
-                return tool?.schema
-                  ? { id: tool.id, schema: tool.schema, code: tool.code }
-                  : undefined
-              })()
+              const tool = tools.find((t) => t.id === editingTool)
+              return tool?.schema
+                ? { id: tool.id, schema: tool.schema, code: tool.code }
+                : undefined
+            })()
             : undefined
         }
       />

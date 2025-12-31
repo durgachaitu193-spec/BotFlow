@@ -5,7 +5,7 @@ import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useSession } from '@/lib/auth/auth-client'
 import { usePrivy } from '@privy-io/react-auth'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('WorkspacePage')
 
@@ -140,7 +140,7 @@ export default function WorkspacePage() {
     if (typeof window !== 'undefined' && window.location.pathname === '/workspace') {
       redirectToFirstWorkspace()
     }
-  }, [session, isPending, router])
+  }, [session, isPending, router, privyReady, privyAuthenticated, isRetrying, refetch])
 
   // Show loading state while we determine where to redirect
   if (isPending) {

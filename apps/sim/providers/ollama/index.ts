@@ -1,6 +1,6 @@
 import OpenAI from 'openai'
 import { env } from '@/lib/core/config/env'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { StreamingExecution } from '@/executor/types'
 import type { ModelsObject } from '@/providers/ollama/types'
 import type {
@@ -134,13 +134,13 @@ export const ollamaProvider: ProviderConfig = {
     // Transform tools to OpenAI format if provided
     const tools = request.tools?.length
       ? request.tools.map((tool) => ({
-          type: 'function',
-          function: {
-            name: tool.id,
-            description: tool.description,
-            parameters: tool.parameters,
-          },
-        }))
+        type: 'function',
+        function: {
+          name: tool.id,
+          description: tool.description,
+          parameters: tool.parameters,
+        },
+      }))
       : undefined
 
     // Build the request payload
@@ -192,7 +192,7 @@ export const ollamaProvider: ProviderConfig = {
       if (hasForcedTools) {
         logger.warn(
           'Ollama does not support forced tool selection (tool_choice parameter is ignored). ' +
-            'Tools marked with usageControl="force" will behave as "auto" instead.'
+          'Tools marked with usageControl="force" will behave as "auto" instead.'
         )
       }
 
@@ -545,9 +545,9 @@ export const ollamaProvider: ProviderConfig = {
               toolCalls:
                 toolCalls.length > 0
                   ? {
-                      list: toolCalls,
-                      count: toolCalls.length,
-                    }
+                    list: toolCalls,
+                    count: toolCalls.length,
+                  }
                   : undefined,
               providerTiming: {
                 startTime: providerStartTimeISO,

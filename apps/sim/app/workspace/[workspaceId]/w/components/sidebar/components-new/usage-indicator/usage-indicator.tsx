@@ -11,7 +11,7 @@ import {
   getSubscriptionStatus,
   getUsage,
 } from '@/lib/billing/client/utils'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { useSocket } from '@/app/workspace/providers/socket-provider'
 import { subscriptionKeys, useSubscriptionData } from '@/hooks/queries/subscription'
 import { MIN_SIDEBAR_WIDTH, useSidebarStore } from '@/stores/sidebar/store'
@@ -249,9 +249,8 @@ export function UsageIndicator({ onClick }: UsageIndicatorProps) {
 
   return (
     <div
-      className={`group flex flex-shrink-0 cursor-pointer flex-col gap-[8px] border-t px-[13.5px] pt-[8px] pb-[10px] ${
-        isBlocked ? 'border-red-500/50 bg-red-950/20' : ''
-      }`}
+      className={`group flex flex-shrink-0 cursor-pointer flex-col gap-[8px] border-t px-[13.5px] pt-[8px] pb-[10px] ${isBlocked ? 'border-red-500/50 bg-red-950/20' : ''
+        }`}
       onClick={handleClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -285,11 +284,10 @@ export function UsageIndicator({ onClick }: UsageIndicatorProps) {
         {showUpgradeButton && (
           <Button
             variant='ghost'
-            className={`-mx-1 !h-auto !px-1 !py-0 mt-[-2px] transition-colors duration-100 ${
-              isBlocked
+            className={`-mx-1 !h-auto !px-1 !py-0 mt-[-2px] transition-colors duration-100 ${isBlocked
                 ? '!text-red-400 group-hover:!text-red-300'
                 : '!text-[#F473B7] group-hover:!text-[#F789C4]'
-            }`}
+              }`}
             onClick={handleClick}
           >
             <span className='font-medium text-[12px]'>{isBlocked ? 'Fix Now' : 'Upgrade'}</span>
@@ -332,9 +330,8 @@ export function UsageIndicator({ onClick }: UsageIndicatorProps) {
             } else if (pillOffsetFromStart === headIndex) {
               const fillPercent = Math.max(0, Math.min(1, progress)) * 100
               backgroundColor = isFilled ? baseColor : grayColor
-              backgroundImage = `linear-gradient(to right, ${activeColor} 0%, ${activeColor} ${fillPercent}%, ${
-                isFilled ? baseColor : grayColor
-              } ${fillPercent}%, ${isFilled ? baseColor : grayColor} 100%)`
+              backgroundImage = `linear-gradient(to right, ${activeColor} 0%, ${activeColor} ${fillPercent}%, ${isFilled ? baseColor : grayColor
+                } ${fillPercent}%, ${isFilled ? baseColor : grayColor} 100%)`
             } else {
               backgroundColor = isFilled ? baseColor : grayColor
             }

@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import '@/lib/uploads/core/setup.server'
 import { getSession } from '@/lib/auth'
 import type { StorageContext } from '@/lib/uploads/config'

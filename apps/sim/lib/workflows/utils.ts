@@ -5,7 +5,7 @@ import { and, eq } from 'drizzle-orm'
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { PermissionType } from '@/lib/workspaces/permissions/utils'
 import type { ExecutionResult } from '@/executor/types'
 import type { WorkflowState } from '@/stores/workflows/workflow/types'
@@ -408,9 +408,6 @@ export function hasWorkflowChanged(
   return false
 }
 
-export function stripCustomToolPrefix(name: string) {
-  return name.startsWith('custom_') ? name.replace('custom_', '') : name
-}
 
 export const workflowHasResponseBlock = (executionResult: ExecutionResult): boolean => {
   if (

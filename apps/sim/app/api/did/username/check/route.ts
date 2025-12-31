@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { BSC_MAINNET, BSC_TESTNET } from '@/lib/contracts/didRegistry'
 import { checkUsernameAvailability } from '@/lib/did/utils'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('UsernameCheckAPI')
 

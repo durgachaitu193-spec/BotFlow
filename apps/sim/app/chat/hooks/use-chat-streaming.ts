@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { ChatMessage } from '@/app/chat/components/message/message'
 import { CHAT_ERROR_MESSAGES } from '@/app/chat/constants'
 
@@ -164,11 +164,11 @@ export function useChatStreaming() {
                   prev.map((msg) =>
                     msg.id === messageId
                       ? {
-                          ...msg,
-                          content: errorMessage,
-                          isStreaming: false,
-                          type: 'assistant' as const,
-                        }
+                        ...msg,
+                        content: errorMessage,
+                        isStreaming: false,
+                        type: 'assistant' as const,
+                      }
                       : msg
                   )
                 )
@@ -288,10 +288,10 @@ export function useChatStreaming() {
                   prev.map((msg) =>
                     msg.id === messageId
                       ? {
-                          ...msg,
-                          isStreaming: false,
-                          content: finalContent ?? msg.content,
-                        }
+                        ...msg,
+                        isStreaming: false,
+                        content: finalContent ?? msg.content,
+                      }
                       : msg
                   )
                 )

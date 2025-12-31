@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { JiraRetrieveParams, JiraRetrieveResponse } from '@/tools/jira/types'
 import { getJiraCloudId } from '@/tools/jira/utils'
 import type { ToolConfig } from '@/tools/types'
@@ -93,7 +93,7 @@ export const jiraRetrieveTool: ToolConfig<JiraRetrieveParams, JiraRetrieveRespon
         try {
           const err = await issueResponse.json()
           message = err?.message || err?.errorMessages?.[0] || message
-        } catch (_e) {}
+        } catch (_e) { }
         throw new Error(message)
       }
 
@@ -120,7 +120,7 @@ export const jiraRetrieveTool: ToolConfig<JiraRetrieveParams, JiraRetrieveRespon
         } else {
           logger.debug?.('Failed to fetch comments', { status: commentsResp.status })
         }
-      } catch {}
+      } catch { }
 
       try {
         if (worklogResp.ok) {
@@ -129,20 +129,20 @@ export const jiraRetrieveTool: ToolConfig<JiraRetrieveParams, JiraRetrieveRespon
         } else {
           logger.debug?.('Failed to fetch worklog', { status: worklogResp.status })
         }
-      } catch {}
+      } catch { }
 
       try {
         if (watchersResp.ok) {
           const watchersData = await watchersResp.json()
           if (data?.fields) {
             // Provide both common keys for compatibility
-            ;(data.fields as any).watcher = watchersData
-            ;(data.fields as any).watches = watchersData
+            ; (data.fields as any).watcher = watchersData
+              ; (data.fields as any).watches = watchersData
           }
         } else {
           logger.debug?.('Failed to fetch watchers', { status: watchersResp.status })
         }
-      } catch {}
+      } catch { }
 
       return {
         success: true,
@@ -164,7 +164,7 @@ export const jiraRetrieveTool: ToolConfig<JiraRetrieveParams, JiraRetrieveRespon
       try {
         const err = await response.json()
         message = err?.message || err?.errorMessages?.[0] || message
-      } catch (_e) {}
+      } catch (_e) { }
       throw new Error(message)
     }
     const data = await response.json()
@@ -193,26 +193,26 @@ export const jiraRetrieveTool: ToolConfig<JiraRetrieveParams, JiraRetrieveRespon
             const commentsData = await commentsResp.json()
             if (data?.fields) data.fields.comment = commentsData?.comments || data.fields.comment
           }
-        } catch {}
+        } catch { }
 
         try {
           if (worklogResp.ok) {
             const worklogData = await worklogResp.json()
             if (data?.fields) data.fields.worklog = worklogData || data.fields.worklog
           }
-        } catch {}
+        } catch { }
 
         try {
           if (watchersResp.ok) {
             const watchersData = await watchersResp.json()
             if (data?.fields) {
-              ;(data.fields as any).watcher = watchersData
-              ;(data.fields as any).watches = watchersData
+              ; (data.fields as any).watcher = watchersData
+                ; (data.fields as any).watches = watchersData
             }
           }
-        } catch {}
+        } catch { }
       }
-    } catch {}
+    } catch { }
 
     return {
       success: true,

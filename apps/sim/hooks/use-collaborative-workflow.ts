@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react'
+import { useParams } from 'next/navigation'
 import type { Edge } from 'reactflow'
 import { useSession } from '@/lib/auth/auth-client'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { getBlockOutputs } from '@/lib/workflows/blocks/block-outputs'
 import { TriggerUtils } from '@/lib/workflows/triggers/triggers'
 import { useSocket } from '@/app/workspace/providers/socket-provider'
@@ -130,6 +131,8 @@ export function useCollaborativeWorkflow() {
     onOperationFailed,
   } = useSocket()
 
+  console.log('currentWorkflowId', currentWorkflowId)
+
   const { activeWorkflowId } = useWorkflowRegistry()
   const workflowStore = useWorkflowStore()
   const subBlockStore = useSubBlockStore()
@@ -155,15 +158,33 @@ export function useCollaborativeWorkflow() {
     cancelOperationsForVariable,
   } = useOperationQueue()
 
+  const params = useParams()
+  const urlWorkflowId = params?.workflowId as string | undefined
+
   const isInActiveRoom = useCallback(() => {
-    return !!currentWorkflowId && activeWorkflowId === currentWorkflowId
-  }, [currentWorkflowId, activeWorkflowId])
+    // If we have an active workflow in the registry and it matches the URL,
+    // we consider ourselves "in" the active room for the purpose of queuing operations.
+    // The socket state (currentWorkflowId) might lag slightly behind the URL/registry.
+    const isMatched =
+      !!activeWorkflowId &&
+      (activeWorkflowId === currentWorkflowId || activeWorkflowId === urlWorkflowId)
+
+    if (!isMatched) {
+      logger.debug('isInActiveRoom check failed', {
+        currentWorkflowId,
+        activeWorkflowId,
+        urlWorkflowId,
+        socketConnected: isConnected,
+      })
+    }
+    return isMatched
+  }, [currentWorkflowId, activeWorkflowId, urlWorkflowId, isConnected])
 
   // Clear position timestamps when switching workflows
   // Note: Workflow joining is now handled automatically by socket connect event based on URL
   useEffect(() => {
-    if (activeWorkflowId && currentWorkflowId !== activeWorkflowId) {
-      logger.info(`Active workflow changed to: ${activeWorkflowId}`, {
+    if (activeWorkflowId) {
+      logger.info(`Active workflow changed in registry: ${activeWorkflowId}`, {
         isConnected,
         currentWorkflowId,
         activeWorkflowId,
@@ -173,7 +194,7 @@ export function useCollaborativeWorkflow() {
       // Clear position timestamps when switching workflows
       lastPositionTimestamps.current.clear()
     }
-  }, [activeWorkflowId, isConnected, currentWorkflowId])
+  }, [activeWorkflowId, isConnected, currentWorkflowId, presenceUsers.length])
 
   // Register emit functions with operation queue store
   useEffect(() => {
@@ -1663,7 +1684,7 @@ export function useCollaborativeWorkflow() {
 
         // Queue operation with processed name for server & other clients
         // Empty callback because local store is already updated above
-        executeQueuedOperation('add', 'variable', payloadWithProcessedName, () => {})
+        executeQueuedOperation('add', 'variable', payloadWithProcessedName, () => { })
       }
 
       return id

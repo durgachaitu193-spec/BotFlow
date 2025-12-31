@@ -294,8 +294,10 @@ export const workflowExecutionLogs = pgTable(
     stateSnapshotId: text('state_snapshot_id')
       .notNull()
       .references(() => workflowExecutionSnapshots.id),
+    deploymentVersionId: text('deployment_version_id').references(() => workflowDeploymentVersion.id),
 
     level: text('level').notNull(), // 'info', 'error'
+    status: text('status').notNull().default('success'),
     trigger: text('trigger').notNull(), // 'api', 'webhook', 'schedule', 'manual', 'chat'
 
     startedAt: timestamp('started_at').notNull(),

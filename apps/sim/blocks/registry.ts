@@ -273,6 +273,10 @@ export const registry: Record<string, BlockConfig> = {
 }
 
 export const getBlock = (type: string): BlockConfig | undefined => registry[type]
+export const getBlockByToolName = (toolName: string): BlockConfig | undefined =>
+  Object.values(registry).find(
+    (block) => block.name.toLowerCase() === toolName.toLowerCase() || block.type === toolName
+  )
 
 export const getBlocksByCategory = (category: 'blocks' | 'tools' | 'triggers'): BlockConfig[] =>
   Object.values(registry).filter((block) => block.category === category)

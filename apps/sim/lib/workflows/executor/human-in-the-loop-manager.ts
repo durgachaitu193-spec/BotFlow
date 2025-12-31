@@ -4,7 +4,7 @@ import { pausedExecutions, resumeQueue } from '@sim/db/schema'
 import { and, asc, desc, eq, inArray, lt, sql } from 'drizzle-orm'
 import type { Edge } from 'reactflow'
 import { preprocessExecution } from '@/lib/execution/preprocessing'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { LoggingSession } from '@/lib/logs/execution/logging-session'
 import { executeWorkflowCore } from '@/lib/workflows/executor/execution-core'
 import { ExecutionSnapshot } from '@/executor/execution/snapshot'
@@ -75,19 +75,19 @@ interface EnqueueResumeArgs {
 
 type EnqueueResumeResult =
   | {
-      status: 'queued'
-      resumeExecutionId: string
-      queuePosition: number
-    }
+    status: 'queued'
+    resumeExecutionId: string
+    queuePosition: number
+  }
   | {
-      status: 'starting'
-      resumeExecutionId: string
-      resumeEntryId: string
-      pausedExecution: typeof pausedExecutions.$inferSelect
-      contextId: string
-      resumeInput: any
-      userId: string
-    }
+    status: 'starting'
+    resumeExecutionId: string
+    resumeEntryId: string
+    pausedExecution: typeof pausedExecutions.$inferSelect
+    contextId: string
+    resumeInput: any
+    userId: string
+  }
 
 interface StartResumeExecutionArgs {
   resumeEntryId: string
@@ -391,19 +391,19 @@ export class PauseResumeManager {
 
     const downstreamBlocks = dagIncomingEdgesFromSnapshot
       ? Object.entries(dagIncomingEdgesFromSnapshot)
-          .filter(
-            ([, incoming]) =>
-              Array.isArray(incoming) &&
-              incoming.some(
-                (sourceId) => PauseResumeManager.normalizePauseBlockId(sourceId) === pauseBlockId
-              )
-          )
-          .map(([nodeId]) => nodeId)
+        .filter(
+          ([, incoming]) =>
+            Array.isArray(incoming) &&
+            incoming.some(
+              (sourceId) => PauseResumeManager.normalizePauseBlockId(sourceId) === pauseBlockId
+            )
+        )
+        .map(([nodeId]) => nodeId)
       : baseSnapshot.workflow.connections
-          .filter(
-            (conn: any) => PauseResumeManager.normalizePauseBlockId(conn.source) === pauseBlockId
-          )
-          .map((conn: any) => conn.target)
+        .filter(
+          (conn: any) => PauseResumeManager.normalizePauseBlockId(conn.source) === pauseBlockId
+        )
+        .map((conn: any) => conn.target)
 
     logger.info('Found downstream blocks', {
       pauseBlockId,
@@ -412,9 +412,9 @@ export class PauseResumeManager {
 
     const stateCopy = baseSnapshot.state
       ? {
-          ...baseSnapshot.state,
-          blockStates: { ...baseSnapshot.state.blockStates },
-        }
+        ...baseSnapshot.state,
+        blockStates: { ...baseSnapshot.state.blockStates },
+      }
       : undefined
 
     logger.info('Preparing resume state', {
@@ -469,11 +469,11 @@ export class PauseResumeManager {
 
       const submissionPayload =
         normalizedResumeInputRaw &&
-        typeof normalizedResumeInputRaw === 'object' &&
-        !Array.isArray(normalizedResumeInputRaw) &&
-        normalizedResumeInputRaw.submission &&
-        typeof normalizedResumeInputRaw.submission === 'object' &&
-        !Array.isArray(normalizedResumeInputRaw.submission)
+          typeof normalizedResumeInputRaw === 'object' &&
+          !Array.isArray(normalizedResumeInputRaw) &&
+          normalizedResumeInputRaw.submission &&
+          typeof normalizedResumeInputRaw.submission === 'object' &&
+          !Array.isArray(normalizedResumeInputRaw.submission)
           ? (normalizedResumeInputRaw.submission as Record<string, any>)
           : (normalizedResumeInputRaw as Record<string, any>)
 
@@ -481,8 +481,8 @@ export class PauseResumeManager {
       const existingResponse = existingOutput.response || {}
       const existingResponseData =
         existingResponse &&
-        typeof existingResponse.data === 'object' &&
-        !Array.isArray(existingResponse.data)
+          typeof existingResponse.data === 'object' &&
+          !Array.isArray(existingResponse.data)
           ? existingResponse.data
           : {}
 
@@ -885,8 +885,8 @@ export class PauseResumeManager {
       const statuses = Array.isArray(status)
         ? status
         : String(status)
-            .split(',')
-            .map((s) => s.trim())
+          .split(',')
+          .map((s) => s.trim())
       if (statuses.length === 1) {
         whereClause = and(whereClause, eq(pausedExecutions.status, statuses[0]))
       } else if (statuses.length > 1) {
@@ -1112,12 +1112,12 @@ export class PauseResumeManager {
 
       const resumeLinks = point.resumeLinks
         ? {
-            ...point.resumeLinks,
-            uiUrl:
-              typeof point.resumeLinks.uiUrl === 'string'
-                ? point.resumeLinks.uiUrl.split('?')[0]
-                : point.resumeLinks.uiUrl,
-          }
+          ...point.resumeLinks,
+          uiUrl:
+            typeof point.resumeLinks.uiUrl === 'string'
+              ? point.resumeLinks.uiUrl.split('?')[0]
+              : point.resumeLinks.uiUrl,
+        }
         : undefined
 
       return {

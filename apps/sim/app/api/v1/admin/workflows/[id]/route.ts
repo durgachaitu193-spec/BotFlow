@@ -16,7 +16,7 @@ import { db } from '@sim/db'
 import { workflow, workflowBlocks, workflowEdges, workflowSchedule } from '@sim/db/schema'
 import { count, eq } from 'drizzle-orm'
 import { NextResponse } from 'next/server'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { withAdminAuthParams } from '@/app/api/v1/admin/middleware'
 import {
   internalErrorResponse,

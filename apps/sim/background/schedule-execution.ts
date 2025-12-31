@@ -7,7 +7,7 @@ import type { ZodRecord, ZodString } from 'zod'
 import { decryptSecret } from '@/lib/core/security/encryption'
 import { getPersonalAndWorkspaceEnv } from '@/lib/environment/utils'
 import { preprocessExecution } from '@/lib/execution/preprocessing'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { LoggingSession } from '@/lib/logs/execution/logging-session'
 import { buildTraceSpans } from '@/lib/logs/execution/trace-spans/trace-spans'
 import { executeWorkflowCore } from '@/lib/workflows/executor/execution-core'
@@ -304,9 +304,8 @@ async function runWorkflowExecution({
 
       await loggingSession.safeCompleteWithError({
         error: {
-          message: `Schedule execution failed: ${
-            earlyError instanceof Error ? earlyError.message : String(earlyError)
-          }`,
+          message: `Schedule execution failed: ${earlyError instanceof Error ? earlyError.message : String(earlyError)
+            }`,
           stackTrace: earlyError instanceof Error ? earlyError.stack : undefined,
         },
         traceSpans,

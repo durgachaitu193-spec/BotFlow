@@ -15,7 +15,7 @@ import {
 import type { BillingData, UsageData, UsageLimitInfo } from '@/lib/billing/types'
 import { isBillingEnabled } from '@/lib/core/config/environment'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { sendEmail } from '@/lib/messaging/email/mailer'
 import { getEmailPreferences } from '@/lib/messaging/email/unsubscribe'
 

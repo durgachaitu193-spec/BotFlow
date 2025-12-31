@@ -14,6 +14,10 @@ export default {
       fontFamily: {
         season: ['var(--font-season)'],
       },
+      screens: {
+        '3xl': '1920px',
+        '4xl': '2560px',
+      },
       fontSize: {
         xs: '11px',
         small: '13px',

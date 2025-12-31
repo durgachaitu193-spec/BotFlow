@@ -10,7 +10,7 @@ import {
   useRef,
 } from 'react'
 import { useRouter } from 'next/navigation'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('GlobalCommands')
 

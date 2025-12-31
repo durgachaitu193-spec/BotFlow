@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { EDGE } from '@/executor/consts'
 import type { DAG, DAGNode } from '@/executor/dag/builder'
 import type { DAGEdge } from '@/executor/dag/types'
@@ -9,7 +9,7 @@ const logger = createLogger('EdgeManager')
 export class EdgeManager {
   private deactivatedEdges = new Set<string>()
 
-  constructor(private dag: DAG) {}
+  constructor(private dag: DAG) { }
 
   processOutgoingEdges(
     node: DAGNode,

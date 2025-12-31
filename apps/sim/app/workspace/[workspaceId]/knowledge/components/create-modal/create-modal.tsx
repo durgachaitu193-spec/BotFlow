@@ -16,7 +16,7 @@ import {
 } from '@/components/emcn/components/modal/modal'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Progress } from '@/components/ui/progress'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { formatFileSize, validateKnowledgeBaseFile } from '@/lib/uploads/utils/file-utils'
 import { ACCEPT_ATTRIBUTE } from '@/lib/uploads/utils/validation'
 import { getDocumentIcon } from '@/app/workspace/[workspaceId]/knowledge/components'
@@ -480,11 +480,10 @@ export function CreateModal({ open, onOpenChange, onKnowledgeBaseCreated }: Crea
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
                     onClick={() => fileInputRef.current?.click()}
-                    className={`relative flex cursor-pointer items-center justify-center rounded-lg border-[1.5px] border-dashed py-8 text-center transition-all duration-200 ${
-                      isDragging
+                    className={`relative flex cursor-pointer items-center justify-center rounded-lg border-[1.5px] border-dashed py-8 text-center transition-all duration-200 ${isDragging
                         ? 'border-[var(--brand-primary-hex)] bg-[var(--brand-primary-hex)]/5'
                         : 'border-[var(--c-575757)] hover:border-[var(--text-secondary)]'
-                    }`}
+                      }`}
                   >
                     <input
                       ref={fileInputRef}
@@ -497,9 +496,8 @@ export function CreateModal({ open, onOpenChange, onKnowledgeBaseCreated }: Crea
                     <div className='flex flex-col items-center gap-3'>
                       <div className='space-y-1'>
                         <p
-                          className={`font-medium text-[var(--text-primary)] text-sm transition-colors duration-200 ${
-                            isDragging ? 'text-[var(--brand-primary-hex)]' : ''
-                          }`}
+                          className={`font-medium text-[var(--text-primary)] text-sm transition-colors duration-200 ${isDragging ? 'text-[var(--brand-primary-hex)]' : ''
+                            }`}
                         >
                           {isDragging ? 'Drop files here!' : 'Drop files here or click to browse'}
                         </p>
@@ -520,11 +518,10 @@ export function CreateModal({ open, onOpenChange, onKnowledgeBaseCreated }: Crea
                       onDragLeave={handleDragLeave}
                       onDrop={handleDrop}
                       onClick={() => fileInputRef.current?.click()}
-                      className={`cursor-pointer rounded-md border border-dashed p-3 text-center transition-all duration-200 ${
-                        isDragging
+                      className={`cursor-pointer rounded-md border border-dashed p-3 text-center transition-all duration-200 ${isDragging
                           ? 'border-[var(--brand-primary-hex)] bg-[var(--brand-primary-hex)]/5'
                           : 'border-[var(--c-575757)] hover:border-[var(--text-secondary)]'
-                      }`}
+                        }`}
                     >
                       <input
                         ref={fileInputRef}
@@ -537,9 +534,8 @@ export function CreateModal({ open, onOpenChange, onKnowledgeBaseCreated }: Crea
                       <div className='flex items-center justify-center gap-2'>
                         <div>
                           <p
-                            className={`font-medium text-[var(--text-primary)] text-sm transition-colors duration-200 ${
-                              isDragging ? 'text-[var(--brand-primary-hex)]' : ''
-                            }`}
+                            className={`font-medium text-[var(--text-primary)] text-sm transition-colors duration-200 ${isDragging ? 'text-[var(--brand-primary-hex)]' : ''
+                              }`}
                           >
                             {isDragging
                               ? 'Drop more files here!'

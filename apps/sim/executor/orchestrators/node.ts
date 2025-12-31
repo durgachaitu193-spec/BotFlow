@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { EDGE } from '@/executor/consts'
 import type { DAG, DAGNode } from '@/executor/dag/builder'
 import type { BlockExecutor } from '@/executor/execution/block-executor'
@@ -23,7 +23,7 @@ export class NodeExecutionOrchestrator {
     private blockExecutor: BlockExecutor,
     private loopOrchestrator: LoopOrchestrator,
     private parallelOrchestrator: ParallelOrchestrator
-  ) {}
+  ) { }
 
   async executeNode(ctx: ExecutionContext, nodeId: string): Promise<NodeExecutionResult> {
     const node = this.dag.nodes.get(nodeId)

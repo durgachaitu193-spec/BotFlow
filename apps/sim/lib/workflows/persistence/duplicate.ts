@@ -1,7 +1,7 @@
 import { db } from '@sim/db'
 import { workflow, workflowBlocks, workflowEdges, workflowSubflows } from '@sim/db/schema'
 import { eq } from 'drizzle-orm'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { getUserEntityPermissions } from '@/lib/workspaces/permissions/utils'
 import type { Variable } from '@/stores/panel/variables/types'
 import type { LoopConfig, ParallelConfig } from '@/stores/workflows/workflow/types'
@@ -156,9 +156,9 @@ export async function duplicateWorkflow(
           if (dataObj.parentId && typeof dataObj.parentId === 'string') {
             updatedData = { ...dataObj }
             if (blockIdMapping.has(dataObj.parentId)) {
-              ;(updatedData as any).parentId = blockIdMapping.get(dataObj.parentId)!
-              // Ensure extent is set to 'parent' for child blocks
-              ;(updatedData as any).extent = 'parent'
+              ; (updatedData as any).parentId = blockIdMapping.get(dataObj.parentId)!
+                // Ensure extent is set to 'parent' for child blocks
+                ; (updatedData as any).extent = 'parent'
               newExtent = 'parent'
             }
           }
@@ -235,9 +235,9 @@ export async function duplicateWorkflow(
               | LoopConfig
               | ParallelConfig
 
-            // Update the config ID to match the new subflow ID
+              // Update the config ID to match the new subflow ID
 
-            ;(updatedConfig as any).id = newSubflowId
+              ; (updatedConfig as any).id = newSubflowId
 
             // Update node references in config if they exist
             if ('nodes' in updatedConfig && Array.isArray(updatedConfig.nodes)) {

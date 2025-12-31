@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { updateDeploymentState } from './agentRegistry'
 import type { WorkflowState } from '@/stores/workflows/workflow/types'
 

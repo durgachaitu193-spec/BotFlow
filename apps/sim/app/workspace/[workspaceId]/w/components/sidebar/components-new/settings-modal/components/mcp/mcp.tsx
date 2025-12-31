@@ -12,7 +12,7 @@ import {
   ModalHeader,
 } from '@/components/emcn/components/modal/modal'
 import { Input } from '@/components/ui'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { checkEnvVarTrigger } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/editor/components/sub-block/components/env-var-dropdown'
 import {
   useCreateMcpServer,

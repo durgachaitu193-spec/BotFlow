@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { getSession } from '@/lib/auth'
 import { getUserUsageData } from '@/lib/billing/core/usage'
 import { removeUserFromOrganization } from '@/lib/billing/organizations/membership'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 
 const logger = createLogger('OrganizationMemberAPI')
 

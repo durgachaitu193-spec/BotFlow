@@ -8,7 +8,7 @@ import { and, eq, isNull } from 'drizzle-orm'
 import { isTest } from '@/lib/core/config/environment'
 import { generateRequestId } from '@/lib/core/utils/request'
 import { getEffectiveDecryptedEnv } from '@/lib/environment/utils'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { McpClient } from '@/lib/mcp/client'
 import type {
   McpServerConfig,
@@ -197,7 +197,7 @@ class McpService {
     if (missingVars.length > 0) {
       throw new Error(
         `Missing required environment variable${missingVars.length > 1 ? 's' : ''}: ${missingVars.join(', ')}. ` +
-          `Please set ${missingVars.length > 1 ? 'these variables' : 'this variable'} in your workspace or personal environment settings.`
+        `Please set ${missingVars.length > 1 ? 'these variables' : 'this variable'} in your workspace or personal environment settings.`
       )
     }
 

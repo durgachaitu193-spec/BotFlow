@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { BlockType } from '@/executor/consts'
 import type { DAG } from '@/executor/dag/builder'
 import type { EdgeManager } from '@/executor/execution/edge-manager'
@@ -76,7 +76,7 @@ export class ExecutionEngine {
       // Attach executionResult to the original error instead of creating a new one
       // This preserves block error metadata (blockId, blockName, blockType, etc.)
       if (error && typeof error === 'object') {
-        ;(error as any).executionResult = executionResult
+        ; (error as any).executionResult = executionResult
       }
       throw error
     }

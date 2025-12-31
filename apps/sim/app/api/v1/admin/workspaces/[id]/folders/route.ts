@@ -13,7 +13,7 @@
 import { db } from '@sim/db'
 import { workflowFolder, workspace } from '@sim/db/schema'
 import { count, eq } from 'drizzle-orm'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { withAdminAuthParams } from '@/app/api/v1/admin/middleware'
 import { internalErrorResponse, listResponse, notFoundResponse } from '@/app/api/v1/admin/responses'
 import {

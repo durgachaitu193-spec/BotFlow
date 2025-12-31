@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react'
 import clsx from 'clsx'
 import { Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/emcn'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { useCopilotStore } from '@/stores/panel/copilot/store'
 import { useTerminalStore } from '@/stores/terminal'
 import { useWorkflowDiffStore } from '@/stores/workflow-diff'
@@ -251,7 +251,7 @@ export const DiffControls = memo(function DiffControls() {
           id = candidates.length ? candidates[candidates.length - 1].id : undefined
         }
         if (id) updatePreviewToolCallState('accepted', id)
-      } catch {}
+      } catch { }
 
       // Accept changes without blocking the UI; errors will be logged by the store handler
       acceptChanges().catch((error) => {
@@ -300,7 +300,7 @@ export const DiffControls = memo(function DiffControls() {
         id = candidates.length ? candidates[candidates.length - 1].id : undefined
       }
       if (id) updatePreviewToolCallState('rejected', id)
-    } catch {}
+    } catch { }
 
     // Reject changes optimistically
     rejectChanges().catch((error) => {

@@ -1,5 +1,5 @@
 import { Groq } from 'groq-sdk'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { StreamingExecution } from '@/executor/types'
 import { getProviderDefaultModel, getProviderModels } from '@/providers/models'
 import type {
@@ -83,13 +83,13 @@ export const groqProvider: ProviderConfig = {
     // Transform tools to function format if provided
     const tools = request.tools?.length
       ? request.tools.map((tool) => ({
-          type: 'function',
-          function: {
-            name: tool.id,
-            description: tool.description,
-            parameters: tool.parameters,
-          },
-        }))
+        type: 'function',
+        function: {
+          name: tool.id,
+          description: tool.description,
+          parameters: tool.parameters,
+        },
+      }))
       : undefined
 
     // Build the request payload
@@ -434,9 +434,9 @@ export const groqProvider: ProviderConfig = {
               toolCalls:
                 toolCalls.length > 0
                   ? {
-                      list: toolCalls,
-                      count: toolCalls.length,
-                    }
+                    list: toolCalls,
+                    count: toolCalls.length,
+                  }
                   : undefined,
               providerTiming: {
                 startTime: providerStartTimeISO,

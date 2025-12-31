@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { BlockOutput } from '@/blocks/types'
 import { BlockType } from '@/executor/consts'
 import type { BlockHandler, ExecutionContext } from '@/executor/types'
@@ -28,8 +28,8 @@ export class VariablesBlockHandler implements BlockHandler {
         const existingEntry = assignment.variableId
           ? [assignment.variableId, ctx.workflowVariables[assignment.variableId]]
           : Object.entries(ctx.workflowVariables).find(
-              ([_, v]) => v.name === assignment.variableName
-            )
+            ([_, v]) => v.name === assignment.variableName
+          )
 
         if (existingEntry?.[1]) {
           const [id, variable] = existingEntry
