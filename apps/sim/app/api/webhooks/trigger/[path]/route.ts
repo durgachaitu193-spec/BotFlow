@@ -1,6 +1,6 @@
+import { createLogger } from '@sim/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@sim/logger'
 import {
   checkWebhookPreprocessing,
   findWebhookAndWorkflow,

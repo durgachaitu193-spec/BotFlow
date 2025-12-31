@@ -86,9 +86,7 @@ export default function Templates({
 
     return templates.filter((template) => {
       const tabMatch =
-        activeTab === 'your'
-          ? template.userId === currentUserId || template.isStarred
-          : true
+        activeTab === 'your' ? template.userId === currentUserId || template.isStarred : true
 
       if (!tabMatch) return false
 

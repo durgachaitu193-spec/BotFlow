@@ -1,8 +1,5 @@
 import type { ToolConfig } from '@/tools/types'
-import type {
-  UniswapSwapParams,
-  UniswapSwapResponse,
-} from '@/tools/uniswap/types'
+import type { UniswapSwapParams, UniswapSwapResponse } from '@/tools/uniswap/types'
 
 export const swapTool: ToolConfig<UniswapSwapParams, UniswapSwapResponse> = {
   id: 'uniswap_swap',
@@ -112,4 +109,3 @@ export const swapTool: ToolConfig<UniswapSwapParams, UniswapSwapResponse> = {
     },
   },
 }
-

@@ -1,11 +1,11 @@
 import * as schema from '@sim/db/schema'
 import { workflowBlocks, workflowEdges } from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import { and, eq, isNull } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 import type { Server } from 'socket.io'
 import { env } from '@/lib/core/config/env'
-import { createLogger } from '@sim/logger'
 
 const connectionString = env.DATABASE_URL
 const db = drizzle(
@@ -14,7 +14,7 @@ const db = drizzle(
     idle_timeout: 15,
     connect_timeout: 20,
     max: 3,
-    onnotice: () => { },
+    onnotice: () => {},
   }),
   { schema }
 )

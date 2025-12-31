@@ -1,7 +1,7 @@
+import { createLogger } from '@sim/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { authorizeCredentialUse } from '@/lib/auth/credential-access'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@sim/logger'
 import { getCredential, refreshAccessTokenIfNeeded } from '@/app/api/auth/oauth/utils'
 
 export const dynamic = 'force-dynamic'
@@ -113,11 +113,11 @@ export async function GET(request: NextRequest) {
         size: file.size?.toString(),
         owners: file.createdBy
           ? [
-            {
-              displayName: file.createdBy.user?.displayName || 'Unknown',
-              emailAddress: file.createdBy.user?.email || '',
-            },
-          ]
+              {
+                displayName: file.createdBy.user?.displayName || 'Unknown',
+                emailAddress: file.createdBy.user?.email || '',
+              },
+            ]
           : [],
       }))
 

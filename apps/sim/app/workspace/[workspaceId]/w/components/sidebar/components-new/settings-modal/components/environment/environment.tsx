@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { Plus, Search, Share2, Undo2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { Button, Input as EmcnInput, Tooltip } from '@/components/emcn'
@@ -13,7 +14,6 @@ import {
 } from '@/components/emcn/components/modal/modal'
 import { Trash } from '@/components/emcn/icons/trash'
 import { Input, Skeleton } from '@/components/ui'
-import { createLogger } from '@sim/logger'
 import {
   usePersonalEnvironment,
   useRemoveWorkspaceEnvironment,
@@ -239,9 +239,9 @@ export function EnvironmentVariables({ registerBeforeLeaveHandler }: Environment
     const existingVars = Object.values(variables)
     const initialVars = existingVars.length
       ? existingVars.map((envVar) => ({
-        ...envVar,
-        id: generateRowId(),
-      }))
+          ...envVar,
+          id: generateRowId(),
+        }))
       : [createEmptyEnvVar()]
     initialVarsRef.current = JSON.parse(JSON.stringify(initialVars))
     setEnvVars(JSON.parse(JSON.stringify(initialVars)))

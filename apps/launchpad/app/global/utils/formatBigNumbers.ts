@@ -9,7 +9,7 @@ export default function formatBigNumbers(usd: string) {
         : // Three Zeroes for Thousands
           Math.abs(Number(usd)) >= 1.0e3
           ? `${(Math.abs(Number(usd)) / 1.0e3).toFixed(2)}K`
-          : Math.abs(Number(usd));
+          : Math.abs(Number(usd))
 
-  return formattedUSD.toString();
+  return formattedUSD.toString()
 }

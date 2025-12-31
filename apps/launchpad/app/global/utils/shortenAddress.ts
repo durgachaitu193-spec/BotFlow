@@ -3,21 +3,21 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 interface Params {
-  text: string;
-  startChars: number;
-  endChars: number;
-  separator?: string;
+  text: string
+  startChars: number
+  endChars: number
+  separator?: string
 }
 
 export function shortenAddress({
-  text = "",
+  text = '',
   startChars,
   endChars,
-  separator = "...",
+  separator = '...',
 }: Params): string {
-  const maxLength = startChars + endChars;
+  const maxLength = startChars + endChars
 
   return text?.length > maxLength
     ? `${text.slice(0, startChars)}${separator}${text.slice(-endChars)}`
-    : text;
+    : text
 }

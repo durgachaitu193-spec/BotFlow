@@ -29,7 +29,7 @@ export default function ExploreClient({ initialAgents }: ExploreClientProps) {
     <DashboardLayout>
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className='mb-6'>
-        <h1 className='text-3xl font-bold text-text-primary mb-2'>Explore</h1>
+        <h1 className='mb-2 font-bold text-3xl text-text-primary'>Explore</h1>
         <p className='text-text-secondary'>Discover trending agents and new opportunities</p>
       </motion.div>
 
@@ -38,7 +38,7 @@ export default function ExploreClient({ initialAgents }: ExploreClientProps) {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className='mb-6 flex items-center gap-3 overflow-x-auto pb-2 scrollbar-hide'
+        className='scrollbar-hide mb-6 flex items-center gap-3 overflow-x-auto pb-2'
       >
         {categories.map((category, index) => {
           const Icon = category.icon
@@ -51,10 +51,10 @@ export default function ExploreClient({ initialAgents }: ExploreClientProps) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setSelectedCategory(category.id)}
-              className={`flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-all ${
+              className={`flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 font-medium text-sm transition-all ${
                 selectedCategory === category.id
                   ? 'bg-accent-primary text-bg-deep shadow-glow-primary'
-                  : 'bg-bg-card text-text-secondary hover:bg-bg-surface hover:text-text-primary border border-white/5'
+                  : 'border border-white/5 bg-bg-card text-text-secondary hover:bg-bg-surface hover:text-text-primary'
               }`}
             >
               <Icon className='h-4 w-4' />
@@ -67,7 +67,7 @@ export default function ExploreClient({ initialAgents }: ExploreClientProps) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsFilterOpen(!isFilterOpen)}
-          className='flex items-center gap-2 whitespace-nowrap rounded-full border border-white/10 bg-bg-card px-4 py-2 text-sm font-medium text-text-secondary transition-all hover:bg-bg-surface hover:text-text-primary'
+          className='flex items-center gap-2 whitespace-nowrap rounded-full border border-white/10 bg-bg-card px-4 py-2 font-medium text-sm text-text-secondary transition-all hover:bg-bg-surface hover:text-text-primary'
         >
           <Filter className='h-4 w-4' />
           More

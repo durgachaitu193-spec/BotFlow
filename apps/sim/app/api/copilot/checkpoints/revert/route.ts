@@ -1,5 +1,6 @@
 import { db } from '@sim/db'
 import { workflowCheckpoints, workflow as workflowTable } from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import { and, eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
@@ -12,7 +13,6 @@ import {
 } from '@/lib/copilot/request-helpers'
 import { validateUUID } from '@/lib/core/security/input-validation'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@sim/logger'
 
 const logger = createLogger('CheckpointRevertAPI')
 
@@ -73,9 +73,9 @@ export async function POST(request: NextRequest) {
       deploymentStatuses: checkpointState?.deploymentStatuses || {},
       lastSaved: Date.now(),
       ...(checkpointState?.deployedAt &&
-        checkpointState.deployedAt !== null &&
-        checkpointState.deployedAt !== undefined &&
-        !Number.isNaN(new Date(checkpointState.deployedAt).getTime())
+      checkpointState.deployedAt !== null &&
+      checkpointState.deployedAt !== undefined &&
+      !Number.isNaN(new Date(checkpointState.deployedAt).getTime())
         ? { deployedAt: new Date(checkpointState.deployedAt) }
         : {}),
     }

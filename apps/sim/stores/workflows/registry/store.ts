@@ -103,12 +103,12 @@ export const useWorkflowRegistry = create<WorkflowRegistry>()(
             state.hydration.phase === 'state-loading'
               ? state.hydration
               : {
-                phase: 'metadata-ready',
-                workspaceId,
-                workflowId: null,
-                requestId: null,
-                error: null,
-              },
+                  phase: 'metadata-ready',
+                  workspaceId,
+                  workflowId: null,
+                  requestId: null,
+                  error: null,
+                },
         }))
       },
 
@@ -345,16 +345,16 @@ export const useWorkflowRegistry = create<WorkflowRegistry>()(
           const nextDeploymentStatuses =
             workflowData?.isDeployed || workflowData?.deployedAt
               ? {
-                ...get().deploymentStatuses,
-                [workflowId]: {
-                  isDeployed: workflowData.isDeployed || false,
-                  deployedAt: workflowData.deployedAt
-                    ? new Date(workflowData.deployedAt)
-                    : undefined,
-                  apiKey: workflowData.apiKey || undefined,
-                  needsRedeployment: false,
-                },
-              }
+                  ...get().deploymentStatuses,
+                  [workflowId]: {
+                    isDeployed: workflowData.isDeployed || false,
+                    deployedAt: workflowData.deployedAt
+                      ? new Date(workflowData.deployedAt)
+                      : undefined,
+                    apiKey: workflowData.apiKey || undefined,
+                    needsRedeployment: false,
+                  },
+                }
               : get().deploymentStatuses
 
           const currentHydration = get().hydration
@@ -615,14 +615,14 @@ export const useWorkflowRegistry = create<WorkflowRegistry>()(
             subBlockValues: { ...useSubBlockStore.getState().workflowValues },
             workflowStoreState: isDeletingActiveWorkflow
               ? {
-                blocks: { ...useWorkflowStore.getState().blocks },
-                edges: [...useWorkflowStore.getState().edges],
-                loops: { ...useWorkflowStore.getState().loops },
-                parallels: { ...useWorkflowStore.getState().parallels },
-                isDeployed: useWorkflowStore.getState().isDeployed,
-                deployedAt: useWorkflowStore.getState().deployedAt,
-                lastSaved: useWorkflowStore.getState().lastSaved,
-              }
+                  blocks: { ...useWorkflowStore.getState().blocks },
+                  edges: [...useWorkflowStore.getState().edges],
+                  loops: { ...useWorkflowStore.getState().loops },
+                  parallels: { ...useWorkflowStore.getState().parallels },
+                  isDeployed: useWorkflowStore.getState().isDeployed,
+                  deployedAt: useWorkflowStore.getState().deployedAt,
+                  lastSaved: useWorkflowStore.getState().lastSaved,
+                }
               : null,
           }),
           optimisticUpdate: () => {

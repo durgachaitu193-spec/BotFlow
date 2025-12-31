@@ -1,5 +1,5 @@
-import { processExecutionFiles } from '@/lib/execution/files'
 import { createLogger } from '@sim/logger'
+import { processExecutionFiles } from '@/lib/execution/files'
 import type { UserFile } from '@/executor/types'
 
 const logger = createLogger('ChatFileManager')

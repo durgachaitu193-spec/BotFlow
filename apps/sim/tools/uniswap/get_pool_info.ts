@@ -1,13 +1,7 @@
 import type { ToolConfig } from '@/tools/types'
-import type {
-  UniswapGetPoolInfoParams,
-  UniswapGetPoolInfoResponse,
-} from '@/tools/uniswap/types'
+import type { UniswapGetPoolInfoParams, UniswapGetPoolInfoResponse } from '@/tools/uniswap/types'
 
-export const getPoolInfoTool: ToolConfig<
-  UniswapGetPoolInfoParams,
-  UniswapGetPoolInfoResponse
-> = {
+export const getPoolInfoTool: ToolConfig<UniswapGetPoolInfoParams, UniswapGetPoolInfoResponse> = {
   id: 'uniswap_get_pool_info',
   name: 'Uniswap Get Pool Info',
   description: 'Get information about a Uniswap pool.',
@@ -94,4 +88,3 @@ export const getPoolInfoTool: ToolConfig<
     },
   },
 }
-

@@ -80,20 +80,20 @@ export default {
         },
         // Launchpad shared tokens
         bg: {
-          deep: "#0A0A0F",
-          card: "#121218",
-          surface: "#1A1A20",
+          deep: '#0A0A0F',
+          card: '#121218',
+          surface: '#1A1A20',
         },
         text: {
-          primary: "#FFFFFF",
-          secondary: "#A1A1AA",
-          muted: "#52525B",
+          primary: '#FFFFFF',
+          secondary: '#A1A1AA',
+          muted: '#52525B',
         },
         accent: {
           DEFAULT: 'hsl(var(--accent))',
           foreground: 'hsl(var(--accent-foreground))',
-          primary: "#f26522", // Default launchpad orange
-          secondary: "#00ff94",
+          primary: '#f26522', // Default launchpad orange
+          secondary: '#00ff94',
         },
         fontWeight: {
           base: 'var(--font-weight-base)',

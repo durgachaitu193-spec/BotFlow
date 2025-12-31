@@ -63,10 +63,10 @@ export function useMcpServerTest() {
           ...config,
           headers: config.headers
             ? Object.fromEntries(
-              Object.entries(config.headers).filter(
-                ([key, value]) => key.trim() !== '' && value.trim() !== ''
+                Object.entries(config.headers).filter(
+                  ([key, value]) => key.trim() !== '' && value.trim() !== ''
+                )
               )
-            )
             : {},
         }
 

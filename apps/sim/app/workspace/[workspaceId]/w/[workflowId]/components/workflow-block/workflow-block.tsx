@@ -1,11 +1,11 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { useParams } from 'next/navigation'
 import { Handle, type NodeProps, Position, useUpdateNodeInternals } from 'reactflow'
 import { Badge } from '@/components/emcn/components/badge/badge'
 import { Tooltip } from '@/components/emcn/components/tooltip/tooltip'
 import { getEnv, isTruthy } from '@/lib/core/config/env'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@sim/logger'
 import { createMcpToolId } from '@/lib/mcp/utils'
 import { getProviderIdFromServiceId } from '@/lib/oauth'
 import { useUserPermissionsContext } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
@@ -566,12 +566,12 @@ export const WorkflowBlock = memo(function WorkflowBlock({
       data.isPreview && data.subBlockValues
         ? data.subBlockValues
         : Object.entries(blockSubBlockValues).reduce(
-          (acc, [key, value]) => {
-            acc[key] = { value }
-            return acc
-          },
-          {} as Record<string, { value: unknown }>
-        )
+            (acc, [key, value]) => {
+              acc[key] = { value }
+              return acc
+            },
+            {} as Record<string, { value: unknown }>
+          )
 
     const effectiveAdvanced = displayAdvancedMode
     const effectiveTrigger = displayTriggerMode
@@ -615,9 +615,9 @@ export const WorkflowBlock = memo(function WorkflowBlock({
 
       const isValueMatch = Array.isArray(actualCondition.value)
         ? fieldValue != null &&
-        (actualCondition.not
-          ? !actualCondition.value.includes(fieldValue as string | number | boolean)
-          : actualCondition.value.includes(fieldValue as string | number | boolean))
+          (actualCondition.not
+            ? !actualCondition.value.includes(fieldValue as string | number | boolean)
+            : actualCondition.value.includes(fieldValue as string | number | boolean))
         : actualCondition.not
           ? fieldValue !== actualCondition.value
           : fieldValue === actualCondition.value
@@ -626,9 +626,9 @@ export const WorkflowBlock = memo(function WorkflowBlock({
         !actualCondition.and ||
         (Array.isArray(actualCondition.and.value)
           ? andFieldValue != null &&
-          (actualCondition.and.not
-            ? !actualCondition.and.value.includes(andFieldValue as string | number | boolean)
-            : actualCondition.and.value.includes(andFieldValue as string | number | boolean))
+            (actualCondition.and.not
+              ? !actualCondition.and.value.includes(andFieldValue as string | number | boolean)
+              : actualCondition.and.value.includes(andFieldValue as string | number | boolean))
           : actualCondition.and.not
             ? andFieldValue !== actualCondition.and.value
             : andFieldValue === actualCondition.and.value)
@@ -764,7 +764,7 @@ export const WorkflowBlock = memo(function WorkflowBlock({
 
       const contentHeight = hasContentBelowHeader
         ? BLOCK_DIMENSIONS.WORKFLOW_CONTENT_PADDING +
-        rowsCount * BLOCK_DIMENSIONS.WORKFLOW_ROW_HEIGHT
+          rowsCount * BLOCK_DIMENSIONS.WORKFLOW_ROW_HEIGHT
         : 0
       const calculatedHeight = Math.max(
         BLOCK_DIMENSIONS.HEADER_HEIGHT + contentHeight,
@@ -984,29 +984,29 @@ export const WorkflowBlock = memo(function WorkflowBlock({
           <div className='flex flex-col gap-[8px] p-[8px]'>
             {type === 'condition'
               ? conditionRows.map((cond) => (
-                <SubBlockRow
-                  key={cond.id}
-                  title={cond.title}
-                  value={getDisplayValue(cond.value)}
-                />
-              ))
+                  <SubBlockRow
+                    key={cond.id}
+                    title={cond.title}
+                    value={getDisplayValue(cond.value)}
+                  />
+                ))
               : subBlockRows.map((row, rowIndex) =>
-                row.map((subBlock) => {
-                  const rawValue = subBlockState[subBlock.id]?.value
-                  return (
-                    <SubBlockRow
-                      key={`${subBlock.id}-${rowIndex}`}
-                      title={subBlock.title ?? subBlock.id}
-                      value={getDisplayValue(rawValue)}
-                      subBlock={subBlock}
-                      rawValue={rawValue}
-                      workspaceId={workspaceId}
-                      workflowId={currentWorkflowId}
-                      allSubBlockValues={subBlockState}
-                    />
-                  )
-                })
-              )}
+                  row.map((subBlock) => {
+                    const rawValue = subBlockState[subBlock.id]?.value
+                    return (
+                      <SubBlockRow
+                        key={`${subBlock.id}-${rowIndex}`}
+                        title={subBlock.title ?? subBlock.id}
+                        value={getDisplayValue(rawValue)}
+                        subBlock={subBlock}
+                        rawValue={rawValue}
+                        workspaceId={workspaceId}
+                        workflowId={currentWorkflowId}
+                        allSubBlockValues={subBlockState}
+                      />
+                    )
+                  })
+                )}
             {shouldShowDefaultHandles && <SubBlockRow title='error' />}
           </div>
         )}

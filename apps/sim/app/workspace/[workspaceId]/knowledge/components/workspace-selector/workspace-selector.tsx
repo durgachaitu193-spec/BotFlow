@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { AlertTriangle, ChevronDown } from 'lucide-react'
 import {
   Button,
@@ -10,7 +11,6 @@ import {
   PopoverTrigger,
   Tooltip,
 } from '@/components/emcn'
-import { createLogger } from '@sim/logger'
 import { filterButtonClass } from '@/app/workspace/[workspaceId]/knowledge/components/shared'
 import { useKnowledgeStore } from '@/stores/knowledge/store'
 

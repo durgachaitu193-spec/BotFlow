@@ -1,9 +1,9 @@
 import { memo, useCallback } from 'react'
+import { createLogger } from '@sim/logger'
 import clsx from 'clsx'
 import { X } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { Button } from '@/components/emcn'
-import { createLogger } from '@sim/logger'
 import { useRegisterGlobalCommands } from '@/app/workspace/[workspaceId]/providers/global-commands-provider'
 import { createCommands } from '@/app/workspace/[workspaceId]/utils/commands-utils'
 import {
@@ -113,13 +113,15 @@ export const Notifications = memo(function Notifications() {
           <div
             key={notification.id}
             style={{ transform: `translateX(${xOffset}px)` }}
-            className={`relative h-[78px] w-[240px] overflow-hidden rounded-[4px] border bg-[var(--surface-2)] transition-transform duration-200 ${index > 0 ? '-mt-[78px]' : ''
-              }`}
+            className={`relative h-[78px] w-[240px] overflow-hidden rounded-[4px] border bg-[var(--surface-2)] transition-transform duration-200 ${
+              index > 0 ? '-mt-[78px]' : ''
+            }`}
           >
             <div className='flex h-full flex-col justify-between px-[8px] pt-[6px] pb-[8px]'>
               <div
-                className={`font-medium text-[12px] leading-[16px] ${hasAction ? 'line-clamp-2' : 'line-clamp-4'
-                  }`}
+                className={`font-medium text-[12px] leading-[16px] ${
+                  hasAction ? 'line-clamp-2' : 'line-clamp-4'
+                }`}
               >
                 <Button
                   variant='ghost'

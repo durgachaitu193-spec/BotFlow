@@ -1,5 +1,6 @@
 'use client'
 
+import { LaunchpadNavbar } from '@sim/ui'
 import { Tooltip } from '@/components/emcn'
 import { GlobalCommandsProvider } from '@/app/workspace/[workspaceId]/providers/global-commands-provider'
 import { ProviderModelsLoader } from '@/app/workspace/[workspaceId]/providers/provider-models-loader'
@@ -7,7 +8,6 @@ import { SettingsLoader } from '@/app/workspace/[workspaceId]/providers/settings
 import { WorkspacePermissionsProvider } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
 import { SidebarNew } from '@/app/workspace/[workspaceId]/w/components/sidebar/sidebar-new'
 import { clearUserData, useSidebarStore } from '@/stores'
-import { LaunchpadNavbar } from '@sim/ui'
 
 export default function WorkspaceLayout({ children }: { children: React.ReactNode }) {
   const isCollapsed = useSidebarStore((state) => state.isCollapsed)
@@ -19,11 +19,11 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
       <GlobalCommandsProvider>
         <Tooltip.Provider delayDuration={600} skipDelayDuration={0}>
           <WorkspacePermissionsProvider>
-            <div className="flex h-screen w-full flex-col overflow-hidden">
-              <LaunchpadNavbar currentApp="builder" onSignOut={clearUserData} />
+            <div className='flex h-screen w-full flex-col overflow-hidden'>
+              <LaunchpadNavbar currentApp='builder' onSignOut={clearUserData} />
               <div className='flex flex-1 overflow-hidden'>
                 <SidebarNew />
-                <div className='flex flex-1 flex-col overflow-hidden w-full relative'>
+                <div className='relative flex w-full flex-1 flex-col overflow-hidden'>
                   {children}
                 </div>
               </div>

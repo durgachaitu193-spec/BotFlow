@@ -1,7 +1,7 @@
 import { db } from '@sim/db'
 import { document, workspaceFile } from '@sim/db/schema'
-import { eq, like, or } from 'drizzle-orm'
 import { createLogger } from '@sim/logger'
+import { eq, like, or } from 'drizzle-orm'
 import { getFileMetadata } from '@/lib/uploads'
 import type { StorageContext } from '@/lib/uploads/config'
 import {

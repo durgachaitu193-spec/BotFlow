@@ -51,30 +51,30 @@ export default async function TemplatesPage({ params }: TemplatesPageProps) {
   // Load templates from database
   let rows:
     | Array<{
-      id: string
-      workflowId: string | null
-      name: string
-      details?: unknown
-      creatorId: string | null
-      creator: {
         id: string
-        referenceType: 'user' | 'organization'
-        referenceId: string
+        workflowId: string | null
         name: string
-        profileImageUrl?: string | null
         details?: unknown
-        verified: boolean
-      } | null
-      views: number
-      stars: number
-      status: 'pending' | 'approved' | 'rejected'
-      tags: string[]
-      requiredCredentials: unknown
-      state: unknown
-      createdAt: Date | string
-      updatedAt: Date | string
-      isStarred?: boolean
-    }>
+        creatorId: string | null
+        creator: {
+          id: string
+          referenceType: 'user' | 'organization'
+          referenceId: string
+          name: string
+          profileImageUrl?: string | null
+          details?: unknown
+          verified: boolean
+        } | null
+        views: number
+        stars: number
+        status: 'pending' | 'approved' | 'rejected'
+        tags: string[]
+        requiredCredentials: unknown
+        state: unknown
+        createdAt: Date | string
+        updatedAt: Date | string
+        isStarred?: boolean
+      }>
     | undefined
 
   if (session?.user?.id) {
@@ -147,20 +147,20 @@ export default async function TemplatesPage({ params }: TemplatesPageProps) {
         creatorId: row.creatorId,
         creator: row.creator
           ? {
-            id: row.creator.id,
-            name: row.creator.name,
-            profileImageUrl: row.creator.profileImageUrl,
-            details: row.creator.details as {
-              about?: string
-              xUrl?: string
-              linkedinUrl?: string
-              websiteUrl?: string
-              contactEmail?: string
-            } | null,
-            referenceType: row.creator.referenceType,
-            referenceId: row.creator.referenceId,
-            verified: row.creator.verified,
-          }
+              id: row.creator.id,
+              name: row.creator.name,
+              profileImageUrl: row.creator.profileImageUrl,
+              details: row.creator.details as {
+                about?: string
+                xUrl?: string
+                linkedinUrl?: string
+                websiteUrl?: string
+                contactEmail?: string
+              } | null,
+              referenceType: row.creator.referenceType,
+              referenceId: row.creator.referenceId,
+              verified: row.creator.verified,
+            }
           : null,
         views: row.views,
         stars: row.stars,

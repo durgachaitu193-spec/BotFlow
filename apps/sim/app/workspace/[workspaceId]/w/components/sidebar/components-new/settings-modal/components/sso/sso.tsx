@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { Check, ChevronDown, Copy, Eye, EyeOff } from 'lucide-react'
 import { Button, Combobox, Input, Switch, Textarea } from '@/components/emcn'
 import { Skeleton } from '@/components/ui'
@@ -9,7 +10,6 @@ import { getSubscriptionStatus } from '@/lib/billing/client/utils'
 import { isBillingEnabled } from '@/lib/core/config/environment'
 import { cn } from '@/lib/core/utils/cn'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@sim/logger'
 import { getUserRole } from '@/lib/workspaces/organization/utils'
 import { useOrganizations } from '@/hooks/queries/organization'
 import { useConfigureSSO, useSSOProviders } from '@/hooks/queries/sso'
@@ -356,7 +356,7 @@ export function SSO() {
       await navigator.clipboard.writeText(url)
       setCopied(true)
       setTimeout(() => setCopied(false), 1500)
-    } catch { }
+    } catch {}
   }
 
   const handleEdit = () => {
@@ -578,8 +578,8 @@ export function SSO() {
               className={cn(
                 'h-9',
                 showErrors &&
-                errors.providerId.length > 0 &&
-                'border-[var(--text-error)] focus:border-[var(--text-error)]'
+                  errors.providerId.length > 0 &&
+                  'border-[var(--text-error)] focus:border-[var(--text-error)]'
               )}
             />
             {showErrors && errors.providerId.length > 0 && (
@@ -606,8 +606,8 @@ export function SSO() {
               className={cn(
                 'h-9',
                 showErrors &&
-                errors.issuerUrl.length > 0 &&
-                'border-[var(--text-error)] focus:border-[var(--text-error)]'
+                  errors.issuerUrl.length > 0 &&
+                  'border-[var(--text-error)] focus:border-[var(--text-error)]'
               )}
             />
             {showErrors && errors.issuerUrl.length > 0 && (
@@ -634,8 +634,8 @@ export function SSO() {
               className={cn(
                 'h-9',
                 showErrors &&
-                errors.domain.length > 0 &&
-                'border-[var(--text-error)] focus:border-[var(--text-error)]'
+                  errors.domain.length > 0 &&
+                  'border-[var(--text-error)] focus:border-[var(--text-error)]'
               )}
             />
             {showErrors && errors.domain.length > 0 && (
@@ -666,8 +666,8 @@ export function SSO() {
                   className={cn(
                     'h-9',
                     showErrors &&
-                    errors.clientId.length > 0 &&
-                    'border-[var(--text-error)] focus:border-[var(--text-error)]'
+                      errors.clientId.length > 0 &&
+                      'border-[var(--text-error)] focus:border-[var(--text-error)]'
                   )}
                 />
                 {showErrors && errors.clientId.length > 0 && (
@@ -705,8 +705,8 @@ export function SSO() {
                     className={cn(
                       'h-9 pr-[36px]',
                       showErrors &&
-                      errors.clientSecret.length > 0 &&
-                      'border-[var(--text-error)] focus:border-[var(--text-error)]'
+                        errors.clientSecret.length > 0 &&
+                        'border-[var(--text-error)] focus:border-[var(--text-error)]'
                     )}
                   />
                   <Button
@@ -743,8 +743,8 @@ export function SSO() {
                   className={cn(
                     'h-9',
                     showErrors &&
-                    errors.scopes.length > 0 &&
-                    'border-[var(--text-error)] focus:border-[var(--text-error)]'
+                      errors.scopes.length > 0 &&
+                      'border-[var(--text-error)] focus:border-[var(--text-error)]'
                   )}
                 />
                 {showErrors && errors.scopes.length > 0 && (
@@ -774,8 +774,8 @@ export function SSO() {
                   className={cn(
                     'h-9',
                     showErrors &&
-                    errors.entryPoint.length > 0 &&
-                    'border-[var(--text-error)] focus:border-[var(--text-error)]'
+                      errors.entryPoint.length > 0 &&
+                      'border-[var(--text-error)] focus:border-[var(--text-error)]'
                   )}
                 />
                 {showErrors && errors.entryPoint.length > 0 && (
@@ -799,8 +799,8 @@ export function SSO() {
                   className={cn(
                     'min-h-[80px] font-mono',
                     showErrors &&
-                    errors.cert.length > 0 &&
-                    'border-[var(--text-error)] focus:border-[var(--text-error)]'
+                      errors.cert.length > 0 &&
+                      'border-[var(--text-error)] focus:border-[var(--text-error)]'
                   )}
                   rows={3}
                 />

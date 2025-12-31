@@ -159,11 +159,11 @@ export function useFileAttachments(props: UseFileAttachmentsProps) {
             prev.map((f) =>
               f.id === tempFile.id
                 ? {
-                  ...f,
-                  path: uploadData.fileInfo?.path || uploadData.path || uploadData.url,
-                  key: uploadData.fileInfo?.key || uploadData.key,
-                  uploading: false,
-                }
+                    ...f,
+                    path: uploadData.fileInfo?.path || uploadData.path || uploadData.url,
+                    key: uploadData.fileInfo?.key || uploadData.key,
+                    uploading: false,
+                  }
                 : f
             )
           )

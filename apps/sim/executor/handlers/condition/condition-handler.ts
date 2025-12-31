@@ -60,7 +60,7 @@ export class ConditionBlockHandler implements BlockHandler {
   constructor(
     private pathTracker?: any,
     private resolver?: any
-  ) { }
+  ) {}
 
   canHandle(block: SerializedBlock): boolean {
     return block.metadata?.id === BlockType.CONDITION

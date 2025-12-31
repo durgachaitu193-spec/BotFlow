@@ -1,8 +1,8 @@
+import { createLogger } from '@sim/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { getSession } from '@/lib/auth'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@sim/logger'
 import { applyAutoLayout } from '@/lib/workflows/autolayout'
 import {
   DEFAULT_HORIZONTAL_SPACING,
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       accessContext?.isOwner ||
       (workflowData.workspaceId
         ? accessContext?.workspacePermission === 'write' ||
-        accessContext?.workspacePermission === 'admin'
+          accessContext?.workspacePermission === 'admin'
         : false)
 
     if (!canUpdate) {

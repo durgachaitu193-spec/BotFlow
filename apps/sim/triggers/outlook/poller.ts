@@ -1,5 +1,5 @@
-import { OutlookIcon } from '@/components/icons'
 import { createLogger } from '@sim/logger'
+import { OutlookIcon } from '@/components/icons'
 import { useSubBlockStore } from '@/stores/workflows/subblock/store'
 import type { TriggerConfig } from '@/triggers/types'
 

@@ -1,7 +1,7 @@
 import { db } from '@sim/db'
 import { document, embedding } from '@sim/db/schema'
-import { and, eq, inArray, isNull, sql } from 'drizzle-orm'
 import { createLogger } from '@sim/logger'
+import { and, eq, inArray, isNull, sql } from 'drizzle-orm'
 
 const logger = createLogger('KnowledgeSearchUtils')
 

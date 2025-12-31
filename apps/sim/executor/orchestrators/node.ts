@@ -23,7 +23,7 @@ export class NodeExecutionOrchestrator {
     private blockExecutor: BlockExecutor,
     private loopOrchestrator: LoopOrchestrator,
     private parallelOrchestrator: ParallelOrchestrator
-  ) { }
+  ) {}
 
   async executeNode(ctx: ExecutionContext, nodeId: string): Promise<NodeExecutionResult> {
     const node = this.dag.nodes.get(nodeId)

@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { ArrowUp, Square } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import {
@@ -22,7 +23,6 @@ import {
   Trash,
 } from '@/components/emcn'
 import { VariableIcon } from '@/components/icons'
-import { createLogger } from '@sim/logger'
 import { useRegisterGlobalCommands } from '@/app/workspace/[workspaceId]/providers/global-commands-provider'
 import { useUserPermissionsContext } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
 import { createCommands } from '@/app/workspace/[workspaceId]/utils/commands-utils'
@@ -427,7 +427,7 @@ export function Panel() {
             </div>
 
             {/* Deploy, Run, and Wallet */}
-            <div className='flex gap-[4px] items-center'>
+            <div className='flex items-center gap-[4px]'>
               <Deploy activeWorkflowId={activeWorkflowId} userPermissions={userPermissions} />
               <Button
                 className='h-[32px] w-[61.5px] gap-[8px]'

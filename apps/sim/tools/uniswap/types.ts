@@ -125,4 +125,3 @@ export type UniswapResponse =
   | UniswapGetPoolInfoResponse
   | UniswapGetQuoteResponse
   | UniswapSwapResponse
-

@@ -115,10 +115,10 @@ export const latestCommitTool: ToolConfig<LatestCommitParams, LatestCommitRespon
           },
           stats: data.stats
             ? {
-              additions: data.stats.additions,
-              deletions: data.stats.deletions,
-              total: data.stats.total,
-            }
+                additions: data.stats.additions,
+                deletions: data.stats.deletions,
+                total: data.stats.total,
+              }
             : undefined,
           files: fileDetailsWithContent.length > 0 ? fileDetailsWithContent : undefined,
         },

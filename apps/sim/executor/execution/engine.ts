@@ -76,7 +76,7 @@ export class ExecutionEngine {
       // Attach executionResult to the original error instead of creating a new one
       // This preserves block error metadata (blockId, blockName, blockType, etc.)
       if (error && typeof error === 'object') {
-        ; (error as any).executionResult = executionResult
+        ;(error as any).executionResult = executionResult
       }
       throw error
     }

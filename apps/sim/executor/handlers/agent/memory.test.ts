@@ -232,7 +232,7 @@ describe('Memory', () => {
       }
 
       expect(() => {
-        ; (memoryService as any).buildMemoryKey(mockContext, inputs, 'test-block-id')
+        ;(memoryService as any).buildMemoryKey(mockContext, inputs, 'test-block-id')
       }).toThrow('Conversation ID is required for all memory types')
     })
 
@@ -243,7 +243,7 @@ describe('Memory', () => {
       }
 
       expect(() => {
-        ; (memoryService as any).buildMemoryKey(mockContext, inputs, 'test-block-id')
+        ;(memoryService as any).buildMemoryKey(mockContext, inputs, 'test-block-id')
       }).toThrow('Conversation ID is required for all memory types')
     })
   })

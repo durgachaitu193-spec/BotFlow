@@ -1,7 +1,7 @@
 import { Sandbox } from '@e2b/code-interpreter'
+import { createLogger } from '@sim/logger'
 import { env } from '@/lib/core/config/env'
 import { CodeLanguage } from '@/lib/execution/languages'
-import { createLogger } from '@sim/logger'
 
 export interface E2BExecutionRequest {
   code: string
@@ -89,6 +89,6 @@ export async function executeInE2B(req: E2BExecutionRequest): Promise<E2BExecuti
   } finally {
     try {
       await sandbox.kill()
-    } catch { }
+    } catch {}
   }
 }

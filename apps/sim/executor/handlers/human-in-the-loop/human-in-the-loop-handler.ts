@@ -1,5 +1,5 @@
-import { getBaseUrl } from '@/lib/core/utils/urls'
 import { createLogger } from '@sim/logger'
+import { getBaseUrl } from '@/lib/core/utils/urls'
 import type { BlockOutput } from '@/blocks/types'
 import {
   BlockType,
@@ -168,9 +168,9 @@ export class HumanInTheLoopBlockHandler implements BlockHandler {
 
       const responseDataWithResume =
         resumeLinks &&
-          responseData &&
-          typeof responseData === 'object' &&
-          !Array.isArray(responseData)
+        responseData &&
+        typeof responseData === 'object' &&
+        !Array.isArray(responseData)
           ? { ...responseData, _resume: resumeLinks }
           : responseData
 

@@ -164,11 +164,11 @@ export function useChatStreaming() {
                   prev.map((msg) =>
                     msg.id === messageId
                       ? {
-                        ...msg,
-                        content: errorMessage,
-                        isStreaming: false,
-                        type: 'assistant' as const,
-                      }
+                          ...msg,
+                          content: errorMessage,
+                          isStreaming: false,
+                          type: 'assistant' as const,
+                        }
                       : msg
                   )
                 )
@@ -288,10 +288,10 @@ export function useChatStreaming() {
                   prev.map((msg) =>
                     msg.id === messageId
                       ? {
-                        ...msg,
-                        isStreaming: false,
-                        content: finalContent ?? msg.content,
-                      }
+                          ...msg,
+                          isStreaming: false,
+                          content: finalContent ?? msg.content,
+                        }
                       : msg
                   )
                 )

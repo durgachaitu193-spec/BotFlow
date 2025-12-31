@@ -2,8 +2,8 @@
 
 import type React from 'react'
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { useParams } from 'next/navigation'
 import { createLogger } from '@sim/logger'
+import { useParams } from 'next/navigation'
 import { useCollaborativeWorkflow } from '@/hooks/use-collaborative-workflow'
 import { useUserPermissions, type WorkspaceUserPermissions } from '@/hooks/use-user-permissions'
 import {
@@ -33,8 +33,8 @@ const WorkspacePermissionsContext = createContext<WorkspacePermissionsContextTyp
   workspacePermissions: null,
   permissionsLoading: false,
   permissionsError: null,
-  updatePermissions: () => { },
-  refetchPermissions: async () => { },
+  updatePermissions: () => {},
+  refetchPermissions: async () => {},
   userPermissions: {
     canRead: false,
     canEdit: false,
@@ -43,7 +43,7 @@ const WorkspacePermissionsContext = createContext<WorkspacePermissionsContextTyp
     isLoading: false,
     error: null,
   },
-  setOfflineMode: () => { },
+  setOfflineMode: () => {},
 })
 
 interface WorkspacePermissionsProviderProps {

@@ -1,6 +1,6 @@
+import { createLogger } from '@sim/logger'
 import { NextResponse } from 'next/server'
 import { validateNumericId } from '@/lib/core/security/input-validation'
-import { createLogger } from '@sim/logger'
 
 interface DiscordServer {
   id: string

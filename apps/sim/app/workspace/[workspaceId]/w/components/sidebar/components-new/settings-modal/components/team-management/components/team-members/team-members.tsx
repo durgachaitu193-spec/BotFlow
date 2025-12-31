@@ -1,7 +1,7 @@
 import { useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { Button } from '@/components/emcn'
 import { UserAvatar } from '@/components/user-avatar/user-avatar'
-import { createLogger } from '@sim/logger'
 import type { Invitation, Member, Organization } from '@/lib/workspaces/organization'
 import { useCancelInvitation, useOrganizationMembers } from '@/hooks/queries/organization'
 
@@ -170,10 +170,11 @@ export function TeamMembers({
                   <span className='truncate font-medium text-sm'>{item.name}</span>
                   {item.type === 'member' && (
                     <span
-                      className={`inline-flex h-[1.125rem] items-center rounded-[6px] px-2 py-0 font-medium text-xs ${item.role === 'owner'
+                      className={`inline-flex h-[1.125rem] items-center rounded-[6px] px-2 py-0 font-medium text-xs ${
+                        item.role === 'owner'
                           ? 'gradient-text border-gradient-primary/20 bg-gradient-to-b from-gradient-primary via-gradient-secondary to-gradient-primary'
                           : 'bg-[var(--surface-3)] text-[var(--text-muted)]'
-                        } `}
+                      } `}
                     >
                       {item.role.charAt(0).toUpperCase() + item.role.slice(1)}
                     </span>

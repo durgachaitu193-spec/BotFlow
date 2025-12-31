@@ -1,7 +1,7 @@
+import { createLogger } from '@sim/logger'
 import { jwtVerify, SignJWT } from 'jose'
 import { type NextRequest, NextResponse } from 'next/server'
 import { env } from '@/lib/core/config/env'
-import { createLogger } from '@sim/logger'
 
 const logger = createLogger('CronAuth')
 

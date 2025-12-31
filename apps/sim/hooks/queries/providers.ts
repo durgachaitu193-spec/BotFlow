@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
 import { createLogger } from '@sim/logger'
+import { useQuery } from '@tanstack/react-query'
 import type { ProviderName } from '@/stores/providers/types'
 
 const logger = createLogger('ProviderModelsQuery')

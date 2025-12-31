@@ -12,8 +12,8 @@ import ReactFlow, {
 } from 'reactflow'
 import 'reactflow/dist/style.css'
 
-import { cn } from '@/lib/core/utils/cn'
 import { createLogger } from '@sim/logger'
+import { cn } from '@/lib/core/utils/cn'
 import { NoteBlock } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/note-block/note-block'
 import { SubflowNodeComponent } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/subflows/subflow-node'
 import { WorkflowBlock } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/workflow-block/workflow-block'
@@ -382,9 +382,9 @@ export function WorkflowPreview({
           onNodeClick={
             onNodeClick
               ? (event, node) => {
-                logger.debug('Node clicked:', { nodeId: node.id, event })
-                onNodeClick(node.id, { x: event.clientX, y: event.clientY })
-              }
+                  logger.debug('Node clicked:', { nodeId: node.id, event })
+                  onNodeClick(node.id, { x: event.clientX, y: event.clientY })
+                }
               : undefined
           }
         />

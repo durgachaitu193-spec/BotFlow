@@ -121,13 +121,13 @@ export const getListTool: ToolConfig<SharepointToolParams, SharepointGetListResp
       const nextLink: string | undefined = (data as any)['@odata.nextLink']
       const nextPageToken = nextLink
         ? (() => {
-          try {
-            const u = new URL(nextLink)
-            return u.searchParams.get('$skiptoken') || u.searchParams.get('$skip') || undefined
-          } catch {
-            return undefined
-          }
-        })()
+            try {
+              const u = new URL(nextLink)
+              return u.searchParams.get('$skiptoken') || u.searchParams.get('$skip') || undefined
+            } catch {
+              return undefined
+            }
+          })()
         : undefined
 
       return {
@@ -151,13 +151,13 @@ export const getListTool: ToolConfig<SharepointToolParams, SharepointGetListResp
       const nextLink: string | undefined = (data as any)['@odata.nextLink']
       const nextPageToken = nextLink
         ? (() => {
-          try {
-            const u = new URL(nextLink)
-            return u.searchParams.get('$skiptoken') || u.searchParams.get('$skip') || undefined
-          } catch {
-            return undefined
-          }
-        })()
+            try {
+              const u = new URL(nextLink)
+              return u.searchParams.get('$skiptoken') || u.searchParams.get('$skip') || undefined
+            } catch {
+              return undefined
+            }
+          })()
         : undefined
 
       return {
@@ -177,17 +177,17 @@ export const getListTool: ToolConfig<SharepointToolParams, SharepointGetListResp
       list: data.list,
       columns: Array.isArray(data.columns)
         ? data.columns.map((c: any) => ({
-          id: c.id,
-          name: c.name,
-          displayName: c.displayName,
-          description: c.description,
-          indexed: c.indexed,
-          enforcedUniqueValues: c.enforcedUniqueValues,
-          hidden: c.hidden,
-          readOnly: c.readOnly,
-          required: c.required,
-          columnGroup: c.columnGroup,
-        }))
+            id: c.id,
+            name: c.name,
+            displayName: c.displayName,
+            description: c.description,
+            indexed: c.indexed,
+            enforcedUniqueValues: c.enforcedUniqueValues,
+            hidden: c.hidden,
+            readOnly: c.readOnly,
+            required: c.required,
+            columnGroup: c.columnGroup,
+          }))
         : undefined,
       items: Array.isArray(data.items)
         ? data.items.map((i: any) => ({ id: i.id, fields: i.fields as Record<string, unknown> }))

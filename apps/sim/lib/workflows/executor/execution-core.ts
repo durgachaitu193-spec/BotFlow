@@ -3,10 +3,10 @@
  * This is the SINGLE source of truth for workflow execution
  */
 
+import { createLogger } from '@sim/logger'
 import type { Edge } from 'reactflow'
 import { z } from 'zod'
 import { getPersonalAndWorkspaceEnv } from '@/lib/environment/utils'
-import { createLogger } from '@sim/logger'
 import type { LoggingSession } from '@/lib/logs/execution/logging-session'
 import { buildTraceSpans } from '@/lib/logs/execution/trace-spans/trace-spans'
 import {

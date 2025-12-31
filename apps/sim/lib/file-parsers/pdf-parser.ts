@@ -1,6 +1,6 @@
 import { readFile } from 'fs/promises'
-import type { FileParseResult, FileParser } from '@/lib/file-parsers/types'
 import { createLogger } from '@sim/logger'
+import type { FileParseResult, FileParser } from '@/lib/file-parsers/types'
 
 const logger = createLogger('PdfParser')
 

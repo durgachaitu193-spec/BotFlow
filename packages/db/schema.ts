@@ -294,7 +294,9 @@ export const workflowExecutionLogs = pgTable(
     stateSnapshotId: text('state_snapshot_id')
       .notNull()
       .references(() => workflowExecutionSnapshots.id),
-    deploymentVersionId: text('deployment_version_id').references(() => workflowDeploymentVersion.id),
+    deploymentVersionId: text('deployment_version_id').references(
+      () => workflowDeploymentVersion.id
+    ),
 
     level: text('level').notNull(), // 'info', 'error'
     status: text('status').notNull().default('success'),
@@ -1606,7 +1608,6 @@ export const ssoProvider = pgTable(
   })
 )
 
-
 export const launchpadTokens = pgTable(
   'launchpad_tokens',
   {
@@ -1700,7 +1701,6 @@ export const launchpadComments = pgTable(
     addressIdx: index('launchpad_comments_address_idx').on(table.address),
     createdAtIdx: index('launchpad_comments_created_at_idx').on(table.createdAt),
   })
-
 )
 export const agent = pgTable(
   'agent',
@@ -1763,6 +1763,9 @@ export const templatePurchases = pgTable(
   (table) => ({
     userIdIdx: index('template_purchases_user_id_idx').on(table.userId),
     templateIdIdx: index('template_purchases_template_id_idx').on(table.templateId),
-    userTemplateIdx: index('template_purchases_user_template_idx').on(table.userId, table.templateId),
+    userTemplateIdx: index('template_purchases_user_template_idx').on(
+      table.userId,
+      table.templateId
+    ),
   })
 )

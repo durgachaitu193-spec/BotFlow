@@ -1,5 +1,5 @@
-import { getBaseUrl } from '@/lib/core/utils/urls'
 import { createLogger } from '@sim/logger'
+import { getBaseUrl } from '@/lib/core/utils/urls'
 import { executeProviderRequest } from '@/providers'
 import { getApiKey, getProviderFromModel } from '@/providers/utils'
 

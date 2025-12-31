@@ -1,3 +1,4 @@
+import { createLogger } from '@sim/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import {
@@ -8,7 +9,6 @@ import {
   createUnauthorizedResponse,
 } from '@/lib/copilot/request-helpers'
 import { routeExecution } from '@/lib/copilot/tools/server/router'
-import { createLogger } from '@sim/logger'
 
 const logger = createLogger('ExecuteCopilotServerToolAPI')
 
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     try {
       const preview = JSON.stringify(body).slice(0, 300)
       logger.debug(`[${tracker.requestId}] Incoming request body preview`, { preview })
-    } catch { }
+    } catch {}
 
     const { toolName, payload } = ExecuteSchema.parse(body)
 
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     try {
       const resultPreview = JSON.stringify(result).slice(0, 300)
       logger.debug(`[${tracker.requestId}] Server tool result preview`, { toolName, resultPreview })
-    } catch { }
+    } catch {}
 
     return NextResponse.json({ success: true, result })
   } catch (error) {

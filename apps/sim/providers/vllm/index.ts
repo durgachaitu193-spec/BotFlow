@@ -1,6 +1,6 @@
+import { createLogger } from '@sim/logger'
 import OpenAI from 'openai'
 import { env } from '@/lib/core/config/env'
-import { createLogger } from '@sim/logger'
 import type { StreamingExecution } from '@/executor/types'
 import { getProviderDefaultModel, getProviderModels } from '@/providers/models'
 import type {
@@ -146,13 +146,13 @@ export const vllmProvider: ProviderConfig = {
 
     const tools = request.tools?.length
       ? request.tools.map((tool) => ({
-        type: 'function',
-        function: {
-          name: tool.id,
-          description: tool.description,
-          parameters: tool.parameters,
-        },
-      }))
+          type: 'function',
+          function: {
+            name: tool.id,
+            description: tool.description,
+            parameters: tool.parameters,
+          },
+        }))
       : undefined
 
     const payload: any = {
@@ -540,9 +540,9 @@ export const vllmProvider: ProviderConfig = {
               toolCalls:
                 toolCalls.length > 0
                   ? {
-                    list: toolCalls,
-                    count: toolCalls.length,
-                  }
+                      list: toolCalls,
+                      count: toolCalls.length,
+                    }
                   : undefined,
               providerTiming: {
                 startTime: providerStartTimeISO,

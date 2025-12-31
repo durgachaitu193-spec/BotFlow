@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { AlertTriangle, Check, Clipboard, Eye, EyeOff, Loader2, RefreshCw, X } from 'lucide-react'
 import { Button, Input, Label, Textarea, Tooltip } from '@/components/emcn'
 import {
@@ -15,7 +16,6 @@ import { getEnv, isTruthy } from '@/lib/core/config/env'
 import { generatePassword } from '@/lib/core/security/encryption'
 import { cn } from '@/lib/core/utils/cn'
 import { getEmailDomain } from '@/lib/core/utils/urls'
-import { createLogger } from '@sim/logger'
 import { OutputSelect } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/chat/components/output-select/output-select'
 import {
   type AuthType,
@@ -178,7 +178,10 @@ export function ChatDeploy({
 
   const handleTokenSymbolChange = (value: string) => {
     // Only allow uppercase letters and numbers, max 6 characters
-    const sanitized = value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6)
+    const sanitized = value
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, '')
+      .slice(0, 6)
     setTokenSymbol(sanitized)
   }
 
@@ -234,7 +237,8 @@ export function ChatDeploy({
     (formData.authType !== 'password' ||
       Boolean(formData.password.trim()) ||
       Boolean(existingChat)) &&
-    ((formData.authType !== 'email' && formData.authType !== 'sso') || formData.emails.length > 0) &&
+    ((formData.authType !== 'email' && formData.authType !== 'sso') ||
+      formData.emails.length > 0) &&
     // Token validation for new chats
     (!!existingChat || (!!tokenName.trim() && !!tokenSymbol.trim() && !!tokenImage))
 
@@ -255,8 +259,8 @@ export function ChatDeploy({
           existingChat.customizations?.welcomeMessage || 'Hi there! How can I help you today?',
         selectedOutputBlocks: Array.isArray(existingChat.outputConfigs)
           ? existingChat.outputConfigs.map(
-            (config: { blockId: string; path: string }) => `${config.blockId}_${config.path}`
-          )
+              (config: { blockId: string; path: string }) => `${config.blockId}_${config.path}`
+            )
           : [],
       })
 
@@ -528,9 +532,7 @@ export function ChatDeploy({
                       />
                     </div>
                     <div className='flex flex-col gap-[8px]'>
-                      <p className='text-[12px] text-[var(--text-secondary)]'>
-                        {tokenImage?.name}
-                      </p>
+                      <p className='text-[12px] text-[var(--text-secondary)]'>{tokenImage?.name}</p>
                       <Button
                         type='button'
                         variant='outline'
@@ -879,12 +881,13 @@ function AuthSelector({
               variant={authType === type ? 'active' : 'default'}
               onClick={() => !disabled && onAuthTypeChange(type)}
               disabled={disabled}
-              className={`px-[8px] py-[4px] text-[12px] ${index === 0
-                ? 'rounded-r-none'
-                : index === arr.length - 1
-                  ? 'rounded-l-none'
-                  : 'rounded-none'
-                }`}
+              className={`px-[8px] py-[4px] text-[12px] ${
+                index === 0
+                  ? 'rounded-r-none'
+                  : index === arr.length - 1
+                    ? 'rounded-l-none'
+                    : 'rounded-none'
+              }`}
             >
               {AUTH_LABELS[type]}
             </Button>

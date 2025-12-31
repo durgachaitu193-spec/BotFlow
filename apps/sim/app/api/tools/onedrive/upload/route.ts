@@ -1,9 +1,9 @@
+import { createLogger } from '@sim/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import * as XLSX from 'xlsx'
 import { z } from 'zod'
 import { checkHybridAuth } from '@/lib/auth/hybrid'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@sim/logger'
 import { processSingleFileToUserFile } from '@/lib/uploads/utils/file-utils'
 import { downloadFileFromStorage } from '@/lib/uploads/utils/file-utils.server'
 import { normalizeExcelValues } from '@/tools/onedrive/utils'
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
     // Check if we're creating a blank Excel file
     const isExcelCreation =
       validatedData.mimeType ===
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' && !validatedData.file
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' && !validatedData.file
 
     if (isExcelCreation) {
       // Create a blank Excel workbook

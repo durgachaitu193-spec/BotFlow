@@ -1,10 +1,10 @@
 import { db } from '@sim/db'
 import { account } from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import { and, eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@sim/logger'
 import { refreshAccessTokenIfNeeded } from '@/app/api/auth/oauth/utils'
 export const dynamic = 'force-dynamic'
 
@@ -108,8 +108,8 @@ export async function GET(request: NextRequest) {
 
     const filteredLabels = query
       ? labels.filter((label: GmailLabel) =>
-        label.name.toLowerCase().includes((query as string).toLowerCase())
-      )
+          label.name.toLowerCase().includes((query as string).toLowerCase())
+        )
       : labels
 
     return NextResponse.json({ labels: filteredLabels }, { status: 200 })

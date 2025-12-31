@@ -1,7 +1,7 @@
+import { createLogger } from '@sim/logger'
 import { Cron } from 'croner'
 import cronstrue from 'cronstrue'
 import { formatDateTime } from '@/lib/core/utils/formatting'
-import { createLogger } from '@sim/logger'
 
 const logger = createLogger('ScheduleUtils')
 

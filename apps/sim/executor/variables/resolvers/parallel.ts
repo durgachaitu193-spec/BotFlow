@@ -11,7 +11,7 @@ import type { SerializedWorkflow } from '@/serializer/types'
 const logger = createLogger('ParallelResolver')
 
 export class ParallelResolver implements Resolver {
-  constructor(private workflow: SerializedWorkflow) { }
+  constructor(private workflow: SerializedWorkflow) {}
 
   canResolve(reference: string): boolean {
     if (!isReference(reference)) {

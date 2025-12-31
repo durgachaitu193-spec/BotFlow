@@ -353,8 +353,8 @@ export class WorkflowBlockHandler implements BlockHandler {
 
     const transformedChildren = Array.isArray(span.children)
       ? span.children.map((childSpan) =>
-        this.transformSpanForChildWorkflow(childSpan, childWorkflowName)
-      )
+          this.transformSpanForChildWorkflow(childSpan, childWorkflowName)
+        )
       : undefined
 
     return {

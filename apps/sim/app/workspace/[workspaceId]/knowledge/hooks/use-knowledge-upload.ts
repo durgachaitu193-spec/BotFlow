@@ -882,10 +882,10 @@ export function useKnowledgeUpload(options: UseKnowledgeUploadOptions = {}) {
               fileStatuses: prev.fileStatuses?.map((fs, idx) =>
                 idx === fileIndex
                   ? {
-                    ...fs,
-                    status: 'failed' as const,
-                    error: getErrorMessage(error),
-                  }
+                      ...fs,
+                      status: 'failed' as const,
+                      error: getErrorMessage(error),
+                    }
                   : fs
               ),
             }))

@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { Check, Copy, Plus, Search } from 'lucide-react'
 import { Button } from '@/components/emcn'
 import {
@@ -11,7 +12,6 @@ import {
   ModalHeader,
 } from '@/components/emcn/components/modal/modal'
 import { Input, Skeleton } from '@/components/ui'
-import { createLogger } from '@sim/logger'
 import {
   type CopilotKey,
   useCopilotKeys,

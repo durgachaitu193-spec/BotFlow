@@ -1,10 +1,10 @@
 import { db } from '@sim/db'
-import { workflow, user } from '@sim/db/schema'
+import { user, workflow } from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import { eq } from 'drizzle-orm'
 import type { NextRequest } from 'next/server'
 import { authenticateApiKeyFromHeader, updateApiKeyLastUsed } from '@/lib/api-key/service'
 import { verifyInternalToken } from '@/lib/auth/internal'
-import { createLogger } from '@sim/logger'
 
 const logger = createLogger('HybridAuth')
 

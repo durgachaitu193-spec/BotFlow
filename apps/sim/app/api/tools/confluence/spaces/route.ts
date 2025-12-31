@@ -1,6 +1,6 @@
+import { createLogger } from '@sim/logger'
 import { NextResponse } from 'next/server'
 import { validateJiraCloudId } from '@/lib/core/security/input-validation'
-import { createLogger } from '@sim/logger'
 import { getConfluenceCloudId } from '@/tools/confluence/utils'
 
 const logger = createLogger('ConfluenceSpacesAPI')

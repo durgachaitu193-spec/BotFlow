@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { useQueryClient } from '@tanstack/react-query'
 import Fuse from 'fuse.js'
-import { createLogger } from '@sim/logger'
 import {
   fetchKnowledgeChunks,
   knowledgeKeys,
@@ -487,7 +487,7 @@ export function useDocumentChunks(
     1,
     Math.ceil(
       (pagination.total || 0) /
-      (pagination.limit && pagination.limit > 0 ? pagination.limit : DEFAULT_PAGE_SIZE)
+        (pagination.limit && pagination.limit > 0 ? pagination.limit : DEFAULT_PAGE_SIZE)
     )
   )
   const hasNextPage = serverCurrentPage < totalPages
@@ -621,7 +621,7 @@ export function useDocumentChunks(
     filteredChunks: chunks,
     paginatedChunks: chunks,
     searchQuery: serverSearchQuery,
-    setSearchQuery: () => { },
+    setSearchQuery: () => {},
     isLoading,
     error,
     pagination,

@@ -43,65 +43,65 @@ export async function GET(request: NextRequest) {
       const selectColumns =
         params.details === 'full'
           ? {
-            id: workflowExecutionLogs.id,
-            workflowId: workflowExecutionLogs.workflowId,
-            executionId: workflowExecutionLogs.executionId,
-            stateSnapshotId: workflowExecutionLogs.stateSnapshotId,
-            deploymentVersionId: workflowExecutionLogs.deploymentVersionId,
-            level: workflowExecutionLogs.level,
-            status: workflowExecutionLogs.status,
-            trigger: workflowExecutionLogs.trigger,
-            startedAt: workflowExecutionLogs.startedAt,
-            endedAt: workflowExecutionLogs.endedAt,
-            totalDurationMs: workflowExecutionLogs.totalDurationMs,
-            executionData: workflowExecutionLogs.executionData,
-            cost: workflowExecutionLogs.cost,
-            files: workflowExecutionLogs.files,
-            createdAt: workflowExecutionLogs.createdAt,
-            workflowName: workflow.name,
-            workflowDescription: workflow.description,
-            workflowColor: workflow.color,
-            workflowFolderId: workflow.folderId,
-            workflowUserId: workflow.userId,
-            workflowWorkspaceId: workflow.workspaceId,
-            workflowCreatedAt: workflow.createdAt,
-            workflowUpdatedAt: workflow.updatedAt,
-            pausedStatus: pausedExecutions.status,
-            pausedTotalPauseCount: pausedExecutions.totalPauseCount,
-            pausedResumedCount: pausedExecutions.resumedCount,
-            deploymentVersion: workflowDeploymentVersion.version,
-            deploymentVersionName: workflowDeploymentVersion.name,
-          }
+              id: workflowExecutionLogs.id,
+              workflowId: workflowExecutionLogs.workflowId,
+              executionId: workflowExecutionLogs.executionId,
+              stateSnapshotId: workflowExecutionLogs.stateSnapshotId,
+              deploymentVersionId: workflowExecutionLogs.deploymentVersionId,
+              level: workflowExecutionLogs.level,
+              status: workflowExecutionLogs.status,
+              trigger: workflowExecutionLogs.trigger,
+              startedAt: workflowExecutionLogs.startedAt,
+              endedAt: workflowExecutionLogs.endedAt,
+              totalDurationMs: workflowExecutionLogs.totalDurationMs,
+              executionData: workflowExecutionLogs.executionData,
+              cost: workflowExecutionLogs.cost,
+              files: workflowExecutionLogs.files,
+              createdAt: workflowExecutionLogs.createdAt,
+              workflowName: workflow.name,
+              workflowDescription: workflow.description,
+              workflowColor: workflow.color,
+              workflowFolderId: workflow.folderId,
+              workflowUserId: workflow.userId,
+              workflowWorkspaceId: workflow.workspaceId,
+              workflowCreatedAt: workflow.createdAt,
+              workflowUpdatedAt: workflow.updatedAt,
+              pausedStatus: pausedExecutions.status,
+              pausedTotalPauseCount: pausedExecutions.totalPauseCount,
+              pausedResumedCount: pausedExecutions.resumedCount,
+              deploymentVersion: workflowDeploymentVersion.version,
+              deploymentVersionName: workflowDeploymentVersion.name,
+            }
           : {
-            id: workflowExecutionLogs.id,
-            workflowId: workflowExecutionLogs.workflowId,
-            executionId: workflowExecutionLogs.executionId,
-            stateSnapshotId: workflowExecutionLogs.stateSnapshotId,
-            deploymentVersionId: workflowExecutionLogs.deploymentVersionId,
-            level: workflowExecutionLogs.level,
-            status: workflowExecutionLogs.status,
-            trigger: workflowExecutionLogs.trigger,
-            startedAt: workflowExecutionLogs.startedAt,
-            endedAt: workflowExecutionLogs.endedAt,
-            totalDurationMs: workflowExecutionLogs.totalDurationMs,
-            executionData: sql`null`,
-            cost: workflowExecutionLogs.cost,
-            files: sql`null`,
-            createdAt: workflowExecutionLogs.createdAt,
-            workflowName: workflow.name,
-            workflowDescription: workflow.description,
-            workflowColor: workflow.color,
-            workflowFolderId: workflow.folderId,
-            workflowUserId: workflow.userId,
-            workflowWorkspaceId: workflow.workspaceId,
-            workflowCreatedAt: workflow.createdAt,
-            workflowUpdatedAt: workflow.updatedAt,
-            pausedStatus: pausedExecutions.status,
-            pausedTotalPauseCount: pausedExecutions.totalPauseCount,
-            pausedResumedCount: pausedExecutions.resumedCount,
-            deploymentVersion: workflowDeploymentVersion.version,
-            deploymentVersionName: sql`null`,
-          }
+              id: workflowExecutionLogs.id,
+              workflowId: workflowExecutionLogs.workflowId,
+              executionId: workflowExecutionLogs.executionId,
+              stateSnapshotId: workflowExecutionLogs.stateSnapshotId,
+              deploymentVersionId: workflowExecutionLogs.deploymentVersionId,
+              level: workflowExecutionLogs.level,
+              status: workflowExecutionLogs.status,
+              trigger: workflowExecutionLogs.trigger,
+              startedAt: workflowExecutionLogs.startedAt,
+              endedAt: workflowExecutionLogs.endedAt,
+              totalDurationMs: workflowExecutionLogs.totalDurationMs,
+              executionData: sql`null`,
+              cost: workflowExecutionLogs.cost,
+              files: sql`null`,
+              createdAt: workflowExecutionLogs.createdAt,
+              workflowName: workflow.name,
+              workflowDescription: workflow.description,
+              workflowColor: workflow.color,
+              workflowFolderId: workflow.folderId,
+              workflowUserId: workflow.userId,
+              workflowWorkspaceId: workflow.workspaceId,
+              workflowCreatedAt: workflow.createdAt,
+              workflowUpdatedAt: workflow.updatedAt,
+              pausedStatus: pausedExecutions.status,
+              pausedTotalPauseCount: pausedExecutions.totalPauseCount,
+              pausedResumedCount: pausedExecutions.resumedCount,
+              deploymentVersion: workflowDeploymentVersion.version,
+              deploymentVersionName: sql`null`,
+            }
 
       const workspaceFilter = eq(workflow.workspaceId, params.workspaceId)
 
@@ -154,7 +154,10 @@ export async function GET(request: NextRequest) {
             )
           } else if (level === 'info') {
             levelConditions.push(
-              and(eq(workflowExecutionLogs.level, 'info'), isNotNull(workflowExecutionLogs.endedAt))!
+              and(
+                eq(workflowExecutionLogs.level, 'info'),
+                isNotNull(workflowExecutionLogs.endedAt)
+              )!
             )
           }
         }
@@ -310,7 +313,7 @@ export async function GET(request: NextRequest) {
           try {
             const fo = (log.executionData as any)?.finalOutput
             if (fo !== undefined) finalOutput = fo
-          } catch { }
+          } catch {}
         }
 
         const workflowSummary = {
@@ -347,12 +350,12 @@ export async function GET(request: NextRequest) {
           executionData:
             params.details === 'full'
               ? {
-                totalDuration: log.totalDurationMs,
-                traceSpans,
-                blockExecutions,
-                finalOutput,
-                enhanced: true,
-              }
+                  totalDuration: log.totalDurationMs,
+                  traceSpans,
+                  blockExecutions,
+                  finalOutput,
+                  enhanced: true,
+                }
               : undefined,
           cost:
             params.details === 'full'
@@ -399,7 +402,7 @@ export async function GET(request: NextRequest) {
       {
         error: 'Internal Server Error',
         message: error.message,
-        requestId
+        requestId,
       },
       { status: 500 }
     )

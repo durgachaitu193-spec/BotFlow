@@ -771,9 +771,9 @@ export const googleProvider: ProviderConfig = {
                         toolCalls:
                           toolCalls.length > 0
                             ? {
-                              list: toolCalls,
-                              count: toolCalls.length,
-                            }
+                                list: toolCalls,
+                                count: toolCalls.length,
+                              }
                             : undefined,
                         toolResults,
                         providerTiming: {

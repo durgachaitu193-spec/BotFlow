@@ -21,12 +21,12 @@ export {
   ModalDescription,
   ModalFooter,
   ModalHeader,
-  ModalTitle,
-  ModalTrigger,
   ModalTabs,
   ModalTabsContent,
   ModalTabsList,
   ModalTabsTrigger,
+  ModalTitle,
+  ModalTrigger,
 } from './modal/modal'
 export {
   Popover,

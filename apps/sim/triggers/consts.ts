@@ -41,4 +41,3 @@ export const TRIGGER_RUNTIME_SUBBLOCK_IDS: string[] = [
   'testUrlExpiresAt',
   'scheduleId',
 ]
-

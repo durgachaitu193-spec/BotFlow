@@ -1,5 +1,5 @@
-import { getBaseUrl } from '@/lib/core/utils/urls'
 import { createLogger } from '@sim/logger'
+import { getBaseUrl } from '@/lib/core/utils/urls'
 import {
   BlockType,
   buildResumeApiUrl,
@@ -35,7 +35,7 @@ export class BlockExecutor {
     private resolver: VariableResolver,
     private contextExtensions: ContextExtensions,
     private state: BlockStateWriter
-  ) { }
+  ) {}
 
   async execute(
     ctx: ExecutionContext,
@@ -564,7 +564,7 @@ export class BlockExecutor {
     } finally {
       try {
         reader.releaseLock()
-      } catch { }
+      } catch {}
     }
 
     if (!fullContent) {

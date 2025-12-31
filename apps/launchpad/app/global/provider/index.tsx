@@ -1,9 +1,9 @@
-"use client";
+'use client'
 
-import { ReactNode } from "react";
-import { UserDetailsProvider } from "@/context/UserDetailContext";
-import { AppProvider } from "@/context/AppContext";
-import { PrivyProviderWrapper } from "@sim/ui";
+import type { ReactNode } from 'react'
+import { PrivyProviderWrapper } from '@sim/ui'
+import { AppProvider } from '@/context/AppContext'
+import { UserDetailsProvider } from '@/context/UserDetailContext'
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
@@ -12,5 +12,5 @@ export function Providers({ children }: { children: ReactNode }) {
         <UserDetailsProvider>{children}</UserDetailsProvider>
       </AppProvider>
     </PrivyProviderWrapper>
-  );
+  )
 }

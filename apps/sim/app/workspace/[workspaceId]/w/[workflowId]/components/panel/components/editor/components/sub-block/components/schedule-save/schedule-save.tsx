@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { useParams } from 'next/navigation'
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@/components/emcn'
 import { Trash } from '@/components/emcn/icons/trash'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@sim/logger'
 import { parseCronToHumanReadable } from '@/lib/workflows/schedules/utils'
 import { useCollaborativeWorkflow } from '@/hooks/use-collaborative-workflow'
 import { useScheduleManagement } from '@/hooks/use-schedule-management'
@@ -355,7 +355,7 @@ export function ScheduleSave({ blockId, isPreview = false, disabled = false }: S
     } catch (error: any) {
       setErrorMessage(
         error.message ||
-        `An error occurred while ${scheduleStatus === 'active' ? 'disabling' : 'reactivating'} the schedule.`
+          `An error occurred while ${scheduleStatus === 'active' ? 'disabling' : 'reactivating'} the schedule.`
       )
       logger.error('Error toggling schedule status', { error })
     }

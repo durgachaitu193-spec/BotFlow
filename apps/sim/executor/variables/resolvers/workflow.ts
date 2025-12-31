@@ -10,7 +10,7 @@ import {
 const logger = createLogger('WorkflowResolver')
 
 export class WorkflowResolver implements Resolver {
-  constructor(private workflowVariables: Record<string, any>) { }
+  constructor(private workflowVariables: Record<string, any>) {}
 
   canResolve(reference: string): boolean {
     if (!isReference(reference)) {

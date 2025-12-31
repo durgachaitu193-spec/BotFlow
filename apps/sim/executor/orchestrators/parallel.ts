@@ -32,7 +32,7 @@ export class ParallelOrchestrator {
   constructor(
     private dag: DAG,
     private state: BlockStateWriter
-  ) { }
+  ) {}
 
   initializeParallelScope(
     ctx: ExecutionContext,

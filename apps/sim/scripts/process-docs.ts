@@ -3,10 +3,10 @@
 import path from 'path'
 import { db } from '@sim/db'
 import { docsEmbeddings } from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import { sql } from 'drizzle-orm'
 import { type DocChunk, DocsChunker } from '@/lib/chunkers'
 import { isDev } from '@/lib/core/config/environment'
-import { createLogger } from '@sim/logger'
 
 const logger = createLogger('ProcessDocs')
 
@@ -166,10 +166,10 @@ async function processDocs(options: ProcessingOptions = {}) {
 
     logger.info(
       `\n✅ Processing complete!\n` +
-      `   📊 Total chunks: ${chunks.length}\n` +
-      `   ✅ Processed: ${processedChunks}\n` +
-      `   ❌ Failed: ${failedChunks}\n` +
-      `   💾 Total in DB: ${savedCount}`
+        `   📊 Total chunks: ${chunks.length}\n` +
+        `   ✅ Processed: ${processedChunks}\n` +
+        `   ❌ Failed: ${failedChunks}\n` +
+        `   💾 Total in DB: ${savedCount}`
     )
 
     return { success: failedChunks === 0, processedChunks, failedChunks }

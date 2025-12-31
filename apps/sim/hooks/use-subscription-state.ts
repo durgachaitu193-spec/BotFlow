@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { DEFAULT_FREE_CREDITS } from '@/lib/billing/constants'
 import { createLogger } from '@sim/logger'
+import { DEFAULT_FREE_CREDITS } from '@/lib/billing/constants'
 
 const logger = createLogger('useSubscriptionState')
 

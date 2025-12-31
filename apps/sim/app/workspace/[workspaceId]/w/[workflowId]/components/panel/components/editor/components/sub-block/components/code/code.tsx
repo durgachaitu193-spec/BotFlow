@@ -3,6 +3,7 @@ import { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react
 import { Check, Copy, Wand2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import 'prismjs/components/prism-python'
+import { createLogger } from '@sim/logger'
 import Editor from 'react-simple-code-editor'
 import {
   CODE_LINE_HEIGHT_PX,
@@ -15,7 +16,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/core/utils/cn'
 import { CodeLanguage } from '@/lib/execution/languages'
-import { createLogger } from '@sim/logger'
 import {
   isLikelyReferenceSegment,
   SYSTEM_REFERENCE_PREFIXES,
@@ -211,9 +211,9 @@ export function Code({
 
   // Refs
   const editorRef = useRef<HTMLDivElement>(null)
-  const handleStreamStartRef = useRef<() => void>(() => { })
-  const handleGeneratedContentRef = useRef<(generatedCode: string) => void>(() => { })
-  const handleStreamChunkRef = useRef<(chunk: string) => void>(() => { })
+  const handleStreamStartRef = useRef<() => void>(() => {})
+  const handleGeneratedContentRef = useRef<(generatedCode: string) => void>(() => {})
+  const handleStreamChunkRef = useRef<(chunk: string) => void>(() => {})
 
   // Custom hooks
   const accessiblePrefixes = useAccessibleReferencePrefixes(blockId)
@@ -289,13 +289,13 @@ export function Code({
 
   const isAiLoading = wandHook?.isLoading || false
   const isAiStreaming = wandHook?.isStreaming || false
-  const generateCodeStream = wandHook?.generateStream || (() => { })
+  const generateCodeStream = wandHook?.generateStream || (() => {})
   const isPromptVisible = wandHook?.isPromptVisible || false
-  const showPromptInline = wandHook?.showPromptInline || (() => { })
-  const hidePromptInline = wandHook?.hidePromptInline || (() => { })
+  const showPromptInline = wandHook?.showPromptInline || (() => {})
+  const hidePromptInline = wandHook?.hidePromptInline || (() => {})
   const promptInputValue = wandHook?.promptInputValue || ''
-  const updatePromptValue = wandHook?.updatePromptValue || (() => { })
-  const cancelGeneration = wandHook?.cancelGeneration || (() => { })
+  const updatePromptValue = wandHook?.updatePromptValue || (() => {})
+  const cancelGeneration = wandHook?.cancelGeneration || (() => {})
 
   // Store integration
   const [storeValue, setStoreValue] = useSubBlockValue(blockId, subBlockId, false, {

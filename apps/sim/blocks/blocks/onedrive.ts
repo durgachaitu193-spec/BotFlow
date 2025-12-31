@@ -1,5 +1,5 @@
-import { MicrosoftOneDriveIcon } from '@/components/icons'
 import { createLogger } from '@sim/logger'
+import { MicrosoftOneDriveIcon } from '@/components/icons'
 import type { BlockConfig } from '@/blocks/types'
 import { AuthMode } from '@/blocks/types'
 import type { OneDriveResponse } from '@/tools/onedrive/types'

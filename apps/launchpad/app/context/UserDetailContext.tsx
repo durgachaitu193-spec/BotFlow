@@ -1,31 +1,26 @@
-"use client";
+'use client'
 
-import { Wallet } from "@/global/types";
-import React, {
-  createContext,
-  useMemo,
-  useState,
-  useEffect,
-  useRef,
-} from "react";
-import { usePrivy } from "@privy-io/react-auth";
+import type React from 'react'
+import { createContext, useEffect, useMemo, useRef, useState } from 'react'
+import { usePrivy } from '@privy-io/react-auth'
+import type { Wallet } from '@/global/types'
 
 interface UserDetailsContextType {
-  address: string;
-  wallet: Wallet;
-  userId: string | null;
+  address: string
+  wallet: Wallet
+  userId: string | null
   setUserDetails: React.Dispatch<
     React.SetStateAction<{
-      address: string;
-      wallet: Wallet;
-      userId: string | null;
+      address: string
+      wallet: Wallet
+      userId: string | null
     }>
-  >;
+  >
 }
 
 export const UserDetailsContext = createContext<UserDetailsContextType>(
-  {} as UserDetailsContextType,
-);
+  {} as UserDetailsContextType
+)
 
 // Transform Privy user to match expected format
 const transformPrivyUser = (privyUser: any) => {
@@ -36,93 +31,88 @@ const transformPrivyUser = (privyUser: any) => {
     linkedAccounts: privyUser.linkedAccounts,
     wallet: privyUser.wallet,
     metadata: privyUser.metadata || {},
-  };
-};
+  }
+}
 
-export function UserDetailsProvider({
-  children,
-}: React.PropsWithChildren<object>) {
-  const { user, authenticated } = usePrivy();
-  const hasSynced = useRef(false);
+export function UserDetailsProvider({ children }: React.PropsWithChildren<object>) {
+  const { user, authenticated } = usePrivy()
+  const hasSynced = useRef(false)
 
   const [userDetails, setUserDetails] = useState({
-    address: "",
-    wallet: "" as Wallet,
+    address: '',
+    wallet: '' as Wallet,
     userId: null as string | null,
-  });
+  })
 
   // Sync user with database and update wallet details when authenticated
   useEffect(() => {
     // Reset sync flag when user logs out
     if (!authenticated || !user) {
-      hasSynced.current = false;
+      hasSynced.current = false
       setUserDetails({
-        address: "",
-        wallet: "" as Wallet,
+        address: '',
+        wallet: '' as Wallet,
         userId: null,
-      });
-      return;
+      })
+      return
     }
 
     // Update wallet details immediately
     // Get wallet from linkedAccounts (filter for wallet type accounts)
-    const linkedWallet = user.linkedAccounts?.find(
-      (account) => account.type === "wallet",
-    ) as any;
-    const walletAddress = user.wallet?.address || linkedWallet?.address;
-    const walletType = (user.wallet?.walletClientType ||
-      linkedWallet?.walletClientType) as Wallet;
+    const linkedWallet = user.linkedAccounts?.find((account) => account.type === 'wallet') as any
+    const walletAddress = user.wallet?.address || linkedWallet?.address
+    const walletType = (user.wallet?.walletClientType || linkedWallet?.walletClientType) as Wallet
 
     if (walletAddress) {
       setUserDetails((prev) => ({
         ...prev,
         address: walletAddress,
         wallet: walletType,
-      }));
+      }))
     }
 
     // Sync user with database (only once per login)
     if (hasSynced.current) {
-      return;
+      return
     }
 
     const syncUser = async () => {
       try {
-        hasSynced.current = true;
+        hasSynced.current = true
 
-        const privyUserData = transformPrivyUser(user);
+        const privyUserData = transformPrivyUser(user)
 
-        const response = await fetch("/api/auth/privy/sync", {
-          method: "POST",
+        const response = await fetch('/api/auth/privy/sync', {
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             user: privyUserData,
             walletAddress,
           }),
-        });
+        })
 
         if (response.ok) {
-          const data = await response.json();
+          const data = await response.json()
 
           // Update with database user ID
           setUserDetails((prev) => ({
             ...prev,
             userId: data.user?.id || null,
-          }));
+          }))
         } else {
-          console.error("Failed to sync user:", await response.text());
-          hasSynced.current = false; // Allow retry on error
+          console.error('Failed to sync user:', await response.text())
+          hasSynced.current = false // Allow retry on error
         }
       } catch (error) {
-        console.error("Error syncing user:", error);
-        hasSynced.current = false; // Allow retry on error
+        console.error('Error syncing user:', error)
+        hasSynced.current = false // Allow retry on error
       }
-    };
+    }
 
-    syncUser();
-  }, [authenticated, user]);
+    syncUser()
+  }, [authenticated, user])
 
   const providerValue = useMemo(
     () => ({
@@ -131,12 +121,8 @@ export function UserDetailsProvider({
       userId: userDetails.userId,
       setUserDetails,
     }),
-    [userDetails],
-  );
+    [userDetails]
+  )
 
-  return (
-    <UserDetailsContext.Provider value={providerValue}>
-      {children}
-    </UserDetailsContext.Provider>
-  );
+  return <UserDetailsContext.Provider value={providerValue}>{children}</UserDetailsContext.Provider>
 }

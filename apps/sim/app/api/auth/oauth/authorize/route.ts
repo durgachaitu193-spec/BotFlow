@@ -1,11 +1,11 @@
 import { db, user } from '@sim/db'
+import { createLogger } from '@sim/logger'
 import { eq } from 'drizzle-orm'
 import { cookies } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'
 import { getEnv } from '@/lib/core/config/env'
-import { createLogger } from '@sim/logger'
-import { OAUTH_PROVIDERS } from '@/lib/oauth/oauth'
 import { getBaseUrl } from '@/lib/core/utils/urls'
+import { OAUTH_PROVIDERS } from '@/lib/oauth/oauth'
 
 const logger = createLogger('OAuthAuthorize')
 
@@ -23,11 +23,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify user exists
-    const [userRecord] = await db
-      .select()
-      .from(user)
-      .where(eq(user.id, privyUserId))
-      .limit(1)
+    const [userRecord] = await db.select().from(user).where(eq(user.id, privyUserId)).limit(1)
 
     if (!userRecord) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
@@ -337,7 +333,10 @@ function buildAuthorizationUrl(
   })
 
   // For Google providers, add prompt=consent to force consent screen
-  if (config.providerId?.startsWith('google-') || config.authorizationUrl?.includes('accounts.google.com')) {
+  if (
+    config.providerId?.startsWith('google-') ||
+    config.authorizationUrl?.includes('accounts.google.com')
+  ) {
     params.set('prompt', 'consent')
     params.set('access_type', 'offline') // Ensures refresh token is provided
   }
@@ -352,4 +351,3 @@ async function generateCodeChallenge(verifier: string): Promise<string> {
   const base64 = btoa(String.fromCharCode(...new Uint8Array(digest)))
   return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
 }
-

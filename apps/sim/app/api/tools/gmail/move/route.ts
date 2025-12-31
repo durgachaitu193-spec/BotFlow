@@ -1,8 +1,8 @@
+import { createLogger } from '@sim/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { checkHybridAuth } from '@/lib/auth/hybrid'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@sim/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -54,9 +54,9 @@ export async function POST(request: NextRequest) {
 
     const removeLabelIds = validatedData.removeLabelIds
       ? validatedData.removeLabelIds
-        .split(',')
-        .map((id) => id.trim())
-        .filter((id) => id.length > 0)
+          .split(',')
+          .map((id) => id.trim())
+          .filter((id) => id.length > 0)
       : []
 
     const modifyBody: { addLabelIds?: string[]; removeLabelIds?: string[] } = {}

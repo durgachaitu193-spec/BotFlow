@@ -1,10 +1,10 @@
 import * as schema from '@sim/db'
 import { webhook, workflow, workflowBlocks, workflowEdges, workflowSubflows } from '@sim/db'
+import { createLogger } from '@sim/logger'
 import { and, eq, inArray, or, sql } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 import { env } from '@/lib/core/config/env'
-import { createLogger } from '@sim/logger'
 import { cleanupExternalWebhook } from '@/lib/webhooks/provider-subscriptions'
 import { loadWorkflowFromNormalizedTables } from '@/lib/workflows/persistence/utils'
 
@@ -17,7 +17,7 @@ const socketDb = drizzle(
     idle_timeout: 10,
     connect_timeout: 20,
     max: 15,
-    onnotice: () => { },
+    onnotice: () => {},
   }),
   { schema }
 )
@@ -275,24 +275,24 @@ async function handleBlockOperationTx(
           const subflowConfig =
             payload.type === SubflowType.LOOP
               ? {
-                id: payload.id,
-                nodes: [], // Empty initially, will be populated when child blocks are added
-                iterations: payload.data?.count || DEFAULT_LOOP_ITERATIONS,
-                loopType: payload.data?.loopType || 'for',
-                // Set the appropriate field based on loop type
-                ...(payload.data?.loopType === 'while'
-                  ? { whileCondition: payload.data?.whileCondition || '' }
-                  : payload.data?.loopType === 'doWhile'
-                    ? { doWhileCondition: payload.data?.doWhileCondition || '' }
-                    : { forEachItems: payload.data?.collection || '' }),
-              }
+                  id: payload.id,
+                  nodes: [], // Empty initially, will be populated when child blocks are added
+                  iterations: payload.data?.count || DEFAULT_LOOP_ITERATIONS,
+                  loopType: payload.data?.loopType || 'for',
+                  // Set the appropriate field based on loop type
+                  ...(payload.data?.loopType === 'while'
+                    ? { whileCondition: payload.data?.whileCondition || '' }
+                    : payload.data?.loopType === 'doWhile'
+                      ? { doWhileCondition: payload.data?.doWhileCondition || '' }
+                      : { forEachItems: payload.data?.collection || '' }),
+                }
               : {
-                id: payload.id,
-                nodes: [], // Empty initially, will be populated when child blocks are added
-                distribution: payload.data?.collection || '',
-                count: payload.data?.count || DEFAULT_PARALLEL_COUNT,
-                parallelType: payload.data?.parallelType || 'count',
-              }
+                  id: payload.id,
+                  nodes: [], // Empty initially, will be populated when child blocks are added
+                  distribution: payload.data?.collection || '',
+                  count: payload.data?.count || DEFAULT_PARALLEL_COUNT,
+                  parallelType: payload.data?.parallelType || 'count',
+                }
 
           logger.debug(`Auto-creating ${payload.type} subflow ${payload.id}:`, subflowConfig)
 
@@ -574,10 +574,10 @@ async function handleBlockOperationTx(
       const updatedData = isRemovingFromParent
         ? {} // Clear data entirely when removing from parent
         : {
-          ...currentData,
-          ...(payload.parentId ? { parentId: payload.parentId } : {}),
-          ...(payload.extent ? { extent: payload.extent } : {}),
-        }
+            ...currentData,
+            ...(payload.parentId ? { parentId: payload.parentId } : {}),
+            ...(payload.extent ? { extent: payload.extent } : {}),
+          }
 
       const updateResult = await tx
         .update(workflowBlocks)
@@ -602,7 +602,8 @@ async function handleBlockOperationTx(
       }
 
       logger.debug(
-        `Updated block parent: ${payload.id} -> parent: ${payload.parentId || 'null'}, extent: ${payload.extent || 'null'}${isRemovingFromParent ? ' (cleared data JSON)' : ''
+        `Updated block parent: ${payload.id} -> parent: ${payload.parentId || 'null'}, extent: ${payload.extent || 'null'}${
+          isRemovingFromParent ? ' (cleared data JSON)' : ''
         }`
       )
       break
@@ -728,22 +729,22 @@ async function handleBlockOperationTx(
           const subflowConfig =
             payload.type === SubflowType.LOOP
               ? {
-                id: payload.id,
-                nodes: [], // Empty initially, will be populated when child blocks are added
-                iterations: payload.data?.count || DEFAULT_LOOP_ITERATIONS,
-                loopType: payload.data?.loopType || 'for',
-                // Set the appropriate field based on loop type
-                ...(payload.data?.loopType === 'while'
-                  ? { whileCondition: payload.data?.whileCondition || '' }
-                  : payload.data?.loopType === 'doWhile'
-                    ? { doWhileCondition: payload.data?.doWhileCondition || '' }
-                    : { forEachItems: payload.data?.collection || '' }),
-              }
+                  id: payload.id,
+                  nodes: [], // Empty initially, will be populated when child blocks are added
+                  iterations: payload.data?.count || DEFAULT_LOOP_ITERATIONS,
+                  loopType: payload.data?.loopType || 'for',
+                  // Set the appropriate field based on loop type
+                  ...(payload.data?.loopType === 'while'
+                    ? { whileCondition: payload.data?.whileCondition || '' }
+                    : payload.data?.loopType === 'doWhile'
+                      ? { doWhileCondition: payload.data?.doWhileCondition || '' }
+                      : { forEachItems: payload.data?.collection || '' }),
+                }
               : {
-                id: payload.id,
-                nodes: [], // Empty initially, will be populated when child blocks are added
-                distribution: payload.data?.collection || '',
-              }
+                  id: payload.id,
+                  nodes: [], // Empty initially, will be populated when child blocks are added
+                  distribution: payload.data?.collection || '',
+                }
 
           logger.debug(
             `Auto-creating ${payload.type} subflow for duplicated block ${payload.id}:`,

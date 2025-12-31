@@ -1,11 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePrivy } from '@privy-io/react-auth'
+import { createLogger } from '@sim/logger'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useSession } from '@/lib/auth/auth-client'
-import { usePrivy } from '@privy-io/react-auth'
-import { createLogger } from '@sim/logger'
 
 const logger = createLogger('WorkspacePage')
 
@@ -158,7 +158,7 @@ export default function WorkspacePage() {
     return (
       <div className='flex h-screen w-full flex-col items-center justify-center space-y-4'>
         <div className='text-center'>
-          <h1 className='text-2xl font-bold text-destructive'>Something went wrong</h1>
+          <h1 className='font-bold text-2xl text-destructive'>Something went wrong</h1>
           <p className='text-muted-foreground'>{error}</p>
         </div>
         <button
@@ -169,7 +169,7 @@ export default function WorkspacePage() {
         </button>
         <button
           onClick={() => router.push('/login')}
-          className='text-sm text-muted-foreground hover:underline'
+          className='text-muted-foreground text-sm hover:underline'
         >
           Back to Login
         </button>

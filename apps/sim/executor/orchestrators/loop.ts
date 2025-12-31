@@ -30,7 +30,7 @@ export class LoopOrchestrator {
     private dag: DAG,
     private state: BlockStateController,
     private resolver: VariableResolver
-  ) { }
+  ) {}
 
   initializeLoopScope(ctx: ExecutionContext, loopId: string): LoopScope {
     const loopConfig = this.dag.loopConfigs.get(loopId) as SerializedLoop | undefined

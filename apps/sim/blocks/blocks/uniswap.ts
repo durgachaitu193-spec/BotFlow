@@ -242,4 +242,3 @@ export const UniswapBlock: BlockConfig<UniswapResponse> = {
     transactionHash: { type: 'string', description: 'Transaction hash' },
   },
 }
-

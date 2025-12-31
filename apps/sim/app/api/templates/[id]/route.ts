@@ -1,11 +1,11 @@
 import { db } from '@sim/db'
 import { member, templateCreators, templates, workflow } from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import { and, eq, or, sql } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { getSession } from '@/lib/auth'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@sim/logger'
 import {
   extractRequiredCredentials,
   sanitizeCredentials,

@@ -1,9 +1,9 @@
+import { createLogger } from '@sim/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { z } from 'zod'
 import { checkHybridAuth } from '@/lib/auth/hybrid'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@sim/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -55,18 +55,18 @@ export async function POST(request: NextRequest) {
     const emailData =
       contentType === 'html'
         ? {
-          from: validatedData.fromAddress,
-          to: validatedData.to,
-          subject: validatedData.subject,
-          html: validatedData.body,
-          text: validatedData.body.replace(/<[^>]*>/g, ''), // Strip HTML for text version
-        }
+            from: validatedData.fromAddress,
+            to: validatedData.to,
+            subject: validatedData.subject,
+            html: validatedData.body,
+            text: validatedData.body.replace(/<[^>]*>/g, ''), // Strip HTML for text version
+          }
         : {
-          from: validatedData.fromAddress,
-          to: validatedData.to,
-          subject: validatedData.subject,
-          text: validatedData.body,
-        }
+            from: validatedData.fromAddress,
+            to: validatedData.to,
+            subject: validatedData.subject,
+            text: validatedData.body,
+          }
 
     const { data, error } = await resend.emails.send(emailData)
 

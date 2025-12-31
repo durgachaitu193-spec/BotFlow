@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { useQueryClient } from '@tanstack/react-query'
 import { v4 as uuidv4 } from 'uuid'
-import { createLogger } from '@sim/logger'
 import { buildTraceSpans } from '@/lib/logs/execution/trace-spans/trace-spans'
 import { processStreamingBlockLogs } from '@/lib/tokenization'
 import {
@@ -378,7 +378,7 @@ export function useWorkflowExecution() {
                     if (isUploadErrorCapable(workflowInput)) {
                       try {
                         workflowInput.onUploadError(message)
-                      } catch { }
+                      } catch {}
                     }
                   }
                 }
@@ -389,7 +389,7 @@ export function useWorkflowExecution() {
                 if (isUploadErrorCapable(workflowInput)) {
                   try {
                     workflowInput.onUploadError('Unexpected error uploading files')
-                  } catch { }
+                  } catch {}
                 }
                 // Continue execution even if file upload fails
                 workflowInput.files = []
@@ -520,7 +520,7 @@ export function useWorkflowExecution() {
                 if (!result.metadata) {
                   result.metadata = { duration: 0, startTime: new Date().toISOString() }
                 }
-                ; (result.metadata as any).source = 'chat'
+                ;(result.metadata as any).source = 'chat'
 
                 // Update block logs with actual stream completion times
                 if (result.logs && streamCompletionTimes.size > 0) {
@@ -628,7 +628,7 @@ export function useWorkflowExecution() {
             if (!result.metadata) {
               result.metadata = { duration: 0, startTime: new Date().toISOString() }
             }
-            ; (result.metadata as any).source = 'chat'
+            ;(result.metadata as any).source = 'chat'
           }
 
           // Invalidate subscription query to update usage
@@ -882,11 +882,11 @@ export function useWorkflowExecution() {
           isClientSession: true,
           workflowStateOverride: executionWorkflowState
             ? {
-              blocks: executionWorkflowState.blocks,
-              edges: executionWorkflowState.edges,
-              loops: executionWorkflowState.loops,
-              parallels: executionWorkflowState.parallels,
-            }
+                blocks: executionWorkflowState.blocks,
+                edges: executionWorkflowState.edges,
+                loops: executionWorkflowState.loops,
+                parallels: executionWorkflowState.parallels,
+              }
             : undefined,
           callbacks: {
             onExecutionStarted: (data) => {
@@ -1126,7 +1126,7 @@ export function useWorkflowExecution() {
             blockName,
             blockType,
           })
-        } catch { }
+        } catch {}
       }
 
       errorResult = {

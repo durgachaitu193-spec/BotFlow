@@ -1,15 +1,15 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { usePrivy, useWallets, useCreateWallet } from '@privy-io/react-auth'
+import { useCreateWallet, usePrivy, useWallets } from '@privy-io/react-auth'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import { useSession } from '@/lib/auth/auth-client'
 import type { PrivyUserData } from '@/lib/privy/types'
 import { inter } from '@/app/_styles/fonts/inter/inter'
 import { soehne } from '@/app/_styles/fonts/soehne/soehne'
-import { useSession } from '@/lib/auth/auth-client'
 
 /**
  * Transform Privy user object to our PrivyUserData structure
@@ -29,12 +29,12 @@ const transformPrivyUser = (privyUser: any): PrivyUserData => {
     })),
     wallet: privyUser.wallet
       ? {
-        address: privyUser.wallet.address,
-        walletClientType: privyUser.wallet.walletClientType,
-        chainType: privyUser.wallet.chainType,
-        createdAt: privyUser.wallet.createdAt,
-        ...privyUser.wallet,
-      }
+          address: privyUser.wallet.address,
+          walletClientType: privyUser.wallet.walletClientType,
+          chainType: privyUser.wallet.chainType,
+          createdAt: privyUser.wallet.createdAt,
+          ...privyUser.wallet,
+        }
       : undefined,
     wallets: privyUser.wallets?.map((wallet: any) => ({
       address: wallet.address,
@@ -140,7 +140,11 @@ export default function PrivyLogin() {
 
     // If we're already processing this exact user, don't start again
     // Unless much time has passed (recovery case)
-    if (isProcessing.current && processedUserId.current === userId && now - lastRedirectAttempt.current < 10000) {
+    if (
+      isProcessing.current &&
+      processedUserId.current === userId &&
+      now - lastRedirectAttempt.current < 10000
+    ) {
       return
     }
 
@@ -228,14 +232,14 @@ export default function PrivyLogin() {
   if (authenticated && user) {
     if (error) {
       return (
-        <div className='space-y-4 text-center max-w-md mx-auto p-6 bg-black/20 rounded-2xl border border-red-500/20 backdrop-blur-sm'>
+        <div className='mx-auto max-w-md space-y-4 rounded-2xl border border-red-500/20 bg-black/20 p-6 text-center backdrop-blur-sm'>
           <h1 className={`${soehne.className} font-medium text-[24px] text-red-400 tracking-tight`}>
             Authentication Error
           </h1>
           <p className={`${inter.className} font-[380] text-[16px] text-gray-200`}>{error}</p>
           <Button
             onClick={() => window.location.reload()}
-            className='mt-4 bg-white/10 hover:bg-white/20 text-white border border-white/10'
+            className='mt-4 border border-white/10 bg-white/10 text-white hover:bg-white/20'
           >
             Retry Connection
           </Button>
@@ -257,7 +261,7 @@ export default function PrivyLogin() {
         <h1 className={`${soehne.className} font-medium text-[32px] text-white tracking-tight`}>
           {statusMessage}
         </h1>
-        <p className={`${inter.className} font-[380] text-[16px] text-gray-200 mt-2`}>
+        <p className={`${inter.className} mt-2 font-[380] text-[16px] text-gray-200`}>
           Please wait...
         </p>
       </div>
@@ -270,20 +274,9 @@ export default function PrivyLogin() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className='relative flex min-h-screen items-center justify-center px-4 m'
+      className='m relative flex min-h-screen items-center justify-center px-4'
     >
-      <div
-        className='
-      w-full max-w-md
-      rounded-3xl
-      bg-black/10
-      backdrop-blur-2xl
-      border border-black/20
-      shadow-2xl
-      p-8   
-      space-y-8         
-    '
-      >
+      <div className='w-full max-w-md space-y-8 rounded-3xl border border-black/20 bg-black/10 p-8 shadow-2xl backdrop-blur-2xl '>
         <div className='space-y-10 text-center'>
           <div className='flex justify-center'>
             <Image
@@ -305,15 +298,7 @@ export default function PrivyLogin() {
           <Button
             onClick={handleLogin}
             disabled={isLoading || !ready}
-            className='
-          auth-button-gradient
-          flex w-full items-center justify-center gap-2
-          rounded-[12px]
-          font-medium text-[17px]
-          text-white
-          py-4 
-          transition-all duration-200
-        '
+            className='auth-button-gradient flex w-full items-center justify-center gap-2 rounded-[12px] py-4 font-medium text-[17px] text-white transition-all duration-200 '
           >
             {!ready ? 'Initializing...' : isLoading ? 'Connecting...' : 'Connect Wallet / Sign In'}
           </Button>
@@ -326,4 +311,3 @@ export default function PrivyLogin() {
     </motion.div>
   )
 }
-

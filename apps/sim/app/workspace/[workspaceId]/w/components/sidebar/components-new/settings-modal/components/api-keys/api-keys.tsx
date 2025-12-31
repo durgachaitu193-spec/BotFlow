@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { Check, Copy, Info, Plus, Search } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { Button, Input as EmcnInput, Tooltip } from '@/components/emcn'
@@ -13,7 +14,6 @@ import {
 } from '@/components/emcn/components/modal/modal'
 import { Input, Skeleton, Switch } from '@/components/ui'
 import { useSession } from '@/lib/auth/auth-client'
-import { createLogger } from '@sim/logger'
 import { useUserPermissionsContext } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
 import {
   type ApiKey,

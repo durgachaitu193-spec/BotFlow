@@ -1,6 +1,5 @@
 // Triggering CSP reload
 import type { NextConfig } from 'next'
-
 import { env, getEnv, isTruthy } from './lib/core/config/env'
 import { isDev, isHosted } from './lib/core/config/environment'
 import { getMainCSPPolicy, getWorkflowExecutionCSPPolicy } from './lib/core/security/csp'
@@ -97,7 +96,6 @@ const nextConfig: NextConfig = {
     },
   },
   experimental: {
-
     turbopackFileSystemCacheForDev: true,
   },
 

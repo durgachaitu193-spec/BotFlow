@@ -1,3 +1,4 @@
+import { createLogger } from '@sim/logger'
 import {
   type Chain,
   createPublicClient,
@@ -7,7 +8,6 @@ import {
   http,
   parseEther,
 } from 'viem'
-import { createLogger } from '@sim/logger'
 import { DEFAULT_CHAIN } from './didRegistry'
 
 const logger = createLogger('TokenFactory')
@@ -313,11 +313,11 @@ export async function createToken(
                   rpcUrls: chain.rpcUrls.default.http,
                   blockExplorers: chain.blockExplorers
                     ? {
-                      default: {
-                        name: chain.blockExplorers.default.name,
-                        url: chain.blockExplorers.default.url,
-                      },
-                    }
+                        default: {
+                          name: chain.blockExplorers.default.name,
+                          url: chain.blockExplorers.default.url,
+                        },
+                      }
                     : undefined,
                 },
               ],

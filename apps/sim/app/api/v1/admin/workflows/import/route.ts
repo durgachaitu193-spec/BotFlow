@@ -16,9 +16,9 @@
 
 import { db } from '@sim/db'
 import { workflow, workspace } from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import { eq } from 'drizzle-orm'
 import { NextResponse } from 'next/server'
-import { createLogger } from '@sim/logger'
 import { saveWorkflowToNormalizedTables } from '@/lib/workflows/persistence/utils'
 import { withAdminAuth } from '@/app/api/v1/admin/middleware'
 import {
@@ -77,12 +77,12 @@ export const POST = withAdminAuth(async (request) => {
     const parsedWorkflow =
       typeof body.workflow === 'string'
         ? (() => {
-          try {
-            return JSON.parse(body.workflow)
-          } catch {
-            return null
-          }
-        })()
+            try {
+              return JSON.parse(body.workflow)
+            } catch {
+              return null
+            }
+          })()
         : body.workflow
 
     const {

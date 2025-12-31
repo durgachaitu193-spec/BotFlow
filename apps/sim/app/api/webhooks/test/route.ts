@@ -1,10 +1,10 @@
 import { db } from '@sim/db'
 import { webhook } from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import { eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { generateRequestId } from '@/lib/core/utils/request'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@sim/logger'
 
 const logger = createLogger('WebhookTestAPI')
 
@@ -168,7 +168,7 @@ export async function GET(request: NextRequest) {
         let responseText = ''
         try {
           responseText = await response.text()
-        } catch (_e) { }
+        } catch (_e) {}
 
         const success = status >= 200 && status < 300
 

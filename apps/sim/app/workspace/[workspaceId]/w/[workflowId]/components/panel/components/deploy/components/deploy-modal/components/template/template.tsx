@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { Loader2 } from 'lucide-react'
 import { Button, Combobox, Input, Label, Textarea } from '@/components/emcn'
 import {
@@ -12,7 +13,6 @@ import {
 } from '@/components/emcn/components/modal/modal'
 import { Skeleton, TagInput } from '@/components/ui'
 import { useSession } from '@/lib/auth/auth-client'
-import { createLogger } from '@sim/logger'
 import { WorkflowPreview } from '@/app/workspace/[workspaceId]/w/components/workflow-preview/workflow-preview'
 import {
   useCreateTemplate,
@@ -414,12 +414,12 @@ export function TemplateDeploy({
 
 interface TemplatePreviewContentProps {
   existingTemplate:
-  | {
-    id: string
-    state?: Partial<WorkflowState>
-  }
-  | null
-  | undefined
+    | {
+        id: string
+        state?: Partial<WorkflowState>
+      }
+    | null
+    | undefined
 }
 
 function TemplatePreviewContent({ existingTemplate }: TemplatePreviewContentProps) {

@@ -1,7 +1,7 @@
 import { db } from '@sim/db'
 import { workflowExecutionLogs } from '@sim/db/schema'
-import { and, avg, count, desc, eq, gte } from 'drizzle-orm'
 import { createLogger } from '@sim/logger'
+import { and, avg, count, desc, eq, gte } from 'drizzle-orm'
 
 const logger = createLogger('AlertRules')
 

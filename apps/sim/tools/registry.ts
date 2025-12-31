@@ -1150,6 +1150,13 @@ import {
 } from '@/tools/typeform'
 import type { ToolConfig } from '@/tools/types'
 import {
+  uniswapGetPoolInfoTool,
+  uniswapGetPriceTool,
+  uniswapGetQuoteTool,
+  uniswapGetTokenInfoTool,
+  uniswapSwapTool,
+} from '@/tools/uniswap'
+import {
   falaiVideoTool,
   lumaVideoTool,
   minimaxVideoTool,
@@ -1179,13 +1186,6 @@ import {
   wikipediaRandomPageTool,
   wikipediaSearchTool,
 } from '@/tools/wikipedia'
-import {
-  uniswapGetPriceTool,
-  uniswapGetTokenInfoTool,
-  uniswapGetPoolInfoTool,
-  uniswapGetQuoteTool,
-  uniswapSwapTool,
-} from '@/tools/uniswap'
 import {
   wordpressCreateCategoryTool,
   wordpressCreateCommentTool,

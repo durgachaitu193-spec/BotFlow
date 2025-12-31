@@ -20,20 +20,20 @@ export interface TeamsMention {
   id: number
   mentionText: string
   mentioned:
-  | {
-    user: {
-      id: string
-      displayName: string
-      userIdentityType?: string
-    }
-  }
-  | {
-    application: {
-      displayName: string
-      id: string
-      applicationIdentityType: 'bot'
-    }
-  }
+    | {
+        user: {
+          id: string
+          displayName: string
+          userIdentityType?: string
+        }
+      }
+    | {
+        application: {
+          displayName: string
+          id: string
+          applicationIdentityType: 'bot'
+        }
+      }
 }
 
 /**

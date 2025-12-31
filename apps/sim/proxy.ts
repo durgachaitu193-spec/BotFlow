@@ -1,7 +1,7 @@
+import { createLogger } from '@sim/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { isHosted } from './lib/core/config/environment'
 import { generateRuntimeCSP } from './lib/core/security/csp'
-import { createLogger } from '@sim/logger'
 
 const logger = createLogger('Proxy')
 

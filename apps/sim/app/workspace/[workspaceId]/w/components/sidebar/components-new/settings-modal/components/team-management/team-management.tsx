@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { Skeleton } from '@/components/ui'
 import { useSession } from '@/lib/auth/auth-client'
 import { DEFAULT_TEAM_TIER_COST_LIMIT } from '@/lib/billing/constants'
 import { checkEnterprisePlan } from '@/lib/billing/subscriptions/utils'
-import { createLogger } from '@sim/logger'
 import {
   generateSlug,
   getUsedSeats,
@@ -131,9 +131,9 @@ export function TeamManagement() {
       const workspaceInvitations =
         selectedWorkspaces.length > 0
           ? selectedWorkspaces.map((w) => ({
-            workspaceId: w.workspaceId,
-            permission: w.permission as 'admin' | 'write' | 'read',
-          }))
+              workspaceId: w.workspaceId,
+              permission: w.permission as 'admin' | 'write' | 'read',
+            }))
           : undefined
 
       await inviteMutation.mutateAsync({
@@ -395,7 +395,7 @@ export function TeamManagement() {
             selectedWorkspaces={selectedWorkspaces}
             userWorkspaces={adminWorkspaces}
             onInviteMember={handleInviteMember}
-            onLoadUserWorkspaces={async () => { }} // No-op: data is auto-loaded by React Query
+            onLoadUserWorkspaces={async () => {}} // No-op: data is auto-loaded by React Query
             onWorkspaceToggle={handleWorkspaceToggle}
             inviteSuccess={inviteSuccess}
             availableSeats={Math.max(0, totalSeats - usedSeats.used)}

@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
-import { getBaseUrl } from '@/lib/core/utils/urls'
 import { IntroductionClient } from '@/components/pre-login-view'
-
+import { getBaseUrl } from '@/lib/core/utils/urls'
 
 const baseUrl = getBaseUrl()
 

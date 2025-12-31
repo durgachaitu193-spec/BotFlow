@@ -1,7 +1,7 @@
 import { db } from '@sim/db'
 import { workflow } from '@sim/db/schema'
-import { eq } from 'drizzle-orm'
 import { createLogger } from '@sim/logger'
+import { eq } from 'drizzle-orm'
 import { getUserEntityPermissions } from '@/lib/workspaces/permissions/utils'
 
 const logger = createLogger('SocketPermissions')

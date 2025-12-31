@@ -318,10 +318,10 @@ export const useWorkflowStore = create<WorkflowStore>()(
         const newData = !parentId
           ? {}
           : {
-            ...block.data,
-            parentId,
-            extent,
-          }
+              ...block.data,
+              parentId,
+              extent,
+            }
 
         // For removal we already set data to {}; for setting a parent keep as-is
 
@@ -1026,8 +1026,8 @@ export const useWorkflowStore = create<WorkflowStore>()(
             ...get().deploymentStatuses,
             ...(deploymentStatus
               ? {
-                [activeWorkflowId]: deploymentStatus,
-              }
+                  [activeWorkflowId]: deploymentStatus,
+                }
               : {}),
           },
         }

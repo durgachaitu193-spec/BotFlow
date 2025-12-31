@@ -1,8 +1,8 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import type { TagSlot } from '@/lib/knowledge/constants'
 import { createLogger } from '@sim/logger'
+import type { TagSlot } from '@/lib/knowledge/constants'
 
 const logger = createLogger('useTagDefinitions')
 

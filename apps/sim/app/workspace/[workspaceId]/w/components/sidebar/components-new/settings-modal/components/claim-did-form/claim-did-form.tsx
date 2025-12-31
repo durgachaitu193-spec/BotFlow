@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { usePrivy, useWallets } from '@privy-io/react-auth'
+import { createLogger } from '@sim/logger'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Check, Loader2 } from 'lucide-react'
 import { type Chain, createPublicClient, createWalletClient, custom, http } from 'viem'
@@ -16,7 +17,6 @@ import {
   DID_REGISTRY_ADDRESS,
 } from '@/lib/contracts/didRegistry'
 import { fetchDIDForAddress } from '@/lib/did/utils'
-import { createLogger } from '@sim/logger'
 import { cn } from '@/lib/utils'
 import { inter } from '@/app/_styles/fonts/inter/inter'
 import { soehne } from '@/app/_styles/fonts/soehne/soehne'
@@ -67,7 +67,10 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
     const checkDID = async () => {
       if (walletAddress && selectedChain) {
         try {
-          const { did, username: fetchedUsername } = await fetchDIDForAddress(walletAddress, selectedChain)
+          const { did, username: fetchedUsername } = await fetchDIDForAddress(
+            walletAddress,
+            selectedChain
+          )
           if (did) {
             logger.info('User already has DID, updating profile...', { did })
 
@@ -226,7 +229,9 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
             } else {
               // Proceed if it's just an unsupported chain ID error from the wallet wrapper
               if (providerError.message?.includes('Unsupported chainId')) {
-                console.warn(`Network ${targetChain.name} may not be fully supported by wallet wrapper, but proceeding.`)
+                console.warn(
+                  `Network ${targetChain.name} may not be fully supported by wallet wrapper, but proceeding.`
+                )
               } else {
                 throw providerError
               }
@@ -254,13 +259,15 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
       logger.error('Network switch error:', error)
       // Even if it fails, if the user explicitly clicked it, we might want to select it
       // but let's warn them.
-      if (error.message?.includes('Unsupported chainId') || error.message?.includes('User rejected')) {
+      if (
+        error.message?.includes('Unsupported chainId') ||
+        error.message?.includes('User rejected')
+      ) {
         // User rejected, do nothing or show toast
         return false
-      } else {
-        // Some wallets throw errors even on success or partial success with custom chains
-        return false
       }
+      // Some wallets throw errors even on success or partial success with custom chains
+      return false
     } finally {
       setIsSwitchingNetwork(false)
     }
@@ -286,7 +293,9 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}))
-          throw new Error(errorData.details || errorData.error || 'Failed to check username availability')
+          throw new Error(
+            errorData.details || errorData.error || 'Failed to check username availability'
+          )
         }
 
         const data = await response.json()
@@ -456,7 +465,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
   }
 
   return (
-    <div className='flex flex-col h-screen'>
+    <div className='flex h-screen flex-col'>
       <div className='flex-1 overflow-y-auto p-6'>
         <div className='space-y-6'>
           {step !== 'success' && (
@@ -477,10 +486,10 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                 </svg>
               </div>
               <div className='space-y-2'>
-                <h2 className={`${soehne.className} text-xl font-medium text-foreground`}>
+                <h2 className={`${soehne.className} font-medium text-foreground text-xl`}>
                   {step === 'username' ? 'Claim Username' : 'Setup Deployment Identity'}
                 </h2>
-                <p className={`${inter.className} text-sm text-muted-foreground`}>
+                <p className={`${inter.className} text-muted-foreground text-sm`}>
                   {step === 'username'
                     ? 'Choose a unique username for your agent'
                     : 'You need a DID (Decentralized Identifier) to deploy agents.'}
@@ -500,7 +509,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
               >
                 {/* Network Selection */}
                 <div className='space-y-3'>
-                  <Label className='text-muted-foreground font-medium text-sm'>
+                  <Label className='font-medium text-muted-foreground text-sm'>
                     Select Network
                   </Label>
                   <div className='grid grid-cols-2 gap-3'>
@@ -511,19 +520,21 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                       }}
                       disabled={isSwitchingNetwork}
                       className={cn(
-                        'flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 relative overflow-hidden group',
+                        'group relative flex flex-col items-center justify-center overflow-hidden rounded-xl border-2 p-4 transition-all duration-200',
                         selectedChain.id === BSC_TESTNET.id
                           ? 'border-white bg-accent/50 shadow-md'
                           : 'border-white/10 bg-white/5 hover:border-white hover:bg-accent/50'
                       )}
                     >
                       <div className='absolute top-3 right-3'>
-                        <div className={cn(
-                          'h-4 w-4 rounded-full border flex items-center justify-center transition-all duration-200',
-                          selectedChain.id === BSC_TESTNET.id
-                            ? 'border-white bg-white'
-                            : 'border-muted-foreground/50'
-                        )}>
+                        <div
+                          className={cn(
+                            'flex h-4 w-4 items-center justify-center rounded-full border transition-all duration-200',
+                            selectedChain.id === BSC_TESTNET.id
+                              ? 'border-white bg-white'
+                              : 'border-muted-foreground/50'
+                          )}
+                        >
                           {selectedChain.id === BSC_TESTNET.id && (
                             <div className='h-1.5 w-1.5 rounded-full bg-black' />
                           )}
@@ -531,7 +542,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                       </div>
 
                       <div className='mb-2 rounded-full bg-background p-2 shadow-sm dark:bg-muted/50'>
-                        <div className='h-6 w-6 flex items-center justify-center'>
+                        <div className='flex h-6 w-6 items-center justify-center'>
                           <svg
                             width='100%'
                             height='100%'
@@ -547,11 +558,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                           </svg>
                         </div>
                       </div>
-                      <span
-                        className={cn(
-                          'font-medium text-sm transition-colors duration-200'
-                        )}
-                      >
+                      <span className={cn('font-medium text-sm transition-colors duration-200')}>
                         BSC Testnet
                       </span>
                     </button>
@@ -563,19 +570,21 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                       }}
                       disabled={isSwitchingNetwork}
                       className={cn(
-                        'flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 relative overflow-hidden group',
+                        'group relative flex flex-col items-center justify-center overflow-hidden rounded-xl border-2 p-4 transition-all duration-200',
                         selectedChain.id === BSC_MAINNET.id
                           ? 'border-white bg-accent/50 shadow-md'
                           : 'border-white/10 bg-white/5 hover:border-white hover:bg-accent/50'
                       )}
                     >
                       <div className='absolute top-3 right-3'>
-                        <div className={cn(
-                          'h-4 w-4 rounded-full border flex items-center justify-center transition-all duration-200',
-                          selectedChain.id === BSC_MAINNET.id
-                            ? 'border-white bg-white'
-                            : 'border-muted-foreground/50'
-                        )}>
+                        <div
+                          className={cn(
+                            'flex h-4 w-4 items-center justify-center rounded-full border transition-all duration-200',
+                            selectedChain.id === BSC_MAINNET.id
+                              ? 'border-white bg-white'
+                              : 'border-muted-foreground/50'
+                          )}
+                        >
                           {selectedChain.id === BSC_MAINNET.id && (
                             <div className='h-1.5 w-1.5 rounded-full bg-black' />
                           )}
@@ -583,7 +592,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                       </div>
 
                       <div className='mb-2 rounded-full bg-background p-2 shadow-sm dark:bg-muted/50'>
-                        <div className='h-6 w-6 flex items-center justify-center'>
+                        <div className='flex h-6 w-6 items-center justify-center'>
                           <svg
                             width='100%'
                             height='100%'
@@ -599,11 +608,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                           </svg>
                         </div>
                       </div>
-                      <span
-                        className={cn(
-                          'font-medium text-sm transition-colors duration-200'
-                        )}
-                      >
+                      <span className={cn('font-medium text-sm transition-colors duration-200')}>
                         BSC Mainnet
                       </span>
                     </button>
@@ -614,7 +619,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                   onClick={hasWallets ? handleCreateDIDClick : connectWallet}
                   disabled={!ready}
                   className={cn(
-                    'w-full gap-2 font-medium h-11',
+                    'h-11 w-full gap-2 font-medium',
                     'bg-[var(--brand-primary-hover-hex)] hover:bg-[var(--brand-primary-hover-hex)]',
                     'shadow-[0_0_0_0_var(--brand-primary-hover-hex)] hover:shadow-[0_0_0_4px_rgba(127,47,255,0.15)]',
                     'text-white transition-all duration-200',
@@ -633,7 +638,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                 className='space-y-6'
               >
                 <div className='space-y-2'>
-                  <Label className='text-muted-foreground font-medium text-sm'>Username</Label>
+                  <Label className='font-medium text-muted-foreground text-sm'>Username</Label>
                   <div className='relative'>
                     <Input
                       value={username}
@@ -644,14 +649,14 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                       }}
                       placeholder='Enter username'
                       className={cn(
-                        'bg-muted/30 border-border text-foreground pr-10 h-11 transition-all duration-200',
+                        'h-11 border-border bg-muted/30 pr-10 text-foreground transition-all duration-200',
                         usernameAvailable === true &&
-                        'border-green-500 focus-visible:ring-green-500/20 focus-visible:border-green-500',
+                          'border-green-500 focus-visible:border-green-500 focus-visible:ring-green-500/20',
                         usernameAvailable === false &&
-                        'border-destructive focus-visible:ring-destructive/20 focus-visible:border-destructive'
+                          'border-destructive focus-visible:border-destructive focus-visible:ring-destructive/20'
                       )}
                     />
-                    <div className='absolute right-3 top-1/2 -translate-y-1/2'>
+                    <div className='-translate-y-1/2 absolute top-1/2 right-3'>
                       {isCheckingUsername ? (
                         <Loader2 className='h-4 w-4 animate-spin text-muted-foreground' />
                       ) : usernameAvailable === true ? (
@@ -661,19 +666,17 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                   </div>
                   <div className='h-5'>
                     {usernameAvailable === true && (
-                      <p className='text-xs text-green-500 font-medium flex items-center gap-1'>
+                      <p className='flex items-center gap-1 font-medium text-green-500 text-xs'>
                         <Check className='h-3 w-3' /> Username available
                       </p>
                     )}
                     {usernameAvailable === false && (
-                      <p className='text-xs text-destructive font-medium'>
+                      <p className='font-medium text-destructive text-xs'>
                         Username is already taken
                       </p>
                     )}
                     {checkError && (
-                      <p className='text-xs text-destructive font-medium'>
-                        {checkError}
-                      </p>
+                      <p className='font-medium text-destructive text-xs'>{checkError}</p>
                     )}
                   </div>
                 </div>
@@ -682,7 +685,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                   <Button
                     variant='outline'
                     onClick={() => setStep('initial')}
-                    className='flex-1 text-muted-foreground hover:text-foreground h-11'
+                    className='h-11 flex-1 text-muted-foreground hover:text-foreground'
                   >
                     Back
                   </Button>
@@ -690,7 +693,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                     onClick={handleCreateDID}
                     disabled={isClaiming || !username || usernameAvailable !== true}
                     className={cn(
-                      'flex-1 gap-2 font-medium h-11',
+                      'h-11 flex-1 gap-2 font-medium',
                       'bg-[var(--brand-primary-hover-hex)] hover:bg-[var(--brand-primary-hover-hex)]',
                       'shadow-[0_0_0_0_var(--brand-primary-hover-hex)] hover:shadow-[0_0_0_4px_rgba(127,47,255,0.15)]',
                       'text-white transition-all duration-200',
@@ -709,7 +712,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                 </div>
 
                 {claimStatus === 'error' && (
-                  <p className='text-sm text-destructive text-center bg-destructive/10 p-2 rounded-md'>
+                  <p className='rounded-md bg-destructive/10 p-2 text-center text-destructive text-sm'>
                     Failed to create DID. Please try again.
                   </p>
                 )}
@@ -721,12 +724,12 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 className='flex flex-col items-center justify-center space-y-6 py-8'
               >
-                <div className='h-24 w-24 rounded-full bg-green-500/10 flex items-center justify-center'>
+                <div className='flex h-24 w-24 items-center justify-center rounded-full bg-green-500/10'>
                   <Check className='h-12 w-12 text-green-500' />
                 </div>
-                <div className='text-center space-y-2'>
-                  <h3 className='text-2xl font-semibold text-foreground'>DID Created!</h3>
-                  <p className='text-muted-foreground max-w-[280px]'>
+                <div className='space-y-2 text-center'>
+                  <h3 className='font-semibold text-2xl text-foreground'>DID Created!</h3>
+                  <p className='max-w-[280px] text-muted-foreground'>
                     Your decentralized identity has been successfully created and linked to your
                     wallet.
                   </p>
@@ -734,7 +737,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                 <Button
                   onClick={onSuccess}
                   className={cn(
-                    'w-full max-w-[200px] gap-2 font-medium h-11',
+                    'h-11 w-full max-w-[200px] gap-2 font-medium',
                     'bg-green-600 hover:bg-green-700',
                     'text-white transition-all duration-200'
                   )}
@@ -744,8 +747,8 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
               </motion.div>
             )}
           </AnimatePresence>
-        </div >
-      </div >
-    </div >
+        </div>
+      </div>
+    </div>
   )
 }

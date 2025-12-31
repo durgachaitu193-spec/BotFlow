@@ -2,8 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { StatusCodes } from "http-status-codes";
-import { ERROR_CODES, ERROR_MESSAGES } from "./utils/constants/errors";
+import { StatusCodes } from 'http-status-codes'
+import { ERROR_CODES, ERROR_MESSAGES } from './utils/constants/errors'
 
 /**
  * @param {string} name
@@ -32,10 +32,8 @@ import { ERROR_CODES, ERROR_MESSAGES } from "./utils/constants/errors";
  */
 export class ClientError extends Error {
   constructor(name?: string, message?: string) {
-    super(
-      message || ERROR_MESSAGES[String(name)] || ERROR_MESSAGES.CLIENT_ERROR,
-    );
-    this.name = name || ERROR_CODES.CLIENT_ERROR;
+    super(message || ERROR_MESSAGES[String(name)] || ERROR_MESSAGES.CLIENT_ERROR)
+    this.name = name || ERROR_CODES.CLIENT_ERROR
   }
 }
 
@@ -72,13 +70,11 @@ export class ClientError extends Error {
  * });
  */
 export class APIError extends Error {
-  status: StatusCodes;
+  status: StatusCodes
 
   constructor(name?: string, status?: StatusCodes, message?: string) {
-    super(
-      message || ERROR_MESSAGES[String(name)] || ERROR_MESSAGES.API_FETCH_ERROR,
-    );
-    this.name = name || ERROR_CODES.API_FETCH_ERROR;
-    this.status = status || StatusCodes.INTERNAL_SERVER_ERROR;
+    super(message || ERROR_MESSAGES[String(name)] || ERROR_MESSAGES.API_FETCH_ERROR)
+    this.name = name || ERROR_CODES.API_FETCH_ERROR
+    this.status = status || StatusCodes.INTERNAL_SERVER_ERROR
   }
 }

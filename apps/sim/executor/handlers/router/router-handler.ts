@@ -1,5 +1,5 @@
-import { getBaseUrl } from '@/lib/core/utils/urls'
 import { createLogger } from '@sim/logger'
+import { getBaseUrl } from '@/lib/core/utils/urls'
 import { generateRouterPrompt } from '@/blocks/blocks/router'
 import type { BlockOutput } from '@/blocks/types'
 import { BlockType, DEFAULTS, HTTP, isAgentBlockType, ROUTER } from '@/executor/consts'
@@ -13,7 +13,7 @@ const logger = createLogger('RouterBlockHandler')
  * Handler for Router blocks that dynamically select execution paths.
  */
 export class RouterBlockHandler implements BlockHandler {
-  constructor(private pathTracker?: any) { }
+  constructor(private pathTracker?: any) {}
 
   canHandle(block: SerializedBlock): boolean {
     return block.metadata?.id === BlockType.ROUTER
@@ -64,7 +64,7 @@ export class RouterBlockHandler implements BlockHandler {
           if (errorData.error) {
             errorMessage = errorData.error
           }
-        } catch (_e) { }
+        } catch (_e) {}
         throw new Error(errorMessage)
       }
 

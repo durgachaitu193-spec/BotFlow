@@ -12,8 +12,8 @@
 
 import { db } from '@sim/db'
 import { user } from '@sim/db/schema'
-import { count } from 'drizzle-orm'
 import { createLogger } from '@sim/logger'
+import { count } from 'drizzle-orm'
 import { withAdminAuth } from '@/app/api/v1/admin/middleware'
 import { internalErrorResponse, listResponse } from '@/app/api/v1/admin/responses'
 import {

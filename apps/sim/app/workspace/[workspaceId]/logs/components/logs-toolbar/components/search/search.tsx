@@ -179,7 +179,7 @@ export function AutocompleteSearch({
                   className={cn(
                     'h-6 shrink-0 cursor-pointer whitespace-nowrap rounded-md px-2 text-[11px]',
                     highlightedBadgeIndex === index &&
-                    'ring-1 ring-[var(--border-focus)] ring-offset-1 ring-offset-[var(--surface-5)]'
+                      'ring-1 ring-[var(--border-focus)] ring-offset-1 ring-offset-[var(--surface-5)]'
                   )}
                   onClick={() => removeBadge(index)}
                   onKeyDown={(e) => {
@@ -312,7 +312,7 @@ export function AutocompleteSearch({
                             {suggestion.value !== suggestion.label && (
                               <div className='shrink-0 font-mono text-[11px] text-[var(--text-muted)]'>
                                 {suggestion.category === 'workflow' ||
-                                  suggestion.category === 'folder'
+                                suggestion.category === 'folder'
                                   ? `${suggestion.category}:`
                                   : ''}
                               </div>

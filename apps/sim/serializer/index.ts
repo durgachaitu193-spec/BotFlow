@@ -1,5 +1,5 @@
-import type { Edge } from 'reactflow'
 import { createLogger } from '@sim/logger'
+import type { Edge } from 'reactflow'
 import { BlockPathCalculator } from '@/lib/workflows/blocks/block-path-calculator'
 import { getBlock } from '@/blocks'
 import type { SubBlockConfig } from '@/blocks/types'
@@ -351,8 +351,8 @@ export class Serializer {
         // Include response format fields if available
         ...(params.responseFormat
           ? {
-            responseFormat: this.parseResponseFormatSafely(params.responseFormat),
-          }
+              responseFormat: this.parseResponseFormatSafely(params.responseFormat),
+            }
           : {}),
       },
       metadata: {
@@ -555,17 +555,17 @@ export class Serializer {
     const evalCond = (
       condition:
         | {
-          field: string
-          value: any
-          not?: boolean
-          and?: { field: string; value: any; not?: boolean }
-        }
+            field: string
+            value: any
+            not?: boolean
+            and?: { field: string; value: any; not?: boolean }
+          }
         | (() => {
-          field: string
-          value: any
-          not?: boolean
-          and?: { field: string; value: any; not?: boolean }
-        })
+            field: string
+            value: any
+            not?: boolean
+            and?: { field: string; value: any; not?: boolean }
+          })
         | undefined,
       values: Record<string, any>
     ): boolean => {
@@ -575,7 +575,7 @@ export class Serializer {
 
       const valueMatch = Array.isArray(actual.value)
         ? fieldValue != null &&
-        (actual.not ? !actual.value.includes(fieldValue) : actual.value.includes(fieldValue))
+          (actual.not ? !actual.value.includes(fieldValue) : actual.value.includes(fieldValue))
         : actual.not
           ? fieldValue !== actual.value
           : fieldValue === actual.value
@@ -583,16 +583,16 @@ export class Serializer {
       const andMatch = !actual.and
         ? true
         : (() => {
-          const andFieldValue = values[actual.and!.field]
-          return Array.isArray(actual.and!.value)
-            ? andFieldValue != null &&
-            (actual.and!.not
-              ? !actual.and!.value.includes(andFieldValue)
-              : actual.and!.value.includes(andFieldValue))
-            : actual.and!.not
-              ? andFieldValue !== actual.and!.value
-              : andFieldValue === actual.and!.value
-        })()
+            const andFieldValue = values[actual.and!.field]
+            return Array.isArray(actual.and!.value)
+              ? andFieldValue != null &&
+                  (actual.and!.not
+                    ? !actual.and!.value.includes(andFieldValue)
+                    : actual.and!.value.includes(andFieldValue))
+              : actual.and!.not
+                ? andFieldValue !== actual.and!.value
+                : andFieldValue === actual.and!.value
+          })()
 
       return valueMatch && andMatch
     }

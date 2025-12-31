@@ -41,7 +41,7 @@ export function generateDummyAgentWallet(): `0x${string}` {
   // crypto.getRandomValues is available in both browser and Node.js environments
   // In Next.js, it's available globally in both client and server contexts
   const cryptoObj = typeof window !== 'undefined' ? window.crypto : globalThis.crypto
-  if (cryptoObj && cryptoObj.getRandomValues) {
+  if (cryptoObj?.getRandomValues) {
     cryptoObj.getRandomValues(randomBytes)
   } else {
     // Fallback: use Math.random (less secure but works everywhere)

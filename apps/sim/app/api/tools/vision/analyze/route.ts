@@ -1,8 +1,8 @@
+import { createLogger } from '@sim/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { checkHybridAuth } from '@/lib/auth/hybrid'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@sim/logger'
 import { processSingleFileToUserFile } from '@/lib/uploads/utils/file-utils'
 import { downloadFileFromStorage } from '@/lib/uploads/utils/file-utils.server'
 
@@ -210,12 +210,12 @@ export async function POST(request: NextRequest) {
           : data.usage?.total_tokens,
         usage: data.usage
           ? {
-            input_tokens: data.usage.input_tokens,
-            output_tokens: data.usage.output_tokens,
-            total_tokens:
-              data.usage.total_tokens ||
-              (data.usage.input_tokens || 0) + (data.usage.output_tokens || 0),
-          }
+              input_tokens: data.usage.input_tokens,
+              output_tokens: data.usage.output_tokens,
+              total_tokens:
+                data.usage.total_tokens ||
+                (data.usage.input_tokens || 0) + (data.usage.output_tokens || 0),
+            }
           : undefined,
       },
     })

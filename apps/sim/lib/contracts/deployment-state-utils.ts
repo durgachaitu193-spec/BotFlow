@@ -1,6 +1,6 @@
 import { createLogger } from '@sim/logger'
-import { updateDeploymentState } from './agentRegistry'
 import type { WorkflowState } from '@/stores/workflows/workflow/types'
+import { updateDeploymentState } from './agentRegistry'
 
 const logger = createLogger('DeploymentStateUtils')
 
@@ -105,4 +105,3 @@ export async function getAgentIdForWorkflow(workflowId: string): Promise<string 
     return null
   }
 }
-

@@ -28,4 +28,3 @@ export interface PrivyUserData {
   }>
   metadata?: Record<string, any>
 }
-

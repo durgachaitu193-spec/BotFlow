@@ -1,8 +1,8 @@
+import { createLogger } from '@sim/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { checkHybridAuth } from '@/lib/auth/hybrid'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@sim/logger'
 import { processFilesToUserFiles } from '@/lib/uploads/utils/file-utils'
 import { downloadFileFromStorage } from '@/lib/uploads/utils/file-utils.server'
 
@@ -58,14 +58,14 @@ export async function POST(request: NextRequest) {
 
     const ccRecipients = validatedData.cc
       ? validatedData.cc.split(',').map((email) => ({
-        emailAddress: { address: email.trim() },
-      }))
+          emailAddress: { address: email.trim() },
+        }))
       : undefined
 
     const bccRecipients = validatedData.bcc
       ? validatedData.bcc.split(',').map((email) => ({
-        emailAddress: { address: email.trim() },
-      }))
+          emailAddress: { address: email.trim() },
+        }))
       : undefined
 
     const message: any = {

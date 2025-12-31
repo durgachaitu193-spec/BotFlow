@@ -94,13 +94,13 @@ export const cerebrasProvider: ProviderConfig = {
       // Transform tools to Cerebras format if provided
       const tools = request.tools?.length
         ? request.tools.map((tool) => ({
-          type: 'function',
-          function: {
-            name: tool.id,
-            description: tool.description,
-            parameters: tool.parameters,
-          },
-        }))
+            type: 'function',
+            function: {
+              name: tool.id,
+              description: tool.description,
+              parameters: tool.parameters,
+            },
+          }))
         : undefined
 
       // Build the request payload
@@ -513,9 +513,9 @@ export const cerebrasProvider: ProviderConfig = {
               toolCalls:
                 toolCalls.length > 0
                   ? {
-                    list: toolCalls,
-                    count: toolCalls.length,
-                  }
+                      list: toolCalls,
+                      count: toolCalls.length,
+                    }
                   : undefined,
               providerTiming: {
                 startTime: providerStartTimeISO,

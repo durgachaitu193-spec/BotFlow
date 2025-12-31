@@ -1,56 +1,53 @@
-"use client";
+'use client'
 
-import React from "react";
-import DashboardLayout from "@/components/DashboardLayout";
-import SpotlightAgent from "@/components/SpotlightAgent";
-import TrendingAgents from "@/components/TrendingAgents";
-import LogsTable from "@/components/LogsTable";
+import DashboardLayout from '@/components/DashboardLayout'
+import LogsTable from '@/components/LogsTable'
+import SpotlightAgent from '@/components/SpotlightAgent'
+import TrendingAgents from '@/components/TrendingAgents'
 
 export default function Home() {
   return (
     <DashboardLayout>
-      <div className="relative isolate w-full">
+      <div className='relative isolate w-full'>
         {/* Background Sections */}
-        <div className="absolute top-0 left-0 right-0 -z-10 w-full h-[800px] pointer-events-none">
-          <div className="relative w-full h-full">
+        <div className='-z-10 pointer-events-none absolute top-0 right-0 left-0 h-[800px] w-full'>
+          <div className='relative h-full w-full'>
             <img
-              src="/background/launchpadbackground1.png"
-              alt=""
-              className="absolute inset-0 w-full h-full object-cover"
+              src='/background/launchpadbackground1.png'
+              alt=''
+              className='absolute inset-0 h-full w-full object-cover'
             />
             <div
-              className="absolute inset-0"
+              className='absolute inset-0'
               style={{
-                background:
-                  "linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, #000000 100%)",
+                background: 'linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, #000000 100%)',
               }}
             />
           </div>
         </div>
 
-        <div className="absolute top-[800px] left-0 right-0 -z-10 w-full h-[800px] pointer-events-none">
-          <div className="relative w-full h-full">
+        <div className='-z-10 pointer-events-none absolute top-[800px] right-0 left-0 h-[800px] w-full'>
+          <div className='relative h-full w-full'>
             <img
-              src="/background/launchpadbackground2.png"
-              alt=""
-              className="absolute inset-0 w-full h-full object-cover"
+              src='/background/launchpadbackground2.png'
+              alt=''
+              className='absolute inset-0 h-full w-full object-cover'
             />
             <div
-              className="absolute inset-0"
+              className='absolute inset-0'
               style={{
-                background:
-                  "linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, #000000 100%)",
+                background: 'linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, #000000 100%)',
               }}
             />
           </div>
         </div>
 
         {/* Top Section: Trending & Spotlight */}
-        <div className="mb-6">
+        <div className='mb-6'>
           <TrendingAgents />
         </div>
 
-        <div className="grid grid-cols-1">
+        <div className='grid grid-cols-1'>
           <SpotlightAgent />
         </div>
         {/* <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -85,7 +82,7 @@ export default function Home() {
 
           </div>
         </div> */}
-        <div className="mt-6 grid grid-cols-1">
+        <div className='mt-6 grid grid-cols-1'>
           {/* <div className="md:col-span-2 lg:col-span-2">
             <div className="mb-6 flex items-center justify-between">
               <h3 className="text-xl font-bold text-text-primary">Live Agents</h3>
@@ -107,10 +104,10 @@ export default function Home() {
 
           {/* <TrendingTemplates /> */}
         </div>
-        <div className="grid grid-cols-1">
+        <div className='grid grid-cols-1'>
           <LogsTable />
         </div>
       </div>
     </DashboardLayout>
-  );
+  )
 }

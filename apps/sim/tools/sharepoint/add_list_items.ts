@@ -70,9 +70,9 @@ export const addListItemTool: ToolConfig<SharepointToolParams, SharepointAddList
 
       const providedFields =
         typeof params.listItemFields === 'object' &&
-          params.listItemFields !== null &&
-          'fields' in (params.listItemFields as Record<string, unknown>) &&
-          Object.keys(params.listItemFields as Record<string, unknown>).length === 1
+        params.listItemFields !== null &&
+        'fields' in (params.listItemFields as Record<string, unknown>) &&
+        Object.keys(params.listItemFields as Record<string, unknown>).length === 1
           ? ((params.listItemFields as any).fields as Record<string, unknown>)
           : (params.listItemFields as Record<string, unknown>)
 

@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { createLogger } from '@sim/logger'
+import { cookies } from 'next/headers'
+import { NextResponse } from 'next/server'
 
 const logger = createLogger('PrivyLogout')
 

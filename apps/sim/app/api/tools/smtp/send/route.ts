@@ -1,9 +1,9 @@
+import { createLogger } from '@sim/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
 import { z } from 'zod'
 import { checkHybridAuth } from '@/lib/auth/hybrid'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@sim/logger'
 import { processFilesToUserFiles } from '@/lib/uploads/utils/file-utils'
 import { downloadFileFromStorage } from '@/lib/uploads/utils/file-utils.server'
 
@@ -74,11 +74,11 @@ export async function POST(request: NextRequest) {
       tls:
         validatedData.smtpSecure === 'None'
           ? {
-            rejectUnauthorized: false,
-          }
+              rejectUnauthorized: false,
+            }
           : {
-            rejectUnauthorized: true,
-          },
+              rejectUnauthorized: true,
+            },
     })
 
     const contentType = validatedData.contentType || 'text'

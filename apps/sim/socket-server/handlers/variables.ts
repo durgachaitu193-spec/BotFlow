@@ -1,7 +1,7 @@
 import { db } from '@sim/db'
 import { workflow } from '@sim/db/schema'
-import { eq } from 'drizzle-orm'
 import { createLogger } from '@sim/logger'
+import { eq } from 'drizzle-orm'
 import type { HandlerDependencies } from '@/socket-server/handlers/workflow'
 import type { AuthenticatedSocket } from '@/socket-server/middleware/auth'
 import type { RoomManager } from '@/socket-server/rooms/manager'

@@ -1,7 +1,7 @@
+import { createLogger } from '@sim/logger'
 import { generateInternalToken } from '@/lib/auth/internal'
 import { generateRequestId } from '@/lib/core/utils/request'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@sim/logger'
 import { parseMcpToolId } from '@/lib/mcp/utils'
 import type { ExecutionContext } from '@/executor/types'
 import type { ErrorInfo } from '@/tools/error-extractors'
@@ -204,10 +204,10 @@ export async function executeTool(
         // Preserve credential for downstream transforms while removing it from request payload
         // so we don't leak it to external services.
         if (contextParams.credential) {
-          ; (contextParams as any)._credentialId = contextParams.credential
+          ;(contextParams as any)._credentialId = contextParams.credential
         }
         if (workflowId) {
-          ; (contextParams as any)._workflowId = workflowId
+          ;(contextParams as any)._workflowId = workflowId
         }
         // Clean up params we don't need to pass to the actual tool
         contextParams.credential = undefined
@@ -353,10 +353,11 @@ export async function executeTool(
           } else if (error.data.message) {
             errorMessage = `${errorMessage} - ${error.data.message}`
           } else if (error.data.error) {
-            errorMessage = `${errorMessage} - ${typeof error.data.error === 'string'
+            errorMessage = `${errorMessage} - ${
+              typeof error.data.error === 'string'
                 ? error.data.error
                 : JSON.stringify(error.data.error)
-              }`
+            }`
           }
         }
 

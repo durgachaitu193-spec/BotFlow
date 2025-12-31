@@ -1,10 +1,10 @@
 import { randomUUID } from 'crypto'
-import { db, account } from '@sim/db'
+import { account, db } from '@sim/db'
+import { createLogger } from '@sim/logger'
 import { and, eq } from 'drizzle-orm'
 import { cookies } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'
 import { getEnv } from '@/lib/core/config/env'
-import { createLogger } from '@sim/logger'
 import { getBaseUrl } from '@/lib/core/utils/urls'
 
 const logger = createLogger('OAuthCallback')
@@ -106,7 +106,7 @@ export async function GET(
       const credentials = Buffer.from(
         `${providerConfig.clientId!}:${providerConfig.clientSecret!}`
       ).toString('base64')
-      tokenHeaders['Authorization'] = `Basic ${credentials}`
+      tokenHeaders.Authorization = `Basic ${credentials}`
       tokenBody = new URLSearchParams({
         grant_type: 'authorization_code',
         code,
@@ -223,7 +223,7 @@ export async function GET(
           Buffer.from(base64, 'base64')
             .toString()
             .split('')
-            .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+            .map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`)
             .join('')
         )
         const decoded = JSON.parse(jsonPayload)
@@ -331,9 +331,7 @@ export async function GET(
     const existingAccounts = await db
       .select()
       .from(account)
-      .where(
-        and(eq(account.userId, oauthState.userId), eq(account.providerId, providerId))
-      )
+      .where(and(eq(account.userId, oauthState.userId), eq(account.providerId, providerId)))
       .limit(1)
 
     const now = new Date()

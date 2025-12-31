@@ -4,5 +4,5 @@
  * @returns The sanitized tool name
  */
 export function stripCustomToolPrefix(name: string) {
-    return name.startsWith('custom_') ? name.replace('custom_', '') : name
+  return name.startsWith('custom_') ? name.replace('custom_', '') : name
 }

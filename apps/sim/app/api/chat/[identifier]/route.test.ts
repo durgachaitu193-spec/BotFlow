@@ -76,9 +76,9 @@ vi.mock('@/app/api/workflows/[id]/execute/route', () => ({
     logs: undefined,
     metadata: result.metadata
       ? {
-        ...result.metadata,
-        workflowConnections: undefined,
-      }
+          ...result.metadata,
+          workflowConnections: undefined,
+        }
       : undefined,
   })),
 }))

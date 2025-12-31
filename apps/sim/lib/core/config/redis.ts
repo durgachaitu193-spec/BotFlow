@@ -1,6 +1,6 @@
+import { createLogger } from '@sim/logger'
 import Redis from 'ioredis'
 import { env } from '@/lib/core/config/env'
-import { createLogger } from '@sim/logger'
 
 const logger = createLogger('Redis')
 
@@ -56,7 +56,7 @@ export function getRedisClient(): Redis | null {
       }
     })
 
-    globalRedisClient.on('connect', () => { })
+    globalRedisClient.on('connect', () => {})
 
     return globalRedisClient
   } catch (error) {

@@ -1,5 +1,6 @@
 import { db } from '@sim/db'
 import { account, workflow } from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import { and, eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
@@ -12,7 +13,6 @@ import {
 } from '@/lib/copilot/request-helpers'
 import { generateRequestId } from '@/lib/core/utils/request'
 import { getEffectiveDecryptedEnv } from '@/lib/environment/utils'
-import { createLogger } from '@sim/logger'
 import { refreshTokenIfNeeded } from '@/app/api/auth/oauth/utils'
 import { executeTool } from '@/tools'
 import { getTool } from '@/tools/utils'
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     try {
       const preview = JSON.stringify(body).slice(0, 300)
       logger.debug(`[${tracker.requestId}] Incoming execute-tool request`, { preview })
-    } catch { }
+    } catch {}
 
     const { toolCallId, toolName, arguments: toolArgs, workflowId } = ExecuteToolSchema.parse(body)
 

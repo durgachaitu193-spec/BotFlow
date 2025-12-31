@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { Check, ChevronDown, ExternalLink, Search } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button, Label } from '@/components/emcn'
@@ -13,7 +14,6 @@ import {
 } from '@/components/emcn/components/modal/modal'
 import { Input, Skeleton } from '@/components/ui'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@sim/logger'
 import { OAUTH_PROVIDERS } from '@/lib/oauth/oauth'
 import {
   type ServiceInfo,
@@ -149,7 +149,7 @@ export function Integrations({ onOpenChange, registerCloseHandler }: Integration
         }
       }
       prevConnectedIdsRef.current = currentConnected
-    } catch { }
+    } catch {}
   }, [services])
 
   // On mount, register a close handler so the parent modal can delegate close events here
@@ -165,7 +165,7 @@ export function Integrations({ onOpenChange, registerCloseHandler }: Integration
             })
           )
         }
-      } catch { }
+      } catch {}
       onOpenChange?.(open)
     }
     registerCloseHandler(handle)
@@ -322,7 +322,7 @@ export function Integrations({ onOpenChange, registerCloseHandler }: Integration
                       className={cn(
                         'flex items-center justify-between',
                         pendingService === service.id &&
-                        '-m-[8px] rounded-[8px] bg-[var(--bg)] p-[8px]'
+                          '-m-[8px] rounded-[8px] bg-[var(--bg)] p-[8px]'
                       )}
                       ref={pendingService === service.id ? pendingServiceRef : undefined}
                     >

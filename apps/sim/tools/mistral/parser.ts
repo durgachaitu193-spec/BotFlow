@@ -1,5 +1,5 @@
-import { getBaseUrl } from '@/lib/core/utils/urls'
 import { createLogger } from '@sim/logger'
+import { getBaseUrl } from '@/lib/core/utils/urls'
 import type { MistralParserInput, MistralParserOutput } from '@/tools/mistral/types'
 import type { ToolConfig } from '@/tools/types'
 
@@ -142,8 +142,8 @@ export const mistralParserTool: ToolConfig<MistralParserInput, MistralParserOutp
         if (url.hostname.includes('drive.google.com') || url.hostname.includes('docs.google.com')) {
           throw new Error(
             'Google Drive links are not supported by the Mistral OCR API. ' +
-            'Please upload your PDF to a public web server or provide a direct download link ' +
-            'that ends with .pdf extension.'
+              'Please upload your PDF to a public web server or provide a direct download link ' +
+              'that ends with .pdf extension.'
           )
         }
 
@@ -154,14 +154,14 @@ export const mistralParserTool: ToolConfig<MistralParserInput, MistralParserOutp
           if (!pathname.includes('pdf')) {
             logger.warn(
               'Warning: URL does not appear to point to a PDF document. ' +
-              'The Mistral OCR API is designed to work with PDF files. ' +
-              'Please ensure your URL points to a valid PDF document (ideally ending with .pdf extension).'
+                'The Mistral OCR API is designed to work with PDF files. ' +
+                'Please ensure your URL points to a valid PDF document (ideally ending with .pdf extension).'
             )
           } else {
             // If "pdf" is in the URL but not at the end, give a different warning
             logger.warn(
               'Warning: URL contains "pdf" but does not end with .pdf extension. ' +
-              'This might still work if the server returns a valid PDF document despite the missing extension.'
+                'This might still work if the server returns a valid PDF document despite the missing extension.'
             )
           }
         }
@@ -342,15 +342,15 @@ export const mistralParserTool: ToolConfig<MistralParserInput, MistralParserOutp
       const usageInfo =
         ocrResult.usage_info && typeof ocrResult.usage_info === 'object'
           ? {
-            pagesProcessed:
-              typeof ocrResult.usage_info.pages_processed === 'number'
-                ? ocrResult.usage_info.pages_processed
-                : Number(ocrResult.usage_info.pages_processed),
-            docSizeBytes:
-              typeof ocrResult.usage_info.doc_size_bytes === 'number'
-                ? ocrResult.usage_info.doc_size_bytes
-                : Number(ocrResult.usage_info.doc_size_bytes),
-          }
+              pagesProcessed:
+                typeof ocrResult.usage_info.pages_processed === 'number'
+                  ? ocrResult.usage_info.pages_processed
+                  : Number(ocrResult.usage_info.pages_processed),
+              docSizeBytes:
+                typeof ocrResult.usage_info.doc_size_bytes === 'number'
+                  ? ocrResult.usage_info.doc_size_bytes
+                  : Number(ocrResult.usage_info.doc_size_bytes),
+            }
           : undefined
 
       // Create metadata object

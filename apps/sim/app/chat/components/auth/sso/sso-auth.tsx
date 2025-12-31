@@ -1,12 +1,12 @@
 'use client'
 
 import { type KeyboardEvent, useEffect, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@sim/logger'
 import { quickValidateEmail } from '@/lib/messaging/email/validation'
 import { inter } from '@/app/_styles/fonts/inter/inter'
 import { soehne } from '@/app/_styles/fonts/soehne/soehne'
@@ -178,8 +178,8 @@ export default function SSOAuth({
                     className={cn(
                       'rounded-[10px] shadow-sm transition-colors focus:border-gray-400 focus:ring-2 focus:ring-gray-100',
                       showEmailValidationError &&
-                      emailErrors.length > 0 &&
-                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                        emailErrors.length > 0 &&
+                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                     )}
                     autoFocus
                   />

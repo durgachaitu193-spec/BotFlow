@@ -1,7 +1,7 @@
 import { db } from '@sim/db'
 import { workspaceFiles } from '@sim/db/schema'
-import { and, eq } from 'drizzle-orm'
 import { createLogger } from '@sim/logger'
+import { and, eq } from 'drizzle-orm'
 import type { StorageContext } from '../shared/types'
 
 const logger = createLogger('FileMetadata')

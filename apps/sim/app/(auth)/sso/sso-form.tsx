@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -9,7 +10,6 @@ import { Label } from '@/components/ui/label'
 import { betterAuthClient } from '@/lib/auth/auth-client'
 import { env, isFalsy } from '@/lib/core/config/env'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@sim/logger'
 import { quickValidateEmail } from '@/lib/messaging/email/validation'
 import { inter } from '@/app/_styles/fonts/inter/inter'
 import { soehne } from '@/app/_styles/fonts/soehne/soehne'
@@ -208,8 +208,8 @@ export default function SSOForm() {
               className={cn(
                 'rounded-[10px] shadow-sm transition-colors focus:border-gray-400 focus:ring-2 focus:ring-gray-100',
                 showEmailValidationError &&
-                emailErrors.length > 0 &&
-                'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                  emailErrors.length > 0 &&
+                  'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
               )}
             />
             {showEmailValidationError && emailErrors.length > 0 && (

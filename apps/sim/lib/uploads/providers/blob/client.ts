@@ -139,9 +139,9 @@ export async function getPresignedUrl(key: string, expiresIn = 3600) {
     new StorageSharedKeyCredential(
       BLOB_CONFIG.accountName,
       BLOB_CONFIG.accountKey ??
-      (() => {
-        throw new Error('AZURE_ACCOUNT_KEY is required when using account name authentication')
-      })()
+        (() => {
+          throw new Error('AZURE_ACCOUNT_KEY is required when using account name authentication')
+        })()
     )
   ).toString()
 
@@ -201,9 +201,9 @@ export async function getPresignedUrlWithConfig(
     new StorageSharedKeyCredential(
       customConfig.accountName,
       customConfig.accountKey ??
-      (() => {
-        throw new Error('Account key is required when using account name authentication')
-      })()
+        (() => {
+          throw new Error('Account key is required when using account name authentication')
+        })()
     )
   ).toString()
 

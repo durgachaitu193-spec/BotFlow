@@ -1,6 +1,6 @@
+import { createLogger } from '@sim/logger'
 import { NextResponse } from 'next/server'
 import { validateAlphanumericId } from '@/lib/core/security/input-validation'
-import { createLogger } from '@sim/logger'
 
 export const dynamic = 'force-dynamic'
 

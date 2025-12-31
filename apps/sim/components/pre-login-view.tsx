@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 export function IntroductionClient() {
   const router = useRouter()
@@ -30,9 +30,7 @@ export function IntroductionClient() {
 
   return (
     <div className='fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-black'>
-      {isRedirecting && (
-        <div className='fixed inset-0 z-[200] bg-black' />
-      )}
+      {isRedirecting && <div className='fixed inset-0 z-[200] bg-black' />}
 
       <video
         autoPlay
@@ -46,7 +44,7 @@ export function IntroductionClient() {
           console.error('Video error:', e)
           handleTransition()
         }}
-        className='absolute inset-0 -z-10 h-full w-full object-cover'
+        className='-z-10 absolute inset-0 h-full w-full object-cover'
       >
         <source src='/video/video2.mp4' type='video/mp4' />
       </video>

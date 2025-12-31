@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useMemo, useRef, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { Plus, Search } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { Button, Input as EmcnInput } from '@/components/emcn'
@@ -12,7 +13,6 @@ import {
   ModalHeader,
 } from '@/components/emcn/components/modal/modal'
 import { Input } from '@/components/ui'
-import { createLogger } from '@sim/logger'
 import { checkEnvVarTrigger } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/editor/components/sub-block/components/env-var-dropdown'
 import {
   useCreateMcpServer,

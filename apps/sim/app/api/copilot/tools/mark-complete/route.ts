@@ -1,3 +1,4 @@
+import { createLogger } from '@sim/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { SIM_AGENT_API_URL_DEFAULT } from '@/lib/copilot/constants'
@@ -9,7 +10,6 @@ import {
   createUnauthorizedResponse,
 } from '@/lib/copilot/request-helpers'
 import { env } from '@/lib/core/config/env'
-import { createLogger } from '@sim/logger'
 
 const logger = createLogger('CopilotMarkToolCompleteAPI')
 
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
       logger.debug(`[${tracker.requestId}] Incoming mark-complete raw body preview`, {
         preview: `${bodyPreview}${bodyPreview.length === 300 ? '...' : ''}`,
       })
-    } catch { }
+    } catch {}
 
     const parsed = MarkCompleteSchema.parse(body)
 
@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
     } catch (_) {
       try {
         agentText = await agentRes.text()
-      } catch { }
+      } catch {}
     }
 
     logger.info(`[${tracker.requestId}] Agent responded to mark-complete`, {

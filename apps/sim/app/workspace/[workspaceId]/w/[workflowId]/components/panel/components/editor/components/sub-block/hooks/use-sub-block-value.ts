@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { isEqual } from 'lodash'
 import { createLogger } from '@sim/logger'
+import { isEqual } from 'lodash'
 import { useCollaborativeWorkflow } from '@/hooks/use-collaborative-workflow'
 import { getProviderFromModel } from '@/providers/utils'
 import { useWorkflowDiffStore } from '@/stores/workflow-diff/store'

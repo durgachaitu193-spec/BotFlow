@@ -1,11 +1,10 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { Layout, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components/emcn'
 import { Input } from '@/components/ui/input'
-import { createLogger } from '@sim/logger'
 import type { CredentialRequirement } from '@/lib/workflows/credentials/credential-extractor'
 import type { CreatorProfileDetails } from '@/app/_types/creator-profile'
 import { TemplateCard, TemplateCardSkeleton } from '@/app/templates/components/template-card'
@@ -89,7 +88,6 @@ export default function Templates({
     const query = debouncedSearchQuery.toLowerCase()
 
     return templates.filter((template) => {
-
       if (!query) return true
 
       const searchableText = [template.name, template.details?.tagline, template.creator?.name]
@@ -149,7 +147,7 @@ export default function Templates({
 
           <div className='mt-[24px] h-[1px] w-full border-[var(--border)] border-t' />
 
-          <div className='mt-[24px] grid grid-cols-1 gap-x-[20px] gap-y-[40px] md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-8'>
+          <div className='mt-[24px] grid 3xl:grid-cols-6 4xl:grid-cols-8 grid-cols-1 gap-x-[20px] gap-y-[40px] md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
             {loading ? (
               Array.from({ length: 8 }).map((_, index) => (
                 <TemplateCardSkeleton key={`skeleton-${index}`} />

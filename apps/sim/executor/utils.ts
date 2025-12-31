@@ -113,7 +113,7 @@ export class StreamingResponseFormatProcessor implements ResponseFormatStreamPro
 
         return null
       }
-    } catch (e) { }
+    } catch (e) {}
 
     const openBraces = (buffer.match(/\{/g) || []).length
     const closeBraces = (buffer.match(/\}/g) || []).length
@@ -138,7 +138,7 @@ export class StreamingResponseFormatProcessor implements ResponseFormatStreamPro
 
           return null
         }
-      } catch (e) { }
+      } catch (e) {}
     }
 
     return null

@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react'
+import { createLogger } from '@sim/logger'
 import { useParams } from 'next/navigation'
 import type { Edge } from 'reactflow'
 import { useSession } from '@/lib/auth/auth-client'
-import { createLogger } from '@sim/logger'
 import { getBlockOutputs } from '@/lib/workflows/blocks/block-outputs'
 import { TriggerUtils } from '@/lib/workflows/triggers/triggers'
 import { useSocket } from '@/app/workspace/providers/socket-provider'
@@ -1684,7 +1684,7 @@ export function useCollaborativeWorkflow() {
 
         // Queue operation with processed name for server & other clients
         // Empty callback because local store is already updated above
-        executeQueuedOperation('add', 'variable', payloadWithProcessedName, () => { })
+        executeQueuedOperation('add', 'variable', payloadWithProcessedName, () => {})
       }
 
       return id

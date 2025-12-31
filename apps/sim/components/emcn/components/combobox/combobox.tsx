@@ -48,7 +48,7 @@ export type ComboboxOption = {
 
 export interface ComboboxProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'>,
-  VariantProps<typeof comboboxVariants> {
+    VariantProps<typeof comboboxVariants> {
   /** Available options for selection */
   options: ComboboxOption[]
   /** Current selected value */
@@ -570,7 +570,7 @@ const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
                           size === 'sm' ? 'py-[5px] text-[12px]' : 'py-[6px] text-sm',
                           'hover:bg-[var(--surface-11)]',
                           (!multiSelectValues || multiSelectValues.length === 0) &&
-                          'bg-[var(--surface-11)]'
+                            'bg-[var(--surface-11)]'
                         )}
                       >
                         <span className='flex-1 truncate text-[var(--text-primary)]'>

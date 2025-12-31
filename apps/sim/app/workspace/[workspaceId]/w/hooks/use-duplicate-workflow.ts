@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { useRouter } from 'next/navigation'
 import { createLogger } from '@sim/logger'
+import { useRouter } from 'next/navigation'
 import { useDuplicateWorkflowMutation } from '@/hooks/queries/workflows'
 import { useFolderStore } from '@/stores/folders/store'
 import { useWorkflowRegistry } from '@/stores/workflows/registry/store'

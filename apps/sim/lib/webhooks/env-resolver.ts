@@ -1,5 +1,5 @@
-import { getEffectiveDecryptedEnv } from '@/lib/environment/utils'
 import { createLogger } from '@sim/logger'
+import { getEffectiveDecryptedEnv } from '@/lib/environment/utils'
 import { extractEnvVarName, isEnvVarReference } from '@/executor/consts'
 
 const logger = createLogger('EnvResolver')

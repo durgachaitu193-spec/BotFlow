@@ -1,7 +1,7 @@
+import { createLogger } from '@sim/logger'
 import type { NextRequest, NextResponse } from 'next/server'
 import { checkHybridAuth } from '@/lib/auth/hybrid'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@sim/logger'
 import { createMcpErrorResponse } from '@/lib/mcp/utils'
 import { getUserEntityPermissions } from '@/lib/workspaces/permissions/utils'
 
@@ -67,7 +67,7 @@ async function validateMcpAuth(
         if (contentType?.includes('application/json')) {
           const body = await request.json()
           workspaceId = body.workspaceId
-            ; (request as any)._parsedBody = body
+          ;(request as any)._parsedBody = body
         }
       } catch (error) {
         logger.debug(`[${requestId}] Could not parse request body for workspaceId extraction`)

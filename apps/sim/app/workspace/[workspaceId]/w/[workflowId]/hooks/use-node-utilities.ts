@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { useReactFlow } from 'reactflow'
 import { createLogger } from '@sim/logger'
+import { useReactFlow } from 'reactflow'
 import { BLOCK_DIMENSIONS, CONTAINER_DIMENSIONS } from '@/lib/workflows/blocks/block-dimensions'
 
 const logger = createLogger('NodeUtilities')

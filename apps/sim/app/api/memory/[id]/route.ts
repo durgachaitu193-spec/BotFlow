@@ -1,10 +1,10 @@
 import { db } from '@sim/db'
 import { memory, workflowBlocks } from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import { and, eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@sim/logger'
 
 const logger = createLogger('MemoryByIdAPI')
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import clsx from 'clsx'
 import { Folder, FolderOpen, Pencil, Trash2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
@@ -16,7 +17,6 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { createLogger } from '@sim/logger'
 import { useUserPermissionsContext } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
 import { useDeleteFolderMutation, useUpdateFolder } from '@/hooks/queries/folders'
 import { type FolderTreeNode, useFolderStore } from '@/stores/folders/store'
@@ -92,7 +92,7 @@ export function FolderItem({
 
     // Set global drag state for validation in other components
     if (typeof window !== 'undefined') {
-      ; (window as any).currentDragFolderId = folder.id
+      ;(window as any).currentDragFolderId = folder.id
     }
   }
 
@@ -104,7 +104,7 @@ export function FolderItem({
 
     // Clear global drag state
     if (typeof window !== 'undefined') {
-      ; (window as any).currentDragFolderId = null
+      ;(window as any).currentDragFolderId = null
     }
   }
 
@@ -206,7 +206,7 @@ export function FolderItem({
                 className={clsx(
                   'relative flex h-[14px] w-[14px] items-center justify-center rounded transition-colors hover:bg-muted',
                   dragOver &&
-                  'before:pointer-events-none before:absolute before:inset-0 before:rounded before:bg-muted/20 before:ring-2 before:ring-muted-foreground/60'
+                    'before:pointer-events-none before:absolute before:inset-0 before:rounded before:bg-muted/20 before:ring-2 before:ring-muted-foreground/60'
                 )}
               >
                 {isExpanded ? (

@@ -311,8 +311,8 @@ export const useOperationQueueStore = create<OperationQueueState>((set, get) => 
 
     const nextOperation = currentRegisteredWorkflowId
       ? state.operations.find(
-        (op) => op.status === 'pending' && op.workflowId === currentRegisteredWorkflowId
-      )
+          (op) => op.status === 'pending' && op.workflowId === currentRegisteredWorkflowId
+        )
       : state.operations.find((op) => op.status === 'pending')
     if (!nextOperation) {
       return

@@ -28,8 +28,8 @@ export class VariablesBlockHandler implements BlockHandler {
         const existingEntry = assignment.variableId
           ? [assignment.variableId, ctx.workflowVariables[assignment.variableId]]
           : Object.entries(ctx.workflowVariables).find(
-            ([_, v]) => v.name === assignment.variableName
-          )
+              ([_, v]) => v.name === assignment.variableName
+            )
 
         if (existingEntry?.[1]) {
           const [id, variable] = existingEntry

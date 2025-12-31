@@ -9,10 +9,10 @@ import {
   useRef,
   useState,
 } from 'react'
+import { createLogger } from '@sim/logger'
 import { useParams } from 'next/navigation'
 import { io, type Socket } from 'socket.io-client'
 import { getEnv } from '@/lib/core/config/env'
-import { createLogger } from '@sim/logger'
 
 const logger = createLogger('SocketContext')
 
@@ -76,24 +76,24 @@ const SocketContext = createContext<SocketContextType>({
   isConnecting: false,
   currentWorkflowId: null,
   presenceUsers: [],
-  joinWorkflow: () => { },
-  leaveWorkflow: () => { },
-  emitWorkflowOperation: () => { },
-  emitSubblockUpdate: () => { },
-  emitVariableUpdate: () => { },
-  emitCursorUpdate: () => { },
-  emitSelectionUpdate: () => { },
-  onWorkflowOperation: () => { },
-  onSubblockUpdate: () => { },
-  onVariableUpdate: () => { },
-  onCursorUpdate: () => { },
-  onSelectionUpdate: () => { },
-  onUserJoined: () => { },
-  onUserLeft: () => { },
-  onWorkflowDeleted: () => { },
-  onWorkflowReverted: () => { },
-  onOperationConfirmed: () => { },
-  onOperationFailed: () => { },
+  joinWorkflow: () => {},
+  leaveWorkflow: () => {},
+  emitWorkflowOperation: () => {},
+  emitSubblockUpdate: () => {},
+  emitVariableUpdate: () => {},
+  emitCursorUpdate: () => {},
+  emitSelectionUpdate: () => {},
+  onWorkflowOperation: () => {},
+  onSubblockUpdate: () => {},
+  onVariableUpdate: () => {},
+  onCursorUpdate: () => {},
+  onSelectionUpdate: () => {},
+  onUserJoined: () => {},
+  onUserLeft: () => {},
+  onWorkflowDeleted: () => {},
+  onWorkflowReverted: () => {},
+  onOperationConfirmed: () => {},
+  onOperationFailed: () => {},
 })
 
 export const useSocket = () => useContext(SocketContext)
@@ -121,7 +121,7 @@ export function SocketProvider({ children, user }: SocketProviderProps) {
     currentWorkflowId,
     isConnected,
     isConnecting,
-    socketId: socket?.id
+    socketId: socket?.id,
   })
 
   // Use refs to store event handlers to avoid stale closures
@@ -246,7 +246,7 @@ export function SocketProvider({ children, user }: SocketProviderProps) {
             description: error.description,
             type: error.type,
             transport: error.transport,
-            url: socketUrl
+            url: socketUrl,
           })
 
           // Authentication errors now indicate either session expiry or token generation issues
@@ -582,7 +582,7 @@ export function SocketProvider({ children, user }: SocketProviderProps) {
       try {
         const { useOperationQueueStore } = require('@/stores/operation-queue/store')
         useOperationQueueStore.getState().cancelOperationsForWorkflow(currentWorkflowId)
-      } catch { }
+      } catch {}
       socket.emit('leave-workflow')
       logger.info(`Setting currentWorkflowId to null (via leaveWorkflow)`)
       setCurrentWorkflowId(null)
@@ -795,7 +795,6 @@ export function SocketProvider({ children, user }: SocketProviderProps) {
   }, [])
 
   console.log('currentWorkflowId in SocketProvider', currentWorkflowId)
-
 
   return (
     <SocketContext.Provider

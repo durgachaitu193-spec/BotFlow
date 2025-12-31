@@ -8,11 +8,11 @@ import {
   workflowEdges,
   workflowSubflows,
 } from '@sim/db'
+import { createLogger } from '@sim/logger'
 import type { InferSelectModel } from 'drizzle-orm'
 import { and, desc, eq, sql } from 'drizzle-orm'
 import type { Edge } from 'reactflow'
 import { v4 as uuidv4 } from 'uuid'
-import { createLogger } from '@sim/logger'
 import { sanitizeAgentToolsInBlocks } from '@/lib/workflows/sanitization/validation'
 import type { BlockState, Loop, Parallel, WorkflowState } from '@/stores/workflows/workflow/types'
 import { SUBFLOW_TYPES } from '@/stores/workflows/workflow/types'
@@ -251,9 +251,9 @@ export async function loadWorkflowFromNormalizedTables(
       if (subflow.type === SUBFLOW_TYPES.LOOP) {
         const loopType =
           (config as Loop).loopType === 'for' ||
-            (config as Loop).loopType === 'forEach' ||
-            (config as Loop).loopType === 'while' ||
-            (config as Loop).loopType === 'doWhile'
+          (config as Loop).loopType === 'forEach' ||
+          (config as Loop).loopType === 'while' ||
+          (config as Loop).loopType === 'doWhile'
             ? (config as Loop).loopType
             : 'for'
 
@@ -291,7 +291,7 @@ export async function loadWorkflowFromNormalizedTables(
           distribution: (config as Parallel).distribution ?? '',
           parallelType:
             (config as Parallel).parallelType === 'count' ||
-              (config as Parallel).parallelType === 'collection'
+            (config as Parallel).parallelType === 'collection'
               ? (config as Parallel).parallelType
               : 'count',
         }
@@ -615,11 +615,11 @@ export function regenerateWorkflowStateIds(state: any): any {
     blockIdMapping.set(oldId, crypto.randomUUID())
   })
 
-    // Map edge IDs
+  // Map edge IDs
 
-    ; (state.edges || []).forEach((edge: any) => {
-      edgeIdMapping.set(edge.id, crypto.randomUUID())
-    })
+  ;(state.edges || []).forEach((edge: any) => {
+    edgeIdMapping.set(edge.id, crypto.randomUUID())
+  })
 
   // Map loop IDs
   Object.keys(state.loops || {}).forEach((oldId) => {
@@ -672,20 +672,20 @@ export function regenerateWorkflowStateIds(state: any): any {
     newBlocks[newId] = newBlock
   })
 
-    // Regenerate edges with updated source/target references
+  // Regenerate edges with updated source/target references
 
-    ; (state.edges || []).forEach((edge: any) => {
-      const newId = edgeIdMapping.get(edge.id)!
-      const newSource = blockIdMapping.get(edge.source) || edge.source
-      const newTarget = blockIdMapping.get(edge.target) || edge.target
+  ;(state.edges || []).forEach((edge: any) => {
+    const newId = edgeIdMapping.get(edge.id)!
+    const newSource = blockIdMapping.get(edge.source) || edge.source
+    const newTarget = blockIdMapping.get(edge.target) || edge.target
 
-      newEdges.push({
-        ...edge,
-        id: newId,
-        source: newSource,
-        target: newTarget,
-      })
+    newEdges.push({
+      ...edge,
+      id: newId,
+      source: newSource,
+      target: newTarget,
     })
+  })
 
   // Regenerate loops with updated node references
   Object.entries(state.loops || {}).forEach(([oldId, loop]: [string, any]) => {

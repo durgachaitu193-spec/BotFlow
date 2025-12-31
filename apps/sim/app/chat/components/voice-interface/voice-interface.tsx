@@ -1,10 +1,10 @@
 'use client'
 
 import { type RefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { Mic, MicOff, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@sim/logger'
 import { ParticlesVisualization } from '@/app/chat/components/voice-interface/components/particles'
 
 const logger = createLogger('VoiceInterface')
@@ -33,7 +33,7 @@ interface SpeechRecognition extends EventTarget {
 }
 
 interface SpeechRecognitionStatic {
-  new(): SpeechRecognition
+  new (): SpeechRecognition
 }
 
 declare global {
@@ -236,7 +236,7 @@ export function VoiceInterface({
     recognition.interimResults = true
     recognition.lang = 'en-US'
 
-    recognition.onstart = () => { }
+    recognition.onstart = () => {}
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       const currentState = currentStateRef.current

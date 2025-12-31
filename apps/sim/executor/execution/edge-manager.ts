@@ -9,7 +9,7 @@ const logger = createLogger('EdgeManager')
 export class EdgeManager {
   private deactivatedEdges = new Set<string>()
 
-  constructor(private dag: DAG) { }
+  constructor(private dag: DAG) {}
 
   processOutgoingEdges(
     node: DAGNode,

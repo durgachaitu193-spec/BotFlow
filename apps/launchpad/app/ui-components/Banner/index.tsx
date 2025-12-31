@@ -1,22 +1,19 @@
-import React, { ReactNode } from "react";
-import "./styles.css";
+import type { ReactNode } from 'react'
+import './styles.css'
 
-const NUMBER_OF_SLIDES = 4;
+const NUMBER_OF_SLIDES = 4
 
 const Banner = ({
   components,
   duration = 28,
-  direction = "left",
+  direction = 'left',
 }: {
-  components: { component: ReactNode }[];
-  duration?: number;
-  direction?: "right" | "left";
+  components: { component: ReactNode }[]
+  duration?: number
+  direction?: 'right' | 'left'
 }) => {
   return (
-    <div
-      className={"slides-wrap flex overflow-hidden mb-4"}
-      style={{ width: "100%" }}
-    >
+    <div className={'slides-wrap mb-4 flex overflow-hidden'} style={{ width: '100%' }}>
       {Array(NUMBER_OF_SLIDES)
         .fill(NUMBER_OF_SLIDES)
         .map((item, i) => (
@@ -25,7 +22,7 @@ const Banner = ({
             style={{
               animation: `swipe-${direction} ${duration}s linear infinite backwards`,
             }}
-            className="px-[10px]"
+            className='px-[10px]'
           >
             {components.map(({ component }, i) => (
               <div
@@ -38,7 +35,7 @@ const Banner = ({
           </section>
         ))}
     </div>
-  );
-};
+  )
+}
 
-export default Banner;
+export default Banner

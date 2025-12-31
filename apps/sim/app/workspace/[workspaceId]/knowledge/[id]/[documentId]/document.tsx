@@ -1,12 +1,12 @@
 'use client'
 
 import { Suspense, startTransition, useCallback, useEffect, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { ChevronLeft, ChevronRight, Circle, CircleOff, FileText, Plus } from 'lucide-react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Button, Tooltip } from '@/components/emcn'
 import { Trash } from '@/components/emcn/icons/trash'
 import { Checkbox, SearchHighlight } from '@/components/ui'
-import { createLogger } from '@sim/logger'
 import {
   CreateChunkModal,
   DeleteChunkModal,
@@ -217,8 +217,8 @@ export function Document({
     }
   }, [hasPrevPage, currentPage, goToPage])
 
-  const refreshChunks = showingSearch ? async () => { } : initialRefreshChunks
-  const updateChunk = showingSearch ? (id: string, updates: any) => { } : initialUpdateChunk
+  const refreshChunks = showingSearch ? async () => {} : initialRefreshChunks
+  const updateChunk = showingSearch ? (id: string, updates: any) => {} : initialUpdateChunk
 
   const [documentData, setDocumentData] = useState<DocumentData | null>(null)
   const [isLoadingDocument, setIsLoadingDocument] = useState(true)
@@ -807,8 +807,9 @@ export function Document({
                                 key={page}
                                 onClick={() => goToPage(page)}
                                 disabled={false}
-                                className={`font-medium text-sm transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50 ${page === currentPage ? 'text-foreground' : 'text-muted-foreground'
-                                  }`}
+                                className={`font-medium text-sm transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50 ${
+                                  page === currentPage ? 'text-foreground' : 'text-muted-foreground'
+                                }`}
                               >
                                 {page}
                               </button>

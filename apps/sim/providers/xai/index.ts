@@ -1,5 +1,5 @@
-import OpenAI from 'openai'
 import { createLogger } from '@sim/logger'
+import OpenAI from 'openai'
 import type { StreamingExecution } from '@/executor/types'
 import { getProviderDefaultModel, getProviderModels } from '@/providers/models'
 import type {
@@ -90,13 +90,13 @@ export const xAIProvider: ProviderConfig = {
     // Set up tools
     const tools = request.tools?.length
       ? request.tools.map((tool) => ({
-        type: 'function',
-        function: {
-          name: tool.id,
-          description: tool.description,
-          parameters: tool.parameters,
-        },
-      }))
+          type: 'function',
+          function: {
+            name: tool.id,
+            description: tool.description,
+            parameters: tool.parameters,
+          },
+        }))
       : undefined
 
     // Log tools and response format conflict detection
@@ -541,9 +541,9 @@ export const xAIProvider: ProviderConfig = {
               toolCalls:
                 toolCalls.length > 0
                   ? {
-                    list: toolCalls,
-                    count: toolCalls.length,
-                  }
+                      list: toolCalls,
+                      count: toolCalls.length,
+                    }
                   : undefined,
               providerTiming: {
                 startTime: providerStartTimeISO,

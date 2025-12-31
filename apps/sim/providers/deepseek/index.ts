@@ -1,5 +1,5 @@
-import OpenAI from 'openai'
 import { createLogger } from '@sim/logger'
+import OpenAI from 'openai'
 import type { StreamingExecution } from '@/executor/types'
 import { getProviderDefaultModel, getProviderModels } from '@/providers/models'
 import type {
@@ -92,13 +92,13 @@ export const deepseekProvider: ProviderConfig = {
       // Transform tools to OpenAI format if provided
       const tools = request.tools?.length
         ? request.tools.map((tool) => ({
-          type: 'function',
-          function: {
-            name: tool.id,
-            description: tool.description,
-            parameters: tool.parameters,
-          },
-        }))
+            type: 'function',
+            function: {
+              name: tool.id,
+              description: tool.description,
+              parameters: tool.parameters,
+            },
+          }))
         : undefined
 
       const payload: any = {
@@ -487,9 +487,9 @@ export const deepseekProvider: ProviderConfig = {
               toolCalls:
                 toolCalls.length > 0
                   ? {
-                    list: toolCalls,
-                    count: toolCalls.length,
-                  }
+                      list: toolCalls,
+                      count: toolCalls.length,
+                    }
                   : undefined,
               providerTiming: {
                 startTime: providerStartTimeISO,
