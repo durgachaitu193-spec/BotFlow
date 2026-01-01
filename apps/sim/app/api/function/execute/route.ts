@@ -14,7 +14,7 @@ export const MAX_DURATION = 210
 const logger = createLogger('FunctionExecuteAPI')
 
 function createSecureFetch(requestId: string) {
-  const originalFetch = (globalThis as any).fetch || require('node-fetch').default
+  const originalFetch = (globalThis as any).fetch
 
   return async function secureFetch(input: any, init?: any) {
     const url = typeof input === 'string' ? input : input?.url || input

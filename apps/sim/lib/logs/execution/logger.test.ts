@@ -1,4 +1,4 @@
-import { loggerMock } from '@sim/testing'
+
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { ExecutionLogger } from '@/lib/logs/execution/logger'
 
@@ -73,7 +73,15 @@ vi.mock('@/lib/core/utils/display-filters', () => ({
   filterForDisplay: vi.fn((data) => data),
 }))
 
-vi.mock('@sim/logger', () => loggerMock)
+vi.mock('@sim/logger', () => ({
+  createLogger: vi.fn(() => ({
+    debug: vi.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    fatal: vi.fn(),
+  })),
+}))
 
 // Mock events
 vi.mock('@/lib/logs/events', () => ({

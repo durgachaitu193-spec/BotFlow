@@ -7,7 +7,7 @@ import {
 import { createLogger } from '@sim/logger'
 import { and, eq, or, sql } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'
-import { isTriggerDevEnabled } from '@/lib/core/config/feature-flags'
+import { isTriggerDevEnabled } from '@/lib/core/config/environment'
 import type { WorkflowExecutionLog } from '@/lib/logs/types'
 import {
   type AlertCheckContext,

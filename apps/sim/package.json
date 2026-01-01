@@ -141,10 +141,12 @@
     "uuid": "^11.1.0",
     "viem": "^2.38.6",
     "xlsx": "0.18.5",
+    "binary-extensions": "2.3.0",
     "zod": "^3.24.2",
     "zustand": "^4.5.7"
   },
   "devDependencies": {
+    "@sim/testing": "workspace:*",
     "@testing-library/jest-dom": "^6.6.3",
     "@trigger.dev/build": "4.1.2",
     "@types/html-to-text": "9.0.4",
@@ -174,7 +176,13 @@
     "tape": "5.9.0",
     "typescript": "^5.7.3",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.0.8"
+    "vitest": "^3.0.8",
+    "chromium-bidi": "0.10.0",
+    "electron": "33.2.1",
+    "cpu-features": "0.0.10",
+    "playwright": "1.57.0",
+    "playwright-core": "1.57.0",
+    "ssh2": "1.17.0"
   },
   "trustedDependencies": [
     "canvas",

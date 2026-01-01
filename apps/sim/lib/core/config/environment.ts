@@ -31,6 +31,11 @@ export const isHosted =
 export const isBillingEnabled = isTruthy(env.BILLING_ENABLED)
 
 /**
+ * Is Trigger.dev development enabled
+ */
+export const isTriggerDevEnabled = isTruthy(env.TRIGGER_DEV_ENABLED)
+
+/**
  * Is email verification enabled
  */
 export const isEmailVerificationEnabled = isTruthy(env.EMAIL_VERIFICATION_ENABLED)

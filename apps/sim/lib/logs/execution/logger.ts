@@ -17,7 +17,7 @@ import {
 } from '@/lib/billing/core/usage'
 import { logWorkflowUsageBatch } from '@/lib/billing/core/usage-log'
 import { checkAndBillOverageThreshold } from '@/lib/billing/threshold-billing'
-import { isBillingEnabled } from '@/lib/core/config/feature-flags'
+import { isBillingEnabled } from '@/lib/core/config/environment'
 import { redactApiKeys } from '@/lib/core/security/redaction'
 import { filterForDisplay } from '@/lib/core/utils/display-filters'
 import { emitWorkflowExecutionCompleted } from '@/lib/logs/events'
@@ -144,7 +144,6 @@ export class ExecutionLogger implements IExecutionLoggerService {
       .values({
         id: uuidv4(),
         workflowId,
-        workspaceId,
         executionId,
         stateSnapshotId: snapshotResult.snapshot.id,
         deploymentVersionId: deploymentVersionId ?? null,
@@ -272,32 +271,32 @@ export class ExecutionLogger implements IExecutionLoggerService {
     const existingCost = isResume && existingLog?.cost ? existingLog.cost : null
     const mergedCost = existingCost
       ? {
-          // For resume, add only the model costs, NOT the base execution charge again
-          total: (existingCost.total || 0) + costSummary.modelCost,
-          input: (existingCost.input || 0) + costSummary.totalInputCost,
-          output: (existingCost.output || 0) + costSummary.totalOutputCost,
-          tokens: {
-            input:
-              (existingCost.tokens?.input || existingCost.tokens?.prompt || 0) +
-              costSummary.totalPromptTokens,
-            output:
-              (existingCost.tokens?.output || existingCost.tokens?.completion || 0) +
-              costSummary.totalCompletionTokens,
-            total: (existingCost.tokens?.total || 0) + costSummary.totalTokens,
-          },
-          models: this.mergeCostModels(existingCost.models || {}, costSummary.models),
-        }
+        // For resume, add only the model costs, NOT the base execution charge again
+        total: (existingCost.total || 0) + costSummary.modelCost,
+        input: (existingCost.input || 0) + costSummary.totalInputCost,
+        output: (existingCost.output || 0) + costSummary.totalOutputCost,
+        tokens: {
+          input:
+            (existingCost.tokens?.input || existingCost.tokens?.prompt || 0) +
+            costSummary.totalPromptTokens,
+          output:
+            (existingCost.tokens?.output || existingCost.tokens?.completion || 0) +
+            costSummary.totalCompletionTokens,
+          total: (existingCost.tokens?.total || 0) + costSummary.totalTokens,
+        },
+        models: this.mergeCostModels(existingCost.models || {}, costSummary.models),
+      }
       : {
-          total: costSummary.totalCost,
-          input: costSummary.totalInputCost,
-          output: costSummary.totalOutputCost,
-          tokens: {
-            input: costSummary.totalPromptTokens,
-            output: costSummary.totalCompletionTokens,
-            total: costSummary.totalTokens,
-          },
-          models: costSummary.models,
-        }
+        total: costSummary.totalCost,
+        input: costSummary.totalInputCost,
+        output: costSummary.totalOutputCost,
+        tokens: {
+          input: costSummary.totalPromptTokens,
+          output: costSummary.totalCompletionTokens,
+          total: costSummary.totalTokens,
+        },
+        models: costSummary.models,
+      }
 
     // Merge files if resuming
     const existingFiles = isResume && existingLog?.files ? existingLog.files : []
@@ -444,7 +443,7 @@ export class ExecutionLogger implements IExecutionLoggerService {
           updatedLog.trigger as ExecutionTrigger['type'],
           executionId
         )
-      } catch {}
+      } catch { }
       logger.warn('Usage threshold notification check failed (non-fatal)', { error: e })
     }
 

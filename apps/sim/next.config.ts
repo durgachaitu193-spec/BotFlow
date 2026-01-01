@@ -83,6 +83,13 @@ const nextConfig: NextConfig = {
     'process-warning',
     'real-require',
     'sonic-boom',
+    'chromium-bidi',
+    'electron',
+    'binary-extensions',
+    'ssh2',
+    'cpu-features',
+    'playwright',
+    'playwright-core',
   ],
   turbopack: {
     resolveAlias: {

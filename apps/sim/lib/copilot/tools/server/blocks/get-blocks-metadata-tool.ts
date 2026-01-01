@@ -12,7 +12,7 @@ import { AuthMode } from '@/blocks/types'
 import { PROVIDER_DEFINITIONS } from '@/providers/models'
 import { tools as toolsRegistry } from '@/tools/registry'
 import { getTrigger, isTriggerValid } from '@/triggers'
-import { SYSTEM_SUBBLOCK_IDS } from '@/triggers/constants'
+import { SYSTEM_SUBBLOCK_IDS } from '@/triggers/consts'
 
 export interface CopilotSubblockMetadata {
   id: string
@@ -134,7 +134,7 @@ export const getBlocksMetadataServerTool: BaseServerTool<
           operationInputSchema: operationParameters,
           outputs: specialBlock.outputs,
         }
-        ;(metadata as any).subBlocks = undefined
+          ; (metadata as any).subBlocks = undefined
       } else {
         const blockConfig: BlockConfig | undefined = blockRegistry[blockId]
         if (!blockConfig) {
@@ -148,16 +148,16 @@ export const getBlocksMetadataServerTool: BaseServerTool<
         }
         const tools: CopilotToolMetadata[] = Array.isArray(blockConfig.tools?.access)
           ? blockConfig.tools!.access.map((toolId) => {
-              const tool = toolsRegistry[toolId]
-              if (!tool) return { id: toolId, name: toolId }
-              return {
-                id: toolId,
-                name: tool.name || toolId,
-                description: tool.description || '',
-                inputs: tool.params || {},
-                outputs: tool.outputs || {},
-              }
-            })
+            const tool = toolsRegistry[toolId]
+            if (!tool) return { id: toolId, name: toolId }
+            return {
+              id: toolId,
+              name: tool.name || toolId,
+              description: tool.description || '',
+              inputs: tool.params || {},
+              outputs: tool.outputs || {},
+            }
+          })
           : []
 
         const triggers: CopilotTriggerMetadata[] = []
@@ -275,7 +275,7 @@ export const getBlocksMetadataServerTool: BaseServerTool<
         if (existsSync(docPath)) {
           metadata.yamlDocumentation = readFileSync(docPath, 'utf-8')
         }
-      } catch {}
+      } catch { }
 
       if (metadata) {
         result[blockId] = removeNullish(metadata) as CopilotBlockMetadata
@@ -632,7 +632,7 @@ function processSubBlock(sb: any): CopilotSubblockMetadata {
   // Add non-null optional fields
   for (const [key, value] of Object.entries(optionalFields)) {
     if (value !== undefined && value !== null) {
-      ;(processed as any)[key] = value
+      ; (processed as any)[key] = value
     }
   }
 
@@ -941,7 +941,7 @@ function resolveToolIdForOperation(blockConfig: BlockConfig, opId: string): stri
       const maybeToolId = toolSelector({ operation: opId })
       if (typeof maybeToolId === 'string') return maybeToolId
     }
-  } catch {}
+  } catch { }
   return undefined
 }
 

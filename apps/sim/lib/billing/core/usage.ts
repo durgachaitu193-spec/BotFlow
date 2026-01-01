@@ -372,6 +372,34 @@ export async function getUserUsageLimit(userId: string): Promise<number> {
 }
 
 /**
+ * Get organization usage limit information
+ */
+export async function getOrgUsageLimit(
+  organizationId: string,
+  plan: string,
+  seats?: number | null
+): Promise<{ limit: number; minimum: number; configured: number | null }> {
+  const orgData = await db
+    .select({ orgUsageLimit: organization.orgUsageLimit })
+    .from(organization)
+    .where(eq(organization.id, organizationId))
+    .limit(1)
+
+  const { getPlanPricing } = await import('@/lib/billing/core/billing')
+  const { basePrice } = getPlanPricing(plan)
+  const minimum = (seats ?? 0) * basePrice
+  let configured: number | null = null
+
+  if (orgData.length > 0 && orgData[0].orgUsageLimit) {
+    configured = Number.parseFloat(orgData[0].orgUsageLimit)
+  }
+
+  const limit = configured !== null ? Math.max(configured, minimum) : minimum
+
+  return { limit, minimum, configured }
+}
+
+/**
  * Check usage status with warning thresholds
  */
 export async function checkUsageStatus(userId: string): Promise<{

@@ -11,7 +11,7 @@ const projectDir = process.cwd()
 loadEnvConfig(projectDir)
 
 export default defineConfig({
-  plugins: [react(), tsconfigPaths()],
+  plugins: [react() as any, tsconfigPaths() as any],
   test: {
     globals: true,
     environment: 'node',
@@ -39,6 +39,10 @@ export default defineConfig({
   },
   resolve: {
     alias: [
+      {
+        find: '@sim/testing',
+        replacement: path.resolve(__dirname, '../../packages/testing/src'),
+      },
       {
         find: '@sim/db',
         replacement: path.resolve(__dirname, '../../packages/db'),
