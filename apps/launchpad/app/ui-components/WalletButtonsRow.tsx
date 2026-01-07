@@ -3,20 +3,18 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-"use client";
+'use client'
 
-import { Wallet } from "@/global/types";
-import React from "react";
-import NextImage from "next/image";
-const Image = NextImage as any;
+import type React from 'react'
+import NextImage from 'next/image'
+import { Wallet } from '@/global/types'
+
+const Image = NextImage as any
 
 interface Props {
-  className?: string;
-  onWalletClick: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    wallet: Wallet,
-  ) => void;
-  disabled?: boolean;
+  className?: string
+  onWalletClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, wallet: Wallet) => void
+  disabled?: boolean
 }
 
 function WalletButtons({ className, onWalletClick, disabled = false }: Props) {
@@ -31,7 +29,7 @@ function WalletButtons({ className, onWalletClick, disabled = false }: Props) {
   return (
     <div className={`${className} flex items-center justify-center gap-3`}>
       <button
-        className="flex flex-col items-center justify-start border-0 shadow-none bg-transparent px-5"
+        className='flex flex-col items-center justify-start border-0 bg-transparent px-5 shadow-none'
         onClick={(e: any) => onWalletClick(e, Wallet.POLKADOT)}
         disabled={disabled}
       >
@@ -44,7 +42,7 @@ function WalletButtons({ className, onWalletClick, disabled = false }: Props) {
         <span>Polkadot Js</span>
       </button>
       <button
-        className="flex flex-col items-center justify-start border-0 shadow-none bg-transparent px-5"
+        className='flex flex-col items-center justify-start border-0 bg-transparent px-5 shadow-none'
         onClick={(e: any) => onWalletClick(e, Wallet.SUBWALLET)}
         disabled={disabled}
       >
@@ -57,7 +55,7 @@ function WalletButtons({ className, onWalletClick, disabled = false }: Props) {
         <span>Subwallet</span>
       </button>
       <button
-        className="flex flex-col items-center justify-start border-0 shadow-none bg-transparent px-5"
+        className='flex flex-col items-center justify-start border-0 bg-transparent px-5 shadow-none'
         onClick={(e: any) => onWalletClick(e, Wallet.TALISMAN)}
         disabled={disabled}
       >
@@ -69,29 +67,28 @@ function WalletButtons({ className, onWalletClick, disabled = false }: Props) {
         />
         <span>Talisman</span>
       </button>
-      {typeof window !== "undefined" &&
-        (window as any).walletExtension?.isNovaWallet && (
-          <button
-            className="flex flex-col items-center justify-start border-0 shadow-none bg-transparent px-5"
-            onClick={(e: any) => onWalletClick(e, Wallet.NOVAWALLET)}
-            disabled={disabled}
-          >
-            <Image
-              src={`/assets/icons/wallets/nova.jpg`}
-              alt={Wallet.NOVAWALLET}
-              width={28}
-              height={28}
-            />
-            <span>Nova Wallet</span>
-          </button>
-        )}
+      {typeof window !== 'undefined' && (window as any).walletExtension?.isNovaWallet && (
+        <button
+          className='flex flex-col items-center justify-start border-0 bg-transparent px-5 shadow-none'
+          onClick={(e: any) => onWalletClick(e, Wallet.NOVAWALLET)}
+          disabled={disabled}
+        >
+          <Image
+            src={`/assets/icons/wallets/nova.jpg`}
+            alt={Wallet.NOVAWALLET}
+            width={28}
+            height={28}
+          />
+          <span>Nova Wallet</span>
+        </button>
+      )}
       {/* {wallets.length > 3 && (
         <Button onClick={handleShowMore} className="w-full bg-transparent px-5">
           {showMore ? "Show Less" : "Show More"}
         </Button>
       )} */}
     </div>
-  );
+  )
 }
 
-export default WalletButtons;
+export default WalletButtons

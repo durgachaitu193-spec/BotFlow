@@ -1,72 +1,61 @@
-import NextImage from "next/image";
-const Image = NextImage as any;
-import React, { useState } from "react";
-import SecondaryButton from "../SecondaryButton";
-import LoginModal from "@/global/Modals/LoginModal";
-import { useUserDetailsContext } from "@/context";
-import Address from "../Address";
-import NextLink from "next/link";
-const Link = NextLink as any;
-import { Popover } from "antd";
-import { DownOutlined } from "@ant-design/icons";
-import { useRouter } from "next/navigation";
+import NextImage from 'next/image'
 
-import { Wallet } from "@/global/types";
+const Image = NextImage as any
+
+import { useState } from 'react'
+import NextLink from 'next/link'
+import { useUserDetailsContext } from '@/context'
+import LoginModal from '@/global/Modals/LoginModal'
+
+const Link = NextLink as any
+
+import { useRouter } from 'next/navigation'
+import { Wallet } from '@/global/types'
 
 const logout = async () => {
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     // Clear local storage
-    localStorage.removeItem("address");
-    localStorage.removeItem("wallet");
-    localStorage.removeItem("signature");
+    localStorage.removeItem('address')
+    localStorage.removeItem('wallet')
+    localStorage.removeItem('signature')
 
     // Clear server-side cookies
     try {
       await fetch('/api/auth/privy/logout', {
         method: 'POST',
-      });
+      })
     } catch (error) {
-      console.error('Failed to clear server cookies during logout:', error);
+      console.error('Failed to clear server cookies during logout:', error)
     }
   }
-};
+}
 
 const NavHeader = () => {
-  const [openModal, setOpenModal] = useState(false);
-  const { address, wallet, setUserDetails } = useUserDetailsContext();
-  const router = useRouter();
+  const [openModal, setOpenModal] = useState(false)
+  const { address, wallet, setUserDetails } = useUserDetailsContext()
+  const router = useRouter()
 
   const handleDisconnect = () => {
-    logout();
+    logout()
 
     setUserDetails({
       wallet: Wallet.NotConnected,
-      address: "",
+      address: '',
       userId: null,
-    });
+    })
 
-    router.push("/");
-  };
+    router.push('/')
+  }
 
   return (
     <>
       <LoginModal open={openModal} onClose={() => setOpenModal(false)} />
-      <div className="flex items-center justify-between px-2 w-full h-full">
-        <Link href="/">
-          <Image
-            src="/assets/pill-logo.png"
-            alt="logo"
-            width={40}
-            height={40}
-          />
+      <div className='flex h-full w-full items-center justify-between px-2'>
+        <Link href='/'>
+          <Image src='/assets/pill-logo.png' alt='logo' width={40} height={40} />
         </Link>
-        <Link href="/" className="hidden sm:block">
-          <Image
-            src="/assets/onlyfun-logo.png"
-            alt="logo"
-            width={180}
-            height={30}
-          />
+        <Link href='/' className='hidden sm:block'>
+          <Image src='/assets/onlyfun-logo.png' alt='logo' width={180} height={30} />
         </Link>
         {/* {address && wallet !== Wallet.NotConnected && !isDisconnected ? (
           <div className="flex items-center">
@@ -98,7 +87,7 @@ const NavHeader = () => {
         )} */}
       </div>
     </>
-  );
-};
+  )
+}
 
-export default NavHeader;
+export default NavHeader

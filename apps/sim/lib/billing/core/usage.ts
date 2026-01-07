@@ -1,5 +1,6 @@
 import { db } from '@sim/db'
 import { member, organization, settings, user, userStats } from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import { eq, inArray } from 'drizzle-orm'
 import {
   getEmailSubject,
@@ -15,7 +16,6 @@ import {
 import type { BillingData, UsageData, UsageLimitInfo } from '@/lib/billing/types'
 import { isBillingEnabled } from '@/lib/core/config/environment'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@/lib/logs/console/logger'
 import { sendEmail } from '@/lib/messaging/email/mailer'
 import { getEmailPreferences } from '@/lib/messaging/email/unsubscribe'
 
@@ -369,6 +369,34 @@ export async function getUserUsageLimit(userId: string): Promise<number> {
   const { getPlanPricing } = await import('@/lib/billing/core/billing')
   const { basePrice } = getPlanPricing(subscription.plan)
   return (subscription.seats ?? 0) * basePrice
+}
+
+/**
+ * Get organization usage limit information
+ */
+export async function getOrgUsageLimit(
+  organizationId: string,
+  plan: string,
+  seats?: number | null
+): Promise<{ limit: number; minimum: number; configured: number | null }> {
+  const orgData = await db
+    .select({ orgUsageLimit: organization.orgUsageLimit })
+    .from(organization)
+    .where(eq(organization.id, organizationId))
+    .limit(1)
+
+  const { getPlanPricing } = await import('@/lib/billing/core/billing')
+  const { basePrice } = getPlanPricing(plan)
+  const minimum = (seats ?? 0) * basePrice
+  let configured: number | null = null
+
+  if (orgData.length > 0 && orgData[0].orgUsageLimit) {
+    configured = Number.parseFloat(orgData[0].orgUsageLimit)
+  }
+
+  const limit = configured !== null ? Math.max(configured, minimum) : minimum
+
+  return { limit, minimum, configured }
 }
 
 /**

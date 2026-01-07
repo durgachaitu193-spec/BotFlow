@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
-
 import backgroundImage from '@/public/background/background1.jpg'
 
 type AuthBackgroundProps = {

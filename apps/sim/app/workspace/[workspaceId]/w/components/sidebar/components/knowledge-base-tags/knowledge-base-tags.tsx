@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { Eye, MoreHorizontal, Plus, Trash2, X } from 'lucide-react'
 import {
   Button as EmcnButton,
@@ -33,7 +34,6 @@ import {
 } from '@/components/ui/alert-dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { MAX_TAG_SLOTS } from '@/lib/knowledge/constants'
-import { createLogger } from '@/lib/logs/console/logger'
 import { useUserPermissionsContext } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
 import { DocumentList } from '@/app/workspace/[workspaceId]/w/components/sidebar/components/knowledge-base-tags/components/document-list'
 import {

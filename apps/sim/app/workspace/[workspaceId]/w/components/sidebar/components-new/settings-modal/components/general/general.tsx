@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+import { usePrivy } from '@privy-io/react-auth'
+import { createLogger } from '@sim/logger'
 import { Camera, Check, Pencil } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -10,18 +12,23 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@/components/emcn/components/modal/modal'
-import { Input, Skeleton, Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui'
-import { usePrivy } from '@privy-io/react-auth'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  Input,
+  Skeleton,
+} from '@/components/ui'
 import { useSession } from '@/lib/auth/auth-client'
 import { useBrandConfig } from '@/lib/branding/branding'
 import { getEnv, isTruthy } from '@/lib/core/config/env'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@/lib/logs/console/logger'
+import { ClaimDidForm } from '@/app/workspace/[workspaceId]/w/components/sidebar/components-new/settings-modal/components/claim-did-form/claim-did-form'
 import { useProfilePictureUpload } from '@/app/workspace/[workspaceId]/w/components/sidebar/components-new/settings-modal/hooks/use-profile-picture-upload'
 import { useGeneralSettings, useUpdateGeneralSetting } from '@/hooks/queries/general-settings'
 import { useUpdateUserProfile, useUserProfile } from '@/hooks/queries/user-profile'
 import { clearUserData } from '@/stores'
-import { ClaimDidForm } from '@/app/workspace/[workspaceId]/w/components/sidebar/components-new/settings-modal/components/claim-did-form/claim-did-form'
 
 const logger = createLogger('General')
 
@@ -185,6 +192,7 @@ export function General({ onOpenChange }: GeneralProps) {
             credentials: 'include',
           }).catch(() => {
             // If API fails, try to clear cookie client-side as fallback
+            document.cookie = 'sim-privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
             document.cookie = 'privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
           })
 
@@ -292,7 +300,7 @@ export function General({ onOpenChange }: GeneralProps) {
               action: 'enable_from_settings',
               timestamp: new Date().toISOString(),
             }),
-          }).catch(() => { })
+          }).catch(() => {})
         }
       }
     }
@@ -322,8 +330,9 @@ export function General({ onOpenChange }: GeneralProps) {
                     width={36}
                     height={36}
                     unoptimized
-                    className={`h-full w-full object-cover transition-opacity duration-300 ${isUploadingProfilePicture ? 'opacity-50' : 'opacity-100'
-                      }`}
+                    className={`h-full w-full object-cover transition-opacity duration-300 ${
+                      isUploadingProfilePicture ? 'opacity-50' : 'opacity-100'
+                    }`}
                   />
                 )
               }
@@ -334,8 +343,9 @@ export function General({ onOpenChange }: GeneralProps) {
               )
             })()}
             <div
-              className={`absolute inset-0 flex items-center justify-center rounded-full bg-black/50 transition-opacity ${isUploadingProfilePicture ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                }`}
+              className={`absolute inset-0 flex items-center justify-center rounded-full bg-black/50 transition-opacity ${
+                isUploadingProfilePicture ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+              }`}
             >
               {isUploadingProfilePicture ? (
                 <div className='h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent' />
@@ -437,11 +447,11 @@ export function General({ onOpenChange }: GeneralProps) {
         </div>
         {profile?.userDID ? (
           <div className='flex items-center gap-2'>
-            <div className='flex items-center gap-1.5 rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-500'>
+            <div className='flex items-center gap-1.5 rounded-full bg-green-500/10 px-3 py-1 font-medium text-green-500 text-xs'>
               <Check className='h-3 w-3' />
               Verified
             </div>
-            <span className='text-xs text-[var(--text-tertiary)] font-mono'>
+            <span className='font-mono text-[var(--text-tertiary)] text-xs'>
               {profile.userDID.slice(0, 10)}...{profile.userDID.slice(-4)}
             </span>
           </div>
@@ -518,7 +528,10 @@ export function General({ onOpenChange }: GeneralProps) {
 
       {/* Claim DID Modal */}
       <Dialog open={isClaimModalOpen} onOpenChange={setIsClaimModalOpen}>
-        <DialogContent className='max-w-[500px] h-[600px] p-0 overflow-hidden' hideCloseButton={false}>
+        <DialogContent
+          className='h-[600px] max-w-[500px] overflow-hidden p-0'
+          hideCloseButton={false}
+        >
           <DialogTitle className='sr-only'>Verify Identity</DialogTitle>
           <DialogDescription className='sr-only'>
             Setup your decentralized identity to deploy agents.

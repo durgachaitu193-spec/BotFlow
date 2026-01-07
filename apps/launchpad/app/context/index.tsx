@@ -1,15 +1,14 @@
-"use client";
-import { useContext } from "react";
-
-import { useApp } from "./AppContext";
-import { UserDetailsContext } from "./UserDetailContext";
+'use client'
+import { useContext } from 'react'
+import { useApp } from './AppContext'
+import { UserDetailsContext } from './UserDetailContext'
 
 const useApiContext = () => {
-  return useApp();
-};
+  return useApp()
+}
 
 const useUserDetailsContext = () => {
-  return useContext(UserDetailsContext);
-};
+  return useContext(UserDetailsContext)
+}
 
-export { useApiContext, useUserDetailsContext };
+export { useApiContext, useUserDetailsContext }

@@ -9,10 +9,10 @@ import {
   useRef,
   useState,
 } from 'react'
+import { createLogger } from '@sim/logger'
 import { useParams } from 'next/navigation'
 import { io, type Socket } from 'socket.io-client'
 import { getEnv } from '@/lib/core/config/env'
-import { createLogger } from '@/lib/logs/console/logger'
 
 const logger = createLogger('SocketContext')
 
@@ -111,9 +111,18 @@ export function SocketProvider({ children, user }: SocketProviderProps) {
   const [presenceUsers, setPresenceUsers] = useState<PresenceUser[]>([])
   const initializedRef = useRef(false)
 
-  // Get current workflow ID from URL params
   const params = useParams()
   const urlWorkflowId = params?.workflowId as string | undefined
+
+  logger.info('SocketProvider render:', {
+    hasUser: !!user?.id,
+    userEmail: user?.email,
+    urlWorkflowId,
+    currentWorkflowId,
+    isConnected,
+    isConnecting,
+    socketId: socket?.id,
+  })
 
   // Use refs to store event handlers to avoid stale closures
   const eventHandlers = useRef<{
@@ -162,8 +171,8 @@ export function SocketProvider({ children, user }: SocketProviderProps) {
 
     const initializeSocket = async () => {
       try {
-        // Generate initial token for socket authentication
         const token = await generateSocketToken()
+        logger.info('Generated socket token', { hasToken: !!token })
 
         const socketUrl = getEnv('NEXT_PUBLIC_SOCKET_URL') || 'http://localhost:3002'
 
@@ -210,7 +219,10 @@ export function SocketProvider({ children, user }: SocketProviderProps) {
               workflowId: urlWorkflowId,
             })
             // Update our internal state to match the URL
+            logger.info(`Setting currentWorkflowId to ${urlWorkflowId} (after connection)`)
             setCurrentWorkflowId(urlWorkflowId)
+          } else {
+            logger.warn('Socket connected but no urlWorkflowId found to join')
           }
         })
 
@@ -234,6 +246,7 @@ export function SocketProvider({ children, user }: SocketProviderProps) {
             description: error.description,
             type: error.type,
             transport: error.transport,
+            url: socketUrl,
           })
 
           // Authentication errors now indicate either session expiry or token generation issues
@@ -518,6 +531,7 @@ export function SocketProvider({ children, user }: SocketProviderProps) {
     socket.emit('join-workflow', {
       workflowId: urlWorkflowId,
     })
+    logger.info(`Setting currentWorkflowId to ${urlWorkflowId} (after URL change)`)
     setCurrentWorkflowId(urlWorkflowId)
   }, [socket, isConnected, urlWorkflowId, currentWorkflowId])
 
@@ -555,6 +569,7 @@ export function SocketProvider({ children, user }: SocketProviderProps) {
       socket.emit('join-workflow', {
         workflowId, // Server gets user info from authenticated session
       })
+      logger.info(`Setting currentWorkflowId to ${workflowId} (via joinWorkflow)`)
       setCurrentWorkflowId(workflowId)
     },
     [socket, user, currentWorkflowId]
@@ -569,6 +584,7 @@ export function SocketProvider({ children, user }: SocketProviderProps) {
         useOperationQueueStore.getState().cancelOperationsForWorkflow(currentWorkflowId)
       } catch {}
       socket.emit('leave-workflow')
+      logger.info(`Setting currentWorkflowId to null (via leaveWorkflow)`)
       setCurrentWorkflowId(null)
       setPresenceUsers([])
 
@@ -777,6 +793,8 @@ export function SocketProvider({ children, user }: SocketProviderProps) {
   const onOperationFailed = useCallback((handler: (data: any) => void) => {
     eventHandlers.current.operationFailed = handler
   }, [])
+
+  console.log('currentWorkflowId in SocketProvider', currentWorkflowId)
 
   return (
     <SocketContext.Provider

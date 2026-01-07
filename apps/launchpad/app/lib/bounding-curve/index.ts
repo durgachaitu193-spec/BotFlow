@@ -1,69 +1,61 @@
-import { BN } from "@polkadot/util";
-import { INITIAL_TOKEN_PRICE, TOKEN_DECIMAL } from "@/global/constants";
+import { BN } from '@polkadot/util'
+import { INITIAL_TOKEN_PRICE, TOKEN_DECIMAL } from '@/global/constants'
 
 // const CURVE_PRECISION = new BN(10).pow(new BN(5)).mul(new BN(3));
-const DECIMALS = new BN(TOKEN_DECIMAL);
-const EXPONENT = new BN(50000).pow(new BN(2));
-export const SELLING_EXPONENT = new BN(40000).pow(new BN(2));
-const PRECISION = new BN(10).pow(new BN(10)); // Precision factor
-export const SCALING_FACTOR = new BN(10).pow(DECIMALS);
+const DECIMALS = new BN(TOKEN_DECIMAL)
+const EXPONENT = new BN(50000).pow(new BN(2))
+export const SELLING_EXPONENT = new BN(40000).pow(new BN(2))
+const PRECISION = new BN(10).pow(new BN(10)) // Precision factor
+export const SCALING_FACTOR = new BN(10).pow(DECIMALS)
 
-const calculateTotalCost = (
-  currentSupply: BN,
-  amount: BN,
-  reserveBalance: BN,
-) => {
+const calculateTotalCost = (currentSupply: BN, amount: BN, reserveBalance: BN) => {
   if (amount.isZero()) {
-    return { cost: new BN(0), reserveBalance };
+    return { cost: new BN(0), reserveBalance }
   }
-  const S = currentSupply.div(SCALING_FACTOR);
-  const deltaS = amount;
+  const S = currentSupply.div(SCALING_FACTOR)
+  const deltaS = amount
 
-  const linearComponent = INITIAL_TOKEN_PRICE.mul(deltaS);
+  const linearComponent = INITIAL_TOKEN_PRICE.mul(deltaS)
   const curveComponent = deltaS
     .mul(S.mul(new BN(2)).add(deltaS).sub(new BN(1)))
     .div(new BN(2))
     .mul(EXPONENT)
-    .div(PRECISION);
+    .div(PRECISION)
 
-  const totalCost = linearComponent.add(curveComponent);
-  return { cost: totalCost, reserveBalance: reserveBalance.add(totalCost) };
-};
+  const totalCost = linearComponent.add(curveComponent)
+  return { cost: totalCost, reserveBalance: reserveBalance.add(totalCost) }
+}
 
-const calculateTotalSellingCost = (
-  currentSupply: BN,
-  amount: BN,
-  reserveBalance: BN,
-) => {
+const calculateTotalSellingCost = (currentSupply: BN, amount: BN, reserveBalance: BN) => {
   if (amount.isZero()) {
-    return { cost: new BN(0), reserveBalance };
+    return { cost: new BN(0), reserveBalance }
   }
-  const S = currentSupply.div(SCALING_FACTOR);
+  const S = currentSupply.div(SCALING_FACTOR)
 
   // Calculate the initial and final supply
-  const finalSupply = S.sub(amount);
+  const finalSupply = S.sub(amount)
   if (finalSupply.isNeg()) {
-    return { cost: new BN(0), reserveBalance, maxExceed: true };
+    return { cost: new BN(0), reserveBalance, maxExceed: true }
   }
 
   // Calculate revenue from linear component
-  const linearComponent = INITIAL_TOKEN_PRICE.mul(amount);
+  const linearComponent = INITIAL_TOKEN_PRICE.mul(amount)
 
   // Calculate revenue from the curve component, reversed from buying
   const curveComponent = amount
     .mul(S.add(finalSupply).sub(new BN(1)))
     .div(new BN(2))
     .mul(SELLING_EXPONENT)
-    .div(PRECISION);
+    .div(PRECISION)
 
   // Calculate total revenue from selling the tokens
-  const totalRevenue = linearComponent.add(curveComponent);
+  const totalRevenue = linearComponent.add(curveComponent)
 
   return {
     cost: totalRevenue,
     reserveBalance: reserveBalance.sub(totalRevenue),
-  };
-};
+  }
+}
 
 // -----------------------------------------------------------------------------------------------------------------------------
 
@@ -203,4 +195,4 @@ const calculateTotalSellingCost = (
 // );
 // export { calculateTotalCost, calculateTotalSellingCost };
 
-export { calculateTotalCost, calculateTotalSellingCost };
+export { calculateTotalCost, calculateTotalSellingCost }

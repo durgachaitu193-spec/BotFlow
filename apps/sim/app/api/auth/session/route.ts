@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server'
 export async function GET() {
   try {
     const cookieStore = await cookies()
-    const privyUserId = cookieStore.get('privy-user-id')?.value
+    const privyUserId = cookieStore.get('sim-privy-user-id')?.value
 
     if (!privyUserId) {
       return NextResponse.json({ data: null })
@@ -52,4 +52,3 @@ export async function GET() {
     return NextResponse.json({ data: null })
   }
 }
-

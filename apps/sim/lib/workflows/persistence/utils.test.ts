@@ -84,7 +84,7 @@ vi.mock('drizzle-orm', () => ({
   })),
 }))
 
-vi.mock('@/lib/logs/console/logger', () => ({
+vi.mock('@sim/logger', () => ({
   createLogger: vi.fn(() => ({
     info: vi.fn(),
     error: vi.fn(),

@@ -1,14 +1,20 @@
 import { db } from '@sim/db'
 import { permissions, workflow as workflowTable, workspace } from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import type { InferSelectModel } from 'drizzle-orm'
 import { and, eq } from 'drizzle-orm'
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@/lib/logs/console/logger'
 import type { PermissionType } from '@/lib/workspaces/permissions/utils'
 import type { ExecutionResult } from '@/executor/types'
 import type { WorkflowState } from '@/stores/workflows/workflow/types'
+import {
+  normalizeEdge,
+  normalizeValue,
+  normalizedStringify,
+  sortEdges,
+} from '@/lib/workflows/comparison'
 
 const logger = createLogger('WorkflowUtils')
 
@@ -145,45 +151,6 @@ function sanitizeInputFormatForComparison(inputFormat: any[] | undefined): any[]
 }
 
 /**
- * Normalize a value for consistent comparison by sorting object keys
- * @param value - The value to normalize
- * @returns A normalized version of the value
- */
-function normalizeValue(value: any): any {
-  // If not an object or array, return as is
-  if (value === null || value === undefined || typeof value !== 'object') {
-    return value
-  }
-
-  // Handle arrays by normalizing each element
-  if (Array.isArray(value)) {
-    return value.map(normalizeValue)
-  }
-
-  // For objects, sort keys and normalize each value
-  const sortedObj: Record<string, any> = {}
-
-  // Get all keys and sort them
-  const sortedKeys = Object.keys(value).sort()
-
-  // Reconstruct object with sorted keys and normalized values
-  for (const key of sortedKeys) {
-    sortedObj[key] = normalizeValue(value[key])
-  }
-
-  return sortedObj
-}
-
-/**
- * Generate a normalized JSON string for comparison
- * @param value - The value to normalize and stringify
- * @returns A normalized JSON string
- */
-function normalizedStringify(value: any): string {
-  return JSON.stringify(normalizeValue(value))
-}
-
-/**
  * Compare the current workflow state with the deployed state to detect meaningful changes
  * @param currentState - The current workflow state
  * @param deployedState - The deployed workflow state
@@ -202,31 +169,8 @@ export function hasWorkflowChanged(
   const deployedEdges = deployedState.edges || []
 
   // Create sorted, normalized representations of the edges for more reliable comparison
-  const normalizedCurrentEdges = currentEdges
-    .map((edge) => ({
-      source: edge.source,
-      sourceHandle: edge.sourceHandle,
-      target: edge.target,
-      targetHandle: edge.targetHandle,
-    }))
-    .sort((a, b) =>
-      `${a.source}-${a.sourceHandle}-${a.target}-${a.targetHandle}`.localeCompare(
-        `${b.source}-${b.sourceHandle}-${b.target}-${b.targetHandle}`
-      )
-    )
-
-  const normalizedDeployedEdges = deployedEdges
-    .map((edge) => ({
-      source: edge.source,
-      sourceHandle: edge.sourceHandle,
-      target: edge.target,
-      targetHandle: edge.targetHandle,
-    }))
-    .sort((a, b) =>
-      `${a.source}-${a.sourceHandle}-${a.target}-${a.targetHandle}`.localeCompare(
-        `${b.source}-${b.sourceHandle}-${b.target}-${b.targetHandle}`
-      )
-    )
+  const normalizedCurrentEdges = sortEdges(currentEdges.map(normalizeEdge))
+  const normalizedDeployedEdges = sortEdges(deployedEdges.map(normalizeEdge))
 
   // Compare the normalized edge arrays
   if (
@@ -406,10 +350,6 @@ export function hasWorkflowChanged(
   }
 
   return false
-}
-
-export function stripCustomToolPrefix(name: string) {
-  return name.startsWith('custom_') ? name.replace('custom_', '') : name
 }
 
 export const workflowHasResponseBlock = (executionResult: ExecutionResult): boolean => {

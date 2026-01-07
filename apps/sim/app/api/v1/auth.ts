@@ -1,6 +1,6 @@
+import { createLogger } from '@sim/logger'
 import type { NextRequest } from 'next/server'
 import { authenticateApiKeyFromHeader, updateApiKeyLastUsed } from '@/lib/api-key/service'
-import { createLogger } from '@/lib/logs/console/logger'
 
 const logger = createLogger('V1Auth')
 

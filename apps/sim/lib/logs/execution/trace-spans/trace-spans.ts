@@ -1,5 +1,6 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import type { ToolCall, TraceSpan } from '@/lib/logs/types'
+import { stripCustomToolPrefix } from '@/lib/workflows/common'
 import { isWorkflowBlockType } from '@/executor/consts'
 import type { ExecutionResult } from '@/executor/types'
 
@@ -471,8 +472,10 @@ function groupIterationBlocks(spans: TraceSpan[]): TraceSpan[] {
     }
   })
 
+  // Include loop/parallel spans that have errors (e.g., validation errors that blocked execution)
+  // These won't have iteration children, so they should appear directly in results
   const nonIterationContainerSpans = normalSpans.filter(
-    (span) => span.type !== 'parallel' && span.type !== 'loop'
+    (span) => (span.type !== 'parallel' && span.type !== 'loop') || span.status === 'error'
   )
 
   if (iterationSpans.length > 0) {
@@ -766,8 +769,4 @@ function ensureNestedWorkflowsProcessed(span: TraceSpan): TraceSpan {
   processedSpan.children = mergedChildren.length > 0 ? mergedChildren : undefined
 
   return processedSpan
-}
-
-export function stripCustomToolPrefix(name: string) {
-  return name.startsWith('custom_') ? name.replace('custom_', '') : name
 }

@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePrivy } from '@privy-io/react-auth'
+import { createLogger } from '@sim/logger'
 import { formatDistanceToNow } from 'date-fns'
 import {
   ArrowLeft,
@@ -33,13 +35,11 @@ import { VerifiedBadge } from '@/components/ui/verified-badge'
 import { useSession } from '@/lib/auth/auth-client'
 import { cn } from '@/lib/core/utils/cn'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@/lib/logs/console/logger'
 import type { CredentialRequirement } from '@/lib/workflows/credentials/credential-extractor'
+import { X402PaywallDialog } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/deploy/components/x402-paywall-dialog'
 import { WorkflowPreview } from '@/app/workspace/[workspaceId]/w/components/workflow-preview/workflow-preview'
 import { getBlock } from '@/blocks/registry'
 import { useStarTemplate, useTemplate } from '@/hooks/queries/templates'
-import { X402PaywallDialog } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/deploy/components/x402-paywall-dialog'
-import { usePrivy } from '@privy-io/react-auth'
 
 const logger = createLogger('TemplateDetails')
 
@@ -65,8 +65,6 @@ export default function TemplateDetails({ isWorkspaceContext = false }: Template
   const [isSuperUser, setIsSuperUser] = useState(false)
   const [isUsing, setIsUsing] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
-  const [isApproving, setIsApproving] = useState(false)
-  const [isRejecting, setIsRejecting] = useState(false)
   const [isVerifying, setIsVerifying] = useState(false)
   const [hasWorkspaceAccess, setHasWorkspaceAccess] = useState<boolean | null>(null)
   const [workspaces, setWorkspaces] = useState<
@@ -447,52 +445,6 @@ export default function TemplateDetails({ isWorkspaceContext = false }: Template
     }
   }
 
-  const handleApprove = async () => {
-    if (isApproving || !template) return
-
-    setIsApproving(true)
-    try {
-      const response = await fetch(`/api/templates/${template.id}/approve`, {
-        method: 'POST',
-      })
-
-      if (response.ok) {
-        if (isWorkspaceContext && workspaceId) {
-          router.push(`/workspace/${workspaceId}/templates`)
-        } else {
-          router.push('/templates')
-        }
-      }
-    } catch (error) {
-      logger.error('Error approving template:', error)
-    } finally {
-      setIsApproving(false)
-    }
-  }
-
-  const handleReject = async () => {
-    if (isRejecting || !template) return
-
-    setIsRejecting(true)
-    try {
-      const response = await fetch(`/api/templates/${template.id}/reject`, {
-        method: 'POST',
-      })
-
-      if (response.ok) {
-        if (isWorkspaceContext && workspaceId) {
-          router.push(`/workspace/${workspaceId}/templates`)
-        } else {
-          router.push('/templates')
-        }
-      }
-    } catch (error) {
-      logger.error('Error rejecting template:', error)
-    } finally {
-      setIsRejecting(false)
-    }
-  }
-
   const handleToggleVerification = async () => {
     if (isVerifying || !template?.creator?.id) return
 
@@ -572,7 +524,7 @@ export default function TemplateDetails({ isWorkspaceContext = false }: Template
 
   return (
     <>
-      <div className={cn('flex min-h-screen flex-col', isWorkspaceContext && 'pl-64')}>
+      <div className={cn('flex min-h-screen flex-col')}>
         <div className='flex flex-1 overflow-hidden'>
           <div className='flex flex-1 flex-col overflow-auto px-[24px] pt-[24px] pb-[24px]'>
             {/* Top bar with back button */}
@@ -593,36 +545,17 @@ export default function TemplateDetails({ isWorkspaceContext = false }: Template
 
               {/* Action buttons */}
               <div className='flex items-center gap-[8px]'>
-                {/* Approve/Reject buttons for super users */}
-                {isSuperUser && template.status === 'pending' && (
-                  <>
-                    <Button
-                      variant='active'
-                      onClick={handleApprove}
-                      disabled={isApproving}
-                      className='h-[32px] rounded-[6px]'
-                    >
-                      {isApproving ? 'Approving...' : 'Approve'}
-                    </Button>
-                    <Button
-                      variant='active'
-                      onClick={handleReject}
-                      disabled={isRejecting}
-                      className='h-[32px] rounded-[6px]'
-                    >
-                      {isRejecting ? 'Rejecting...' : 'Reject'}
-                    </Button>
-                  </>
-                )}
-
                 {/* Edit button - for template owners */}
                 {canEditTemplate && currentUserId && (
                   <>
-                    {(isWorkspaceContext || template.workflowId) && !showWorkspaceSelectorForEdit ? (
+                    {(isWorkspaceContext || template.workflowId) &&
+                    !showWorkspaceSelectorForEdit ? (
                       <Button
                         variant='active'
                         onClick={handleEditTemplate}
-                        disabled={isEditing || (!isWorkspaceContext && hasWorkspaceAccess === false)}
+                        disabled={
+                          isEditing || (!isWorkspaceContext && hasWorkspaceAccess === false)
+                        }
                         className='h-[32px] rounded-[6px]'
                       >
                         {isEditing ? 'Opening...' : 'Edit'}
@@ -670,8 +603,8 @@ export default function TemplateDetails({ isWorkspaceContext = false }: Template
                   </>
                 )}
 
-                {/* Use template button - only for approved templates and non-owners */}
-                {template.status === 'approved' && !canEditTemplate && (
+                {/* Use template button - non-owners */}
+                {!canEditTemplate && (
                   <>
                     {!currentUserId ? (
                       <Button
@@ -680,8 +613,8 @@ export default function TemplateDetails({ isWorkspaceContext = false }: Template
                           const callbackUrl =
                             isWorkspaceContext && workspaceId
                               ? encodeURIComponent(
-                                `/workspace/${workspaceId}/templates/${template.id}?use=true`
-                              )
+                                  `/workspace/${workspaceId}/templates/${template.id}?use=true`
+                                )
                               : encodeURIComponent(`/templates/${template.id}`)
                           router.push(`/login?callbackUrl=${callbackUrl}`)
                         }}
@@ -1067,7 +1000,10 @@ export default function TemplateDetails({ isWorkspaceContext = false }: Template
                 throw new Error('Failed to record purchase')
               }
 
-              logger.info('Template purchase recorded', { templateId: template.id, transactionHash })
+              logger.info('Template purchase recorded', {
+                templateId: template.id,
+                transactionHash,
+              })
 
               // Close paywall and proceed with template usage
               setShowPaywall(false)

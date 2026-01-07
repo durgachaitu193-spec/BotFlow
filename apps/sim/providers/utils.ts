@@ -1,6 +1,6 @@
+import { createLogger } from '@sim/logger'
 import { getEnv, isTruthy } from '@/lib/core/config/env'
 import { isHosted } from '@/lib/core/config/environment'
-import { createLogger } from '@/lib/logs/console/logger'
 import { anthropicProvider } from '@/providers/anthropic'
 import { azureOpenAIProvider } from '@/providers/azure-openai'
 import { cerebrasProvider } from '@/providers/cerebras'

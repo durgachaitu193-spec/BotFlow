@@ -1,10 +1,10 @@
-import { db } from "@sim/db";
-import { launchpadTokens } from "@sim/db/schema";
-import { eq } from "drizzle-orm";
+import { db } from '@sim/db'
+import { launchpadTokens } from '@sim/db/schema'
+import { eq } from 'drizzle-orm'
 
 interface ISaveAssetID {
-  assetId: string;
-  hydradxId: string;
+  assetId: string
+  hydradxId: string
 }
 
 export const saveAssetID = async ({ assetId, hydradxId }: ISaveAssetID) => {
@@ -16,5 +16,5 @@ export const saveAssetID = async ({ assetId, hydradxId }: ISaveAssetID) => {
     .set({
       hydradxId,
     })
-    .where(eq(launchpadTokens.id, assetId));
-};
+    .where(eq(launchpadTokens.id, assetId))
+}

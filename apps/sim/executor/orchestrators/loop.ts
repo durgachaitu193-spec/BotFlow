@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { buildLoopIndexCondition, DEFAULTS, EDGE } from '@/executor/consts'
 import type { DAG } from '@/executor/dag/builder'
 import type { LoopScope } from '@/executor/execution/state'

@@ -1,7 +1,7 @@
-import React, { InputHTMLAttributes, ReactNode } from "react";
+import React, { type InputHTMLAttributes, type ReactNode } from 'react'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  suffix?: ReactNode;
+  suffix?: ReactNode
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -9,20 +9,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={`relative flex items-center ${className}`}>
         <input
-          className={`w-full h-full bg-transparent outline-none px-4 py-2 ${suffix ? "pr-10" : ""}`}
+          className={`h-full w-full bg-transparent px-4 py-2 outline-none ${suffix ? 'pr-10' : ''}`}
           ref={ref}
           {...props}
         />
         {suffix && (
-          <div className="absolute right-3 flex items-center pointer-events-none">
-            {suffix}
-          </div>
+          <div className='pointer-events-none absolute right-3 flex items-center'>{suffix}</div>
         )}
       </div>
-    );
-  },
-);
+    )
+  }
+)
 
-Input.displayName = "Input";
+Input.displayName = 'Input'
 
-export default Input;
+export default Input

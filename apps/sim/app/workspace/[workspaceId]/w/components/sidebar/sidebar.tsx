@@ -1,13 +1,13 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { Search } from 'lucide-react'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import { ScrollArea } from '@/components/ui'
 import { useSession } from '@/lib/auth/auth-client'
 import { canUpgrade, getBillingStatus } from '@/lib/billing/client/utils'
 import { getEnv, isTruthy } from '@/lib/core/config/env'
-import { createLogger } from '@/lib/logs/console/logger'
 import { generateWorkspaceName } from '@/lib/workspaces/naming'
 import { useUserPermissionsContext } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
 import {

@@ -1,7 +1,7 @@
+import { createLogger } from '@sim/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { isHosted } from './lib/core/config/environment'
 import { generateRuntimeCSP } from './lib/core/security/csp'
-import { createLogger } from './lib/logs/console/logger'
 
 const logger = createLogger('Proxy')
 
@@ -136,7 +136,7 @@ export async function proxy(request: NextRequest) {
   const url = request.nextUrl
 
   // Check for Privy authentication cookie
-  const privyUserId = request.cookies.get('privy-user-id')?.value
+  const privyUserId = request.cookies.get('sim-privy-user-id')?.value
   const hasActiveSession = !!privyUserId
 
   const redirect = handleRootPathRedirects(request, hasActiveSession)

@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { format } from 'date-fns'
 import {
   AlertCircle,
@@ -29,7 +30,6 @@ import { Trash } from '@/components/emcn/icons/trash'
 import { Checkbox } from '@/components/ui/checkbox'
 import { SearchHighlight } from '@/components/ui/search-highlight'
 import type { DocumentSortField, SortOrder } from '@/lib/knowledge/documents/types'
-import { createLogger } from '@/lib/logs/console/logger'
 import {
   ActionBar,
   KnowledgeBaseLoading,

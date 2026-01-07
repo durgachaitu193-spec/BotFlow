@@ -1,11 +1,11 @@
 import { createContext, Script } from 'vm'
+import { createLogger } from '@sim/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { env, isTruthy } from '@/lib/core/config/env'
 import { validateProxyUrl } from '@/lib/core/security/input-validation'
 import { generateRequestId } from '@/lib/core/utils/request'
 import { executeInE2B } from '@/lib/execution/e2b'
 import { CodeLanguage, DEFAULT_CODE_LANGUAGE, isValidCodeLanguage } from '@/lib/execution/languages'
-import { createLogger } from '@/lib/logs/console/logger'
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
@@ -14,7 +14,7 @@ export const MAX_DURATION = 210
 const logger = createLogger('FunctionExecuteAPI')
 
 function createSecureFetch(requestId: string) {
-  const originalFetch = (globalThis as any).fetch || require('node-fetch').default
+  const originalFetch = (globalThis as any).fetch
 
   return async function secureFetch(input: any, init?: any) {
     const url = typeof input === 'string' ? input : input?.url || input

@@ -21,6 +21,10 @@ export {
   ModalDescription,
   ModalFooter,
   ModalHeader,
+  ModalTabs,
+  ModalTabsContent,
+  ModalTabsList,
+  ModalTabsTrigger,
   ModalTitle,
   ModalTrigger,
 } from './modal/modal'

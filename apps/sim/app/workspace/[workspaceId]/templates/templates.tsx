@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import { Layout, Search } from 'lucide-react'
 import { Button } from '@/components/emcn'
 import { Input } from '@/components/ui/input'
-import { createLogger } from '@/lib/logs/console/logger'
+// import { createLogger } from '@sim/logger'
 import type { CreatorProfileDetails } from '@/app/_types/creator-profile'
 import {
   TemplateCard,
@@ -13,7 +13,7 @@ import {
 import { useDebounce } from '@/hooks/use-debounce'
 import type { WorkflowState } from '@/stores/workflows/workflow/types'
 
-const logger = createLogger('TemplatesPage')
+// const logger = createLogger('TemplatesPage')
 
 /**
  * Template data structure with support for both new and legacy fields
@@ -86,11 +86,7 @@ export default function Templates({
 
     return templates.filter((template) => {
       const tabMatch =
-        activeTab === 'your'
-          ? template.userId === currentUserId || template.isStarred
-          : activeTab === 'gallery'
-            ? template.status === 'approved'
-            : template.status === 'pending'
+        activeTab === 'your' ? template.userId === currentUserId || template.isStarred : true
 
       if (!tabMatch) return false
 
@@ -124,27 +120,23 @@ export default function Templates({
     }
 
     const messages = {
-      pending: {
-        title: 'No pending templates',
-        description: 'New submissions will appear here',
-      },
       your: {
         title: 'No templates yet',
         description: 'Create or star templates to see them here',
       },
       gallery: {
         title: 'No templates available',
-        description: 'Templates will appear once approved',
+        description: 'Templates will appear once created',
       },
     }
 
-    return messages[activeTab as keyof typeof messages] || messages.gallery
+    return (messages as any)[activeTab] || messages.gallery
   }, [debouncedSearchQuery, activeTab])
 
   return (
-    <div className='flex h-[100vh] flex-col pl-64'>
+    <div className='flex h-[100vh] flex-col'>
       <div className='flex flex-1 overflow-hidden'>
-        <div className='flex flex-1 flex-col overflow-auto px-[24px] pt-[24px] pb-[24px]'>
+        <div className='flex flex-1 flex-col overflow-auto px-[24px] pt-[16px] pb-[24px]'>
           <div>
             <div className='flex items-start gap-[12px]'>
               <div className='flex h-[26px] w-[26px] items-center justify-center rounded-[6px] border border-[#7A5F11] bg-[#514215]'>
@@ -182,15 +174,6 @@ export default function Templates({
               >
                 Your Templates
               </Button>
-              {isSuperUser && (
-                <Button
-                  variant={activeTab === 'pending' ? 'active' : 'default'}
-                  className='h-[32px] rounded-[6px]'
-                  onClick={() => setActiveTab('pending')}
-                >
-                  Pending
-                </Button>
-              )}
             </div>
           </div>
 

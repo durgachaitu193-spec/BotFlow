@@ -1,10 +1,10 @@
-import { Wallet } from "@/global/types";
-import { nextApiFetch } from "@/global/utils/nextApiFetch";
+import type { Wallet } from '@/global/types'
+import { nextApiFetch } from '@/global/utils/nextApiFetch'
 
 interface ILoginArgs {
-  address: string;
-  wallet: Wallet;
-  signature: string;
+  address: string
+  wallet: Wallet
+  signature: string
 }
 
 export const login = async ({
@@ -13,12 +13,12 @@ export const login = async ({
   signature,
 }: ILoginArgs): Promise<{ data?: { address: string }; error?: string }> => {
   return nextApiFetch({
-    url: "api/v1/auth/login",
-    method: "POST",
+    url: 'api/v1/auth/login',
+    method: 'POST',
     data: {
       address,
       signature,
       wallet,
     },
-  });
-};
+  })
+}

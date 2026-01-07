@@ -14,7 +14,6 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 
-
 export interface WalletButtonProps {
   onSignOut?: () => Promise<void> | void
 }
@@ -66,7 +65,9 @@ export function WalletButton({ onSignOut }: WalletButtonProps) {
             method: 'POST',
             credentials: 'include',
           }).catch(() => {
-            // If API fails, try to clear cookie client-side as fallback
+            document.cookie = 'sim-privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+            document.cookie =
+              'launchpad-privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
             document.cookie = 'privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
           })
 
@@ -100,29 +101,37 @@ export function WalletButton({ onSignOut }: WalletButtonProps) {
       <Button
         variant='outline'
         onClick={() => login()}
-        className='h-[32px] w-[32px] rounded-[11px] border bg-card text-card-foreground shadow-xs hover:border-[var(--brand-primary-hex)] hover:bg-[var(--brand-primary-hex)] hover:text-white z-50'
+        className='h-9 rounded-full border border-white/10 bg-white/5 px-4 font-medium text-white text-xs shadow-sm transition-all duration-200 hover:border-white/20 hover:bg-white/10'
       >
-        <Wallet className='h-4 w-4' />
+        <Wallet className='mr-2 h-3.5 w-3.5' />
+        Connect Wallet
       </Button>
     )
   }
+
+  const truncatedAddress = walletAddress
+    ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+    : 'Connected'
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant='outline'
-          className='h-[32px] w-[32px] rounded-[11px] border bg-card text-card-foreground shadow-xs hover:border-[var(--brand-primary-hex)] hover:bg-[var(--brand-primary-hex)] hover:text-white relative z-50'
+          className='relative z-50 h-9 rounded-full border border-white/10 bg-white/5 px-4 font-medium text-white text-xs shadow-sm transition-all duration-200 hover:border-white/20 hover:bg-white/10'
         >
-          <Wallet className='h-4 w-4' />
+          <div className='flex items-center gap-2'>
+            <div className='h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' />
+            <span className='font-mono'>{truncatedAddress}</span>
+          </div>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-72 max-w-[calc(100vw-2rem)]'>
         <DropdownMenuLabel className='font-normal'>
           <div className='flex flex-col space-y-1'>
-            <p className='text-sm font-medium leading-none'>Wallet</p>
+            <p className='font-medium text-sm leading-none'>Wallet</p>
             {walletAddress && (
-              <p className='font-mono text-xs leading-tight text-muted-foreground break-all'>
+              <p className='break-all font-mono text-muted-foreground text-xs leading-tight'>
                 {walletAddress}
               </p>
             )}
@@ -155,4 +164,3 @@ export function WalletButton({ onSignOut }: WalletButtonProps) {
     </DropdownMenu>
   )
 }
-

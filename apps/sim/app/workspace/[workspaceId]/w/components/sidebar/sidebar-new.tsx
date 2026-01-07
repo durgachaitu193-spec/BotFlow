@@ -1,12 +1,12 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { ArrowDown, Plus, Search } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { Button, FolderPlus, Tooltip } from '@/components/emcn'
 import { useSession } from '@/lib/auth/auth-client'
 import { getEnv, isTruthy } from '@/lib/core/config/env'
-import { createLogger } from '@/lib/logs/console/logger'
 import { useRegisterGlobalCommands } from '@/app/workspace/[workspaceId]/providers/global-commands-provider'
 import { createCommands } from '@/app/workspace/[workspaceId]/utils/commands-utils'
 import {
@@ -483,7 +483,7 @@ export function SidebarNew() {
         <>
           <aside
             ref={sidebarRef}
-            className='sidebar-container relative h-full flex-shrink-0 z-10 overflow-hidden bg-[var(--surface-1)]'
+            className='sidebar-container relative z-10 h-full flex-shrink-0 overflow-hidden bg-[var(--surface-1)]'
             aria-label='Workspace sidebar'
             onClick={handleSidebarClick}
           >

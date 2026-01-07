@@ -149,4 +149,3 @@ export const USERNAME_REGISTRY_ABI = [
     stateMutability: 'view',
   },
 ] as const
-

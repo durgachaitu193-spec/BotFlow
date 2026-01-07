@@ -328,3 +328,7 @@ export function parseReferencePath(reference: string): string[] {
   const content = extractReferenceContent(reference)
   return content.split(REFERENCE.PATH_DELIMITER)
 }
+
+export function normalizeName(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, '')
+}

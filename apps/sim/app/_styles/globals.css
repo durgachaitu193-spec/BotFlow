@@ -78,7 +78,6 @@
  * Dark color tokens - single source of truth for all colors (dark-only)
  */
 @layer base {
-
   :root,
   .light {
     /* Neutrals (surfaces) - shadcn stone palette */
@@ -307,7 +306,7 @@
     --border-success: #575757;
 
     /* Brand & state */
-   --brand-400: #ff8a50;
+    --brand-400: #ff8a50;
     --brand-500: #f26522;
     --brand-secondary: #00bac7;
     --brand-tertiary: #22c55e;
@@ -638,19 +637,23 @@ input[type="search"]::-ms-clear {
   .streaming-effect::after {
     content: "";
     @apply pointer-events-none absolute left-0 top-0 h-full w-full;
-    background: linear-gradient(90deg,
-        rgba(128, 128, 128, 0) 0%,
-        rgba(128, 128, 128, 0.1) 50%,
-        rgba(128, 128, 128, 0) 100%);
+    background: linear-gradient(
+      90deg,
+      rgba(128, 128, 128, 0) 0%,
+      rgba(128, 128, 128, 0.1) 50%,
+      rgba(128, 128, 128, 0) 100%
+    );
     animation: code-shimmer 1.5s infinite;
     z-index: 10;
   }
 
   .dark .streaming-effect::after {
-    background: linear-gradient(90deg,
-        rgba(180, 180, 180, 0) 0%,
-        rgba(180, 180, 180, 0.1) 50%,
-        rgba(180, 180, 180, 0) 100%);
+    background: linear-gradient(
+      90deg,
+      rgba(180, 180, 180, 0) 0%,
+      rgba(180, 180, 180, 0.1) 50%,
+      rgba(180, 180, 180, 0) 100%
+    );
   }
 
   .loading-placeholder::placeholder {
@@ -738,7 +741,6 @@ input[type="search"]::-ms-clear {
  * Do not modify; remove after migration.
  */
 @layer base {
-
   :root,
   .light {
     --background: 0 0% 100%;
@@ -779,7 +781,6 @@ input[type="search"]::-ms-clear {
     --brand-primary-hover-hex: #00bac7;
     --brand-accent-hex: #f26522;
     --brand-accent-hover-hex: #00bac7;
-
   }
 
   .dark {

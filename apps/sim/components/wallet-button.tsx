@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { usePrivy, useWallets } from '@privy-io/react-auth'
+import { createLogger } from '@sim/logger'
 import { Check, Copy, LogOut, Wallet } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -13,7 +14,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { createLogger } from '@/lib/logs/console/logger'
 import { clearUserData } from '@/stores'
 
 const logger = createLogger('WalletButton')
@@ -66,7 +66,7 @@ export function WalletButton() {
             method: 'POST',
             credentials: 'include',
           }).catch(() => {
-            // If API fails, try to clear cookie client-side as fallback
+            document.cookie = 'sim-privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
             document.cookie = 'privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
           })
 
@@ -105,9 +105,9 @@ export function WalletButton() {
       <DropdownMenuContent align='end' className='w-72 max-w-[calc(100vw-2rem)]'>
         <DropdownMenuLabel className='font-normal'>
           <div className='flex flex-col space-y-1'>
-            <p className='text-sm font-medium leading-none'>Wallet</p>
+            <p className='font-medium text-sm leading-none'>Wallet</p>
             {walletAddress && (
-              <p className='font-mono text-xs leading-tight text-muted-foreground break-all'>
+              <p className='break-all font-mono text-muted-foreground text-xs leading-tight'>
                 {walletAddress}
               </p>
             )}
@@ -140,4 +140,3 @@ export function WalletButton() {
     </DropdownMenu>
   )
 }
-

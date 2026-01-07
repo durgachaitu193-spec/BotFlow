@@ -1,15 +1,15 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { usePrivy, useWallets, useCreateWallet } from '@privy-io/react-auth'
+import { useCreateWallet, usePrivy, useWallets } from '@privy-io/react-auth'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import { useSession } from '@/lib/auth/auth-client'
 import type { PrivyUserData } from '@/lib/privy/types'
 import { inter } from '@/app/_styles/fonts/inter/inter'
 import { soehne } from '@/app/_styles/fonts/soehne/soehne'
-import { useSession } from '@/lib/auth/auth-client'
 
 /**
  * Transform Privy user object to our PrivyUserData structure
@@ -29,12 +29,12 @@ const transformPrivyUser = (privyUser: any): PrivyUserData => {
     })),
     wallet: privyUser.wallet
       ? {
-        address: privyUser.wallet.address,
-        walletClientType: privyUser.wallet.walletClientType,
-        chainType: privyUser.wallet.chainType,
-        createdAt: privyUser.wallet.createdAt,
-        ...privyUser.wallet,
-      }
+          address: privyUser.wallet.address,
+          walletClientType: privyUser.wallet.walletClientType,
+          chainType: privyUser.wallet.chainType,
+          createdAt: privyUser.wallet.createdAt,
+          ...privyUser.wallet,
+        }
       : undefined,
     wallets: privyUser.wallets?.map((wallet: any) => ({
       address: wallet.address,
@@ -52,7 +52,7 @@ export default function PrivyLogin() {
   const { wallets } = useWallets()
   const { createWallet } = useCreateWallet()
   const router = useRouter()
-  const { refetch } = useSession()
+  const { data, refetch } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
   const [isCreatingWallet, setIsCreatingWallet] = useState(false)
@@ -62,6 +62,7 @@ export default function PrivyLogin() {
   const hasSynced = useRef(false)
   const isProcessing = useRef(false)
   const processedUserId = useRef<string | null>(null)
+  const lastRedirectAttempt = useRef<number>(0)
 
   // Get wallet address - simple approach
   const getWalletAddress = (): string | undefined => {
@@ -131,92 +132,91 @@ export default function PrivyLogin() {
 
   // Handle sync + redirect after authentication
   useEffect(() => {
-    // Prevent multiple redirects - check if we've already processed this user
-    if (hasRedirected.current || isProcessing.current) return
-    if (processedUserId.current === user?.id) return
-
     // Wait for Privy readiness and auth
-    if (!ready) return
-    if (!authenticated || !user?.id) return
+    if (!ready || !authenticated || !user?.id) return
 
-    // Mark as processing immediately to prevent re-execution
-    isProcessing.current = true
-    hasRedirected.current = true
-    processedUserId.current = user.id
+    const userId = user.id
+    const now = Date.now()
+
+    // If we're already processing this exact user, don't start again
+    // Unless much time has passed (recovery case)
+    if (
+      isProcessing.current &&
+      processedUserId.current === userId &&
+      now - lastRedirectAttempt.current < 10000
+    ) {
+      return
+    }
 
     // Async function to handle sync and redirect
     const proceedWithSyncAndRedirect = async () => {
-      // Check if user has a wallet
-      let walletAddress = getWalletAddress()
+      try {
+        isProcessing.current = true
+        processedUserId.current = userId
+        lastRedirectAttempt.current = now
 
-      // If no wallet exists, create one explicitly
-      if (!walletAddress) {
-        try {
-          console.log('No wallet found, creating embedded wallet...')
-          setIsCreatingWallet(true)
+        // 1. Check if we already have a session for this user
+        const currentSessionUserId = data?.user?.id || data?.session?.userId
 
-          // Use createWallet function to explicitly create a wallet
-          const wallet = await createWallet()
-
-          if (wallet?.address) {
-            walletAddress = wallet.address
-            console.log('Wallet created successfully:', walletAddress)
-          } else {
-            // Wait a bit for wallet to be available in wallets array
-            await new Promise((resolve) => setTimeout(resolve, 1000))
-            walletAddress = getWalletAddress()
-          }
-        } catch (error) {
-          console.error('Error creating wallet:', error)
-          // Continue without wallet - user can still be synced
-          setError('Failed to create wallet. Please try again.')
-          isProcessing.current = false
-          hasRedirected.current = false
-          hasSynced.current = false
-          processedUserId.current = null
-          setIsCreatingWallet(false)
+        if (currentSessionUserId === userId) {
+          console.log('Session already active for user, redirecting to workspace')
+          router.push('/workspace')
           return
-        } finally {
-          setIsCreatingWallet(false)
-        }
-      }
-
-      // If still no wallet after creation attempt, wait a bit more
-      if (!walletAddress) {
-        console.log('Waiting for wallet to be available...')
-        let attempts = 0
-        const maxAttempts = 10 // Wait up to 5 seconds (10 * 500ms)
-
-        while (!walletAddress && attempts < maxAttempts) {
-          await new Promise((resolve) => setTimeout(resolve, 500))
-          walletAddress = getWalletAddress()
-          attempts++
         }
 
-        if (!walletAddress && attempts >= maxAttempts) {
-          console.warn('Wallet not available after creation attempt, proceeding without wallet address')
+        // 2. We don't have a session, so we need to sync
+        let walletAddress = getWalletAddress()
+
+        // If no wallet exists, create one explicitly
+        if (!walletAddress) {
+          try {
+            console.log('No wallet found, creating embedded wallet...')
+            setIsCreatingWallet(true)
+            const wallet = await createWallet()
+            if (wallet?.address) {
+              walletAddress = wallet.address
+            } else {
+              await new Promise((resolve) => setTimeout(resolve, 1000))
+              walletAddress = getWalletAddress()
+            }
+          } catch (error) {
+            console.error('Error creating wallet:', error)
+            setError('Failed to create wallet. Proceeding without one.')
+          } finally {
+            setIsCreatingWallet(false)
+          }
         }
-      }
 
-      // Sync user data to database (with wallet address)
-      const syncResult = await syncPrivyUser(user, walletAddress)
+        // Sync user data to database
+        console.log('Syncing user with wallet:', walletAddress)
+        const syncSuccess = await syncPrivyUser(user, walletAddress)
 
-      if (!syncResult) {
-        console.error('Sync failed, cannot redirect')
-        // Reset processing flags so user can retry
+        if (!syncSuccess) {
+          console.error('Sync failed')
+          setError('Failed to sync account data. Please refresh and try again.')
+          return
+        }
+
+        // 3. After sync, refetch the session
+        console.log('Sync successful, refetching session...')
+        await refetch()
+
+        // Wait a bit for the cookie/state to settle
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+
+        // 4. Finally redirect
+        console.log('Redirecting to workspace')
+        router.push('/workspace')
+      } catch (err) {
+        console.error('Unexpected error in login flow:', err)
+        setError('An unexpected error occurred. Please try again.')
+      } finally {
         isProcessing.current = false
-        hasRedirected.current = false
-        hasSynced.current = false
-        processedUserId.current = null
-        setError('Failed to sync account data. Please try again.')
-        return
       }
-      console.log('Sync successful, refetching session...')
-      await refetch()
-      router.push('/workspace')
     }
+
     proceedWithSyncAndRedirect()
-  }, [ready, authenticated, user?.id, wallets])
+  }, [ready, authenticated, user?.id, wallets, data?.user?.id])
 
   const handleLogin = async () => {
     try {
@@ -232,14 +232,14 @@ export default function PrivyLogin() {
   if (authenticated && user) {
     if (error) {
       return (
-        <div className='space-y-4 text-center max-w-md mx-auto p-6 bg-black/20 rounded-2xl border border-red-500/20 backdrop-blur-sm'>
+        <div className='mx-auto max-w-md space-y-4 rounded-2xl border border-red-500/20 bg-black/20 p-6 text-center backdrop-blur-sm'>
           <h1 className={`${soehne.className} font-medium text-[24px] text-red-400 tracking-tight`}>
             Authentication Error
           </h1>
           <p className={`${inter.className} font-[380] text-[16px] text-gray-200`}>{error}</p>
           <Button
             onClick={() => window.location.reload()}
-            className='mt-4 bg-white/10 hover:bg-white/20 text-white border border-white/10'
+            className='mt-4 border border-white/10 bg-white/10 text-white hover:bg-white/20'
           >
             Retry Connection
           </Button>
@@ -261,7 +261,7 @@ export default function PrivyLogin() {
         <h1 className={`${soehne.className} font-medium text-[32px] text-white tracking-tight`}>
           {statusMessage}
         </h1>
-        <p className={`${inter.className} font-[380] text-[16px] text-gray-200 mt-2`}>
+        <p className={`${inter.className} mt-2 font-[380] text-[16px] text-gray-200`}>
           Please wait...
         </p>
       </div>
@@ -274,20 +274,9 @@ export default function PrivyLogin() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className='relative flex min-h-screen items-center justify-center px-4 m'
+      className='m relative flex min-h-screen items-center justify-center px-4'
     >
-      <div
-        className='
-      w-full max-w-md
-      rounded-3xl
-      bg-black/10
-      backdrop-blur-2xl
-      border border-black/20
-      shadow-2xl
-      p-8   
-      space-y-8         
-    '
-      >
+      <div className='w-full max-w-md space-y-8 rounded-3xl border border-black/20 bg-black/10 p-8 shadow-2xl backdrop-blur-2xl '>
         <div className='space-y-10 text-center'>
           <div className='flex justify-center'>
             <Image
@@ -309,15 +298,7 @@ export default function PrivyLogin() {
           <Button
             onClick={handleLogin}
             disabled={isLoading || !ready}
-            className='
-          auth-button-gradient
-          flex w-full items-center justify-center gap-2
-          rounded-[12px]
-          font-medium text-[17px]
-          text-white
-          py-4 
-          transition-all duration-200
-        '
+            className='auth-button-gradient flex w-full items-center justify-center gap-2 rounded-[12px] py-4 font-medium text-[17px] text-white transition-all duration-200 '
           >
             {!ready ? 'Initializing...' : isLoading ? 'Connecting...' : 'Connect Wallet / Sign In'}
           </Button>
@@ -330,4 +311,3 @@ export default function PrivyLogin() {
     </motion.div>
   )
 }
-

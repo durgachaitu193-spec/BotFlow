@@ -114,6 +114,7 @@ import { TtsBlock } from '@/blocks/blocks/tts'
 import { TwilioSMSBlock } from '@/blocks/blocks/twilio'
 import { TwilioVoiceBlock } from '@/blocks/blocks/twilio_voice'
 import { TypeformBlock } from '@/blocks/blocks/typeform'
+import { UniswapBlock } from '@/blocks/blocks/uniswap'
 import { VariablesBlock } from '@/blocks/blocks/variables'
 import { VideoGeneratorBlock } from '@/blocks/blocks/video_generator'
 import { VisionBlock } from '@/blocks/blocks/vision'
@@ -264,6 +265,7 @@ export const registry: Record<string, BlockConfig> = {
   workflow: WorkflowBlock,
   workflow_input: WorkflowInputBlock,
   x: XBlock,
+  uniswap: UniswapBlock,
   youtube: YouTubeBlock,
   zep: ZepBlock,
   zendesk: ZendeskBlock,
@@ -271,6 +273,10 @@ export const registry: Record<string, BlockConfig> = {
 }
 
 export const getBlock = (type: string): BlockConfig | undefined => registry[type]
+export const getBlockByToolName = (toolName: string): BlockConfig | undefined =>
+  Object.values(registry).find(
+    (block) => block.name.toLowerCase() === toolName.toLowerCase() || block.type === toolName
+  )
 
 export const getBlocksByCategory = (category: 'blocks' | 'tools' | 'triggers'): BlockConfig[] =>
   Object.values(registry).filter((block) => block.category === category)

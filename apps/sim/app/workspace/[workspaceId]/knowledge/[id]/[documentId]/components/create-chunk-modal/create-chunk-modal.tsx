@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { AlertCircle, Loader2 } from 'lucide-react'
 import { Button, Textarea } from '@/components/emcn'
 import {
@@ -11,7 +12,6 @@ import {
   ModalHeader,
 } from '@/components/emcn/components/modal/modal'
 import { Label } from '@/components/ui/label'
-import { createLogger } from '@/lib/logs/console/logger'
 import type { ChunkData, DocumentData } from '@/stores/knowledge/store'
 
 const logger = createLogger('CreateChunkModal')

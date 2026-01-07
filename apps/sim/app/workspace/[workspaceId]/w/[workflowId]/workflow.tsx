@@ -11,9 +11,9 @@ import ReactFlow, {
   useReactFlow,
 } from 'reactflow'
 import 'reactflow/dist/style.css'
+import { createLogger } from '@sim/logger'
 import { Loader2 } from 'lucide-react'
 import type { OAuthConnectEventDetail } from '@/lib/copilot/tools/client/other/oauth-request-access'
-import { createLogger } from '@/lib/logs/console/logger'
 import type { OAuthProvider } from '@/lib/oauth'
 import { TriggerUtils } from '@/lib/workflows/triggers/triggers'
 import { useUserPermissionsContext } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
@@ -765,7 +765,7 @@ const WorkflowContent = React.memo(() => {
                   block: b,
                   distance: Math.sqrt(
                     (b.position.x - relativePosition.x) ** 2 +
-                    (b.position.y - relativePosition.y) ** 2
+                      (b.position.y - relativePosition.y) ** 2
                   ),
                 }))
                 .sort((a, b) => a.distance - b.distance)[0]?.block
@@ -1535,7 +1535,7 @@ const WorkflowContent = React.memo(() => {
     resizeLoopNodesWrapper()
 
     // No need for cleanup with direct function
-    return () => { }
+    return () => {}
   }, [nodes, resizeLoopNodesWrapper])
 
   // Special effect to handle cleanup after node deletion
@@ -1629,7 +1629,7 @@ const WorkflowContent = React.memo(() => {
         const sourceParentId =
           blocks[sourceNode.id]?.data?.parentId ||
           (connection.sourceHandle === 'loop-start-source' ||
-            connection.sourceHandle === 'parallel-start-source'
+          connection.sourceHandle === 'parallel-start-source'
             ? connection.source
             : undefined)
         const targetParentId = blocks[targetNode.id]?.data?.parentId
@@ -1678,9 +1678,9 @@ const WorkflowContent = React.memo(() => {
           type: 'workflowEdge',
           data: isInsideContainer
             ? {
-              parentId,
-              isInsideContainer,
-            }
+                parentId,
+                isInsideContainer,
+              }
             : undefined,
         })
       }
@@ -1885,7 +1885,7 @@ const WorkflowContent = React.memo(() => {
           }
           setDragStartPosition(null)
         }
-      } catch { }
+      } catch {}
 
       // Don't process parent changes if the node hasn't actually changed parent or is being moved within same parent
       if (potentialParentId === dragStartParentId) return
@@ -1986,7 +1986,7 @@ const WorkflowContent = React.memo(() => {
                 block: b,
                 distance: Math.sqrt(
                   (b.position.x - relativePositionBefore.x) ** 2 +
-                  (b.position.y - relativePositionBefore.y) ** 2
+                    (b.position.y - relativePositionBefore.y) ** 2
                 ),
               }))
               .sort((a, b) => a.distance - b.distance)[0]?.block
@@ -2066,7 +2066,7 @@ const WorkflowContent = React.memo(() => {
     try {
       // Clear current design selection when clicking on empty canvas
       usePanelEditorStore.getState().clearCurrentBlock()
-    } catch { }
+    } catch {}
   }, [])
 
   // Edge selection

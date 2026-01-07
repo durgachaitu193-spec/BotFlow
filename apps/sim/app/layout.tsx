@@ -6,13 +6,13 @@ import { generateBrandedMetadata, generateStructuredData } from '@/lib/branding/
 import { PostHogProvider } from '@/app/_shell/providers/posthog-provider'
 import '@/app/_styles/globals.css'
 
+import { PrivyProviderWrapper } from '@sim/ui'
 import { OneDollarStats } from '@/components/analytics/onedollarstats'
 import { HydrationErrorHandler } from '@/app/_shell/hydration-error-handler'
 import { QueryProvider } from '@/app/_shell/providers/query-provider'
 import { SessionProvider } from '@/app/_shell/providers/session-provider'
 import { ThemeProvider } from '@/app/_shell/providers/theme-provider'
 import { ZoomPrevention } from '@/app/_shell/zoom-prevention'
-import { PrivyProviderWrapper } from '@sim/ui'
 import { season } from '@/app/_styles/fonts/season/season'
 
 export const viewport: Viewport = {

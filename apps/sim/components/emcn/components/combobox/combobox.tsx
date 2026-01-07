@@ -90,6 +90,10 @@ export interface ComboboxProps
   searchable?: boolean
   /** Placeholder for search input */
   searchPlaceholder?: string
+  /** Whether to show an "All" option in multi-select mode */
+  showAllOption?: boolean
+  /** Label for the "All" option (default: "All") */
+  allOptionLabel?: string
   /** Size variant */
   size?: 'default' | 'sm'
   /** Dropdown alignment */
@@ -128,6 +132,8 @@ const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
       onOpenChange,
       searchable = false,
       searchPlaceholder = 'Search...',
+      showAllOption = false,
+      allOptionLabel = 'All',
       align = 'start',
       dropdownWidth = 'trigger',
       ...props
@@ -190,6 +196,10 @@ const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
     const handleSelect = useCallback(
       (selectedValue: string) => {
         if (multiSelect && onMultiSelectChange) {
+          if (selectedValue === 'all') {
+            onMultiSelectChange([])
+            return
+          }
           const currentValues = multiSelectValues || []
           const newValues = currentValues.includes(selectedValue)
             ? currentValues.filter((v) => v !== selectedValue)
@@ -546,6 +556,28 @@ const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
                   </div>
                 ) : (
                   <div className='space-y-[2px]'>
+                    {showAllOption && multiSelect && (
+                      <div
+                        role='option'
+                        aria-selected={!multiSelectValues || multiSelectValues.length === 0}
+                        onMouseDown={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          handleSelect('all')
+                        }}
+                        className={cn(
+                          'relative flex cursor-pointer select-none items-center rounded-[4px] px-[8px] font-medium font-sans',
+                          size === 'sm' ? 'py-[5px] text-[12px]' : 'py-[6px] text-sm',
+                          'hover:bg-[var(--surface-11)]',
+                          (!multiSelectValues || multiSelectValues.length === 0) &&
+                            'bg-[var(--surface-11)]'
+                        )}
+                      >
+                        <span className='flex-1 truncate text-[var(--text-primary)]'>
+                          {allOptionLabel}
+                        </span>
+                      </div>
+                    )}
                     {filteredOptions.map((option, index) => {
                       const isSelected = multiSelect
                         ? multiSelectValues?.includes(option.value)

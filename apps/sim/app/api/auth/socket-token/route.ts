@@ -5,7 +5,7 @@ import { generateInternalToken } from '@/lib/auth/internal'
 export async function POST() {
   try {
     const cookieStore = await cookies()
-    const privyUserId = cookieStore.get('privy-user-id')?.value
+    const privyUserId = cookieStore.get('sim-privy-user-id')?.value
 
     if (!privyUserId) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })

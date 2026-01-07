@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { Check, Copy, LibraryBig } from 'lucide-react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { createLogger } from '@/lib/logs/console/logger'
 
 const logger = createLogger('BaseOverviewComponent')
 

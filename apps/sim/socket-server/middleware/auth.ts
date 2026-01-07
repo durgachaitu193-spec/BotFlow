@@ -1,9 +1,9 @@
-import type { Socket } from 'socket.io'
 import { db } from '@sim/db'
 import { user } from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import { eq } from 'drizzle-orm'
+import type { Socket } from 'socket.io'
 import { verifyInternalToken } from '@/lib/auth/internal'
-import { createLogger } from '@/lib/logs/console/logger'
 
 const logger = createLogger('SocketAuth')
 
@@ -87,7 +87,10 @@ export async function authenticateSocket(socket: AuthenticatedSocket, next: any)
         origin,
         referer,
       })
-      const clientMsg = process.env.NODE_ENV === 'development' ? `Token validation failed: ${errorMessage}` : 'Token validation failed'
+      const clientMsg =
+        process.env.NODE_ENV === 'development'
+          ? `Token validation failed: ${errorMessage}`
+          : 'Token validation failed'
       return next(new Error(clientMsg))
     }
   } catch (error) {

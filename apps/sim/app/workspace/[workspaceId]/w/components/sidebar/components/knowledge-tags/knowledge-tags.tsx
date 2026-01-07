@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { ChevronDown, Plus, X } from 'lucide-react'
 import {
   Button,
@@ -18,7 +19,6 @@ import {
 } from '@/components/ui'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { MAX_TAG_SLOTS, TAG_SLOTS, type TagSlot } from '@/lib/knowledge/constants'
-import { createLogger } from '@/lib/logs/console/logger'
 import type { DocumentTag } from '@/app/workspace/[workspaceId]/knowledge/components/document-tag-entry/document-tag-entry'
 import { useUserPermissionsContext } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
 import {

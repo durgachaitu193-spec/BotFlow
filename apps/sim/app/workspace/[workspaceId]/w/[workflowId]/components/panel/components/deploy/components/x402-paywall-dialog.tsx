@@ -180,10 +180,10 @@ export function X402PaywallDialog({ open, onOpenChange, onSuccess }: X402Paywall
           <div className='inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--brand-primary-hex)]/10 text-[var(--brand-primary-hex)]'>
             <ShieldCheck className='h-5 w-5' />
           </div>
-          <div className='text-base font-semibold'>
+          <div className='font-semibold text-base'>
             {isNativeToken ? 'Payment Required' : 'x402 Sybil-Resistance Payment Required'}
           </div>
-          <p className='text-xs text-[var(--text-tertiary)]'>
+          <p className='text-[var(--text-tertiary)] text-xs'>
             {isNativeToken ? (
               <>
                 Before deploying this workflow, authorize a small on-chain payment. This helps
@@ -203,12 +203,12 @@ export function X402PaywallDialog({ open, onOpenChange, onSuccess }: X402Paywall
           {error && (
             <div className='mb-3 rounded-lg border border-[var(--text-error)] bg-[var(--text-error)]/10 p-3'>
               <div className='flex items-start gap-2'>
-                <AlertTriangle className='h-4 w-4 text-[var(--text-error)] mt-0.5' />
+                <AlertTriangle className='mt-0.5 h-4 w-4 text-[var(--text-error)]' />
                 <div>
-                  <div className='text-xs font-semibold text-[var(--text-error)]'>
+                  <div className='font-semibold text-[var(--text-error)] text-xs'>
                     Payment error
                   </div>
-                  <div className='text-xs text-[var(--text-error)]/90'>{error}</div>
+                  <div className='text-[var(--text-error)]/90 text-xs'>{error}</div>
                 </div>
               </div>
             </div>
@@ -216,7 +216,7 @@ export function X402PaywallDialog({ open, onOpenChange, onSuccess }: X402Paywall
 
           {logs.length > 0 && (
             <div className='mb-3 max-h-28 overflow-y-auto rounded-lg border border-[var(--border-primary)] bg-[var(--bg-secondary)] p-2'>
-              <ul className='space-y-0.5 text-[11px] font-mono text-[var(--text-tertiary)]'>
+              <ul className='space-y-0.5 font-mono text-[11px] text-[var(--text-tertiary)]'>
                 {logs.map((line, idx) => (
                   <li key={idx}>{line}</li>
                 ))}
@@ -229,7 +229,7 @@ export function X402PaywallDialog({ open, onOpenChange, onSuccess }: X402Paywall
             <div className='flex flex-wrap items-center justify-between gap-2'>
               <div className='flex flex-wrap items-center gap-2'>
                 {/* Only show BNB Chain - other networks kept for reference but hidden from UI */}
-                <span className='rounded-full px-3 py-1 text-xs font-medium bg-[var(--brand-primary-hover-hex)] text-white'>
+                <span className='rounded-full bg-[var(--brand-primary-hover-hex)] px-3 py-1 font-medium text-white text-xs'>
                   BNB Chain
                 </span>
               </div>
@@ -252,10 +252,11 @@ export function X402PaywallDialog({ open, onOpenChange, onSuccess }: X402Paywall
                     key={t.address}
                     type='button'
                     onClick={() => setSelectedToken(t.address)}
-                    className={`min-w-[80px] rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${checked
+                    className={`min-w-[80px] rounded-md border px-3 py-1.5 font-medium text-xs transition-colors ${
+                      checked
                         ? 'border-[var(--brand-primary-hover-hex)] bg-[var(--brand-primary-hover-hex)]/10 text-[var(--text-primary)]'
                         : 'border-[var(--border-primary)] bg-[var(--bg-primary)] hover:bg-[var(--bg-secondary)]'
-                      }`}
+                    }`}
                     disabled={isPaying}
                   >
                     {t.symbol}
@@ -285,7 +286,7 @@ export function X402PaywallDialog({ open, onOpenChange, onSuccess }: X402Paywall
                 <span className='text-[var(--text-tertiary)]'>Protocol</span>
                 <span className='font-medium'>
                   {selectedToken &&
-                    selectedToken.toLowerCase() === '0x0000000000000000000000000000000000000000'
+                  selectedToken.toLowerCase() === '0x0000000000000000000000000000000000000000'
                     ? 'Native'
                     : 'x402'}
                 </span>
@@ -308,7 +309,7 @@ export function X402PaywallDialog({ open, onOpenChange, onSuccess }: X402Paywall
             type='button'
             onClick={handleConfirm}
             disabled={isPaying}
-            className='h-9 rounded-lg px-4 text-xs font-medium text-white bg-[var(--brand-primary-hover-hex)] hover:bg-[var(--brand-primary-hover-hex)] shadow-[0_0_0_0_var(--brand-primary-hover-hex)] hover:shadow-[0_0_0_4px_rgba(127,47,255,0.15)] disabled:opacity-50'
+            className='h-9 rounded-lg bg-[var(--brand-primary-hover-hex)] px-4 font-medium text-white text-xs shadow-[0_0_0_0_var(--brand-primary-hover-hex)] hover:bg-[var(--brand-primary-hover-hex)] hover:shadow-[0_0_0_4px_rgba(127,47,255,0.15)] disabled:opacity-50'
           >
             {isPaying ? (
               <>

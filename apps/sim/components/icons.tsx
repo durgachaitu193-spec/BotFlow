@@ -2695,6 +2695,26 @@ export function WikipediaIcon(props: SVGProps<SVGSVGElement>) {
   )
 }
 
+export function UniswapIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...props} viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+      <path
+        d='M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22.5C6.201 22.5 1.5 17.799 1.5 12S6.201 1.5 12 1.5 22.5 6.201 22.5 12 17.799 22.5 12 22.5z'
+        fill='#FF007A'
+      />
+      <path
+        d='M12 3.75c-4.556 0-8.25 3.694-8.25 8.25S7.444 20.25 12 20.25s8.25-3.694 8.25-8.25S16.556 3.75 12 3.75zm0 15c-3.722 0-6.75-3.028-6.75-6.75S8.278 5.25 12 5.25s6.75 3.028 6.75 6.75-3.028 6.75-6.75 6.75z'
+        fill='#FF007A'
+      />
+      <path
+        d='M12 6c-3.314 0-6 2.686-6 6s2.686 6 6 6 6-2.686 6-6-2.686-6-6-6zm0 10.5c-2.485 0-4.5-2.015-4.5-4.5S9.515 7.5 12 7.5s4.5 2.015 4.5 4.5-2.015 4.5-4.5 4.5z'
+        fill='#FF007A'
+      />
+      <circle cx='12' cy='12' r='3' fill='#FF007A' />
+    </svg>
+  )
+}
+
 export function HunterIOIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg

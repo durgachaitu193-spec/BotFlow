@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
-import { withErrorHandling } from "@/api/v1/utils/withErrorHandling";
-import { ERROR_CODES, ERROR_MESSAGES } from "@/global/utils/constants/errors";
-import { StatusCodes } from "http-status-codes";
-import { APIError } from "@/global/exceptions";
-import { getBody } from "@/api/v1/utils/getBody";
-import { db } from "@sim/db";
-import { launchpadTokens } from "@sim/db/schema";
-import { eq } from "drizzle-orm";
+import { db } from '@sim/db'
+import { launchpadTokens } from '@sim/db/schema'
+import { eq } from 'drizzle-orm'
+import { StatusCodes } from 'http-status-codes'
+import { type NextRequest, NextResponse } from 'next/server'
+import { getBody } from '@/api/v1/utils/getBody'
+import { withErrorHandling } from '@/api/v1/utils/withErrorHandling'
+import { APIError } from '@/global/exceptions'
+import { ERROR_CODES, ERROR_MESSAGES } from '@/global/utils/constants/errors'
 
 export const POST = withErrorHandling(async (req: NextRequest) => {
   const {
@@ -15,41 +15,33 @@ export const POST = withErrorHandling(async (req: NextRequest) => {
     description,
     logo,
     id,
-    twitter = "",
-    telegram = "",
-    website = "",
+    twitter = '',
+    telegram = '',
+    website = '',
     network,
     address,
-  } = await getBody(req);
+  } = await getBody(req)
 
-  if (
-    !id ||
-    !name ||
-    !symbol ||
-    !description ||
-    !logo ||
-    !network ||
-    !address
-  ) {
+  if (!id || !name || !symbol || !description || !logo || !network || !address) {
     throw new APIError(
       ERROR_CODES.INVALID_PARAMS_ERROR,
       StatusCodes.BAD_REQUEST,
-      ERROR_MESSAGES.INVALID_PARAMS_ERROR,
-    );
+      ERROR_MESSAGES.INVALID_PARAMS_ERROR
+    )
   }
 
   try {
     // Check if token already exists
     const existingToken = await db.query.launchpadTokens.findFirst({
       where: eq(launchpadTokens.id, id),
-    });
+    })
 
-    if (existingToken && existingToken.active) {
+    if (existingToken?.active) {
       throw new APIError(
         ERROR_CODES.TOKEN_ALREADY_EXISTS_ERROR,
         StatusCodes.BAD_REQUEST,
-        ERROR_MESSAGES.TOKEN_ALREADY_EXISTS_ERROR,
-      );
+        ERROR_MESSAGES.TOKEN_ALREADY_EXISTS_ERROR
+      )
     }
 
     await db
@@ -65,10 +57,10 @@ export const POST = withErrorHandling(async (req: NextRequest) => {
         website,
         network,
         createdBy: address,
-        supply: "0",
-        reserveBalance: "0",
+        supply: '0',
+        reserveBalance: '0',
         active: false,
-        currentPrice: "0",
+        currentPrice: '0',
         tradeDisabled: false,
       })
       .onConflictDoUpdate({
@@ -84,17 +76,11 @@ export const POST = withErrorHandling(async (req: NextRequest) => {
           network,
           createdBy: address,
         },
-      });
+      })
 
-    return NextResponse.json(
-      { message: "success", address: address },
-      { status: StatusCodes.OK },
-    );
+    return NextResponse.json({ message: 'success', address: address }, { status: StatusCodes.OK })
   } catch (error) {
-    console.error(error);
-    return NextResponse.json(
-      { message: "error" },
-      { status: StatusCodes.BAD_REQUEST },
-    );
+    console.error(error)
+    return NextResponse.json({ message: 'error' }, { status: StatusCodes.BAD_REQUEST })
   }
-});
+})

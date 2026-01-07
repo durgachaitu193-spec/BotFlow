@@ -1,3 +1,4 @@
+import { createLogger } from '@sim/logger'
 import {
   type Chain,
   createPublicClient,
@@ -6,7 +7,6 @@ import {
   decodeEventLog,
   http,
 } from 'viem'
-import { createLogger } from '@/lib/logs/console/logger'
 import {
   AGENT_IDENTITY_REGISTRY_ABI,
   AGENT_IDENTITY_REGISTRY_ADDRESS,

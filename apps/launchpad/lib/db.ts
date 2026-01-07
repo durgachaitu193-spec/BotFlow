@@ -1,3 +1,3 @@
-import { db } from "@sim/db";
+import { db } from '@sim/db'
 
-export { db };
+export { db }

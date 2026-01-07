@@ -1,4 +1,4 @@
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { VariableManager } from '@/lib/workflows/variables/variable-manager'
 import { isReference, parseReferencePath, REFERENCE } from '@/executor/consts'
 import {

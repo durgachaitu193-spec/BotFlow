@@ -1,3 +1,4 @@
+import { createLogger } from '@sim/logger'
 import {
   type Chain,
   createPublicClient,
@@ -7,7 +8,6 @@ import {
   http,
   parseEther,
 } from 'viem'
-import { createLogger } from '@/lib/logs/console/logger'
 import { DEFAULT_CHAIN } from './didRegistry'
 
 const logger = createLogger('TokenFactory')

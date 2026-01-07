@@ -1,10 +1,9 @@
 'use client'
 
 import { useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import AuthBackground from '@/app/(auth)/components/auth-background'
 import Nav from '@/app/(landing)/components/nav/nav'
-import { usePathname } from 'next/navigation'
-
 
 // Helper to detect if a color is dark
 function isColorDark(hexColor: string): boolean {
@@ -31,11 +30,11 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     }
   }, [])
   return (
-   <AuthBackground>
+    <AuthBackground>
       <main className='relative flex h-screen flex-col overflow-hidden font-geist-sans text-foreground'>
         {pathname !== '/login' && <Nav hideAuthButtons={true} variant='auth' />}
 
-        <div className='relative z-30 flex flex-1 items-center justify-center px-4 pb-24 overflow-hidden'>
+        <div className='relative z-30 flex flex-1 items-center justify-center overflow-hidden px-4 pb-24'>
           <div className='w-full max-w-lg px-4'>{children}</div>
         </div>
       </main>

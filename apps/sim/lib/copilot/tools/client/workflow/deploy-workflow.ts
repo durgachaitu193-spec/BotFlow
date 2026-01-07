@@ -1,10 +1,10 @@
+import { createLogger } from '@sim/logger'
 import { Loader2, Rocket, X, XCircle } from 'lucide-react'
 import {
   BaseClientTool,
   type BaseClientToolMetadata,
   ClientToolCallState,
 } from '@/lib/copilot/tools/client/base-tool'
-import { createLogger } from '@/lib/logs/console/logger'
 import { getInputFormatExample } from '@/lib/workflows/operations/deployment-utils'
 import { useCopilotStore } from '@/stores/panel/copilot/store'
 import { useWorkflowRegistry } from '@/stores/workflows/registry/store'
@@ -279,7 +279,7 @@ export class DeployWorkflowClientTool extends BaseClientTool {
             ? window.location.origin
             : process.env.NEXT_PUBLIC_APP_URL || 'https://app.sim.ai'
         const endpoint = `${appUrl}/api/workflows/${workflowId}/execute`
-        const apiKeyPlaceholder = '$MEGALITH_API_KEY'
+        const apiKeyPlaceholder = '$SIM_API_KEY'
 
         // Get input format example (returns empty string if no inputs, or -d flag with example data)
         const inputExample = getInputFormatExample(false)

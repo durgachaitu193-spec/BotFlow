@@ -6,13 +6,12 @@ import {
   decodeEventLog,
   http,
   parseEther,
-} from "viem";
-import { bscTestnet } from "viem/chains";
+} from 'viem'
+import { bscTestnet } from 'viem/chains'
 
-export const DEFAULT_CHAIN = bscTestnet;
+export const DEFAULT_CHAIN = bscTestnet
 
-export const TOKEN_FACTORY_ADDRESS =
-  "0x9A5d351d16c10cEDd984085C568018982275a7d8";
+export const TOKEN_FACTORY_ADDRESS = '0x9A5d351d16c10cEDd984085C568018982275a7d8'
 
 export const TOKEN_FACTORY_ABI = [
   {
@@ -20,209 +19,205 @@ export const TOKEN_FACTORY_ABI = [
     inputs: [
       {
         indexed: true,
-        internalType: "address",
-        name: "tokenAddress",
-        type: "address",
+        internalType: 'address',
+        name: 'tokenAddress',
+        type: 'address',
       },
-      { indexed: false, internalType: "string", name: "name", type: "string" },
+      { indexed: false, internalType: 'string', name: 'name', type: 'string' },
       {
         indexed: false,
-        internalType: "string",
-        name: "symbol",
-        type: "string",
+        internalType: 'string',
+        name: 'symbol',
+        type: 'string',
       },
       {
         indexed: false,
-        internalType: "string",
-        name: "ipfsHash",
-        type: "string",
+        internalType: 'string',
+        name: 'ipfsHash',
+        type: 'string',
       },
     ],
-    name: "TokenCreated",
-    type: "event",
+    name: 'TokenCreated',
+    type: 'event',
   },
   {
     inputs: [],
-    name: "MINTING_FEE",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
+    name: 'MINTING_FEE',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [
-      { internalType: "string", name: "name", type: "string" },
-      { internalType: "string", name: "symbol", type: "string" },
-      { internalType: "uint256", name: "amount", type: "uint256" },
+      { internalType: 'string', name: 'name', type: 'string' },
+      { internalType: 'string', name: 'symbol', type: 'string' },
+      { internalType: 'uint256', name: 'amount', type: 'uint256' },
     ],
-    name: "buytoken",
+    name: 'buytoken',
     outputs: [],
-    stateMutability: "payable",
-    type: "function",
+    stateMutability: 'payable',
+    type: 'function',
   },
   {
     inputs: [
-      { internalType: "string", name: "name", type: "string" },
-      { internalType: "string", name: "symbol", type: "string" },
-      { internalType: "uint256", name: "amount", type: "uint256" },
+      { internalType: 'string', name: 'name', type: 'string' },
+      { internalType: 'string', name: 'symbol', type: 'string' },
+      { internalType: 'uint256', name: 'amount', type: 'uint256' },
     ],
-    name: "calculateTotalCost",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
+    name: 'calculateTotalCost',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [
-      { internalType: "string", name: "name", type: "string" },
-      { internalType: "string", name: "symbol", type: "string" },
-      { internalType: "uint256", name: "amount", type: "uint256" },
+      { internalType: 'string', name: 'name', type: 'string' },
+      { internalType: 'string', name: 'symbol', type: 'string' },
+      { internalType: 'uint256', name: 'amount', type: 'uint256' },
     ],
-    name: "calculateTotalSellingCost",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
+    name: 'calculateTotalSellingCost',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [
-      { internalType: "string", name: "tokenName", type: "string" },
-      { internalType: "string", name: "tokenSymbol", type: "string" },
-      { internalType: "string", name: "tokenIpfsHash", type: "string" },
+      { internalType: 'string', name: 'tokenName', type: 'string' },
+      { internalType: 'string', name: 'tokenSymbol', type: 'string' },
+      { internalType: 'string', name: 'tokenIpfsHash', type: 'string' },
     ],
-    name: "createToken",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "payable",
-    type: "function",
+    name: 'createToken',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'payable',
+    type: 'function',
   },
   {
     inputs: [
-      { internalType: "string", name: "name", type: "string" },
-      { internalType: "string", name: "symbol", type: "string" },
+      { internalType: 'string', name: 'name', type: 'string' },
+      { internalType: 'string', name: 'symbol', type: 'string' },
     ],
-    name: "debugTokenLookup",
+    name: 'debugTokenLookup',
     outputs: [
-      { internalType: "bool", name: "exists", type: "bool" },
-      { internalType: "address", name: "foundAddress", type: "address" },
-      { internalType: "string", name: "foundName", type: "string" },
-      { internalType: "string", name: "foundSymbol", type: "string" },
+      { internalType: 'bool', name: 'exists', type: 'bool' },
+      { internalType: 'address', name: 'foundAddress', type: 'address' },
+      { internalType: 'string', name: 'foundName', type: 'string' },
+      { internalType: 'string', name: 'foundSymbol', type: 'string' },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [],
-    name: "getAllTokenInformation",
+    name: 'getAllTokenInformation',
     outputs: [
       {
         components: [
-          { internalType: "string", name: "name", type: "string" },
-          { internalType: "string", name: "symbol", type: "string" },
-          { internalType: "string", name: "ipfsHash", type: "string" },
+          { internalType: 'string', name: 'name', type: 'string' },
+          { internalType: 'string', name: 'symbol', type: 'string' },
+          { internalType: 'string', name: 'ipfsHash', type: 'string' },
         ],
-        internalType: "struct TokenFactory.TokenDetails[]",
-        name: "",
-        type: "tuple[]",
+        internalType: 'struct TokenFactory.TokenDetails[]',
+        name: '',
+        type: 'tuple[]',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    inputs: [{ internalType: "uint256", name: "index", type: "uint256" }],
-    name: "getToken",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
+    inputs: [{ internalType: 'uint256', name: 'index', type: 'uint256' }],
+    name: 'getToken',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [
-      { internalType: "string", name: "name", type: "string" },
-      { internalType: "string", name: "symbol", type: "string" },
+      { internalType: 'string', name: 'name', type: 'string' },
+      { internalType: 'string', name: 'symbol', type: 'string' },
     ],
-    name: "getTokenAddress",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
+    name: 'getTokenAddress',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [],
-    name: "getTokenCount",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
+    name: 'getTokenCount',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    inputs: [
-      { internalType: "address", name: "tokenAddress", type: "address" },
-    ],
-    name: "getTokenDetails",
+    inputs: [{ internalType: 'address', name: 'tokenAddress', type: 'address' }],
+    name: 'getTokenDetails',
     outputs: [
-      { internalType: "string", name: "name", type: "string" },
-      { internalType: "string", name: "symbol", type: "string" },
-      { internalType: "string", name: "ipfsHash", type: "string" },
+      { internalType: 'string', name: 'name', type: 'string' },
+      { internalType: 'string', name: 'symbol', type: 'string' },
+      { internalType: 'string', name: 'ipfsHash', type: 'string' },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [
-      { internalType: "string", name: "name", type: "string" },
-      { internalType: "string", name: "symbol", type: "string" },
+      { internalType: 'string', name: 'name', type: 'string' },
+      { internalType: 'string', name: 'symbol', type: 'string' },
     ],
-    name: "getUserTokenBalance",
+    name: 'getUserTokenBalance',
     outputs: [
-      { internalType: "uint256", name: "balance", type: "uint256" },
-      { internalType: "string", name: "message", type: "string" },
+      { internalType: 'uint256', name: 'balance', type: 'uint256' },
+      { internalType: 'string', name: 'message', type: 'string' },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [
-      { internalType: "string", name: "name", type: "string" },
-      { internalType: "string", name: "symbol", type: "string" },
-      { internalType: "uint256", name: "amount", type: "uint256" },
+      { internalType: 'string', name: 'name', type: 'string' },
+      { internalType: 'string', name: 'symbol', type: 'string' },
+      { internalType: 'uint256', name: 'amount', type: 'uint256' },
     ],
-    name: "selltoken",
+    name: 'selltoken',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "tokenInfo",
+    inputs: [{ internalType: 'address', name: '', type: 'address' }],
+    name: 'tokenInfo',
     outputs: [
-      { internalType: "string", name: "name", type: "string" },
-      { internalType: "string", name: "symbol", type: "string" },
-      { internalType: "string", name: "ipfsHash", type: "string" },
+      { internalType: 'string', name: 'name', type: 'string' },
+      { internalType: 'string', name: 'symbol', type: 'string' },
+      { internalType: 'string', name: 'ipfsHash', type: 'string' },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
-  { stateMutability: "payable", type: "receive" },
-] as const;
+  { stateMutability: 'payable', type: 'receive' },
+] as const
 
 /**
  * Get the minting fee from the TokenFactory contract
  */
-export async function getMintingFee(
-  chain: Chain = DEFAULT_CHAIN,
-): Promise<bigint> {
+export async function getMintingFee(chain: Chain = DEFAULT_CHAIN): Promise<bigint> {
   try {
     const publicClient = createPublicClient({
       chain,
       transport: http(chain.rpcUrls.default.http[0]),
-    });
+    })
 
     const fee = await publicClient.readContract({
       address: TOKEN_FACTORY_ADDRESS as `0x${string}`,
       abi: TOKEN_FACTORY_ABI,
-      functionName: "MINTING_FEE",
-    });
+      functionName: 'MINTING_FEE',
+    })
 
-    return fee as bigint;
+    return fee as bigint
   } catch (error: any) {
-    console.error("Error getting minting fee:", error);
+    console.error('Error getting minting fee:', error)
     // Default to 0.001 BNB if we can't read from contract
-    return parseEther("0.001");
+    return parseEther('0.001')
   }
 }
 
@@ -232,30 +227,30 @@ export async function getMintingFee(
 export async function checkTokenExists(
   tokenName: string,
   tokenSymbol: string,
-  chain: Chain = DEFAULT_CHAIN,
+  chain: Chain = DEFAULT_CHAIN
 ): Promise<{ exists: boolean; tokenAddress?: string }> {
   try {
     const publicClient = createPublicClient({
       chain,
       transport: http(chain.rpcUrls.default.http[0]),
-    });
+    })
 
     const result = await publicClient.readContract({
       address: TOKEN_FACTORY_ADDRESS as `0x${string}`,
       abi: TOKEN_FACTORY_ABI,
-      functionName: "debugTokenLookup",
+      functionName: 'debugTokenLookup',
       args: [tokenName, tokenSymbol],
-    });
+    })
 
-    const [exists, foundAddress] = result as [boolean, string, string, string];
+    const [exists, foundAddress] = result as [boolean, string, string, string]
 
     return {
       exists,
       tokenAddress: exists ? foundAddress : undefined,
-    };
+    }
   } catch (error: any) {
-    console.error("Error checking token existence:", error);
-    return { exists: false };
+    console.error('Error checking token existence:', error)
+    return { exists: false }
   }
 }
 
@@ -275,23 +270,23 @@ export async function createToken(
   tokenSymbol: string,
   ipfsHash: string,
   provider: any,
-  chain: Chain = DEFAULT_CHAIN,
+  chain: Chain = DEFAULT_CHAIN
 ): Promise<{ tokenAddress: string; txHash: string } | null> {
   try {
     if (!provider) {
-      throw new Error("Ethereum provider not available");
+      throw new Error('Ethereum provider not available')
     }
 
     // Check if token already exists
     const { exists, tokenAddress: existingAddress } = await checkTokenExists(
       tokenName,
       tokenSymbol,
-      chain,
-    );
+      chain
+    )
 
     if (exists && existingAddress) {
-      console.log("Token already exists", { tokenAddress: existingAddress });
-      return { tokenAddress: existingAddress, txHash: "" };
+      console.log('Token already exists', { tokenAddress: existingAddress })
+      return { tokenAddress: existingAddress, txHash: '' }
     }
 
     // Create wallet client
@@ -299,34 +294,31 @@ export async function createToken(
       account: walletAddress as `0x${string}`,
       chain,
       transport: custom(provider),
-    });
+    })
 
     // Create public client for waiting for transaction receipt
     const publicClient = createPublicClient({
       chain,
       transport: http(chain.rpcUrls.default.http[0]),
-    });
+    })
 
     // Check current network and switch if needed
     try {
-      const currentChainId = await provider.request({ method: "eth_chainId" });
-      const currentChainIdNumber = Number.parseInt(
-        currentChainId as string,
-        16,
-      );
+      const currentChainId = await provider.request({ method: 'eth_chainId' })
+      const currentChainIdNumber = Number.parseInt(currentChainId as string, 16)
 
       if (currentChainIdNumber !== chain.id) {
         try {
           await provider.request({
-            method: "wallet_switchEthereumChain",
+            method: 'wallet_switchEthereumChain',
             params: [{ chainId: `0x${chain.id.toString(16)}` }],
-          });
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+          })
+          await new Promise((resolve) => setTimeout(resolve, 1000))
         } catch (switchError: any) {
           if (switchError.code === 4902) {
             // Chain not added, try to add it
             await provider.request({
-              method: "wallet_addEthereumChain",
+              method: 'wallet_addEthereumChain',
               params: [
                 {
                   chainId: `0x${chain.id.toString(16)}`,
@@ -343,45 +335,43 @@ export async function createToken(
                     : undefined,
                 },
               ],
-            });
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            })
+            await new Promise((resolve) => setTimeout(resolve, 1000))
           } else {
             console.warn(
-              "Network switch failed, but proceeding with transaction on selected network RPC",
-            );
+              'Network switch failed, but proceeding with transaction on selected network RPC'
+            )
           }
         }
       }
     } catch (error) {
-      console.warn(
-        "Could not check current network, proceeding with transaction",
-      );
+      console.warn('Could not check current network, proceeding with transaction')
     }
 
     // Get minting fee
-    const mintingFee = await getMintingFee(chain);
+    const mintingFee = await getMintingFee(chain)
 
-    console.log("Creating token", {
+    console.log('Creating token', {
       tokenName,
       tokenSymbol,
       ipfsHash,
       mintingFee: mintingFee.toString(),
-    });
+    })
 
     // Create token
     const hash = await walletClient.writeContract({
       address: TOKEN_FACTORY_ADDRESS as `0x${string}`,
       abi: TOKEN_FACTORY_ABI,
-      functionName: "createToken",
+      functionName: 'createToken',
       args: [tokenName, tokenSymbol, ipfsHash],
       value: mintingFee,
-    });
+    })
 
     // Wait for transaction receipt
-    const receipt = await publicClient.waitForTransactionReceipt({ hash });
+    const receipt = await publicClient.waitForTransactionReceipt({ hash })
 
     // Extract token address from event logs
-    let tokenAddress: string | null = null;
+    let tokenAddress: string | null = null
     if (receipt.logs) {
       for (const log of receipt.logs) {
         try {
@@ -389,11 +379,11 @@ export async function createToken(
             abi: TOKEN_FACTORY_ABI,
             data: log.data,
             topics: log.topics,
-          });
+          })
 
-          if (decoded.eventName === "TokenCreated") {
-            tokenAddress = decoded.args.tokenAddress as string;
-            break;
+          if (decoded.eventName === 'TokenCreated') {
+            tokenAddress = decoded.args.tokenAddress as string
+            break
           }
         } catch {
           // Not the event we're looking for, continue
@@ -402,23 +392,19 @@ export async function createToken(
     }
 
     if (!tokenAddress) {
-      console.warn("Could not extract token address from transaction receipt");
+      console.warn('Could not extract token address from transaction receipt')
       // Try to get it from contract
-      const { tokenAddress: fetchedAddress } = await checkTokenExists(
-        tokenName,
-        tokenSymbol,
-        chain,
-      );
+      const { tokenAddress: fetchedAddress } = await checkTokenExists(tokenName, tokenSymbol, chain)
       if (fetchedAddress) {
-        tokenAddress = fetchedAddress;
+        tokenAddress = fetchedAddress
       }
     }
 
-    console.log("Token created successfully", { tokenAddress, txHash: hash });
+    console.log('Token created successfully', { tokenAddress, txHash: hash })
 
-    return tokenAddress ? { tokenAddress, txHash: hash } : null;
+    return tokenAddress ? { tokenAddress, txHash: hash } : null
   } catch (error: any) {
-    console.error("Error creating token:", error);
-    throw error;
+    console.error('Error creating token:', error)
+    throw error
   }
 }

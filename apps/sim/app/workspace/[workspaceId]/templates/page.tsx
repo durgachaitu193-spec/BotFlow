@@ -78,7 +78,7 @@ export default async function TemplatesPage({ params }: TemplatesPageProps) {
     | undefined
 
   if (session?.user?.id) {
-    const whereCondition = effectiveSuperUser ? undefined : eq(templates.status, 'approved')
+    const whereCondition = undefined
     rows = await db
       .select({
         id: templates.id,

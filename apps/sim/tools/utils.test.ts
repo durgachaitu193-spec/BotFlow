@@ -10,7 +10,7 @@ import {
   validateRequiredParametersAfterMerge,
 } from '@/tools/utils'
 
-vi.mock('@/lib/logs/console/logger', () => ({
+vi.mock('@sim/logger', () => ({
   createLogger: vi.fn().mockReturnValue({
     debug: vi.fn(),
     info: vi.fn(),

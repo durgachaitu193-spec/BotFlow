@@ -1,11 +1,11 @@
 import { db } from '@sim/db'
 import { member, templateCreators, templates, workflow } from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import { and, eq, or, sql } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { getSession } from '@/lib/auth'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@/lib/logs/console/logger'
 import {
   extractRequiredCredentials,
   sanitizeCredentials,
@@ -47,10 +47,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       creator: creator || undefined,
     }
 
-    // Only show approved templates to non-authenticated users
-    if (!session?.user?.id && template.status !== 'approved') {
-      return NextResponse.json({ error: 'Template not found' }, { status: 404 })
-    }
+    // Authenticated users can see any template, non-authenticated can see any template
+    // as approval logic is removed.
 
     // Check if user has starred (only if authenticated)
     let isStarred = false
@@ -66,7 +64,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       isStarred = starResult.length > 0
     }
 
-    const shouldIncrementView = template.status === 'approved'
+    const shouldIncrementView = true
 
     if (shouldIncrementView) {
       try {

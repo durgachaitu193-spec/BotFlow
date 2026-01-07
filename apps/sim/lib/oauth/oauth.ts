@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { createLogger } from '@sim/logger'
 import {
   AirtableIcon,
   AsanaIcon,
@@ -39,7 +40,6 @@ import {
   ZoomIcon,
 } from '@/components/icons'
 import { env } from '@/lib/core/config/env'
-import { createLogger } from '@/lib/logs/console/logger'
 
 const logger = createLogger('OAuth')
 

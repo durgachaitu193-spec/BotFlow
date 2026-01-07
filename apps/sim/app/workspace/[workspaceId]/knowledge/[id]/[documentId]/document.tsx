@@ -1,12 +1,12 @@
 'use client'
 
 import { Suspense, startTransition, useCallback, useEffect, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { ChevronLeft, ChevronRight, Circle, CircleOff, FileText, Plus } from 'lucide-react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Button, Tooltip } from '@/components/emcn'
 import { Trash } from '@/components/emcn/icons/trash'
 import { Checkbox, SearchHighlight } from '@/components/ui'
-import { createLogger } from '@/lib/logs/console/logger'
 import {
   CreateChunkModal,
   DeleteChunkModal,

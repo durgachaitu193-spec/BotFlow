@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { createLogger } from '@/lib/logs/console/logger'
+import { createLogger } from '@sim/logger'
 import { useDebounce } from '@/hooks/use-debounce'
 import { useOperationQueueStore } from '@/stores/operation-queue/store'
 import { useSubBlockStore } from '@/stores/workflows/subblock/store'

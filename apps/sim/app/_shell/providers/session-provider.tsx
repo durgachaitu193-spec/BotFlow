@@ -84,7 +84,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       } else {
         posthog.reset()
       }
-    } catch { }
+    } catch {}
   }, [data, isPending])
 
   const value = useMemo<SessionHookResult>(

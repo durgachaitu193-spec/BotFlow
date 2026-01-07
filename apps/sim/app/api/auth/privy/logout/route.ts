@@ -1,13 +1,13 @@
-import { NextResponse } from 'next/server'
+import { createLogger } from '@sim/logger'
 import { cookies } from 'next/headers'
-import { createLogger } from '@/lib/logs/console/logger'
+import { NextResponse } from 'next/server'
 
 const logger = createLogger('PrivyLogout')
 
 export async function POST() {
   try {
     const cookieStore = await cookies()
-    const privyUserId = cookieStore.get('privy-user-id')?.value
+    const privyUserId = cookieStore.get('sim-privy-user-id')?.value
 
     if (privyUserId) {
       logger.info('Clearing Privy authentication cookie', { userId: privyUserId })
@@ -22,7 +22,8 @@ export async function POST() {
       path: '/',
     }
 
-    response.cookies.set('privy-user-id', '', cookieOptions)
+    response.cookies.set('sim-privy-user-id', '', cookieOptions)
+    response.cookies.set('privy-user-id', '', cookieOptions) // Clear legacy if exists
     response.cookies.set('privy-token', '', cookieOptions)
     response.cookies.set('privy-refresh-token', '', cookieOptions)
     response.cookies.set('privy-session', '', cookieOptions)
@@ -33,4 +34,3 @@ export async function POST() {
     return NextResponse.json({ error: 'Failed to logout' }, { status: 500 })
   }
 }
-

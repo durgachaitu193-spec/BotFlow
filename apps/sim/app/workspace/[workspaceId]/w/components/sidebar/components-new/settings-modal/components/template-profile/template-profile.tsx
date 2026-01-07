@@ -1,13 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createLogger } from '@sim/logger'
 import { Camera, Globe, Linkedin, Mail } from 'lucide-react'
 import Image from 'next/image'
 import { Button, Combobox, Input, Textarea } from '@/components/emcn'
 import { AgentIcon, xIcon as XIcon } from '@/components/icons'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useSession } from '@/lib/auth/auth-client'
-import { createLogger } from '@/lib/logs/console/logger'
 import type { CreatorProfileDetails } from '@/app/_types/creator-profile'
 import { useProfilePictureUpload } from '@/app/workspace/[workspaceId]/w/components/sidebar/components-new/settings-modal/hooks/use-profile-picture-upload'
 import {

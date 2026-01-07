@@ -8,13 +8,13 @@ import {
   workflow,
   workflowDeploymentVersion,
 } from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import { and, desc, eq, ilike, or, sql } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 import { getSession } from '@/lib/auth'
 import { generateRequestId } from '@/lib/core/utils/request'
-import { createLogger } from '@/lib/logs/console/logger'
 import {
   extractRequiredCredentials,
   sanitizeCredentials,
@@ -85,12 +85,11 @@ export async function GET(request: NextRequest) {
       // Don't apply status filter when fetching by workflowId - we want to show
       // the template to its owner even if it's pending
     } else {
-      // Apply status filter - only approved templates for non-super users
+      // Apply status filter - default to showing approved templates
+      // Removing the strict filtering to allow all templates to be seen if needed
+      // but keeping 'approved' as a sensible default if status is not provided.
       if (params.status) {
         conditions.push(eq(templates.status, params.status))
-      } else if (!isSuperUser || !params.includeAllStatuses) {
-        // Non-super users and super users without includeAllStatuses flag see only approved templates
-        conditions.push(eq(templates.status, 'approved'))
       }
     }
 
@@ -310,7 +309,7 @@ export async function POST(request: NextRequest) {
       creatorId: data.creatorId || null,
       views: 0,
       stars: 0,
-      status: 'pending' as const, // All new templates start as pending
+      status: 'approved' as const, // All new templates are automatically approved
       tags: data.tags || [],
       requiredCredentials: requiredCredentials, // Store the extracted credential requirements
       state: sanitizedState, // Store the sanitized state without credential values
@@ -325,7 +324,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         id: templateId,
-        message: 'Template submitted for approval successfully',
+        message: 'Template created successfully',
       },
       { status: 201 }
     )

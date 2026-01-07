@@ -2,6 +2,7 @@ import { sso } from '@better-auth/sso'
 import { stripe } from '@better-auth/stripe'
 import { db } from '@sim/db'
 import * as schema from '@sim/db/schema'
+import { createLogger } from '@sim/logger'
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { nextCookies } from 'better-auth/next-js'
@@ -14,7 +15,6 @@ import {
   organization,
 } from 'better-auth/plugins'
 import { and, eq } from 'drizzle-orm'
-import { headers } from 'next/headers'
 import Stripe from 'stripe'
 import {
   getEmailSubject,
@@ -41,7 +41,6 @@ import {
 import { env, isTruthy } from '@/lib/core/config/env'
 import { isBillingEnabled, isEmailVerificationEnabled } from '@/lib/core/config/environment'
 import { getBaseUrl } from '@/lib/core/utils/urls'
-import { createLogger } from '@/lib/logs/console/logger'
 import { sendEmail } from '@/lib/messaging/email/mailer'
 import { getFromEmailAddress } from '@/lib/messaging/email/utils'
 import { quickValidateEmail } from '@/lib/messaging/email/validation'

@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback } from 'react'
+import { createLogger } from '@sim/logger'
 import {
   Building2,
   Check,
@@ -27,7 +28,6 @@ import { useSession } from '@/lib/auth/auth-client'
 import { useSubscriptionUpgrade } from '@/lib/billing/client/upgrade'
 import { getSubscriptionStatus } from '@/lib/billing/client/utils'
 import { cn } from '@/lib/core/utils/cn'
-import { createLogger } from '@/lib/logs/console/logger'
 import { useOrganizations } from '@/hooks/queries/organization'
 import { useSubscriptionData } from '@/hooks/queries/subscription'
 

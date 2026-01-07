@@ -1,136 +1,134 @@
-"use client";
+'use client'
 
-import { useApiContext, useUserDetailsContext } from "@/context";
-import LoginModal from "@/global/Modals/LoginModal";
-import { executeTx } from "@/global/utils/executeTx";
-import { formatBnBalance } from "@/global/utils/formatBnBalance";
-import { getEncodedAddress } from "@/global/utils/getEncodedAddress";
-import setSigner from "@/global/utils/setSigner";
-import Address from "@/ui-components/Address";
-import Loader from "@/ui-components/Loader";
-import PrimaryButton from "@/ui-components/PrimaryButton";
-import { ApiPromise, WsProvider } from "@polkadot/api";
-import { u8aToHex } from "@polkadot/util";
-import { decodeAddress } from "@polkadot/util-crypto";
-import { Input, Skeleton, Spin } from "antd";
-import React, { useEffect, useState } from "react";
-import BN from "bn.js";
-import inputToBn from "@/global/utils/inputToBn";
-import queueNotification, {
-  NotificationStatus,
-} from "@/ui-components/QueueNotifications";
+import { useEffect, useState } from 'react'
+import { ApiPromise, WsProvider } from '@polkadot/api'
+import { u8aToHex } from '@polkadot/util'
+import { decodeAddress } from '@polkadot/util-crypto'
+import { Input, Skeleton, Spin } from 'antd'
+import BN from 'bn.js'
+import { useApiContext, useUserDetailsContext } from '@/context'
+import LoginModal from '@/global/Modals/LoginModal'
+import { executeTx } from '@/global/utils/executeTx'
+import { formatBnBalance } from '@/global/utils/formatBnBalance'
+import { getEncodedAddress } from '@/global/utils/getEncodedAddress'
+import inputToBn from '@/global/utils/inputToBn'
+import setSigner from '@/global/utils/setSigner'
+import Address from '@/ui-components/Address'
+import Loader from '@/ui-components/Loader'
+import PrimaryButton from '@/ui-components/PrimaryButton'
+import queueNotification, { NotificationStatus } from '@/ui-components/QueueNotifications'
 
 const Teleport = () => {
-  const { api, apiReady, network } = useApiContext();
-  const { address, wallet } = useUserDetailsContext();
+  const { api, apiReady, network } = useApiContext()
+  const { address, wallet } = useUserDetailsContext()
 
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false)
 
-  const [polkaApi, setPolkaApi] = useState<ApiPromise | null>(null);
-  const [polkaApiReady, setPolkaApiReady] = useState<boolean>(false);
-  const [balance, setBalance] = useState<string | null>(null);
-  const [assetHubBalance, setAssetHubBalance] = useState<string | null>(null);
+  const [polkaApi, setPolkaApi] = useState<ApiPromise | null>(null)
+  const [polkaApiReady, setPolkaApiReady] = useState<boolean>(false)
+  const [balance, setBalance] = useState<string | null>(null)
+  const [assetHubBalance, setAssetHubBalance] = useState<string | null>(null)
 
-  const [loading, setLoading] = useState<boolean>(false);
-  const [polkaApiLoading, setPolkaApiLoading] = useState<boolean>(false);
-  const [teleportLoading, setTeleportLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false)
+  const [polkaApiLoading, setPolkaApiLoading] = useState<boolean>(false)
+  const [teleportLoading, setTeleportLoading] = useState<boolean>(false)
 
-  const [value, setValue] = useState<string>("");
+  const [value, setValue] = useState<string>('')
 
-  const [valueBN, setValueBN] = useState<BN>(new BN("0"));
+  const [valueBN, setValueBN] = useState<BN>(new BN('0'))
 
   const fetchBalance = async () => {
     if (!polkaApi) {
-      return;
+      return
     }
     try {
-      setLoading(true);
+      setLoading(true)
       const {
         data: { free: balance },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } = (await polkaApi.query.system.account(address)) as any;
-      setBalance(balance.toString());
+      } = (await polkaApi.query.system.account(address)) as any
+      setBalance(balance.toString())
     } catch (e) {
-      console.log(e);
+      console.log(e)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const fetchAssetHubBalance = async () => {
     if (!api || !apiReady) {
-      return;
+      return
     }
     try {
-      setLoading(true);
+      setLoading(true)
       const {
         data: { free: balance },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } = (await api.query.system.account(address)) as any;
-      setAssetHubBalance(balance.toString());
+      } = (await api.query.system.account(address)) as any
+      setAssetHubBalance(balance.toString())
     } catch (e) {
-      console.log(e);
+      console.log(e)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
     const initApi = async () => {
-      const provider = new WsProvider("wss://rpc.polkadot.io");
-      setPolkaApiLoading(true);
-      const a = await ApiPromise.create({ provider });
-      const isReady = await a.isReady;
+      const provider = new WsProvider('wss://rpc.polkadot.io')
+      setPolkaApiLoading(true)
+      const a = await ApiPromise.create({ provider })
+      const isReady = await a.isReady
       if (isReady) {
-        setPolkaApi(a);
-        setPolkaApiReady(true);
+        setPolkaApi(a)
+        setPolkaApiReady(true)
       }
-      setPolkaApiLoading(false);
-    };
-    initApi();
-  }, []);
+      setPolkaApiLoading(false)
+    }
+    initApi()
+  }, [])
 
   useEffect(() => {
-    if (!polkaApi || !polkaApiReady) return;
-    fetchBalance();
-  }, [polkaApi, polkaApiReady]);
+    if (!polkaApi || !polkaApiReady) return
+    fetchBalance()
+  }, [polkaApi, polkaApiReady])
 
   useEffect(() => {
-    if (!api || !apiReady) return;
-    fetchAssetHubBalance();
-  }, [api, apiReady]);
+    if (!api || !apiReady) return
+    fetchAssetHubBalance()
+  }, [api, apiReady])
 
   const onAmountChange = (a: string) => {
-    const amount = Number(a);
-    if (Number.isNaN(amount)) return;
+    const amount = Number(a)
+    if (Number.isNaN(amount)) return
     if (!amount || amount <= 0) {
-      return;
+      return
     }
 
-    const [inputBalance, isValid] = inputToBn(`${amount}`, network, false);
+    const [inputBalance, isValid] = inputToBn(`${amount}`, network, false)
 
     if (isValid) {
-      setValueBN(inputBalance);
+      setValueBN(inputBalance)
     }
-  };
+  }
 
   const teleport = async () => {
-    if (!polkaApi || !address || !value) return;
+    if (!polkaApi || !address || !value) return
 
-    setTeleportLoading(true);
+    setTeleportLoading(true)
 
-    const accountId = u8aToHex(decodeAddress(address));
+    const accountId = u8aToHex(decodeAddress(address))
 
-    const dest = polkaApi.createType("MultiLocation", {
+    const dest = polkaApi.createType('MultiLocation', {
       parents: 0,
       interior: {
         X1: {
           Parachain: 1000,
         },
       },
-    });
+    })
 
-    const beneficiary = polkaApi.createType("MultiLocation", {
+    const beneficiary = polkaApi.createType('MultiLocation', {
       parents: 0,
       interior: {
         X1: {
@@ -140,75 +138,75 @@ const Teleport = () => {
           },
         },
       },
-    });
+    })
 
     const assets = [
       {
         id: {
           Concrete: {
-            parents: "0",
-            interior: "Here",
+            parents: '0',
+            interior: 'Here',
           },
         },
         fun: {
           Fungible: valueBN.toString(),
         },
       },
-    ];
+    ]
 
     const tx = polkaApi.tx.xcmPallet.limitedTeleportAssets(
       { V2: dest },
       { V2: beneficiary },
       { V2: assets },
-      "0",
-      "Unlimited",
-    );
-    setSigner(polkaApi, wallet, address);
+      '0',
+      'Unlimited'
+    )
+    setSigner(polkaApi, wallet, address)
     await executeTx({
       api: polkaApi,
       apiReady: true,
-      network: "polkadot",
+      network: 'polkadot',
       tx,
       address,
       onSuccess: async () => {
         queueNotification({
-          header: "Success!",
-          message: "Tokens Teleported to Assethub",
+          header: 'Success!',
+          message: 'Tokens Teleported to Assethub',
           status: NotificationStatus.SUCCESS,
-        });
-        setTeleportLoading(false);
-        setValue("");
-        setValueBN(new BN("0"));
-        await fetchBalance();
-        await fetchAssetHubBalance();
+        })
+        setTeleportLoading(false)
+        setValue('')
+        setValueBN(new BN('0'))
+        await fetchBalance()
+        await fetchAssetHubBalance()
       },
       onFailed: () => {
         queueNotification({
-          header: "Failed!",
-          message: "Error in Teleport, Please try again or Refresh.",
+          header: 'Failed!',
+          message: 'Error in Teleport, Please try again or Refresh.',
           status: NotificationStatus.ERROR,
-        });
-        setTeleportLoading(false);
+        })
+        setTeleportLoading(false)
       },
-    });
-  };
+    })
+  }
 
   const formattedPolkadotBalance = formatBnBalance(
-    balance || "0",
+    balance || '0',
     { numberAfterComma: 2, withThousandDelimitor: false },
-    network,
-  );
+    network
+  )
 
   return (
     <Spin spinning={teleportLoading}>
       <LoginModal open={openModal} onClose={() => setOpenModal(false)} />
       {!address ? (
-        <div className="w-full flex items-center justify-center">
+        <div className='flex w-full items-center justify-center'>
           <PrimaryButton
             onClick={() => {
-              setOpenModal(true);
+              setOpenModal(true)
             }}
-            className="bg-accent-primary shadow-accent-primary/50"
+            className='bg-accent-primary shadow-accent-primary/50'
           >
             Connect Wallet
           </PrimaryButton>
@@ -216,44 +214,44 @@ const Teleport = () => {
       ) : polkaApiLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col w-full items-center gap-y-4">
+        <div className='flex w-full flex-col items-center gap-y-4'>
           <Address
             startChars={6}
             endChars={6}
             address={getEncodedAddress(address, network) || address}
           />
-          <div className="flex items-center gap-x-1 w-full">
-            <span>Assethub Balance:</span>{" "}
+          <div className='flex w-full items-center gap-x-1'>
+            <span>Assethub Balance:</span>{' '}
             {loading ? (
               <Skeleton
-                className="w-[100px] flex items-center m-0"
+                className='m-0 flex w-[100px] items-center'
                 paragraph={{ rows: 0, width: 2 }}
                 active
               />
             ) : (
               formatBnBalance(
-                assetHubBalance || "0",
+                assetHubBalance || '0',
                 { withUnit: true, numberAfterComma: 2 },
-                network,
+                network
               )
             )}
           </div>
-          <div className="w-full">
-            <p className="text-white mb-2 flex items-center gap-x-1">
-              Polkadot{" "}
+          <div className='w-full'>
+            <p className='mb-2 flex items-center gap-x-1 text-white'>
+              Polkadot{' '}
               {loading ? (
                 <Skeleton
-                  className="w-[100px] flex items-center m-0"
+                  className='m-0 flex w-[100px] items-center'
                   paragraph={{ rows: 0, width: 2 }}
                   active
                 />
               ) : (
                 <>
-                  (max:{" "}
+                  (max:{' '}
                   {formatBnBalance(
-                    balance || "0",
+                    balance || '0',
                     { withUnit: true, numberAfterComma: 2 },
-                    network,
+                    network
                   )}
                   )
                 </>
@@ -261,15 +259,15 @@ const Teleport = () => {
             </p>
             <Input
               disabled={teleportLoading}
-              placeholder="10 BNB"
-              className={`border-white rounded-[30px] text-white placeholder:text-placeholder bg-transparent px-4 py-2`}
+              placeholder='10 BNB'
+              className={`rounded-[30px] border-white bg-transparent px-4 py-2 text-white placeholder:text-placeholder`}
               value={value}
-              type="number"
-              suffix={"BNB"}
+              type='number'
+              suffix={'BNB'}
               onChange={(e) => {
                 if (Number(e.target.value) >= 0) {
-                  onAmountChange(e.target.value);
-                  setValue(e.target.value);
+                  onAmountChange(e.target.value)
+                  setValue(e.target.value)
                 }
               }}
             />
@@ -278,11 +276,9 @@ const Teleport = () => {
           <PrimaryButton
             loading={teleportLoading}
             disabled={
-              !value ||
-              Number(value) === 0 ||
-              Number(value) > Number(formattedPolkadotBalance)
+              !value || Number(value) === 0 || Number(value) > Number(formattedPolkadotBalance)
             }
-            className="bg-[#5030DB] shadow-[#8952F5] mt-4"
+            className='mt-4 bg-[#5030DB] shadow-[#8952F5]'
             onClick={teleport}
           >
             Teleport
@@ -290,7 +286,7 @@ const Teleport = () => {
         </div>
       )}
     </Spin>
-  );
-};
+  )
+}
 
-export default Teleport;
+export default Teleport

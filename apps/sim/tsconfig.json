@@ -56,6 +56,12 @@
       "@/serializer/*": [
         "./serializer/*"
       ],
+      "@sim/testing": [
+        "../../packages/testing/src"
+      ],
+      "@sim/testing/*": [
+        "../../packages/testing/src/*"
+      ],
       "@sim/db": [
         "../../packages/db"
       ],

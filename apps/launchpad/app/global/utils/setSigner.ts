@@ -1,58 +1,48 @@
-import { Injected, InjectedWindow } from "@polkadot/extension-inject/types";
-import { APP_NAME } from "../constants";
-import { Wallet } from "../types";
-import { ApiPromise } from "@polkadot/api";
+import type { ApiPromise } from '@polkadot/api'
+import type { Injected, InjectedWindow } from '@polkadot/extension-inject/types'
+import { APP_NAME } from '../constants'
+import type { Wallet } from '../types'
 
-export default async function setSigner(
-  api: ApiPromise,
-  chosenWallet: Wallet,
-  address: string,
-) {
-  if (!api || !chosenWallet || !address)
-    throw new Error("Please select an address");
+export default async function setSigner(api: ApiPromise, chosenWallet: Wallet, address: string) {
+  if (!api || !chosenWallet || !address) throw new Error('Please select an address')
 
-  const injectedWindow =
-    typeof window !== "undefined" && (window as Window & InjectedWindow);
+  const injectedWindow = typeof window !== 'undefined' && (window as Window & InjectedWindow)
 
   if (!injectedWindow) {
-    console.log("Injected Window is null", injectedWindow);
-    return;
+    console.log('Injected Window is null', injectedWindow)
+    return
   }
 
-  const wallet = injectedWindow.injectedWeb3[String(chosenWallet)];
+  const wallet = injectedWindow.injectedWeb3[String(chosenWallet)]
 
   if (!wallet) {
-    return;
+    return
   }
 
-  let injected: Injected | undefined;
+  let injected: Injected | undefined
   try {
     injected = await new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
-        reject(new Error("Wallet Timeout"));
-      }, 60000); // wait 60 sec
+        reject(new Error('Wallet Timeout'))
+      }, 60000) // wait 60 sec
 
-      if (wallet && wallet.enable) {
+      if (wallet?.enable) {
         wallet
           .enable(APP_NAME)
-          .then(
-            (
-              value: Injected | PromiseLike<Injected | undefined> | undefined,
-            ) => {
-              clearTimeout(timeoutId);
-              resolve(value);
-            },
-          )
+          .then((value: Injected | PromiseLike<Injected | undefined> | undefined) => {
+            clearTimeout(timeoutId)
+            resolve(value)
+          })
           .catch((error: unknown) => {
-            reject(error);
-          });
+            reject(error)
+          })
       }
-    });
+    })
   } catch (err) {
-    console.log(err);
+    console.log(err)
   }
   if (!injected) {
-    return;
+    return
   }
-  api.setSigner(injected.signer);
+  api.setSigner(injected.signer)
 }
