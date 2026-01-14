@@ -2789,6 +2789,21 @@ export const useCopilotStore = create<CopilotStore>()(
       }
     },
 
+    clearPreviewYaml: async () => {
+      const { currentChat } = get()
+
+      // Update local chat object to clear previewYaml
+      if (currentChat) {
+        set({
+          currentChat: {
+            ...currentChat,
+            previewYaml: null,
+          } as CopilotChat,
+        })
+        logger.info('[PreviewYaml] Cleared preview YAML', { chatId: currentChat.id })
+      }
+    },
+
     savePlanArtifact: async (content: string) => {
       const { currentChat } = get()
 

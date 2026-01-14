@@ -448,7 +448,16 @@ export const useWorkflowDiffStore = create<WorkflowDiffState & WorkflowDiffActio
           const toolCallId = await findLatestEditWorkflowToolCallId()
           if (toolCallId) {
             try {
-              await getClientTool(toolCallId)?.handleAccept?.()
+              const tool = getClientTool(toolCallId) as any
+              const handler = tool?.handleAccept
+              if (typeof handler === 'function') {
+                await handler()
+              } else if (handler != null) {
+                logger.warn('Tool accept handler is not a function', {
+                  toolCallId,
+                  handlerType: typeof handler,
+                })
+              }
             } catch (error) {
               logger.warn('Failed to notify tool accept state', { error })
             }
@@ -537,7 +546,16 @@ export const useWorkflowDiffStore = create<WorkflowDiffState & WorkflowDiffActio
           const toolCallId = await findLatestEditWorkflowToolCallId()
           if (toolCallId) {
             try {
-              await getClientTool(toolCallId)?.handleReject?.()
+              const tool = getClientTool(toolCallId) as any
+              const handler = tool?.handleReject
+              if (typeof handler === 'function') {
+                await handler()
+              } else if (handler != null) {
+                logger.warn('Tool reject handler is not a function', {
+                  toolCallId,
+                  handlerType: typeof handler,
+                })
+              }
             } catch (error) {
               logger.warn('Failed to notify tool reject state', { error })
             }

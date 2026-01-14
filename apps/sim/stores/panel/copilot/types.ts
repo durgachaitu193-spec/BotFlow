@@ -206,6 +206,7 @@ export interface CopilotActions {
   closePlanTodos: () => void
   clearPlanArtifact: () => Promise<void>
   savePlanArtifact: (content: string) => Promise<void>
+  clearPreviewYaml: () => Promise<void>
 
   handleStreamingResponse: (
     stream: ReadableStream,
