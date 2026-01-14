@@ -5,7 +5,8 @@ import { createLogger } from '@sim/logger'
 import { Loader2 } from 'lucide-react'
 import { Button, Rocket, Tooltip } from '@/components/emcn'
 import { DeployModal } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/deploy/components/deploy-modal/deploy-modal'
-import { X402PaywallDialog } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/deploy/components/x402-paywall-dialog'
+// Temporarily disable x402 paywall – keep import commented for easy re‑enable
+// import { X402PaywallDialog } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/deploy/components/x402-paywall-dialog'
 import {
   useChangeDetection,
   useDeployedState,
@@ -30,7 +31,7 @@ interface DeployProps {
  */
 export function Deploy({ activeWorkflowId, userPermissions, className }: DeployProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isPaywallOpen, setIsPaywallOpen] = useState(false)
+  // const [isPaywallOpen, setIsPaywallOpen] = useState(false)
   const hydrationPhase = useWorkflowRegistry((state) => state.hydration.phase)
   const isRegistryLoading =
     hydrationPhase === 'idle' ||
@@ -77,65 +78,20 @@ export function Deploy({ activeWorkflowId, userPermissions, className }: DeployP
   const isDisabled = isDeploying || !canDeploy || isEmpty || !isVerified
 
   /**
-   * Handle deploy button click - check payment status first
-   */
-  /**
-   * Handle deploy button click - check payment status first
+   * Handle deploy button click.
+   * x402 paywall is temporarily disabled, so we always proceed directly to deployment.
    */
   const onDeployClick = useCallback(async () => {
     if (!canDeploy || !activeWorkflowId || !isVerified) return
 
-    // Check if payment is required and not yet completed
-    const paymentPaid = workflowMetadata?.deploymentPaymentPaid ?? false
-
-    if (!paymentPaid && !isDeployed) {
-      // Show X402 paywall for first-time deployment
-      setIsPaywallOpen(true)
-      return
-    }
-
-    // Payment already completed or workflow already deployed, proceed normally
+    // Payment gate disabled: proceed directly to deployment
     const result = await handleDeployClick()
     if (result.shouldOpenModal) {
       setIsModalOpen(true)
     }
   }, [canDeploy, activeWorkflowId, handleDeployClick, workflowMetadata, isDeployed, isVerified])
 
-  /**
-   * Handle successful X402 payment
-   */
-  const handlePaymentSuccess = useCallback(
-    async (paymentTxHash?: string) => {
-      if (!activeWorkflowId) return
-
-      try {
-        // Record payment in database
-        const response = await fetch(`/api/workflows/${activeWorkflowId}/deployment-payment`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ paymentTxHash }),
-        })
-
-        if (!response.ok) {
-          throw new Error('Failed to record payment')
-        }
-
-        // Close paywall and proceed with deployment
-        setIsPaywallOpen(false)
-
-        // Trigger deployment
-        const result = await handleDeployClick()
-        if (result.shouldOpenModal) {
-          setIsModalOpen(true)
-        }
-      } catch (error) {
-        logger.error('Error recording payment:', error)
-        // Still close paywall but show error in modal
-        setIsPaywallOpen(false)
-      }
-    },
-    [activeWorkflowId, handleDeployClick]
-  )
+  // x402 payment handling temporarily disabled
 
   const refetchWithErrorHandling = async () => {
     if (!activeWorkflowId) return
@@ -196,11 +152,7 @@ export function Deploy({ activeWorkflowId, userPermissions, className }: DeployP
         <Tooltip.Content>{getTooltipText()}</Tooltip.Content>
       </Tooltip.Root>
 
-      <X402PaywallDialog
-        open={isPaywallOpen}
-        onOpenChange={setIsPaywallOpen}
-        onSuccess={handlePaymentSuccess}
-      />
+      {/* X402 paywall temporarily disabled */}
 
       <DeployModal
         open={isModalOpen}
