@@ -24,8 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui'
 import { MAX_TAG_SLOTS, type TagSlot } from '@/lib/knowledge/constants'
-// import { useKnowledgeBaseTagDefinitions } from '@/hooks/use-knowledge-base-tag-definitions' // Removed unused or incorrect import if not needed, checking file usage
-import { useTagSelection } from '@/hooks/kb/use-tag-selection'
+import { useKnowledgeBaseTagDefinitions } from '@/hooks/kb/use-knowledge-base-tag-definitions'
 import { useNextAvailableSlot } from '@/hooks/kb/use-next-available-slot'
 import { type TagDefinitionInput, useTagDefinitions } from '@/hooks/kb/use-tag-definitions'
 
