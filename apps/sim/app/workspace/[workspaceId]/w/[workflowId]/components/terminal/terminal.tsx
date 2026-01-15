@@ -12,6 +12,7 @@ import {
   Filter,
   FilterX,
   MoreHorizontal,
+  PanelRightOpen,
   RepeatIcon,
   Search,
   SplitIcon,
@@ -59,7 +60,7 @@ const MIN_OUTPUT_PANEL_WIDTH_PX = 440
  * Column width constants - Tailwind classes for styling
  */
 const COLUMN_WIDTHS = {
-  BLOCK: 'w-[240px]',
+  BLOCK: 'min-w-[140px] flex-1',
   STATUS: 'w-[120px]',
   DURATION: 'w-[120px]',
   RUN_ID: 'w-[120px]',
@@ -310,6 +311,7 @@ export function Terminal() {
   const clearWorkflowConsole = useTerminalConsoleStore((state) => state.clearWorkflowConsole)
   const exportConsoleCSV = useTerminalConsoleStore((state) => state.exportConsoleCSV)
   const [selectedEntry, setSelectedEntry] = useState<ConsoleEntry | null>(null)
+  const [lastSelectedEntry, setLastSelectedEntry] = useState<ConsoleEntry | null>(null)
   const [isToggling, setIsToggling] = useState(false)
   const [wrapText, setWrapText] = useState(true)
   const [showCopySuccess, setShowCopySuccess] = useState(false)
@@ -494,6 +496,10 @@ export function Terminal() {
       const isDeselecting = prev?.id === entry.id
       // Re-enable auto-select when deselecting, disable when selecting
       setAutoSelectEnabled(isDeselecting)
+
+      // Update last selected entry
+      setLastSelectedEntry(entry)
+
       return isDeselecting ? null : entry
     })
   }, [])
@@ -904,7 +910,7 @@ export function Terminal() {
               onClick={handleHeaderClick}
             >
               {uniqueBlocks.length > 0 ? (
-                <div className={clsx(COLUMN_WIDTHS.BLOCK, COLUMN_BASE_CLASS, 'flex items-center')}>
+                <div className={clsx(COLUMN_WIDTHS.BLOCK, 'flex items-center')}>
                   <Popover open={blockFilterOpen} onOpenChange={setBlockFilterOpen}>
                     <PopoverTrigger asChild>
                       <Button
@@ -1156,6 +1162,27 @@ export function Terminal() {
                       </Tooltip.Root>
                     </>
                   )}
+                  {lastSelectedEntry && !selectedEntry && (
+                    <Tooltip.Root>
+                      <Tooltip.Trigger asChild>
+                        <Button
+                          variant='ghost'
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setSelectedEntry(lastSelectedEntry)
+                            setAutoSelectEnabled(false)
+                          }}
+                          aria-label='Reopen panel'
+                          className='!p-1.5 -m-1.5'
+                        >
+                          <PanelRightOpen className='h-3.5 w-3.5' />
+                        </Button>
+                      </Tooltip.Trigger>
+                      <Tooltip.Content>
+                        <span>Reopen panel</span>
+                      </Tooltip.Content>
+                    </Tooltip.Root>
+                  )}
                   <Popover open={mainOptionsOpen} onOpenChange={setMainOptionsOpen}>
                     <PopoverTrigger asChild>
                       <Button
@@ -1202,7 +1229,7 @@ export function Terminal() {
             </div>
 
             {/* Rows */}
-            <div className='flex-1 overflow-y-auto overflow-x-hidden'>
+            <div className='flex-1 overflow-y-auto overflow-x-auto'>
               {filteredEntries.length === 0 ? (
                 <div className='flex h-full items-center justify-center text-[#8D8D8D] text-[13px]'>
                   No logs yet
@@ -1227,7 +1254,7 @@ export function Terminal() {
                       <div
                         className={clsx(
                           COLUMN_WIDTHS.BLOCK,
-                          COLUMN_BASE_CLASS,
+                          COLUMN_WIDTHS.BLOCK,
                           'flex items-center gap-[8px]'
                         )}
                       >
@@ -1349,8 +1376,8 @@ export function Terminal() {
                     className={clsx(
                       'px-[8px] py-[6px] text-[12px]',
                       !showInput &&
-                        hasInputData &&
-                        '!text-[var(--text-primary)] dark:!text-[var(--text-primary)]'
+                      hasInputData &&
+                      '!text-[var(--text-primary)] dark:!text-[var(--text-primary)]'
                     )}
                     onClick={(e) => {
                       e.stopPropagation()
@@ -1551,6 +1578,27 @@ export function Terminal() {
                       handleHeaderClick()
                     }}
                   />
+                  <div className='h-[16px] w-[1px] bg-[var(--border)]' />
+                  <Tooltip.Root>
+                    <Tooltip.Trigger asChild>
+                      <Button
+                        variant='ghost'
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setLastSelectedEntry(selectedEntry)
+                          setSelectedEntry(null)
+                          setAutoSelectEnabled(true)
+                        }}
+                        aria-label='Close panel'
+                        className='!p-1.5 -m-1.5 hover:bg-[var(--surface-5)]'
+                      >
+                        <X className='h-[14px] w-[14px]' />
+                      </Button>
+                    </Tooltip.Trigger>
+                    <Tooltip.Content>
+                      <span>Close</span>
+                    </Tooltip.Content>
+                  </Tooltip.Root>
                 </div>
               </div>
 
