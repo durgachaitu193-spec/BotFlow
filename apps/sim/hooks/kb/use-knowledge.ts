@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import type { ChunkData, DocumentData, KnowledgeBaseData } from '@/lib/knowledge/types'
+import type { ChunkData, DocumentData, KnowledgeBaseData } from '@/stores/knowledge/store'
 import {
   type KnowledgeChunksResponse,
   type KnowledgeDocumentsResponse,
@@ -177,6 +177,16 @@ export function useKnowledgeBasesList(
     [queryClient, workspaceId]
   )
 
+  const addKnowledgeBase = useCallback(
+    (newKnowledgeBase: KnowledgeBaseData) => {
+      queryClient.setQueryData<KnowledgeBaseData[]>(
+        knowledgeKeys.list(workspaceId),
+        (previous) => (previous ? [...previous, newKnowledgeBase] : [newKnowledgeBase])
+      )
+    },
+    [queryClient, workspaceId]
+  )
+
   const refreshList = useCallback(async () => {
     await queryClient.invalidateQueries({ queryKey: knowledgeKeys.list(workspaceId) })
   }, [queryClient, workspaceId])
@@ -190,6 +200,7 @@ export function useKnowledgeBasesList(
     refreshList,
     removeKnowledgeBase,
     updateKnowledgeBase,
+    addKnowledgeBase,
   }
 }
 

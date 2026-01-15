@@ -27,7 +27,7 @@ import {
 import { InviteModal } from '@/app/workspace/[workspaceId]/w/components/sidebar/components-new/workspace-header/components/invite-modal/invite-modal'
 import { useAutoScroll } from '@/app/workspace/[workspaceId]/w/components/sidebar/hooks/use-auto-scroll'
 import { useSubscriptionData } from '@/hooks/queries/subscription'
-import { useKnowledgeBasesList } from '@/hooks/use-knowledge'
+import { useKnowledgeBasesList } from '@/hooks/kb/use-knowledge'
 import { useWorkflowRegistry } from '@/stores/workflows/registry/store'
 import type { WorkflowMetadata } from '@/stores/workflows/registry/types'
 
@@ -929,9 +929,8 @@ export function Sidebar() {
 
           {/* 4. Workflow Selector */}
           <div
-            className={`pointer-events-auto relative h-[212px] flex-shrink-0 rounded-[10px] border bg-background shadow-xs ${
-              isSidebarCollapsed ? 'hidden' : ''
-            }`}
+            className={`pointer-events-auto relative h-[212px] flex-shrink-0 rounded-[10px] border bg-background shadow-xs ${isSidebarCollapsed ? 'hidden' : ''
+              }`}
           >
             <div className='px-2'>
               <ScrollArea className='h-[210px]' hideScrollbar={true}>
@@ -958,9 +957,8 @@ export function Sidebar() {
 
       {/* Floating Toolbar - Only on workflow pages */}
       <div
-        className={`pointer-events-auto fixed left-4 z-50 w-56 rounded-[10px] border bg-background shadow-xs ${
-          !isOnWorkflowPage || isSidebarCollapsed ? 'hidden' : ''
-        }`}
+        className={`pointer-events-auto fixed left-4 z-50 w-56 rounded-[10px] border bg-background shadow-xs ${!isOnWorkflowPage || isSidebarCollapsed ? 'hidden' : ''
+          }`}
         style={{
           top: `${toolbarTop}px`,
           bottom: `${navigationBottom + SIDEBAR_HEIGHTS.NAVIGATION + SIDEBAR_GAP + (isBillingEnabled ? SIDEBAR_HEIGHTS.USAGE_INDICATOR + SIDEBAR_GAP : 0)}px`, // Navigation height + gap + UsageIndicator height + gap (if billing enabled)
@@ -969,9 +967,8 @@ export function Sidebar() {
 
       {/* Floating Logs Filters - Only on logs page */}
       <div
-        className={`pointer-events-auto fixed left-4 z-50 w-56 rounded-[10px] border bg-background shadow-xs ${
-          !isOnLogsPage || isSidebarCollapsed ? 'hidden' : ''
-        }`}
+        className={`pointer-events-auto fixed left-4 z-50 w-56 rounded-[10px] border bg-background shadow-xs ${!isOnLogsPage || isSidebarCollapsed ? 'hidden' : ''
+          }`}
         style={{
           top: `${toolbarTop}px`,
           bottom: `${navigationBottom + SIDEBAR_HEIGHTS.NAVIGATION + SIDEBAR_GAP + (isBillingEnabled ? SIDEBAR_HEIGHTS.USAGE_INDICATOR + SIDEBAR_GAP : 0)}px`, // Navigation height + gap + UsageIndicator height + gap (if billing enabled)
@@ -982,9 +979,8 @@ export function Sidebar() {
 
       {/* Floating Knowledge Tags - Only on knowledge pages */}
       <div
-        className={`pointer-events-auto fixed left-4 z-50 w-56 rounded-[10px] border bg-background shadow-xs ${
-          !isOnKnowledgePage || isSidebarCollapsed || !knowledgeBaseId ? 'hidden' : ''
-        }`}
+        className={`pointer-events-auto fixed left-4 z-50 w-56 rounded-[10px] border bg-background shadow-xs ${!isOnKnowledgePage || isSidebarCollapsed || !knowledgeBaseId ? 'hidden' : ''
+          }`}
         style={{
           top: `${toolbarTop}px`,
           bottom: `${navigationBottom + SIDEBAR_HEIGHTS.NAVIGATION + SIDEBAR_GAP + (isBillingEnabled ? SIDEBAR_HEIGHTS.USAGE_INDICATOR + SIDEBAR_GAP : 0)}px`, // Navigation height + gap + UsageIndicator height + gap (if billing enabled)

@@ -24,9 +24,10 @@ import {
   SelectValue,
 } from '@/components/ui'
 import { MAX_TAG_SLOTS, type TagSlot } from '@/lib/knowledge/constants'
-import { useKnowledgeBaseTagDefinitions } from '@/hooks/use-knowledge-base-tag-definitions'
-import { useNextAvailableSlot } from '@/hooks/use-next-available-slot'
-import { type TagDefinitionInput, useTagDefinitions } from '@/hooks/use-tag-definitions'
+// import { useKnowledgeBaseTagDefinitions } from '@/hooks/use-knowledge-base-tag-definitions' // Removed unused or incorrect import if not needed, checking file usage
+import { useTagSelection } from '@/hooks/kb/use-tag-selection'
+import { useNextAvailableSlot } from '@/hooks/kb/use-next-available-slot'
+import { type TagDefinitionInput, useTagDefinitions } from '@/hooks/kb/use-tag-definitions'
 
 const logger = createLogger('DocumentTagEntry')
 
@@ -223,24 +224,24 @@ export function DocumentTagEntry({
         const updatedTags =
           editingTagIndex !== null
             ? tags.map((tag, index) =>
-                index === editingTagIndex
-                  ? {
-                      ...tag,
-                      displayName: editForm.displayName,
-                      fieldType: editForm.fieldType,
-                      value: editForm.value,
-                    }
-                  : tag
-              )
-            : [
-                ...tags,
-                {
-                  slot: targetSlot,
+              index === editingTagIndex
+                ? {
+                  ...tag,
                   displayName: editForm.displayName,
                   fieldType: editForm.fieldType,
                   value: editForm.value,
-                },
-              ]
+                }
+                : tag
+            )
+            : [
+              ...tags,
+              {
+                slot: targetSlot,
+                displayName: editForm.displayName,
+                fieldType: editForm.fieldType,
+                value: editForm.value,
+              },
+            ]
         await onSave(updatedTags)
       }
 

@@ -30,7 +30,7 @@ import {
   sortKnowledgeBases,
 } from '@/app/workspace/[workspaceId]/knowledge/utils/sort'
 import { useUserPermissionsContext } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
-import { useKnowledgeBasesList } from '@/hooks/use-knowledge'
+import { useKnowledgeBasesList } from '@/hooks/kb/use-knowledge'
 import type { KnowledgeBaseData } from '@/stores/knowledge/store'
 
 interface KnowledgeBaseWithDocCount extends KnowledgeBaseData {
@@ -185,7 +185,7 @@ export function Knowledge() {
                           onClick={
                             userPermissions.canEdit === true
                               ? () => setIsCreateModalOpen(true)
-                              : () => {}
+                              : () => { }
                           }
                           icon={<LibraryBig className='h-4 w-4 text-muted-foreground' />}
                         />
