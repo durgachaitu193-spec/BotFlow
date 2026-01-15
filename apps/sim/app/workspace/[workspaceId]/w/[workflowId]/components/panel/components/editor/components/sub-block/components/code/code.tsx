@@ -36,7 +36,7 @@ import { useAccessibleReferencePrefixes } from '@/app/workspace/[workspaceId]/w/
 import { useWand } from '@/app/workspace/[workspaceId]/w/[workflowId]/hooks/use-wand'
 import type { GenerationType } from '@/blocks/types'
 import { createEnvVarPattern, createReferencePattern } from '@/executor/utils/reference-validation'
-import { useTagSelection } from '@/hooks/use-tag-selection'
+import { useTagSelection } from '@/hooks/kb/use-tag-selection'
 import { normalizeBlockName } from '@/stores/workflows/utils'
 
 const logger = createLogger('Code')
@@ -211,9 +211,9 @@ export function Code({
 
   // Refs
   const editorRef = useRef<HTMLDivElement>(null)
-  const handleStreamStartRef = useRef<() => void>(() => {})
-  const handleGeneratedContentRef = useRef<(generatedCode: string) => void>(() => {})
-  const handleStreamChunkRef = useRef<(chunk: string) => void>(() => {})
+  const handleStreamStartRef = useRef<() => void>(() => { })
+  const handleGeneratedContentRef = useRef<(generatedCode: string) => void>(() => { })
+  const handleStreamChunkRef = useRef<(chunk: string) => void>(() => { })
 
   // Custom hooks
   const accessiblePrefixes = useAccessibleReferencePrefixes(blockId)
@@ -289,13 +289,13 @@ export function Code({
 
   const isAiLoading = wandHook?.isLoading || false
   const isAiStreaming = wandHook?.isStreaming || false
-  const generateCodeStream = wandHook?.generateStream || (() => {})
+  const generateCodeStream = wandHook?.generateStream || (() => { })
   const isPromptVisible = wandHook?.isPromptVisible || false
-  const showPromptInline = wandHook?.showPromptInline || (() => {})
-  const hidePromptInline = wandHook?.hidePromptInline || (() => {})
+  const showPromptInline = wandHook?.showPromptInline || (() => { })
+  const hidePromptInline = wandHook?.hidePromptInline || (() => { })
   const promptInputValue = wandHook?.promptInputValue || ''
-  const updatePromptValue = wandHook?.updatePromptValue || (() => {})
-  const cancelGeneration = wandHook?.cancelGeneration || (() => {})
+  const updatePromptValue = wandHook?.updatePromptValue || (() => { })
+  const cancelGeneration = wandHook?.cancelGeneration || (() => { })
 
   // Store integration
   const [storeValue, setStoreValue] = useSubBlockValue(blockId, subBlockId, false, {

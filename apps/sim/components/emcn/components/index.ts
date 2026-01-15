@@ -1,5 +1,7 @@
 export { Badge } from './badge/badge'
+export { Avatar, AvatarFallback, AvatarImage, avatarVariants } from './avatar/avatar'
 export { Button, buttonVariants } from './button/button'
+export { Checkbox, checkboxVariants } from './checkbox/checkbox'
 export {
   CODE_LINE_HEIGHT_PX,
   Code,
@@ -64,5 +66,6 @@ export {
   SModalTrigger,
 } from './s-modal/s-modal'
 export { Switch } from './switch/switch'
+export { TagInput, type TagItem, type FileInputOptions } from './tag-input/tag-input'
 export { Textarea } from './textarea/textarea'
 export { Tooltip } from './tooltip/tooltip'

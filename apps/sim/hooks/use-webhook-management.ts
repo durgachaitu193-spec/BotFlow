@@ -10,10 +10,13 @@ import { getTrigger, isTriggerValid } from '@/triggers'
 
 const logger = createLogger('useWebhookManagement')
 
+const CREDENTIAL_SET_PREFIX = 'credentialSet:'
+
 interface UseWebhookManagementProps {
   blockId: string
   triggerId?: string
   isPreview?: boolean
+  useWebhookUrl?: boolean
 }
 
 interface WebhookManagementState {
@@ -90,6 +93,7 @@ export function useWebhookManagement({
   blockId,
   triggerId,
   isPreview = false,
+  useWebhookUrl = false,
 }: UseWebhookManagementProps): WebhookManagementState {
   const params = useParams()
   const workflowId = params.workflowId as string
@@ -167,7 +171,22 @@ export function useWebhookManagement({
             if (webhook.providerConfig) {
               const effectiveTriggerId = resolveEffectiveTriggerId(blockId, triggerId, webhook)
 
-              useSubBlockStore.getState().setValue(blockId, 'triggerConfig', webhook.providerConfig)
+              // Filter out runtime/system fields from providerConfig before storing as triggerConfig
+              // These fields are managed by the system and should not be included in change detection
+              const {
+                credentialId: _credId,
+                credentialSetId: _credSetId,
+                userId: _userId,
+                historyId: _historyId,
+                lastCheckedTimestamp: _lastChecked,
+                setupCompleted: _setupCompleted,
+                externalId: _externalId,
+                triggerId: _triggerId,
+                blockId: _blockId,
+                ...userConfigurableFields
+              } = webhook.providerConfig as Record<string, unknown>
+
+              useSubBlockStore.getState().setValue(blockId, 'triggerConfig', userConfigurableFields)
 
               if (effectiveTriggerId) {
                 populateTriggerFieldsFromConfig(blockId, webhook.providerConfig, effectiveTriggerId)
@@ -204,9 +223,10 @@ export function useWebhookManagement({
         })
       }
     }
-
-    loadWebhookOrGenerateUrl()
-  }, [isPreview, triggerId, workflowId, blockId])
+    if (useWebhookUrl) {
+      loadWebhookOrGenerateUrl()
+    }
+  }, [isPreview, triggerId, workflowId, blockId, useWebhookUrl])
 
   const createWebhook = async (
     effectiveTriggerId: string | undefined,
@@ -217,9 +237,17 @@ export function useWebhookManagement({
     }
 
     const triggerConfig = useSubBlockStore.getState().getValue(blockId, 'triggerConfig')
+
+    const isCredentialSet = selectedCredentialId?.startsWith(CREDENTIAL_SET_PREFIX)
+    const credentialSetId = isCredentialSet
+      ? selectedCredentialId!.slice(CREDENTIAL_SET_PREFIX.length)
+      : undefined
+    const credentialId = isCredentialSet ? undefined : selectedCredentialId
+
     const webhookConfig = {
       ...(triggerConfig || {}),
-      ...(selectedCredentialId ? { credentialId: selectedCredentialId } : {}),
+      ...(credentialId ? { credentialId } : {}),
+      ...(credentialSetId ? { credentialSetId } : {}),
       triggerId: effectiveTriggerId,
     }
 
@@ -274,7 +302,17 @@ export function useWebhookManagement({
     effectiveTriggerId: string | undefined,
     selectedCredentialId: string | null
   ): Promise<boolean> => {
-    const triggerConfig = useSubBlockStore.getState().getValue(blockId, 'triggerConfig')
+    const triggerConfigRaw = useSubBlockStore.getState().getValue(blockId, 'triggerConfig')
+    const triggerConfig =
+      typeof triggerConfigRaw === 'object' && triggerConfigRaw !== null
+        ? (triggerConfigRaw as Record<string, unknown>)
+        : {}
+
+    const isCredentialSet = selectedCredentialId?.startsWith(CREDENTIAL_SET_PREFIX)
+    const credentialSetId = isCredentialSet
+      ? selectedCredentialId!.slice(CREDENTIAL_SET_PREFIX.length)
+      : undefined
+    const credentialId = isCredentialSet ? undefined : selectedCredentialId
 
     const response = await fetch(`/api/webhooks/${webhookIdToUpdate}`, {
       method: 'PATCH',
@@ -282,7 +320,8 @@ export function useWebhookManagement({
       body: JSON.stringify({
         providerConfig: {
           ...triggerConfig,
-          ...(selectedCredentialId ? { credentialId: selectedCredentialId } : {}),
+          ...(credentialId ? { credentialId } : {}),
+          ...(credentialSetId ? { credentialSetId } : {}),
           triggerId: effectiveTriggerId,
         },
       }),

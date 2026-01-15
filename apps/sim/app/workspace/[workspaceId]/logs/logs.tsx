@@ -7,7 +7,7 @@ import { cn } from '@/lib/core/utils/cn'
 import { getStartDateFromTimeRange } from '@/lib/logs/filters'
 import { parseQuery, queryToApiParams } from '@/lib/logs/query-parser'
 import { useFolders } from '@/hooks/queries/folders'
-import { useGlobalDashboardLogs, useLogDetail, useLogsList } from '@/hooks/queries/logs'
+import { useDashboardLogs, useLogDetail, useLogsList } from '@/hooks/queries/logs'
 import { useDebounce } from '@/hooks/use-debounce'
 import { useFilterStore } from '@/stores/logs/filters/store'
 import type { WorkflowLog } from '@/stores/logs/filters/types'
@@ -89,6 +89,7 @@ export default function Logs() {
 
   const dashboardFilters = useMemo(
     () => ({
+      timeRange,
       startDate: getStartDateFromTimeRange(timeRange)?.toISOString() ?? new Date(0).toISOString(),
       endDate: new Date().toISOString(),
       level,
@@ -96,12 +97,11 @@ export default function Logs() {
       folderIds,
       triggers,
       searchQuery: debouncedSearchQuery,
-      limit: 1000, // Fetch a large enough sample for dashboard metrics
     }),
     [timeRange, level, workflowIds, folderIds, triggers, debouncedSearchQuery]
   )
 
-  const dashboardLogsQuery = useGlobalDashboardLogs(workspaceId, dashboardFilters, {
+  const dashboardLogsQuery = useDashboardLogs(workspaceId, dashboardFilters, {
     enabled: Boolean(workspaceId) && isInitialized.current,
     refetchInterval: isLive ? 5000 : false,
   })
@@ -373,7 +373,7 @@ export default function Logs() {
             className={cn('flex min-h-0 flex-1 flex-col pr-[24px]', !isDashboardView && 'hidden')}
           >
             <Dashboard
-              logs={dashboardLogsQuery.data?.pages.flatMap((page) => page.logs) ?? []}
+              logs={dashboardLogsQuery.data ?? []}
               isLoading={dashboardLogsQuery.isLoading}
               error={dashboardLogsQuery.error}
             />

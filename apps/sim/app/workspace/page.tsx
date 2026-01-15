@@ -14,6 +14,7 @@ export default function WorkspacePage() {
   const { data: session, isPending, refetch } = useSession()
   const [error, setError] = useState<string | null>(null)
   const [isRetrying, setIsRetrying] = useState(false)
+  const [isRedirecting, setIsRedirecting] = useState(false)
 
   const { ready: privyReady, authenticated: privyAuthenticated } = usePrivy()
 
@@ -57,6 +58,7 @@ export default function WorkspacePage() {
       }
 
       try {
+        setIsRedirecting(true)
         const urlParams = new URLSearchParams(window.location.search)
         const redirectWorkflowId = urlParams.get('redirect_workflow')
 
@@ -131,6 +133,7 @@ export default function WorkspacePage() {
       } catch (error) {
         logger.error('Error fetching workspaces for redirect:', error)
         setError('Failed to load workspaces. Please try again.')
+        setIsRedirecting(false)
         // Don't redirect if there's an error - let the user stay on the page
       }
     }
@@ -142,21 +145,10 @@ export default function WorkspacePage() {
     }
   }, [session, isPending, router, privyReady, privyAuthenticated, isRetrying, refetch])
 
-  // Show loading state while we determine where to redirect
-  if (isPending) {
-    return (
-      <div className='flex h-screen w-full items-center justify-center'>
-        <div className='flex flex-col items-center justify-center text-center align-middle'>
-          <Loader2 className='h-8 w-8 animate-spin text-muted-foreground' />
-        </div>
-      </div>
-    )
-  }
-
   // Show error state
   if (error) {
     return (
-      <div className='flex h-screen w-full flex-col items-center justify-center space-y-4'>
+      <div className='flex h-screen w-full flex-col items-center justify-center space-y-4 text-white'>
         <div className='text-center'>
           <h1 className='font-bold text-2xl text-destructive'>Something went wrong</h1>
           <p className='text-muted-foreground'>{error}</p>
@@ -177,10 +169,24 @@ export default function WorkspacePage() {
     )
   }
 
-  // If user is not authenticated, show nothing (redirect will happen)
-  if (!session?.user) {
-    return null
+  // Show loading state while we determine where to redirect (session pending or redirect in progress)
+  if (isPending || isRedirecting || (privyAuthenticated && !session?.user)) {
+    return (
+      <div className='flex h-screen w-full items-center justify-center text-white'>
+        <div className='flex flex-col items-center justify-center text-center align-middle'>
+          <Loader2 className='h-8 w-8 animate-spin text-muted-foreground' />
+          <p className='mt-2 text-muted-foreground text-sm italic'>Loading your workspaces...</p>
+        </div>
+      </div>
+    )
   }
 
-  return null
+  // Fallback - should ideally not be reached as we should either be loading, redirecting or showing error
+  return (
+    <div className='flex h-screen w-full items-center justify-center text-white'>
+      <div className='flex flex-col items-center justify-center text-center align-middle'>
+        <Loader2 className='h-8 w-8 animate-spin text-muted-foreground' />
+      </div>
+    </div>
+  )
 }

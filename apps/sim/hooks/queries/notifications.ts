@@ -18,7 +18,7 @@ export const notificationKeys = {
 
 type NotificationType = 'webhook' | 'email' | 'slack'
 type LogLevel = 'info' | 'error'
-type TriggerType = 'api' | 'webhook' | 'schedule' | 'manual' | 'chat'
+type TriggerType = 'api' | 'webhook' | 'schedule' | 'manual' | 'chat' | 'mcp'
 
 type AlertRuleType =
   | 'consecutive_failures'
@@ -176,62 +176,6 @@ export function useUpdateNotification() {
     },
     onError: (error) => {
       logger.error('Failed to update notification', { error })
-    },
-  })
-}
-
-/**
- * Hook to toggle notification active state with optimistic update
- */
-export function useToggleNotificationActive() {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async ({
-      workspaceId,
-      notificationId,
-      active,
-    }: {
-      workspaceId: string
-      notificationId: string
-      active: boolean
-    }) => {
-      const response = await fetch(
-        `/api/workspaces/${workspaceId}/notifications/${notificationId}`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ active }),
-        }
-      )
-      if (!response.ok) {
-        throw new Error('Failed to toggle notification')
-      }
-      return response.json()
-    },
-    onMutate: async ({ workspaceId, notificationId, active }) => {
-      // Cancel outgoing refetches
-      await queryClient.cancelQueries({ queryKey: notificationKeys.list(workspaceId) })
-
-      // Snapshot previous value
-      const previousNotifications = queryClient.getQueryData<NotificationSubscription[]>(
-        notificationKeys.list(workspaceId)
-      )
-
-      // Optimistically update
-      queryClient.setQueryData<NotificationSubscription[]>(
-        notificationKeys.list(workspaceId),
-        (old) => old?.map((n) => (n.id === notificationId ? { ...n, active } : n))
-      )
-
-      return { previousNotifications }
-    },
-    onError: (error, { workspaceId }, context) => {
-      // Rollback on error
-      if (context?.previousNotifications) {
-        queryClient.setQueryData(notificationKeys.list(workspaceId), context.previousNotifications)
-      }
-      logger.error('Failed to toggle notification', { error })
     },
   })
 }

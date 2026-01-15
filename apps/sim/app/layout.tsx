@@ -184,7 +184,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <PublicEnvScript />
       </head>
-      <body className={`${season.variable} font-season`} suppressHydrationWarning>
+      <body className={`${season.variable} font-season theme-aira`} suppressHydrationWarning>
         <HydrationErrorHandler />
         <OneDollarStats />
         <PostHogProvider>

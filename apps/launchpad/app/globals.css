@@ -8,19 +8,18 @@
   --background-end-rgb: 10, 10, 15;
 
   /* Theme Variables - Default (Builder/Orange) */
-  --accent-primary: #f26522;
+  --accent-primary: #8bc34a;
   --accent-secondary: #00ff94;
 }
 
 [data-theme="launchpad"] {
   --accent-primary: #00ff94;
-  --accent-secondary: #f26522;
+  --accent-secondary: #8bc34a;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb)))
-    rgb(var(--background-start-rgb));
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
   font-family: var(--font-inter), sans-serif;
 }
 

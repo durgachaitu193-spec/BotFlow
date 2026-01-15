@@ -90,12 +90,12 @@ export const WorkflowEdge = ({
     // Show run path status if edge was traversed
     if (edgeRunStatus === 'success') return 'var(--border-success)'
     if (edgeRunStatus === 'error') return 'var(--text-error)'
-    return 'var(--surface-12)'
+    return 'var(--workflow-connector)'
   }
 
   const edgeStyle = {
     ...(style ?? {}),
-    strokeWidth: edgeDiffStatus ? 3 : isSelected ? 2.5 : 2,
+    strokeWidth: edgeDiffStatus ? 2.5 : isSelected ? 2 : 1.5,
     stroke: getEdgeColor(),
     strokeDasharray: edgeDiffStatus === 'deleted' ? '10,5' : undefined,
     opacity: edgeDiffStatus === 'deleted' ? 0.7 : isSelected ? 0.5 : 1,
@@ -113,38 +113,32 @@ export const WorkflowEdge = ({
         data-is-selected={isSelected ? 'true' : 'false'}
         data-is-inside-loop={isInsideLoop ? 'true' : 'false'}
       />
-      {/* Animate dash offset for edge movement effect */}
-      <animate
-        attributeName='stroke-dashoffset'
-        from={edgeDiffStatus === 'deleted' ? '15' : '10'}
-        to='0'
-        dur={edgeDiffStatus === 'deleted' ? '2s' : '1s'}
-        repeatCount='indefinite'
-      />
 
-      {isSelected && (
-        <EdgeLabelRenderer>
-          <div
-            className='nodrag nopan group flex h-[22px] w-[22px] cursor-pointer items-center justify-center transition-colors'
-            style={{
-              transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-              pointerEvents: 'all',
-              zIndex: 100,
-            }}
-            onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
+      {
+        isSelected && (
+          <EdgeLabelRenderer>
+            <div
+              className='nodrag nopan group flex h-[22px] w-[22px] cursor-pointer items-center justify-center transition-colors'
+              style={{
+                transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
+                pointerEvents: 'all',
+                zIndex: 100,
+              }}
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
 
-              if (data?.onDelete) {
-                // Pass this specific edge's ID to the delete function
-                data.onDelete(id)
-              }
-            }}
-          >
-            <X className='h-4 w-4 text-[var(--text-error)] transition-colors group-hover:text-[var(--text-error)]/80' />
-          </div>
-        </EdgeLabelRenderer>
-      )}
+                if (data?.onDelete) {
+                  // Pass this specific edge's ID to the delete function
+                  data.onDelete(id)
+                }
+              }}
+            >
+              <X className='h-4 w-4 text-[var(--text-error)] transition-colors group-hover:text-[var(--text-error)]/80' />
+            </div>
+          </EdgeLabelRenderer>
+        )
+      }
     </>
   )
 }

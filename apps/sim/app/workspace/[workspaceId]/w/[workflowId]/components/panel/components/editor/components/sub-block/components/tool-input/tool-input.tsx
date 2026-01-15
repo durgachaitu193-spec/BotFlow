@@ -53,7 +53,7 @@ import { useSubBlockValue } from '@/app/workspace/[workspaceId]/w/[workflowId]/c
 import { getAllBlocks } from '@/blocks'
 import { useCustomTools } from '@/hooks/queries/custom-tools'
 import { useWorkflows } from '@/hooks/queries/workflows'
-import { useMcpTools } from '@/hooks/use-mcp-tools'
+import { useMcpTools } from '@/hooks/mcp/use-mcp-tools'
 import { getProviderFromModel, supportsToolUsageControl } from '@/providers/utils'
 import { useSubBlockStore } from '@/stores/workflows/subblock/store'
 import {
@@ -992,11 +992,11 @@ export function ToolInput({
           selectedTools.map((tool, index) =>
             index === editingToolIndex
               ? {
-                  ...tool,
-                  title: customTool.title,
-                  schema: customTool.schema,
-                  code: customTool.code || '',
-                }
+                ...tool,
+                title: customTool.title,
+                schema: customTool.schema,
+                code: customTool.code || '',
+              }
               : tool
           )
         )
@@ -1048,12 +1048,12 @@ export function ToolInput({
         selectedTools.map((tool, index) =>
           index === toolIndex
             ? {
-                ...tool,
-                params: {
-                  ...tool.params,
-                  [paramId]: paramValue,
-                },
-              }
+              ...tool,
+              params: {
+                ...tool.params,
+                [paramId]: paramValue,
+              },
+            }
             : tool
         )
       )
@@ -1107,11 +1107,11 @@ export function ToolInput({
         selectedTools.map((tool, index) =>
           index === toolIndex
             ? {
-                ...tool,
-                toolId: newToolId,
-                operation,
-                params: { ...initialParams, ...preservedParams }, // Preserve all compatible existing values
-              }
+              ...tool,
+              toolId: newToolId,
+              operation,
+              params: { ...initialParams, ...preservedParams }, // Preserve all compatible existing values
+            }
             : tool
         )
       )
@@ -1135,9 +1135,9 @@ export function ToolInput({
         selectedTools.map((tool, index) =>
           index === toolIndex
             ? {
-                ...tool,
-                usageControl: usageControl as 'auto' | 'force' | 'none',
-              }
+              ...tool,
+              usageControl: usageControl as 'auto' | 'force' | 'none',
+            }
             : tool
         )
       )
@@ -1768,15 +1768,15 @@ export function ToolInput({
             const customToolParams =
               isCustomTool && tool.schema && tool.schema.function?.parameters?.properties
                 ? Object.entries(tool.schema.function.parameters.properties || {}).map(
-                    ([paramId, param]: [string, any]) => ({
-                      id: paramId,
-                      type: param.type || 'string',
-                      description: param.description || '',
-                      visibility: (tool.schema.function.parameters.required?.includes(paramId)
-                        ? 'user-or-llm'
-                        : 'user-only') as 'user-or-llm' | 'user-only' | 'llm-only' | 'hidden',
-                    })
-                  )
+                  ([paramId, param]: [string, any]) => ({
+                    id: paramId,
+                    type: param.type || 'string',
+                    description: param.description || '',
+                    visibility: (tool.schema.function.parameters.required?.includes(paramId)
+                      ? 'user-or-llm'
+                      : 'user-only') as 'user-or-llm' | 'user-only' | 'llm-only' | 'hidden',
+                  })
+                )
                 : []
 
             // For MCP tools, extract parameters from input schema
@@ -1786,15 +1786,15 @@ export function ToolInput({
             const mcpToolParams =
               isMcpTool && mcpToolSchema?.properties
                 ? Object.entries(mcpToolSchema.properties || {}).map(
-                    ([paramId, param]: [string, any]) => ({
-                      id: paramId,
-                      type: param.type || 'string',
-                      description: param.description || '',
-                      visibility: (mcpToolSchema.required?.includes(paramId)
-                        ? 'user-or-llm'
-                        : 'user-only') as 'user-or-llm' | 'user-only' | 'llm-only' | 'hidden',
-                    })
-                  )
+                  ([paramId, param]: [string, any]) => ({
+                    id: paramId,
+                    type: param.type || 'string',
+                    description: param.description || '',
+                    visibility: (mcpToolSchema.required?.includes(paramId)
+                      ? 'user-or-llm'
+                      : 'user-only') as 'user-or-llm' | 'user-only' | 'llm-only' | 'hidden',
+                  })
+                )
                 : []
 
             // Get all parameters to display
@@ -1831,8 +1831,8 @@ export function ToolInput({
                   className={cn(
                     'flex items-center justify-between gap-[8px] px-[10px] py-[8px]',
                     isExpandedForDisplay &&
-                      !isCustomTool &&
-                      'border-[var(--border-strong)] border-b',
+                    !isCustomTool &&
+                    'border-[var(--border-strong)] border-b',
                     'cursor-pointer',
                     selectedTools.length > 1 && !isPreview && !disabled
                       ? 'cursor-grab active:cursor-grabbing'
@@ -2268,14 +2268,14 @@ export function ToolInput({
         initialValues={
           editingToolIndex !== null && selectedTools[editingToolIndex]?.type === 'custom-tool'
             ? {
-                id: customTools.find(
-                  (tool) =>
-                    tool.schema?.function?.name ===
-                    selectedTools[editingToolIndex].schema?.function?.name
-                )?.id,
-                schema: selectedTools[editingToolIndex].schema,
-                code: selectedTools[editingToolIndex].code || '',
-              }
+              id: customTools.find(
+                (tool) =>
+                  tool.schema?.function?.name ===
+                  selectedTools[editingToolIndex].schema?.function?.name
+              )?.id,
+              schema: selectedTools[editingToolIndex].schema,
+              code: selectedTools[editingToolIndex].code || '',
+            }
             : undefined
         }
       />

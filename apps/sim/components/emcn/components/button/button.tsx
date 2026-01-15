@@ -15,13 +15,14 @@ const buttonVariants = cva(
         outline:
           'border border-[var(--text-muted)] bg-[var(--border-strong)] hover:bg-[var(--surface-11)]',
         primary:
-          'bg-[var(--brand-400)] dark:bg-[var(--brand-400)] dark:text-[var(--text-primary)] text-[var(--text-primary)] hover:brightness-110 hover:text-[var(--text-primary)] hover:dark:text-[var(--text-primary)]',
+          'bg-[var(--brand-400)] dark:bg-[var(--brand-400)] dark:text-[#1c1917] text-[var(--text-primary)] hover:brightness-110 hover:text-[var(--text-primary)] hover:dark:text-[#1c1917]',
         secondary:
           'bg-[var(--brand-secondary)] dark:bg-[var(--brand-secondary)] dark:text-[var(--text-primary)] text-[var(--text-primary)] hover:bg-[var(--brand-secondary)] hover:dark:bg-[var(--brand-secondary)] hover:text-[var(--text-primary)] hover:dark:text-[var(--text-primary)]',
         tertiary:
           'bg-[var(--brand-tertiary)] dark:bg-[var(--brand-tertiary)] dark:text-[var(--text-primary)] text-[var(--text-primary)] hover:bg-[var(--brand-tertiary)] hover:dark:bg-[var(--brand-tertiary)] hover:text-[var(--text-primary)] hover:dark:text-[var(--text-primary)]',
         ghost: '',
         'ghost-secondary': 'text-[var(--text-muted)] dark:text-[var(--text-muted)]',
+        destructive: 'bg-red-500 hover:bg-red-600 text-white dark:bg-red-600 dark:hover:bg-red-700',
       },
     },
     defaultVariants: {
@@ -32,7 +33,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
+  VariantProps<typeof buttonVariants> { }
 
 function Button({ className, variant, ...props }: ButtonProps) {
   return <button className={cn(buttonVariants({ variant }), className)} {...props} />

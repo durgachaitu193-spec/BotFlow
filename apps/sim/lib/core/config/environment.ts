@@ -1,7 +1,7 @@
 /**
  * Environment utility functions for consistent environment detection across the application
  */
-import { env, getEnv, isTruthy } from './env'
+import { env, isFalsy, isTruthy } from './env'
 
 /**
  * Is the application running in production mode
@@ -21,9 +21,7 @@ export const isTest = env.NODE_ENV === 'test'
 /**
  * Is this the hosted version of the application
  */
-export const isHosted =
-  getEnv('NEXT_PUBLIC_APP_URL') === 'https://www.sim.ai' ||
-  getEnv('NEXT_PUBLIC_APP_URL') === 'https://www.staging.sim.ai'
+export const isHosted = true
 
 /**
  * Is billing enforcement enabled
@@ -31,14 +29,79 @@ export const isHosted =
 export const isBillingEnabled = isTruthy(env.BILLING_ENABLED)
 
 /**
- * Is Trigger.dev development enabled
+ * Is email verification enabled
+ */
+export const isEmailVerificationEnabled = isTruthy(env.EMAIL_VERIFICATION_ENABLED)
+
+/**
+ * Is authentication disabled (for self-hosted deployments behind private networks)
+ * This flag is blocked when isHosted is true.
+ */
+export const isAuthDisabled = isTruthy(env.DISABLE_AUTH) && !isHosted
+
+if (isTruthy(env.DISABLE_AUTH)) {
+  import('@sim/logger')
+    .then(({ createLogger }) => {
+      const logger = createLogger('FeatureFlags')
+      if (isHosted) {
+        logger.error(
+          'DISABLE_AUTH is set but ignored on hosted environment. Authentication remains enabled for security.'
+        )
+      } else {
+        logger.warn(
+          'DISABLE_AUTH is enabled. Authentication is bypassed and all requests use an anonymous session. Only use this in trusted private networks.'
+        )
+      }
+    })
+    .catch(() => {
+      // Fallback during config compilation when logger is unavailable
+    })
+}
+
+/**
+ * Is user registration disabled
+ */
+export const isRegistrationDisabled = isTruthy(env.DISABLE_REGISTRATION)
+
+/**
+ * Is email/password authentication enabled (defaults to true)
+ */
+export const isEmailPasswordEnabled = !isFalsy(env.EMAIL_PASSWORD_SIGNUP_ENABLED)
+
+/**
+ * Is Trigger.dev enabled for async job processing
  */
 export const isTriggerDevEnabled = isTruthy(env.TRIGGER_DEV_ENABLED)
 
 /**
- * Is email verification enabled
+ * Is SSO enabled for enterprise authentication
  */
-export const isEmailVerificationEnabled = isTruthy(env.EMAIL_VERIFICATION_ENABLED)
+export const isSsoEnabled = isTruthy(env.SSO_ENABLED)
+
+/**
+ * Is credential sets (email polling) enabled via env var override
+ * This bypasses plan requirements for self-hosted deployments
+ */
+export const isCredentialSetsEnabled = isTruthy(env.CREDENTIAL_SETS_ENABLED)
+
+/**
+ * Is access control (permission groups) enabled via env var override
+ * This bypasses plan requirements for self-hosted deployments
+ */
+export const isAccessControlEnabled = isTruthy(env.ACCESS_CONTROL_ENABLED)
+
+/**
+ * Is organizations enabled
+ * True if billing is enabled (orgs come with billing), OR explicitly enabled via env var,
+ * OR if access control is enabled (access control requires organizations)
+ */
+export const isOrganizationsEnabled =
+  isBillingEnabled || isTruthy(env.ORGANIZATIONS_ENABLED) || isAccessControlEnabled
+
+/**
+ * Is E2B enabled for remote code execution
+ */
+export const isE2bEnabled = isTruthy(env.E2B_ENABLED)
 
 /**
  * Get cost multiplier based on environment

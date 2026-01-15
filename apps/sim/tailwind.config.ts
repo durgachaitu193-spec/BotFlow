@@ -95,6 +95,20 @@ export default {
           primary: '#f26522', // Default launchpad orange
           secondary: '#00ff94',
         },
+        aira: {
+          bg: 'var(--bg)',
+          surface: 'var(--surface-1)',
+          card: 'var(--card)',
+          border: 'var(--border)',
+          'border-strong': 'var(--border-strong)',
+          text: 'var(--text-primary)',
+          'text-muted': 'var(--text-secondary)',
+          accent: 'var(--brand-500)',
+          emerald: 'var(--brand-secondary)',
+          new: 'var(--badge-new)',
+          updated: 'var(--badge-updated)',
+          model: 'var(--badge-model)',
+        },
         fontWeight: {
           base: 'var(--font-weight-base)',
           medium: 'var(--font-weight-medium)',

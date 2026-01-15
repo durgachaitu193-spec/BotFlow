@@ -20,7 +20,7 @@ import {
   useMcpServers,
   useMcpToolsQuery,
 } from '@/hooks/queries/mcp'
-import { useMcpServerTest } from '@/hooks/use-mcp-server-test'
+import { useMcpServerTest } from '@/hooks/mcp/use-mcp-server-test'
 import type { InputFieldType, McpServerFormData, McpServerTestResult } from './components'
 import {
   FormattedInput,
@@ -42,6 +42,10 @@ interface McpServer {
   name?: string
   transport?: string
   url?: string
+}
+
+interface McpProps {
+  initialServerId?: string | null
 }
 
 const logger = createLogger('McpSettings')
@@ -71,7 +75,7 @@ function getTestButtonLabel(
  * MCP Settings component for managing Model Context Protocol servers.
  * Handles server CRUD operations, connection testing, and environment variable integration.
  */
-export function MCP() {
+export function MCP({ initialServerId }: McpProps) {
   const params = useParams()
   const workspaceId = params.workspaceId as string
 
@@ -101,7 +105,7 @@ export function MCP() {
   const [serverToDelete, setServerToDelete] = useState<{ id: string; name: string } | null>(null)
 
   // Server details view state
-  const [selectedServerId, setSelectedServerId] = useState<string | null>(null)
+  const [selectedServerId, setSelectedServerId] = useState<string | null>(initialServerId || null)
 
   // Environment variable dropdown state
   const [showEnvVars, setShowEnvVars] = useState(false)

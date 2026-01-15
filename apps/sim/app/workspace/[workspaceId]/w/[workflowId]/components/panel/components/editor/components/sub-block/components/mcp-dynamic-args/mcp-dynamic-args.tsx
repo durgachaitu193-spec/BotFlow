@@ -12,7 +12,7 @@ import {
 } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/editor/components/sub-block/components/tag-dropdown/tag-dropdown'
 import { useSubBlockValue } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/editor/components/sub-block/hooks/use-sub-block-value'
 import { useAccessibleReferencePrefixes } from '@/app/workspace/[workspaceId]/w/[workflowId]/hooks/use-accessible-reference-prefixes'
-import { useMcpTools } from '@/hooks/use-mcp-tools'
+import { useMcpTools } from '@/hooks/mcp/use-mcp-tools'
 import { formatParameterLabel } from '@/tools/params'
 
 const logger = createLogger('McpDynamicArgs')
@@ -455,7 +455,7 @@ export function McpDynamicArgs({
               paramSchema.type === 'array'
                 ? `Enter JSON array, e.g. ["item1", "item2"] or comma-separated values`
                 : paramSchema.description ||
-                  `Enter ${formatParameterLabel(paramName).toLowerCase()}`
+                `Enter ${formatParameterLabel(paramName).toLowerCase()}`
             }
             disabled={disabled}
             blockId={blockId}
@@ -495,7 +495,7 @@ export function McpDynamicArgs({
               paramSchema.type === 'array'
                 ? `Enter JSON array, e.g. ["item1", "item2"] or comma-separated values`
                 : paramSchema.description ||
-                  `Enter ${formatParameterLabel(paramName).toLowerCase()}`
+                `Enter ${formatParameterLabel(paramName).toLowerCase()}`
             }
             disabled={disabled}
             isPassword={isPassword}
@@ -575,7 +575,7 @@ export function McpDynamicArgs({
                   className={cn(
                     'font-medium text-sm',
                     toolSchema.required?.includes(paramName) &&
-                      'after:ml-1 after:text-red-500 after:content-["*"]'
+                    'after:ml-1 after:text-red-500 after:content-["*"]'
                   )}
                 >
                   {formatParameterLabel(paramName)}

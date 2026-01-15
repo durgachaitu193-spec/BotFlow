@@ -27,17 +27,17 @@ function useSyncProvider(provider: ProviderName) {
 
     try {
       if (provider === 'ollama') {
-        updateOllamaProviderModels(data)
+        updateOllamaProviderModels(data.models)
       } else if (provider === 'vllm') {
-        updateVLLMProviderModels(data)
+        updateVLLMProviderModels(data.models)
       } else if (provider === 'openrouter') {
-        void updateOpenRouterProviderModels(data)
+        void updateOpenRouterProviderModels(data.models)
       }
     } catch (syncError) {
       logger.warn(`Failed to sync provider definitions for ${provider}`, syncError as Error)
     }
 
-    setProviderModels(provider, data)
+    setProviderModels(provider, data.models)
   }, [provider, data, setProviderModels])
 
   useEffect(() => {

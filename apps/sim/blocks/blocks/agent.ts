@@ -97,8 +97,15 @@ export const AgentBlock: BlockConfig<AgentResponse> = {
         const ollamaModels = providersState.providers.ollama.models
         const vllmModels = providersState.providers.vllm.models
         const openrouterModels = providersState.providers.openrouter.models
+        const safeModels = (models: any) => (Array.isArray(models) ? models : [])
+
         const allModels = Array.from(
-          new Set([...baseModels, ...ollamaModels, ...vllmModels, ...openrouterModels])
+          new Set([
+            ...safeModels(baseModels),
+            ...safeModels(ollamaModels),
+            ...safeModels(vllmModels),
+            ...safeModels(openrouterModels),
+          ])
         )
 
         return allModels.map((model) => {
@@ -183,15 +190,15 @@ export const AgentBlock: BlockConfig<AgentResponse> = {
       // Hide API key for hosted models, Ollama models, and vLLM models
       condition: isHosted
         ? {
-            field: 'model',
-            value: getHostedModels(),
-            not: true, // Show for all models EXCEPT those listed
-          }
+          field: 'model',
+          value: getHostedModels(),
+          not: true, // Show for all models EXCEPT those listed
+        }
         : () => ({
-            field: 'model',
-            value: [...getCurrentOllamaModels(), ...getCurrentVLLMModels()],
-            not: true, // Show for all models EXCEPT Ollama and vLLM models
-          }),
+          field: 'model',
+          value: [...getCurrentOllamaModels(), ...getCurrentVLLMModels()],
+          not: true, // Show for all models EXCEPT Ollama and vLLM models
+        }),
     },
     {
       id: 'memoryType',
