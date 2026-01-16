@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { usePrivy } from '@privy-io/react-auth'
 import { createLogger } from '@sim/logger'
 import { Camera, Check, Pencil } from 'lucide-react'
@@ -27,7 +28,7 @@ import { getBaseUrl } from '@/lib/core/utils/urls'
 import { ClaimDidForm } from '@/app/workspace/[workspaceId]/w/components/sidebar/components-new/settings-modal/components/claim-did-form/claim-did-form'
 import { useProfilePictureUpload } from '@/app/workspace/[workspaceId]/w/components/sidebar/components-new/settings-modal/hooks/use-profile-picture-upload'
 import { useGeneralSettings, useUpdateGeneralSetting } from '@/hooks/queries/general-settings'
-import { useUpdateUserProfile, useUserProfile } from '@/hooks/queries/user-profile'
+import { useUpdateUserProfile, useUserProfile, userProfileKeys } from '@/hooks/queries/user-profile'
 import { clearUserData } from '@/stores'
 
 const logger = createLogger('General')
@@ -58,6 +59,7 @@ export function General({ onOpenChange }: GeneralProps) {
 
   const { data: profile, isLoading: isProfileLoading } = useUserProfile()
   const updateProfile = useUpdateUserProfile()
+  const queryClient = useQueryClient()
 
   const { data: settings, isLoading: isSettingsLoading } = useGeneralSettings()
   const updateSetting = useUpdateGeneralSetting()
@@ -300,7 +302,7 @@ export function General({ onOpenChange }: GeneralProps) {
               action: 'enable_from_settings',
               timestamp: new Date().toISOString(),
             }),
-          }).catch(() => {})
+          }).catch(() => { })
         }
       }
     }
@@ -330,9 +332,8 @@ export function General({ onOpenChange }: GeneralProps) {
                     width={36}
                     height={36}
                     unoptimized
-                    className={`h-full w-full object-cover transition-opacity duration-300 ${
-                      isUploadingProfilePicture ? 'opacity-50' : 'opacity-100'
-                    }`}
+                    className={`h-full w-full object-cover transition-opacity duration-300 ${isUploadingProfilePicture ? 'opacity-50' : 'opacity-100'
+                      }`}
                   />
                 )
               }
@@ -343,9 +344,8 @@ export function General({ onOpenChange }: GeneralProps) {
               )
             })()}
             <div
-              className={`absolute inset-0 flex items-center justify-center rounded-full bg-black/50 transition-opacity ${
-                isUploadingProfilePicture ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-              }`}
+              className={`absolute inset-0 flex items-center justify-center rounded-full bg-black/50 transition-opacity ${isUploadingProfilePicture ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                }`}
             >
               {isUploadingProfilePicture ? (
                 <div className='h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent' />
@@ -539,11 +539,8 @@ export function General({ onOpenChange }: GeneralProps) {
           <ClaimDidForm
             onSuccess={() => {
               setIsClaimModalOpen(false)
-              updateProfile.reset() // Invalidate/refetch profile
-              // Force a refetch to update UI immediately
-              import('@/hooks/queries/user-profile').then(({ useUserProfile }) => {
-                // Query invalidation handles this
-              })
+              // Force invalidation of the user profile query to refetch with new DID
+              queryClient.invalidateQueries({ queryKey: userProfileKeys.profile() })
             }}
           />
         </DialogContent>
