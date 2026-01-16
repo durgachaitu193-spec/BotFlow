@@ -34,7 +34,7 @@ import { getDependsOnFields } from '@/blocks/utils'
 import { useMcpServers, useMcpToolsQuery } from '@/hooks/queries/mcp'
 import { useCredentialName } from '@/hooks/queries/oauth-credentials'
 import { useCollaborativeWorkflow } from '@/hooks/use-collaborative-workflow'
-import { useKnowledgeBaseName } from '@/hooks/use-knowledge-base-name'
+import { useKnowledgeBaseName } from '@/hooks/kb/use-knowledge-base-name'
 import { useSelectorDisplayName } from '@/hooks/use-selector-display-name'
 import { useVariablesStore } from '@/stores/panel/variables/store'
 import { useWorkflowRegistry } from '@/stores/workflows/registry/store'
@@ -566,12 +566,12 @@ export const WorkflowBlock = memo(function WorkflowBlock({
       data.isPreview && data.subBlockValues
         ? data.subBlockValues
         : Object.entries(blockSubBlockValues).reduce(
-            (acc, [key, value]) => {
-              acc[key] = { value }
-              return acc
-            },
-            {} as Record<string, { value: unknown }>
-          )
+          (acc, [key, value]) => {
+            acc[key] = { value }
+            return acc
+          },
+          {} as Record<string, { value: unknown }>
+        )
 
     const effectiveAdvanced = displayAdvancedMode
     const effectiveTrigger = displayTriggerMode
@@ -615,9 +615,9 @@ export const WorkflowBlock = memo(function WorkflowBlock({
 
       const isValueMatch = Array.isArray(actualCondition.value)
         ? fieldValue != null &&
-          (actualCondition.not
-            ? !actualCondition.value.includes(fieldValue as string | number | boolean)
-            : actualCondition.value.includes(fieldValue as string | number | boolean))
+        (actualCondition.not
+          ? !actualCondition.value.includes(fieldValue as string | number | boolean)
+          : actualCondition.value.includes(fieldValue as string | number | boolean))
         : actualCondition.not
           ? fieldValue !== actualCondition.value
           : fieldValue === actualCondition.value
@@ -626,9 +626,9 @@ export const WorkflowBlock = memo(function WorkflowBlock({
         !actualCondition.and ||
         (Array.isArray(actualCondition.and.value)
           ? andFieldValue != null &&
-            (actualCondition.and.not
-              ? !actualCondition.and.value.includes(andFieldValue as string | number | boolean)
-              : actualCondition.and.value.includes(andFieldValue as string | number | boolean))
+          (actualCondition.and.not
+            ? !actualCondition.and.value.includes(andFieldValue as string | number | boolean)
+            : actualCondition.and.value.includes(andFieldValue as string | number | boolean))
           : actualCondition.and.not
             ? andFieldValue !== actualCondition.and.value
             : andFieldValue === actualCondition.and.value)
@@ -685,18 +685,23 @@ export const WorkflowBlock = memo(function WorkflowBlock({
    */
   const getHandleClasses = (position: 'left' | 'right' | 'top' | 'bottom', isError = false) => {
     const baseClasses = '!z-[10] !cursor-crosshair !border-none !transition-[colors] !duration-150'
-    const colorClasses = isError ? '!bg-red-400 dark:!bg-red-500' : '!bg-[var(--surface-12)]'
+    const colorClasses = isError ? '!bg-red-400 dark:!bg-red-500' : ''
 
     const positionClasses = {
-      left: '!left-[-7px] !h-5 !w-[7px] !rounded-l-[2px] !rounded-r-none hover:!left-[-10px] hover:!w-[10px] hover:!rounded-l-full',
+      left: '!left-[-4px] !h-3 !w-[4px] !rounded-l-full !rounded-r-none hover:!left-[-6px] hover:!w-[6px]',
       right:
-        '!right-[-7px] !h-5 !w-[7px] !rounded-r-[2px] !rounded-l-none hover:!right-[-10px] hover:!w-[10px] hover:!rounded-r-full',
-      top: '!top-[-7px] !h-[7px] !w-5 !rounded-t-[2px] !rounded-b-none hover:!top-[-10px] hover:!h-[10px] hover:!rounded-t-full',
+        '!right-[-4px] !h-3 !w-[4px] !rounded-r-full !rounded-l-none hover:!right-[-6px] hover:!w-[6px]',
+      top: '!top-[-4px] !h-[4px] !w-3 !rounded-t-full !rounded-b-none hover:!top-[-6px] hover:!h-[6px]',
       bottom:
-        '!bottom-[-7px] !h-[7px] !w-5 !rounded-b-[2px] !rounded-t-none hover:!bottom-[-10px] hover:!h-[10px] hover:!rounded-b-full',
+        '!bottom-[-4px] !h-[4px] !w-3 !rounded-b-full !rounded-t-none hover:!bottom-[-6px] hover:!h-[6px]',
     }
 
     return cn(baseClasses, colorClasses, positionClasses[position])
+  }
+
+  const glowStyle = {
+    backgroundColor: 'var(--workflow-connector)',
+    boxShadow: '0 0 8px var(--workflow-connector)',
   }
 
   const getHandleStyle = (position: 'horizontal' | 'vertical') => {
@@ -764,7 +769,7 @@ export const WorkflowBlock = memo(function WorkflowBlock({
 
       const contentHeight = hasContentBelowHeader
         ? BLOCK_DIMENSIONS.WORKFLOW_CONTENT_PADDING +
-          rowsCount * BLOCK_DIMENSIONS.WORKFLOW_ROW_HEIGHT
+        rowsCount * BLOCK_DIMENSIONS.WORKFLOW_ROW_HEIGHT
         : 0
       const calculatedHeight = Math.max(
         BLOCK_DIMENSIONS.HEADER_HEIGHT + contentHeight,
@@ -824,7 +829,7 @@ export const WorkflowBlock = memo(function WorkflowBlock({
             position={horizontalHandles ? Position.Left : Position.Top}
             id='target'
             className={getHandleClasses(horizontalHandles ? 'left' : 'top')}
-            style={getHandleStyle(horizontalHandles ? 'horizontal' : 'vertical')}
+            style={{ ...getHandleStyle(horizontalHandles ? 'horizontal' : 'vertical'), ...glowStyle }}
             data-nodeid={id}
             data-handleid='target'
             isConnectableStart={false}
@@ -984,29 +989,29 @@ export const WorkflowBlock = memo(function WorkflowBlock({
           <div className='flex flex-col gap-[8px] p-[8px]'>
             {type === 'condition'
               ? conditionRows.map((cond) => (
-                  <SubBlockRow
-                    key={cond.id}
-                    title={cond.title}
-                    value={getDisplayValue(cond.value)}
-                  />
-                ))
+                <SubBlockRow
+                  key={cond.id}
+                  title={cond.title}
+                  value={getDisplayValue(cond.value)}
+                />
+              ))
               : subBlockRows.map((row, rowIndex) =>
-                  row.map((subBlock) => {
-                    const rawValue = subBlockState[subBlock.id]?.value
-                    return (
-                      <SubBlockRow
-                        key={`${subBlock.id}-${rowIndex}`}
-                        title={subBlock.title ?? subBlock.id}
-                        value={getDisplayValue(rawValue)}
-                        subBlock={subBlock}
-                        rawValue={rawValue}
-                        workspaceId={workspaceId}
-                        workflowId={currentWorkflowId}
-                        allSubBlockValues={subBlockState}
-                      />
-                    )
-                  })
-                )}
+                row.map((subBlock) => {
+                  const rawValue = subBlockState[subBlock.id]?.value
+                  return (
+                    <SubBlockRow
+                      key={`${subBlock.id}-${rowIndex}`}
+                      title={subBlock.title ?? subBlock.id}
+                      value={getDisplayValue(rawValue)}
+                      subBlock={subBlock}
+                      rawValue={rawValue}
+                      workspaceId={workspaceId}
+                      workflowId={currentWorkflowId}
+                      allSubBlockValues={subBlockState}
+                    />
+                  )
+                })
+              )}
             {shouldShowDefaultHandles && <SubBlockRow title='error' />}
           </div>
         )}
@@ -1022,7 +1027,7 @@ export const WorkflowBlock = memo(function WorkflowBlock({
                   position={Position.Right}
                   id={`condition-${cond.id}`}
                   className={getHandleClasses('right')}
-                  style={{ top: `${topOffset}px`, transform: 'translateY(-50%)' }}
+                  style={{ top: `${topOffset}px`, transform: 'translateY(-50%)', ...glowStyle }}
                   data-nodeid={id}
                   data-handleid={`condition-${cond.id}`}
                   isConnectableStart={true}
@@ -1053,7 +1058,7 @@ export const WorkflowBlock = memo(function WorkflowBlock({
               position={horizontalHandles ? Position.Right : Position.Bottom}
               id='source'
               className={getHandleClasses(horizontalHandles ? 'right' : 'bottom')}
-              style={getHandleStyle(horizontalHandles ? 'horizontal' : 'vertical')}
+              style={{ ...getHandleStyle(horizontalHandles ? 'horizontal' : 'vertical'), ...glowStyle }}
               data-nodeid={id}
               data-handleid='source'
               isConnectableStart={true}

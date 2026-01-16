@@ -19,7 +19,6 @@ export interface UserProfile {
   name: string
   email: string
   image: string | null
-  userDID: string | null
   createdAt: string
   updatedAt: string
 }
@@ -41,7 +40,6 @@ async function fetchUserProfile(): Promise<UserProfile> {
     name: user.name || '',
     email: user.email || '',
     image: user.image || null,
-    userDID: user.userDID || null,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   }
@@ -65,7 +63,6 @@ export function useUserProfile() {
 interface UpdateProfileParams {
   name?: string
   image?: string | null
-  userDID?: string
 }
 
 export function useUpdateUserProfile() {

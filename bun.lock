@@ -383,6 +383,7 @@
         "@privy-io/react-auth": "^3.8.0",
         "@types/react": "^19.0.0",
         "next": "16.0.7",
+        "next-themes": "^0.4.6",
         "react": "^19.0.0",
         "tailwindcss": "^3.4.1",
         "typescript": "^5.3.3",
@@ -390,6 +391,7 @@
       "peerDependencies": {
         "@privy-io/react-auth": "^3.8.0",
         "next": "16.0.7",
+        "next-themes": "^0.4.6",
         "react": "^19.0.0",
       },
     },

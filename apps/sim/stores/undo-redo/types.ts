@@ -15,6 +15,14 @@ export type OperationType =
   | 'apply-diff'
   | 'accept-diff'
   | 'reject-diff'
+  | 'batch-add-blocks'
+  | 'batch-remove-blocks'
+  | 'batch-add-edges'
+  | 'batch-remove-edges'
+  | 'batch-move-blocks'
+  | 'batch-update-parent'
+  | 'batch-toggle-enabled'
+  | 'batch-toggle-handles'
 
 export interface BaseOperation {
   id: string
@@ -125,6 +133,79 @@ export interface UpdateParentOperation extends BaseOperation {
   }
 }
 
+export interface BatchAddBlocksOperation extends BaseOperation {
+  type: 'batch-add-blocks'
+  data: {
+    blockSnapshots: BlockState[]
+    edgeSnapshots: Edge[]
+    subBlockValues: Record<string, Record<string, unknown>>
+  }
+}
+
+export interface BatchRemoveBlocksOperation extends BaseOperation {
+  type: 'batch-remove-blocks'
+  data: {
+    blockSnapshots: BlockState[]
+    edgeSnapshots: Edge[]
+    subBlockValues: Record<string, Record<string, unknown>>
+  }
+}
+
+export interface BatchAddEdgesOperation extends BaseOperation {
+  type: 'batch-add-edges'
+  data: {
+    edgeSnapshots: Edge[]
+  }
+}
+
+export interface BatchRemoveEdgesOperation extends BaseOperation {
+  type: 'batch-remove-edges'
+  data: {
+    edgeSnapshots: Edge[]
+  }
+}
+
+export interface BatchMoveBlocksOperation extends BaseOperation {
+  type: 'batch-move-blocks'
+  data: {
+    moves: Array<{
+      blockId: string
+      before: { x: number; y: number; parentId?: string }
+      after: { x: number; y: number; parentId?: string }
+    }>
+  }
+}
+
+export interface BatchUpdateParentOperation extends BaseOperation {
+  type: 'batch-update-parent'
+  data: {
+    updates: Array<{
+      blockId: string
+      oldParentId?: string
+      newParentId?: string
+      oldPosition: { x: number; y: number }
+      newPosition: { x: number; y: number }
+      affectedEdges?: Edge[]
+    }>
+  }
+}
+
+export interface BatchToggleEnabledOperation extends BaseOperation {
+  type: 'batch-toggle-enabled'
+  data: {
+    blockIds: string[]
+    previousStates: Record<string, boolean>
+  }
+}
+
+export interface BatchToggleHandlesOperation extends BaseOperation {
+  type: 'batch-toggle-handles'
+  data: {
+    blockIds: string[]
+    previousStates: Record<string, boolean>
+  }
+}
+
 export interface ApplyDiffOperation extends BaseOperation {
   type: 'apply-diff'
   data: {
@@ -165,6 +246,14 @@ export type Operation =
   | MoveSubflowOperation
   | DuplicateBlockOperation
   | UpdateParentOperation
+  | BatchAddBlocksOperation
+  | BatchRemoveBlocksOperation
+  | BatchAddEdgesOperation
+  | BatchRemoveEdgesOperation
+  | BatchMoveBlocksOperation
+  | BatchUpdateParentOperation
+  | BatchToggleEnabledOperation
+  | BatchToggleHandlesOperation
   | ApplyDiffOperation
   | AcceptDiffOperation
   | RejectDiffOperation

@@ -57,7 +57,7 @@ const STYLES = {
 type TargetPlan = 'pro' | 'team'
 
 interface SubscriptionProps {
-  onOpenChange: (open: boolean) => void
+  onOpenChange?: (open: boolean) => void
 }
 
 /**
@@ -384,10 +384,10 @@ export function Subscription({ onOpenChange }: SubscriptionProps) {
           limit={
             subscription.isEnterprise || subscription.isTeam
               ? organizationBillingData?.totalUsageLimit ||
-                organizationBillingData?.minimumBillingAmount ||
-                usage.limit
+              organizationBillingData?.minimumBillingAmount ||
+              usage.limit
               : !subscription.isFree &&
-                  (permissions.canEditUsageLimit || permissions.showTeamMemberView)
+                (permissions.canEditUsageLimit || permissions.showTeamMemberView)
                 ? usage.current // placeholder; rightContent will render UsageLimit
                 : usage.limit
           }
@@ -399,8 +399,8 @@ export function Subscription({ onOpenChange }: SubscriptionProps) {
                 organizationBillingData.totalUsageLimit > 0 &&
                 organizationBillingData.totalCurrentUsage !== undefined
                 ? (organizationBillingData.totalCurrentUsage /
-                    organizationBillingData.totalUsageLimit) *
-                  100
+                  organizationBillingData.totalUsageLimit) *
+                100
                 : usage.percentUsed
               : usage.percentUsed
           }
@@ -426,7 +426,7 @@ export function Subscription({ onOpenChange }: SubscriptionProps) {
           }}
           rightContent={
             !subscription.isFree &&
-            (permissions.canEditUsageLimit || permissions.showTeamMemberView) ? (
+              (permissions.canEditUsageLimit || permissions.showTeamMemberView) ? (
               <UsageLimit
                 ref={usageLimitRef}
                 currentLimit={
@@ -439,7 +439,7 @@ export function Subscription({ onOpenChange }: SubscriptionProps) {
                 minimumLimit={
                   subscription.isTeam && isTeamAdmin
                     ? organizationBillingData?.minimumBillingAmount ||
-                      (subscription.isPro ? 20 : 40)
+                    (subscription.isPro ? 20 : 40)
                     : usageLimitData.minimumLimit || (subscription.isPro ? 20 : 40)
                 }
                 context={subscription.isTeam && isTeamAdmin ? 'organization' : 'user'}

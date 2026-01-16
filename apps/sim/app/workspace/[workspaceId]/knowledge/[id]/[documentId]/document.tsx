@@ -16,7 +16,7 @@ import {
 import { ActionBar } from '@/app/workspace/[workspaceId]/knowledge/[id]/components'
 import { KnowledgeHeader, SearchInput } from '@/app/workspace/[workspaceId]/knowledge/components'
 import { useUserPermissionsContext } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
-import { useDocumentChunks } from '@/hooks/use-knowledge'
+import { useDocumentChunks } from '@/hooks/kb/use-knowledge'
 import { type ChunkData, type DocumentData, useKnowledgeStore } from '@/stores/knowledge/store'
 
 const logger = createLogger('Document')
@@ -217,8 +217,8 @@ export function Document({
     }
   }, [hasPrevPage, currentPage, goToPage])
 
-  const refreshChunks = showingSearch ? async () => {} : initialRefreshChunks
-  const updateChunk = showingSearch ? (id: string, updates: any) => {} : initialUpdateChunk
+  const refreshChunks = showingSearch ? async () => { } : initialRefreshChunks
+  const updateChunk = showingSearch ? (id: string, updates: any) => { } : initialUpdateChunk
 
   const [documentData, setDocumentData] = useState<DocumentData | null>(null)
   const [isLoadingDocument, setIsLoadingDocument] = useState(true)
@@ -807,9 +807,8 @@ export function Document({
                                 key={page}
                                 onClick={() => goToPage(page)}
                                 disabled={false}
-                                className={`font-medium text-sm transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50 ${
-                                  page === currentPage ? 'text-foreground' : 'text-muted-foreground'
-                                }`}
+                                className={`font-medium text-sm transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50 ${page === currentPage ? 'text-foreground' : 'text-muted-foreground'
+                                  }`}
                               >
                                 {page}
                               </button>

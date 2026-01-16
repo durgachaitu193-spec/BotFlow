@@ -163,6 +163,18 @@ export const AGENT = {
   CUSTOM_TOOL_PREFIX: 'custom_',
 } as const
 
+export const MCP = {
+  TOOL_PREFIX: 'mcp-',
+} as const
+
+export const CREDENTIAL_SET = {
+  PREFIX: 'credentialSet:',
+} as const
+
+export const CREDENTIAL = {
+  FOREIGN_LABEL: 'Saved by collaborator',
+} as const
+
 export const ROUTER = {
   DEFAULT_MODEL: 'gpt-4o',
   DEFAULT_TEMPERATURE: 0,
@@ -331,4 +343,7 @@ export function parseReferencePath(reference: string): string[] {
 
 export function normalizeName(name: string): string {
   return name.toLowerCase().replace(/\s+/g, '')
+}
+export function isMcpTool(toolId: string): boolean {
+  return toolId.startsWith(MCP.TOOL_PREFIX)
 }

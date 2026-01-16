@@ -20,6 +20,8 @@ export const env = createEnv({
     BETTER_AUTH_URL: z.string().url(),                       // Base URL for Better Auth service
     BETTER_AUTH_SECRET: z.string().min(32),                     // Secret key for Better Auth JWT signing
     DISABLE_REGISTRATION: z.boolean().optional(),                 // Flag to disable new user registration
+    EMAIL_PASSWORD_SIGNUP_ENABLED: z.boolean().optional().default(true),   // Enable email/password authentication (server-side enforcement)
+    DISABLE_AUTH: z.boolean().optional(),                 // Bypass authentication entirely (self-hosted only, creates anonymous session)
     ALLOWED_LOGIN_EMAILS: z.string().optional(),                  // Comma-separated list of allowed email addresses for login
     ALLOWED_LOGIN_DOMAINS: z.string().optional(),                  // Comma-separated list of allowed email domains for login
     ENCRYPTION_KEY: z.string().min(32),                     // Key for encrypting sensitive data
@@ -234,6 +236,15 @@ export const env = createEnv({
     // E2B Remote Code Execution
     E2B_ENABLED: z.string().optional(),                  // Enable E2B remote code execution
     E2B_API_KEY: z.string().optional(),                  // E2B API key for sandbox creation
+
+    // Credential Sets (Email Polling) - for self-hosted deployments
+    CREDENTIAL_SETS_ENABLED:               z.boolean().optional(),                 // Enable credential sets on self-hosted (bypasses plan requirements)
+
+     // Access Control (Permission Groups) - for self-hosted deployments
+    ACCESS_CONTROL_ENABLED:                z.boolean().optional(),                 // Enable access control on self-hosted (bypasses plan requirements)
+
+    // Organizations - for self-hosted deployments
+    ORGANIZATIONS_ENABLED:                 z.boolean().optional(),                 // Enable organizations on self-hosted (bypasses plan requirements)
 
     // SSO Configuration (for script-based registration)
     SSO_ENABLED: z.boolean().optional(),                 // Enable SSO functionality

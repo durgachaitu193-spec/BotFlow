@@ -1,51 +1,28 @@
 import { useCallback } from 'react'
-import { createLogger } from '@sim/logger'
 import { useReactFlow } from 'reactflow'
 
-const logger = createLogger('useFocusOnBlock')
-
 /**
- * Hook to focus the canvas on a specific block with smooth animation.
- * Can be called from any component within the workflow (editor, toolbar, action bar, etc.).
- *
- * @returns Function to focus on a block by its ID
- *
- * @example
- * const focusOnBlock = useFocusOnBlock()
- * focusOnBlock('block-id-123')
+ * Hook to focus the workflow canvas on a specific block.
+ * Uses React Flow's setCenter to smoothly animate to the block's position.
  */
 export function useFocusOnBlock() {
-  const { getNodes, fitView } = useReactFlow()
+    const { setCenter, getNode } = useReactFlow()
 
-  return useCallback(
-    (blockId: string) => {
-      if (!blockId) {
-        logger.warn('Cannot focus on block: no blockId provided')
-        return
-      }
+    const focusOnBlock = useCallback(
+        (blockId: string) => {
+            const node = getNode(blockId)
+            if (node) {
+                // Calculate center position of the node
+                // We add half width and height to center on the middle of the node
+                const x = node.position.x + (node.width ?? 0) / 2
+                const y = node.position.y + (node.height ?? 0) / 2
+                const zoom = 1.0
 
-      try {
-        // Check if the node exists
-        const node = getNodes().find((n) => n.id === blockId)
-        if (!node) {
-          logger.warn('Cannot focus on block: block not found', { blockId })
-          return
-        }
+                setCenter(x, y, { zoom, duration: 800 })
+            }
+        },
+        [getNode, setCenter]
+    )
 
-        // Focus on the specific node with smooth animation
-        fitView({
-          nodes: [node],
-          duration: 400,
-          padding: 0.3,
-          minZoom: 0.5,
-          maxZoom: 1.0,
-        })
-
-        logger.info('Focused on block', { blockId })
-      } catch (err) {
-        logger.error('Failed to focus on block', { err, blockId })
-      }
-    },
-    [getNodes, fitView]
-  )
+    return focusOnBlock
 }

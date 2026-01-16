@@ -2,6 +2,37 @@
 
 import clsx from 'clsx'
 import { WalletButton } from './WalletButton'
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
+
+function Logo() {
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return (
+      <div className="flex items-center gap-2 opacity-0">
+        <img src='/logo/Asset 1.svg' alt='Wazabi' className='h-8 w-auto' />
+        <img src='/logo/Asset 2@300x.png' alt='Wazabi' className='h-7 w-auto' />
+      </div>
+    )
+  }
+
+  return (
+    <div className='flex items-center gap-2'>
+      <img src='/logo/Asset 1.svg' alt='Wazabi' className='h-8 w-auto' />
+      <img
+        src={resolvedTheme === 'dark' ? '/logo/Asset 2@300x.png' : '/logo/Asset 3@300x.png'}
+        alt='Wazabi Text'
+        className='h-7 w-auto'
+      />
+    </div>
+  )
+}
 
 const isDev =
   process.env.NODE_ENV === 'development' ||
@@ -21,7 +52,7 @@ export interface LaunchpadNavbarProps {
 }
 
 export function LaunchpadNavbar({ currentApp, onSwitchApp, onSignOut }: LaunchpadNavbarProps) {
-  const bgColor = currentApp === 'launchpad' ? 'rgba(0, 249, 207, 0.16)' : 'rgba(255, 111, 0, 0.16)'
+  const bgColor = currentApp === 'launchpad' ? 'rgba(0, 249, 207, 0.16)' : 'rgba(139, 195, 74, 0.16)'
 
   const handleSwitch = (app: 'launchpad' | 'builder') => {
     if (onSwitchApp) {
@@ -38,14 +69,14 @@ export function LaunchpadNavbar({ currentApp, onSwitchApp, onSignOut }: Launchpa
   return (
     <header
       className='sticky top-0 z-50 flex h-16 w-full items-center justify-between border-white/5 border-b px-6 backdrop-blur-xl'
-      style={{ backgroundColor: bgColor }}
+      style={{ backgroundColor: `var(--navbar-bg, ${bgColor})` }}
     >
-      <div className='flex items-center gap-6'>
-        <img src='/logo/lockup_ow.png' alt='Megalith Labs' className='h-4 w-auto' />
+      <div className='flex items-center gap-2'>
+        <Logo />
       </div>
 
       <div className='flex items-center gap-4'>
-        <div className='flex items-center rounded-full border border-white/10 bg-white/[0.03] p-1'>
+        {/* <div className='flex items-center rounded-full border border-white/10 bg-white/[0.03] p-1'>
           <button
             onClick={() => handleSwitch('launchpad')}
             className={clsx(
@@ -69,7 +100,7 @@ export function LaunchpadNavbar({ currentApp, onSwitchApp, onSignOut }: Launchpa
           >
             Builder
           </button>
-        </div>
+        </div> */}
 
         <div className='ml-2 flex items-center border-white/10 border-l pl-4'>
           <WalletButton onSignOut={onSignOut} />

@@ -39,6 +39,7 @@
 import * as React from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import * as TabsPrimitive from '@radix-ui/react-tabs'
+import { cva, type VariantProps } from 'class-variance-authority'
 import { X } from 'lucide-react'
 import { cn } from '@/lib/core/utils/cn'
 import { Button } from '../button/button'
@@ -56,6 +57,24 @@ const ANIMATION_CLASSES =
  */
 const CONTENT_ANIMATION_CLASSES =
   'data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[50%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[50%]'
+
+const modalContentVariants = cva(
+  'fixed top-[50%] left-[50%] z-[500] flex max-h-[80vh] translate-x-[-50%] translate-y-[-50%] flex-col rounded-[8px] border bg-[var(--bg)] shadow-sm duration-200',
+  {
+    variants: {
+      size: {
+        default: 'w-[30vw] min-w-[400px]',
+        md: 'w-[40vw] min-w-[500px]',
+        lg: 'w-[50vw] min-w-[600px]',
+        xl: 'w-[60vw] min-w-[800px]',
+        full: 'w-[95vw] max-h-[95vh]',
+      },
+    },
+    defaultVariants: {
+      size: 'default',
+    },
+  }
+)
 
 /**
  * Root modal component. Manages open state.
@@ -104,7 +123,8 @@ const ModalOverlay = React.forwardRef<
 ModalOverlay.displayName = 'ModalOverlay'
 
 export interface ModalContentProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
+  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>,
+  VariantProps<typeof modalContentVariants> {
   /**
    * Whether to show the close button
    * @default true
@@ -119,7 +139,7 @@ export interface ModalContentProps
 const ModalContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   ModalContentProps
->(({ className, children, showClose = true, style, ...props }, ref) => {
+>(({ className, children, showClose = true, size, style, ...props }, ref) => {
   const [isInteractionReady, setIsInteractionReady] = React.useState(false)
 
   React.useEffect(() => {
@@ -135,7 +155,7 @@ const ModalContent = React.forwardRef<
         className={cn(
           ANIMATION_CLASSES,
           CONTENT_ANIMATION_CLASSES,
-          'fixed top-[50%] left-[50%] z-[500] flex max-h-[80vh] w-[30vw] min-w-[400px] translate-x-[-50%] translate-y-[-50%] flex-col rounded-[8px] border bg-[var(--bg)] shadow-sm duration-200',
+          modalContentVariants({ size }),
           className
         )}
         style={style}

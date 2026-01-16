@@ -22,11 +22,10 @@ import { MAX_TAG_SLOTS, TAG_SLOTS, type TagSlot } from '@/lib/knowledge/constant
 import type { DocumentTag } from '@/app/workspace/[workspaceId]/knowledge/components/document-tag-entry/document-tag-entry'
 import { useUserPermissionsContext } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
 import {
-  type TagDefinition,
   useKnowledgeBaseTagDefinitions,
-} from '@/hooks/use-knowledge-base-tag-definitions'
-import { useNextAvailableSlot } from '@/hooks/use-next-available-slot'
-import { type TagDefinitionInput, useTagDefinitions } from '@/hooks/use-tag-definitions'
+} from '@/hooks/kb/use-knowledge-base-tag-definitions'
+import { useNextAvailableSlot } from '@/hooks/kb/use-next-available-slot'
+import { type TagDefinitionInput, useTagDefinitions } from '@/hooks/kb/use-tag-definitions'
 import { type DocumentData, useKnowledgeStore } from '@/stores/knowledge/store'
 
 const logger = createLogger('KnowledgeTags')

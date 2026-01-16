@@ -36,10 +36,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { MAX_TAG_SLOTS } from '@/lib/knowledge/constants'
 import { useUserPermissionsContext } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
 import { DocumentList } from '@/app/workspace/[workspaceId]/w/components/sidebar/components/knowledge-base-tags/components/document-list'
-import {
-  type TagDefinition,
-  useKnowledgeBaseTagDefinitions,
-} from '@/hooks/use-knowledge-base-tag-definitions'
+import { useKnowledgeBaseTagDefinitions, type TagDefinition } from '@/hooks/kb/use-knowledge-base-tag-definitions'
 
 const logger = createLogger('KnowledgeBaseTags')
 

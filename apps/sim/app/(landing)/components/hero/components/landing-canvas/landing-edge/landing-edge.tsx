@@ -65,7 +65,7 @@ export const LandingEdge = React.memo(function LandingEdge(props: EdgeProps) {
         className='react-flow__edge-path'
         style={{
           stroke: '#D1D1D1',
-          strokeWidth: 2,
+          strokeWidth: 1.5,
           strokeDasharray: '6 6',
           strokeLinecap: 'round',
           strokeLinejoin: 'round',

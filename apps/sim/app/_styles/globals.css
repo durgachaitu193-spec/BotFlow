@@ -12,6 +12,7 @@
   --toolbar-triggers-height: 300px;
   --editor-connections-height: 200px;
   --terminal-height: 196px;
+  --workflow-connector: var(--surface-12);
 }
 
 .sidebar-container {
@@ -78,6 +79,7 @@
  * Dark color tokens - single source of truth for all colors (dark-only)
  */
 @layer base {
+
   :root,
   .light {
     /* Neutrals (surfaces) - shadcn stone palette */
@@ -140,8 +142,8 @@
     /* stone-300 */
 
     /* Brand & state */
-    --brand-400: #ff8a50;
-    --brand-500: #f26522;
+    --brand-400: #d9ff33;
+    --brand-500: #ccff00;
     --brand-secondary: #00bac7;
     --brand-tertiary: #22c55e;
     --brand-tertiary-2: #33c481;
@@ -306,8 +308,8 @@
     --border-success: #575757;
 
     /* Brand & state */
-    --brand-400: #ff8a50;
-    --brand-500: #f26522;
+    --brand-400: #d9ff33;
+    --brand-500: #ccff00;
     --brand-secondary: #00bac7;
     --brand-tertiary: #22c55e;
     --brand-tertiary-2: #33c481;
@@ -637,23 +639,19 @@ input[type="search"]::-ms-clear {
   .streaming-effect::after {
     content: "";
     @apply pointer-events-none absolute left-0 top-0 h-full w-full;
-    background: linear-gradient(
-      90deg,
-      rgba(128, 128, 128, 0) 0%,
-      rgba(128, 128, 128, 0.1) 50%,
-      rgba(128, 128, 128, 0) 100%
-    );
+    background: linear-gradient(90deg,
+        rgba(128, 128, 128, 0) 0%,
+        rgba(128, 128, 128, 0.1) 50%,
+        rgba(128, 128, 128, 0) 100%);
     animation: code-shimmer 1.5s infinite;
     z-index: 10;
   }
 
   .dark .streaming-effect::after {
-    background: linear-gradient(
-      90deg,
-      rgba(180, 180, 180, 0) 0%,
-      rgba(180, 180, 180, 0.1) 50%,
-      rgba(180, 180, 180, 0) 100%
-    );
+    background: linear-gradient(90deg,
+        rgba(180, 180, 180, 0) 0%,
+        rgba(180, 180, 180, 0.1) 50%,
+        rgba(180, 180, 180, 0) 100%);
   }
 
   .loading-placeholder::placeholder {
@@ -741,6 +739,7 @@ input[type="search"]::-ms-clear {
  * Do not modify; remove after migration.
  */
 @layer base {
+
   :root,
   .light {
     --background: 0 0% 100%;
@@ -777,10 +776,10 @@ input[type="search"]::-ms-clear {
     --gradient-secondary: 336 95% 65%;
     --brand-background-hex: #ffffff;
     --surface-elevated: #202020;
-    --brand-primary-hex: #f26522;
-    --brand-primary-hover-hex: #00bac7;
-    --brand-accent-hex: #f26522;
-    --brand-accent-hover-hex: #00bac7;
+    --brand-primary-hex: #ccff00;
+    --brand-primary-hover-hex: #b3e600;
+    --brand-accent-hex: #ccff00;
+    --brand-accent-hover-hex: #b3e600;
   }
 
   .dark {
@@ -818,7 +817,50 @@ input[type="search"]::-ms-clear {
     --brand-primary-hover-hex: #00bac7;
     --brand-accent-hex: #f26522;
     --brand-accent-hover-hex: #00bac7;
-    --brand-background-hex: #0c0c0c;
     --surface-elevated: #202020;
+  }
+
+  .theme-aira {
+    /* Core backgrounds */
+    --bg: #050505;
+    --surface-1: #0A0A0A;
+    --surface-2: #0F0F0F;
+    --surface-3: #141414;
+    --card: #0F0F0F;
+    --card-foreground: #FFFFFF;
+    --navbar-bg: rgba(5, 5, 5, 0.8);
+    --workflow-connector: #BEF264;
+    /* Lime green */
+
+    /* Borders and Dividers */
+    --border: #1E1E1E;
+    --border-strong: #2A2A2A;
+    --divider: #1A1A1A;
+
+    /* Text colors */
+    --text-primary: #FFFFFF;
+    --text-secondary: #8A8A8A;
+    --text-muted: #777777;
+    --muted-foreground: 0 0% 26.7%;
+    --foreground: #FFFFFF;
+    --muted: 0 0% 14.9%;
+
+    /* Accents */
+    --primary: #FFFFFF;
+    --primary-foreground: #000000;
+    --brand-500: #8B5CF6;
+    /* Violet accent */
+    --brand-secondary: #00FF94;
+    /* Emerald accent from image */
+    --accent: #1E1E1E;
+    --accent-foreground: #FFFFFF;
+
+    /* Badges / Status */
+    --badge-new: #10B981;
+    --badge-updated: #F59E0B;
+    --badge-model: #8B5CF6;
+
+    /* Radius override */
+    --radius: 12px;
   }
 }

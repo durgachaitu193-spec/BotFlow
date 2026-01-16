@@ -33,7 +33,11 @@ export type LogFilterParams = z.infer<typeof LogFilterParamsSchema>
  * @param timeRange - The time range option selected by the user
  * @returns Date object for the start of the range, or null for 'All time'
  */
-export function getStartDateFromTimeRange(timeRange: TimeRange): Date | null {
+export function getStartDateFromTimeRange(
+  timeRange: TimeRange,
+  customDate?: string
+): Date | null {
+  if (customDate) return new Date(customDate)
   if (timeRange === 'All time') return null
 
   const now = new Date()
@@ -60,6 +64,24 @@ export function getStartDateFromTimeRange(timeRange: TimeRange): Date | null {
     default:
       return new Date(0)
   }
+}
+
+/**
+ * Calculates end date from a time range string.
+ * Returns null for 'All time' to indicate no date filtering.
+ * @param timeRange - The time range option selected by the user
+ * @param customDate - Optional custom end date string
+ * @returns Date object for the end of the range, or null for 'All time'
+ */
+export function getEndDateFromTimeRange(
+  timeRange: TimeRange,
+  customDate?: string
+): Date | null {
+  if (customDate) return new Date(customDate)
+  if (timeRange === 'All time') return null
+
+  // For "Past X" ranges, the end date is now
+  return new Date()
 }
 
 type ComparisonOperator = '=' | '>' | '<' | '>=' | '<=' | '!='

@@ -13,8 +13,8 @@ import {
 } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/editor/components/sub-block/components/tag-dropdown/tag-dropdown'
 import { useAccessibleReferencePrefixes } from '@/app/workspace/[workspaceId]/w/[workflowId]/hooks/use-accessible-reference-prefixes'
 import type { SubBlockConfig } from '@/blocks/types'
-import { useKnowledgeBaseTagDefinitions } from '@/hooks/use-knowledge-base-tag-definitions'
-import { useTagSelection } from '@/hooks/use-tag-selection'
+import { useKnowledgeBaseTagDefinitions } from '@/hooks/kb/use-knowledge-base-tag-definitions'
+import { useTagSelection } from '@/hooks/kb/use-tag-selection'
 import { useSubBlockValue } from '../../hooks/use-sub-block-value'
 
 interface TagFilter {
@@ -90,18 +90,18 @@ export function KnowledgeTagFilters({
   const rows: TagFilterRow[] =
     filters.length > 0
       ? filters.map((filter) => ({
-          id: filter.id,
-          cells: {
-            tagName: filter.tagName || '',
-            value: filter.tagValue || '',
-          },
-        }))
+        id: filter.id,
+        cells: {
+          tagName: filter.tagName || '',
+          value: filter.tagValue || '',
+        },
+      }))
       : [
-          {
-            id: 'empty-row-0',
-            cells: { tagName: '', value: '' },
-          },
-        ]
+        {
+          id: 'empty-row-0',
+          cells: { tagName: '', value: '' },
+        },
+      ]
 
   const updateFilters = (newFilters: TagFilter[]) => {
     if (isPreview) return

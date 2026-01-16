@@ -9,7 +9,7 @@ import { PackageSearchIcon } from '@/components/icons'
 import { useSubBlockValue } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/panel/components/editor/components/sub-block/hooks/use-sub-block-value'
 import type { SubBlockConfig } from '@/blocks/types'
 import { fetchKnowledgeBase, knowledgeKeys } from '@/hooks/queries/knowledge'
-import { useKnowledgeBasesList } from '@/hooks/use-knowledge'
+import { useKnowledgeBasesList } from '@/hooks/kb/use-knowledge'
 import type { KnowledgeBaseData } from '@/stores/knowledge/store'
 
 interface KnowledgeBaseSelectorProps {
@@ -54,9 +54,9 @@ export function KnowledgeBaseSelector({
     if (typeof value === 'string') {
       return value.includes(',')
         ? value
-            .split(',')
-            .map((id) => id.trim())
-            .filter((id) => id.length > 0)
+          .split(',')
+          .map((id) => id.trim())
+          .filter((id) => id.length > 0)
         : [value]
     }
     return []
