@@ -1,27 +1,36 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useWallets } from '@privy-io/react-auth'
 import { createLogger } from '@sim/logger'
-import { parseEther, parseUnits, formatUnits } from 'viem'
-import { AlertTriangle, Check, ExternalLink, Loader2, RefreshCw } from 'lucide-react'
+import { parseEther, parseUnits, formatUnits, formatEther } from 'viem'
+import { AlertTriangle, Check, ExternalLink, Info, Loader2, RefreshCw } from 'lucide-react'
 import { Button, Input, Label } from '@/components/emcn'
 import { Alert, AlertDescription } from '@/components/ui'
 import {
-    addLiquidityETH,
-    addLiquidity,
+    createPositionWithBNB,
+    createPositionWithToken,
     approveToken,
     checkTokenAllowance,
     getTokenBalance,
     getBNBBalance,
     getUSDTAddress,
     getWBNBAddress,
-    getPairAddress,
+    getPoolAddress,
+    getPoolState,
+    calculatePairedAmount,
+    calculateTickBounds,
+    createToken,
+    getWBNBToken,
+    getUSDTToken,
+    FEE_TIERS,
+    FEE_TIER_LABELS,
+    type FeeTier,
     type PairType,
-} from '@/lib/contracts/pancakeRouter'
+} from '@/lib/contracts/pancakeV3'
 import { DEFAULT_CHAIN } from '@/lib/contracts/didRegistry'
 
-const logger = createLogger('AddLiquidity')
+const logger = createLogger('AddLiquidityV3')
 
 interface AddLiquidityProps {
     tokenAddress: string
@@ -30,7 +39,8 @@ interface AddLiquidityProps {
     tokenDecimals?: number
 }
 
-const SLIPPAGE_OPTIONS = [0.1, 0.5, 1, 5]
+const SLIPPAGE_OPTIONS = [0.5, 1, 2, 5]
+const PRICE_RANGE_OPTIONS = [25, 50, 100, 200] // ±percentage around initial price
 
 export function AddLiquidity({
     tokenAddress,
@@ -44,7 +54,9 @@ export function AddLiquidity({
     const [tokenAmount, setTokenAmount] = useState('')
     const [pairAmount, setPairAmount] = useState('')
     const [pairType, setPairType] = useState<PairType>('BNB')
-    const [slippage, setSlippage] = useState(0.5)
+    const [slippage, setSlippage] = useState(1)
+    const [feeTier, setFeeTier] = useState<FeeTier>(FEE_TIERS.MEDIUM) // Default 0.25%
+    const [priceRange, setPriceRange] = useState(100) // ±100% default for new tokens
 
     // Balance state
     const [tokenBalance, setTokenBalance] = useState<string | null>(null)
@@ -53,6 +65,7 @@ export function AddLiquidity({
 
     // Approval state
     const [allowance, setAllowance] = useState<bigint>(0n)
+    const [usdtAllowance, setUsdtAllowance] = useState<bigint>(0n)
     const [isApproving, setIsApproving] = useState(false)
     const [isApproved, setIsApproved] = useState(false)
 
@@ -61,7 +74,10 @@ export function AddLiquidity({
     const [error, setError] = useState<string | null>(null)
     const [success, setSuccess] = useState(false)
     const [txHash, setTxHash] = useState<string | null>(null)
-    const [pairAddress, setPairAddressState] = useState<string | null>(null)
+    const [poolExists, setPoolExists] = useState<boolean | null>(null)
+    const [poolAddress, setPoolAddress] = useState<string | null>(null)
+    const [currentTick, setCurrentTick] = useState<number | null>(null)
+    const [isCalculating, setIsCalculating] = useState(false)
 
     const walletAddress = wallets?.[0]?.address
 
@@ -88,6 +104,24 @@ export function AddLiquidity({
             // Check token allowance
             const currentAllowance = await checkTokenAllowance(tokenAddress, walletAddress)
             setAllowance(currentAllowance)
+
+            // Check if pool exists and get pool state
+            const wbnb = getWBNBAddress()
+            const usdt = getUSDTAddress()
+            const pairedToken = pairType === 'BNB' ? wbnb : usdt
+            const pool = await getPoolAddress(tokenAddress, pairedToken, feeTier)
+            setPoolExists(pool !== null)
+            setPoolAddress(pool)
+
+            // If pool exists, get current tick for auto-calculations
+            if (pool) {
+                try {
+                    const poolState = await getPoolState(pool)
+                    setCurrentTick(poolState.tick)
+                } catch (err) {
+                    logger.warn('Failed to get pool state', { error: err })
+                }
+            }
         } catch (err) {
             logger.error('Failed to load balances', { error: err })
         } finally {
@@ -97,7 +131,97 @@ export function AddLiquidity({
 
     useEffect(() => {
         loadBalances()
-    }, [walletAddress, tokenAddress, pairType])
+    }, [walletAddress, tokenAddress, pairType, feeTier])
+
+    // Auto-calculate paired amount when user enters one amount
+    const calculateOtherAmount = useCallback(async (
+        enteredAmount: string,
+        isTokenAmountEntered: boolean
+    ) => {
+        if (!poolAddress || !enteredAmount || Number(enteredAmount) <= 0 || currentTick === null) {
+            return null
+        }
+
+        setIsCalculating(true)
+        try {
+            // Create token instances
+            const token = createToken(tokenAddress, tokenDecimals, tokenSymbol, tokenName)
+            const pairedToken = pairType === 'BNB' ? getWBNBToken() : getUSDTToken()
+
+            // Sort tokens to determine which is token0/token1
+            const isTokenFirst = token.address.toLowerCase() < pairedToken.address.toLowerCase()
+            const token0 = isTokenFirst ? token : pairedToken
+            const token1 = isTokenFirst ? pairedToken : token
+
+            // Calculate tick bounds
+            const { tickLower, tickUpper } = calculateTickBounds(currentTick, priceRange, feeTier)
+
+            // Parse the entered amount
+            const decimals = isTokenAmountEntered ? tokenDecimals : 18
+            const amount = parseUnits(enteredAmount, decimals)
+
+            // Determine if user entered token0 or token1 amount
+            const isAmount0 = isTokenAmountEntered ? isTokenFirst : !isTokenFirst
+
+            const result = await calculatePairedAmount(
+                token0,
+                token1,
+                feeTier,
+                poolAddress,
+                tickLower,
+                tickUpper,
+                amount,
+                isAmount0
+            )
+
+            // Format the paired amount
+            const pairedDecimals = isTokenAmountEntered ? 18 : tokenDecimals
+            const formattedAmount = formatUnits(result.pairedAmount, pairedDecimals)
+
+            return formattedAmount
+        } catch (err) {
+            logger.warn('Failed to calculate paired amount', { error: err })
+            return null
+        } finally {
+            setIsCalculating(false)
+        }
+    }, [poolAddress, currentTick, tokenAddress, tokenDecimals, tokenSymbol, tokenName, pairType, priceRange, feeTier])
+
+    // Track which field was last edited to avoid infinite loops
+    const [lastEditedField, setLastEditedField] = useState<'token' | 'pair' | null>(null)
+
+    // Handle token amount change (synchronous for immediate UI response)
+    const handleTokenAmountChange = (value: string) => {
+        setTokenAmount(value)
+        setLastEditedField('token')
+    }
+
+    // Handle pair amount change (synchronous for immediate UI response)
+    const handlePairAmountChange = (value: string) => {
+        setPairAmount(value)
+        setLastEditedField('pair')
+    }
+
+    // Debounced auto-calculation effect
+    useEffect(() => {
+        if (!poolExists || !lastEditedField) return
+
+        const timeout = setTimeout(async () => {
+            if (lastEditedField === 'token' && tokenAmount && Number(tokenAmount) > 0) {
+                const paired = await calculateOtherAmount(tokenAmount, true)
+                if (paired) {
+                    setPairAmount(paired)
+                }
+            } else if (lastEditedField === 'pair' && pairAmount && Number(pairAmount) > 0) {
+                const paired = await calculateOtherAmount(pairAmount, false)
+                if (paired) {
+                    setTokenAmount(paired)
+                }
+            }
+        }, 500) // 500ms debounce
+
+        return () => clearTimeout(timeout)
+    }, [tokenAmount, pairAmount, lastEditedField, poolExists, calculateOtherAmount])
 
     // Check if we need approval
     useEffect(() => {
@@ -152,36 +276,51 @@ export function AddLiquidity({
             const provider = await wallets[0].getEthereumProvider()
             const parsedTokenAmount = parseUnits(tokenAmount, tokenDecimals)
 
+            // Calculate initial price ratio from amounts
+            const priceRatio = Number(pairAmount) / Number(tokenAmount)
+
             let result
 
             if (pairType === 'BNB') {
                 const parsedBNBAmount = parseEther(pairAmount)
 
-                result = await addLiquidityETH(
+                result = await createPositionWithBNB(
                     walletAddress,
                     tokenAddress,
+                    tokenDecimals,
+                    tokenSymbol,
+                    tokenName,
                     parsedTokenAmount,
                     parsedBNBAmount,
+                    feeTier,
+                    priceRatio,
+                    priceRange,
                     slippage,
                     provider
                 )
             } else {
                 const usdtAddress = getUSDTAddress()
-                const parsedUSDTAmount = parseUnits(pairAmount, 18) // USDT on BSC has 18 decimals
+                const parsedUSDTAmount = parseUnits(pairAmount, 18)
 
-                // Need to approve USDT as well
-                const usdtAllowance = await checkTokenAllowance(usdtAddress, walletAddress)
-                if (usdtAllowance < parsedUSDTAmount) {
+                // Check USDT allowance
+                const usdtAllow = await checkTokenAllowance(usdtAddress, walletAddress)
+                if (usdtAllow < parsedUSDTAmount) {
                     const maxUint256 = BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
                     await approveToken(walletAddress, usdtAddress, maxUint256, provider)
                 }
 
-                result = await addLiquidity(
+                result = await createPositionWithToken(
                     walletAddress,
                     tokenAddress,
+                    tokenDecimals,
+                    tokenSymbol,
+                    tokenName,
                     usdtAddress,
                     parsedTokenAmount,
                     parsedUSDTAmount,
+                    feeTier,
+                    priceRatio,
+                    priceRange,
                     slippage,
                     provider
                 )
@@ -190,16 +329,7 @@ export function AddLiquidity({
             setTxHash(result.txHash)
             setSuccess(true)
 
-            // Try to get pair address
-            const wbnb = getWBNBAddress()
-            const usdt = getUSDTAddress()
-            const pairedToken = pairType === 'BNB' ? wbnb : usdt
-            const pairAddr = await getPairAddress(tokenAddress, pairedToken)
-            if (pairAddr) {
-                setPairAddressState(pairAddr)
-            }
-
-            logger.info('Liquidity added successfully', { txHash: result.txHash })
+            logger.info('V3 Liquidity position created', { txHash: result.txHash })
         } catch (err: any) {
             logger.error('Add liquidity failed', { error: err })
             setError(err.message || 'Failed to add liquidity')
@@ -216,7 +346,7 @@ export function AddLiquidity({
         <div className="space-y-4 rounded-lg border border-[var(--border-primary)] p-4">
             <div className="flex items-center justify-between">
                 <h3 className="font-medium text-[14px] text-[var(--text-primary)]">
-                    Add Liquidity to PancakeSwap
+                    Add Liquidity to PancakeSwap V3
                 </h3>
                 <Button
                     type="button"
@@ -229,6 +359,15 @@ export function AddLiquidity({
                 </Button>
             </div>
 
+            {poolExists === false && (
+                <Alert>
+                    <Info className="h-4 w-4" />
+                    <AlertDescription>
+                        No pool exists yet. A new pool will be created with your initial price.
+                    </AlertDescription>
+                </Alert>
+            )}
+
             {error && (
                 <Alert variant="destructive">
                     <AlertTriangle className="h-4 w-4" />
@@ -240,7 +379,7 @@ export function AddLiquidity({
                 <Alert>
                     <Check className="h-4 w-4" />
                     <AlertDescription className="flex flex-col gap-2">
-                        <span>Liquidity added successfully!</span>
+                        <span>V3 Liquidity position created!</span>
                         {txHash && (
                             <a
                                 href={`${explorerUrl}/tx/${txHash}`}
@@ -249,16 +388,6 @@ export function AddLiquidity({
                                 className="inline-flex items-center gap-1 text-primary underline"
                             >
                                 View Transaction <ExternalLink className="h-3 w-3" />
-                            </a>
-                        )}
-                        {pairAddress && (
-                            <a
-                                href={`${explorerUrl}/address/${pairAddress}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 text-primary underline"
-                            >
-                                View Pair <ExternalLink className="h-3 w-3" />
                             </a>
                         )}
                     </AlertDescription>
@@ -283,7 +412,7 @@ export function AddLiquidity({
                             type="number"
                             placeholder="0.0"
                             value={tokenAmount}
-                            onChange={(e) => setTokenAmount(e.target.value)}
+                            onChange={(e) => handleTokenAmountChange(e.target.value)}
                             disabled={isSubmitting || success}
                             className="h-[32px] flex-1 text-[13px]"
                             min="0"
@@ -293,7 +422,7 @@ export function AddLiquidity({
                             type="button"
                             variant="outline"
                             disabled={!tokenBalance || isSubmitting || success}
-                            onClick={() => setTokenAmount(tokenBalance || '')}
+                            onClick={() => handleTokenAmountChange(tokenBalance || '')}
                             className="h-[32px] text-[11px]"
                         >
                             MAX
@@ -345,7 +474,7 @@ export function AddLiquidity({
                             type="number"
                             placeholder="0.0"
                             value={pairAmount}
-                            onChange={(e) => setPairAmount(e.target.value)}
+                            onChange={(e) => handlePairAmountChange(e.target.value)}
                             disabled={isSubmitting || success}
                             className="h-[32px] flex-1 text-[13px]"
                             min="0"
@@ -355,12 +484,119 @@ export function AddLiquidity({
                             type="button"
                             variant="outline"
                             disabled={!pairBalance || isSubmitting || success}
-                            onClick={() => setPairAmount(pairBalance || '')}
+                            onClick={() => handlePairAmountChange(pairBalance || '')}
                             className="h-[32px] text-[11px]"
                         >
                             MAX
                         </Button>
                     </div>
+                </div>
+
+                {/* Pool Status / Initial Price */}
+                <div className="rounded-lg bg-[var(--bg-secondary)] p-3">
+                    {poolExists === null ? (
+                        <div className="flex items-center gap-2 text-[12px] text-[var(--text-tertiary)]">
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                            Checking pool status...
+                        </div>
+                    ) : poolExists ? (
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2 text-[12px] text-green-500">
+                                <Check className="h-3 w-3" />
+                                Pool exists - amounts will auto-balance
+                            </div>
+                            {currentTick !== null && (
+                                <div className="space-y-1 text-[11px]">
+                                    <div className="text-[var(--text-secondary)]">Current Price:</div>
+                                    {(() => {
+                                        // Calculate price from tick: price = 1.0001^tick
+                                        const token = createToken(tokenAddress, tokenDecimals, tokenSymbol, tokenName)
+                                        const pairedToken = pairType === 'BNB' ? getWBNBToken() : getUSDTToken()
+                                        const isTokenFirst = token.address.toLowerCase() < pairedToken.address.toLowerCase()
+                                        // Price in V3 is token1/token0, so we need to invert based on sort order
+                                        const rawPrice = Math.pow(1.0001, currentTick)
+                                        const priceInPair = isTokenFirst ? rawPrice : 1 / rawPrice
+                                        const priceInToken = 1 / priceInPair
+                                        return (
+                                            <div className="flex flex-col gap-1 rounded bg-[var(--bg-tertiary)] p-2 font-mono text-[10px]">
+                                                <span>1 {tokenSymbol} = {priceInPair.toFixed(8)} {pairType}</span>
+                                                <span>1 {pairType} = {priceInToken.toFixed(4)} {tokenSymbol}</span>
+                                            </div>
+                                        )
+                                    })()}
+                                </div>
+                            )}
+                            {isCalculating && (
+                                <div className="flex items-center gap-2 text-[11px] text-[var(--text-tertiary)]">
+                                    <Loader2 className="h-3 w-3 animate-spin" />
+                                    Calculating paired amount...
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2 text-[12px] text-yellow-500">
+                                <AlertTriangle className="h-3 w-3" />
+                                New pool - you set the initial price
+                            </div>
+                            {tokenAmount && pairAmount && Number(tokenAmount) > 0 && Number(pairAmount) > 0 && (
+                                <div className="space-y-1 text-[11px]">
+                                    <div className="text-[var(--text-secondary)]">
+                                        Initial Price:
+                                    </div>
+                                    <div className="flex flex-col gap-1 rounded bg-[var(--bg-tertiary)] p-2 font-mono text-[10px]">
+                                        <span>1 {tokenSymbol} = {(Number(pairAmount) / Number(tokenAmount)).toFixed(8)} {pairType}</span>
+                                        <span>1 {pairType} = {(Number(tokenAmount) / Number(pairAmount)).toFixed(4)} {tokenSymbol}</span>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+
+                {/* Fee Tier */}
+                <div>
+                    <Label className="mb-1 block text-[12px] text-[var(--text-secondary)]">
+                        Fee Tier
+                    </Label>
+                    <div className="flex gap-1">
+                        {Object.entries(FEE_TIERS).map(([key, value]) => (
+                            <Button
+                                key={key}
+                                type="button"
+                                variant={feeTier === value ? 'default' : 'outline'}
+                                onClick={() => setFeeTier(value)}
+                                disabled={isSubmitting || success}
+                                className="h-[28px] flex-1 text-[11px]"
+                            >
+                                {FEE_TIER_LABELS[value]}
+                            </Button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Price Range */}
+                <div>
+                    <Label className="mb-1 block text-[12px] text-[var(--text-secondary)]">
+                        Price Range (±%)
+                    </Label>
+                    <div className="flex gap-1">
+                        {PRICE_RANGE_OPTIONS.map((option) => (
+                            <Button
+                                key={option}
+                                type="button"
+                                variant={priceRange === option ? 'default' : 'outline'}
+                                onClick={() => setPriceRange(option)}
+                                disabled={isSubmitting || success}
+                                className="h-[28px] flex-1 text-[11px]"
+                            >
+                                ±{option}%
+                            </Button>
+                        ))}
+                    </div>
+                    <p className="mt-1 text-[10px] text-[var(--text-tertiary)]">
+                        Wider range = less concentrated = more tolerant to price changes
+                    </p>
                 </div>
 
                 {/* Slippage */}
@@ -414,12 +650,12 @@ export function AddLiquidity({
                     {isSubmitting ? (
                         <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Adding Liquidity...
+                            Creating Position...
                         </>
                     ) : success ? (
                         <>
                             <Check className="mr-2 h-4 w-4" />
-                            Liquidity Added
+                            Position Created
                         </>
                     ) : (
                         'Add Liquidity'
@@ -428,7 +664,7 @@ export function AddLiquidity({
             </div>
 
             <p className="text-center text-[10px] text-[var(--text-tertiary)]">
-                Creates a {tokenSymbol}/{pairType} pair on PancakeSwap V2
+                Creates a V3 position (NFT) for {tokenSymbol}/{pairType} with {FEE_TIER_LABELS[feeTier]} fee
             </p>
         </div>
     )
