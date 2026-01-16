@@ -105,15 +105,10 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return createErrorResponse('Unable to determine deploying user', 400)
     }
 
-    // NOTE: x402 deployment payment temporarily disabled.
-    // Previously this route enforced payment via a 402 response when
-    // `deploymentPaymentPaid` was false. For now we only log and allow
-    // deployment to proceed without blocking on payment.
+    // Check if x402 payment is required and paid
     if (!workflowData!.deploymentPaymentPaid) {
-      logger.warn(
-        `[${requestId}] Deployment payment not completed for workflow: ${id} (x402 disabled, proceeding anyway)`
-      )
-      // Intentionally do NOT return a 402 here.
+      logger.warn(`[${requestId}] Deployment payment required but not paid for workflow: ${id}`)
+      return createErrorResponse('Payment Required', 402)
     }
 
     const deployResult = await deployWorkflow({

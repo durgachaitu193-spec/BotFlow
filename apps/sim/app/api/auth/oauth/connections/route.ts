@@ -1,4 +1,4 @@
-import { account, db, user } from '@sim/db'
+import { account, db } from '@sim/db'
 import { createLogger } from '@sim/logger'
 import { eq } from 'drizzle-orm'
 import { jwtDecode } from 'jwt-decode'
@@ -35,15 +35,6 @@ export async function GET(request: NextRequest) {
     // Get all accounts for this user
     const accounts = await db.select().from(account).where(eq(account.userId, session.user.id))
 
-    // Get the user's email for fallback
-    const userRecord = await db
-      .select({ email: user.email })
-      .from(user)
-      .where(eq(user.id, session.user.id))
-      .limit(1)
-
-    const userEmail = userRecord.length > 0 ? userRecord[0]?.email : null
-
     // Process accounts to determine connections
     const connections: any[] = []
 
@@ -75,11 +66,6 @@ export async function GET(request: NextRequest) {
         // Method 2: For GitHub, the accountId might be the username
         if (!displayName && baseProvider === 'github') {
           displayName = `${acc.accountId} (GitHub)`
-        }
-
-        // Method 3: Use the user's email from our database
-        if (!displayName && userEmail) {
-          displayName = userEmail
         }
 
         // Fallback: Use accountId with provider type as context

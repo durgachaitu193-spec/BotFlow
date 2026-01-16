@@ -359,11 +359,11 @@ export async function createToken(
                   rpcUrls: chain.rpcUrls.default.http,
                   blockExplorers: chain.blockExplorers
                     ? {
-                        default: {
-                          name: chain.blockExplorers.default.name,
-                          url: chain.blockExplorers.default.url,
-                        },
-                      }
+                      default: {
+                        name: chain.blockExplorers.default.name,
+                        url: chain.blockExplorers.default.url,
+                      },
+                    }
                     : undefined,
                 },
               ],
@@ -505,11 +505,11 @@ export async function createTokenForAgent(
                   rpcUrls: chain.rpcUrls.default.http,
                   blockExplorers: chain.blockExplorers
                     ? {
-                        default: {
-                          name: chain.blockExplorers.default.name,
-                          url: chain.blockExplorers.default.url,
-                        },
-                      }
+                      default: {
+                        name: chain.blockExplorers.default.name,
+                        url: chain.blockExplorers.default.url,
+                      },
+                    }
                     : undefined,
                 },
               ],

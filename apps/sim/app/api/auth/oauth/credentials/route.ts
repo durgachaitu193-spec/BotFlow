@@ -1,5 +1,5 @@
 import { db } from '@sim/db'
-import { account, user, workflow } from '@sim/db/schema'
+import { account, workflow } from '@sim/db/schema'
 import { createLogger } from '@sim/logger'
 import { and, eq } from 'drizzle-orm'
 import { jwtDecode } from 'jwt-decode'
@@ -184,25 +184,6 @@ export async function GET(request: NextRequest) {
         // Method 2: For GitHub, the accountId might be the username
         if (!displayName && baseProvider === 'github') {
           displayName = `${acc.accountId} (GitHub)`
-        }
-
-        // Method 3: Try to get the user's email from our database
-        if (!displayName) {
-          try {
-            const userRecord = await db
-              .select({ email: user.email })
-              .from(user)
-              .where(eq(user.id, acc.userId))
-              .limit(1)
-
-            if (userRecord.length > 0) {
-              displayName = userRecord[0].email
-            }
-          } catch (_error) {
-            logger.warn(`[${requestId}] Error fetching user email`, {
-              userId: acc.userId,
-            })
-          }
         }
 
         // Fallback: Use accountId with provider type as context
