@@ -1,6 +1,6 @@
 import type { Project } from '@linear/sdk'
 import { LinearClient } from '@linear/sdk'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { NextResponse } from 'next/server'
 import { authorizeCredentialUse } from '@/lib/auth/credential-access'
 import { generateRequestId } from '@/lib/core/utils/request'

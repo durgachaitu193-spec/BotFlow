@@ -1,6 +1,6 @@
-import * as schema from '@sim/db'
-import { webhook, workflow, workflowBlocks, workflowEdges, workflowSubflows } from '@sim/db'
-import { createLogger } from '@sim/logger'
+import * as schema from '@wazabi/db'
+import { webhook, workflow, workflowBlocks, workflowEdges, workflowSubflows } from '@wazabi/db'
+import { createLogger } from '@wazabi/logger'
 import { and, eq, inArray, or, sql } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
@@ -27,7 +27,7 @@ const socketDb = drizzle(
     idle_timeout: 10,
     connect_timeout: 20,
     max: 15,
-    onnotice: () => {},
+    onnotice: () => { },
   }),
   { schema }
 )
@@ -339,10 +339,10 @@ async function handleBlockOperationTx(
       const updatedData = isRemovingFromParent
         ? {} // Clear data entirely when removing from parent
         : {
-            ...currentData,
-            ...(payload.parentId ? { parentId: payload.parentId } : {}),
-            ...(payload.extent ? { extent: payload.extent } : {}),
-          }
+          ...currentData,
+          ...(payload.parentId ? { parentId: payload.parentId } : {}),
+          ...(payload.extent ? { extent: payload.extent } : {}),
+        }
 
       const updateResult = await tx
         .update(workflowBlocks)
@@ -367,8 +367,7 @@ async function handleBlockOperationTx(
       }
 
       logger.debug(
-        `Updated block parent: ${payload.id} -> parent: ${payload.parentId || 'null'}, extent: ${payload.extent || 'null'}${
-          isRemovingFromParent ? ' (cleared data JSON)' : ''
+        `Updated block parent: ${payload.id} -> parent: ${payload.parentId || 'null'}, extent: ${payload.extent || 'null'}${isRemovingFromParent ? ' (cleared data JSON)' : ''
         }`
       )
       break
@@ -443,11 +442,18 @@ async function handleBlocksOperationTx(
         const { id, position } = update
         if (!id || !position) continue
 
+        // Validate positions are valid numbers
+        if (typeof position.x !== 'number' || typeof position.y !== 'number' || isNaN(position.x) || isNaN(position.y)) {
+          logger.warn(`Skipping invalid position update for block ${id}:`, position)
+          continue
+        }
+
         await tx
           .update(workflowBlocks)
           .set({
-            positionX: position.x,
-            positionY: position.y,
+            positionX: String(position.x),
+            positionY: String(position.y),
+            updatedAt: new Date(),
           })
           .where(and(eq(workflowBlocks.id, id), eq(workflowBlocks.workflowId, workflowId)))
       }
@@ -465,24 +471,32 @@ async function handleBlocksOperationTx(
       })
 
       if (blocks && blocks.length > 0) {
-        const blockValues = blocks.map((block: Record<string, unknown>) => ({
-          id: block.id as string,
-          workflowId,
-          type: block.type as string,
-          name: block.name as string,
-          positionX: (block.position as { x: number; y: number }).x,
-          positionY: (block.position as { x: number; y: number }).y,
-          data: (block.data as Record<string, unknown>) || {},
-          subBlocks: (block.subBlocks as Record<string, unknown>) || {},
-          outputs: (block.outputs as Record<string, unknown>) || {},
-          enabled: (block.enabled as boolean) ?? true,
-          horizontalHandles: (block.horizontalHandles as boolean) ?? true,
-          advancedMode: (block.advancedMode as boolean) ?? false,
-          triggerMode: (block.triggerMode as boolean) ?? false,
-          height: (block.height as number) || 0,
-        }))
+        const blockValues = blocks.map((block: Record<string, unknown>) => {
+          const position = block.position as { x: number; y: number } | undefined
+          const x = typeof position?.x === 'number' && !isNaN(position.x) ? position.x : 0
+          const y = typeof position?.y === 'number' && !isNaN(position.y) ? position.y : 0
+          const height = typeof block.height === 'number' && !isNaN(block.height) ? block.height : 0
 
-        await tx.insert(workflowBlocks).values(blockValues)
+          return {
+            id: block.id as string,
+            workflowId,
+            type: block.type as string,
+            name: block.name as string,
+            positionX: String(x),
+            positionY: String(y),
+            data: (block.data as Record<string, unknown>) || {},
+            subBlocks: (block.subBlocks as Record<string, unknown>) || {},
+            outputs: (block.outputs as Record<string, unknown>) || {},
+            enabled: (block.enabled as boolean) ?? true,
+            horizontalHandles: (block.horizontalHandles as boolean) ?? true,
+            advancedMode: (block.advancedMode as boolean) ?? false,
+            triggerMode: (block.triggerMode as boolean) ?? false,
+            height: String(height),
+          }
+        })
+
+        // Use onConflictDoNothing to handle retries idempotently
+        await tx.insert(workflowBlocks).values(blockValues).onConflictDoNothing()
 
         // Create subflow entries for loop/parallel blocks (skip if already in payload)
         const loopIds = new Set(loops ? Object.keys(loops) : [])
@@ -490,27 +504,33 @@ async function handleBlocksOperationTx(
         for (const block of blocks) {
           const blockId = block.id as string
           if (block.type === 'loop' && !loopIds.has(blockId)) {
-            await tx.insert(workflowSubflows).values({
-              id: blockId,
-              workflowId,
-              type: 'loop',
-              config: {
-                loopType: 'for',
-                iterations: DEFAULT_LOOP_ITERATIONS,
-                nodes: [],
-              },
-            })
+            await tx
+              .insert(workflowSubflows)
+              .values({
+                id: blockId,
+                workflowId,
+                type: 'loop',
+                config: {
+                  loopType: 'for',
+                  iterations: DEFAULT_LOOP_ITERATIONS,
+                  nodes: [],
+                },
+              })
+              .onConflictDoNothing()
           } else if (block.type === 'parallel' && !parallelIds.has(blockId)) {
-            await tx.insert(workflowSubflows).values({
-              id: blockId,
-              workflowId,
-              type: 'parallel',
-              config: {
-                parallelType: 'fixed',
-                count: DEFAULT_PARALLEL_COUNT,
-                nodes: [],
-              },
-            })
+            await tx
+              .insert(workflowSubflows)
+              .values({
+                id: blockId,
+                workflowId,
+                type: 'parallel',
+                config: {
+                  parallelType: 'fixed',
+                  count: DEFAULT_PARALLEL_COUNT,
+                  nodes: [],
+                },
+              })
+              .onConflictDoNothing()
           }
         }
 
@@ -528,16 +548,26 @@ async function handleBlocksOperationTx(
       }
 
       if (edges && edges.length > 0) {
-        const edgeValues = edges.map((edge: Record<string, unknown>) => ({
-          id: edge.id as string,
-          workflowId,
-          sourceBlockId: edge.source as string,
-          targetBlockId: edge.target as string,
-          sourceHandle: (edge.sourceHandle as string | null) || null,
-          targetHandle: (edge.targetHandle as string | null) || null,
-        }))
+        const edgeValues = edges
+          .filter((edge: Record<string, unknown>) => {
+            if (!edge.id || !edge.source || !edge.target) {
+              logger.warn('Skipping invalid edge in batch add:', edge)
+              return false
+            }
+            return true
+          })
+          .map((edge: Record<string, unknown>) => ({
+            id: edge.id as string,
+            workflowId,
+            sourceBlockId: edge.source as string,
+            targetBlockId: edge.target as string,
+            sourceHandle: (edge.sourceHandle as string | null) || null,
+            targetHandle: (edge.targetHandle as string | null) || null,
+          }))
 
-        await tx.insert(workflowEdges).values(edgeValues)
+        if (edgeValues.length > 0) {
+          await tx.insert(workflowEdges).values(edgeValues).onConflictDoNothing()
+        }
       }
 
       if (loops && Object.keys(loops).length > 0) {
@@ -548,7 +578,7 @@ async function handleBlocksOperationTx(
           config: loop as Record<string, unknown>,
         }))
 
-        await tx.insert(workflowSubflows).values(loopValues)
+        await tx.insert(workflowSubflows).values(loopValues).onConflictDoNothing()
       }
 
       if (parallels && Object.keys(parallels).length > 0) {
@@ -559,7 +589,7 @@ async function handleBlocksOperationTx(
           config: parallel as Record<string, unknown>,
         }))
 
-        await tx.insert(workflowSubflows).values(parallelValues)
+        await tx.insert(workflowSubflows).values(parallelValues).onConflictDoNothing()
       }
 
       logger.info(`Successfully batch added blocks to workflow ${workflowId}`)
@@ -782,9 +812,9 @@ async function handleBlocksOperationTx(
         const updatedData = isRemovingFromParent
           ? {}
           : {
-              ...currentData,
-              ...(parentId ? { parentId, extent: 'parent' } : {}),
-            }
+            ...currentData,
+            ...(parentId ? { parentId, extent: 'parent' } : {}),
+          }
 
         await tx
           .update(workflowBlocks)

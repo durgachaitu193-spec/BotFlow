@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { Twilio } from 'twilio'
 import { env } from '@/lib/core/config/env'
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { usePrivy } from '@privy-io/react-auth'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { Camera, Check, Pencil } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'

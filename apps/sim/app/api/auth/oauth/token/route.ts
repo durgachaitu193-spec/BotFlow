@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { authorizeCredentialUse } from '@/lib/auth/credential-access'

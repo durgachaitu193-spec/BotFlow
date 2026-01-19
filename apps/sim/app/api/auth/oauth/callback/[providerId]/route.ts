@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto'
-import { account, db } from '@sim/db'
-import { createLogger } from '@sim/logger'
+import { account, db } from '@wazabi/db'
+import { createLogger } from '@wazabi/logger'
 import { and, eq } from 'drizzle-orm'
 import { cookies } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'

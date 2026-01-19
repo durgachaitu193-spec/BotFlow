@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { useParams } from 'next/navigation'
 import { useUpdateFolder } from '@/hooks/queries/folders'
 import { useFolderStore } from '@/stores/folders/store'

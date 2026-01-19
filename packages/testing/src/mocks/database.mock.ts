@@ -85,12 +85,12 @@ export function createMockDb() {
 }
 
 /**
- * Mock module for @sim/db.
+ * Mock module for @wazabi/db.
  * Use with vi.mock() to replace the real database.
  *
  * @example
  * ```ts
- * vi.mock('@sim/db', () => databaseMock)
+ * vi.mock('@wazabi/db', () => databaseMock)
  * ```
  */
 export const databaseMock = {

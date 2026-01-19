@@ -6,7 +6,7 @@ import { generateBrandedMetadata, generateStructuredData } from '@/lib/branding/
 import { PostHogProvider } from '@/app/_shell/providers/posthog-provider'
 import '@/app/_styles/globals.css'
 
-import { PrivyProviderWrapper } from '@sim/ui'
+import { PrivyProviderWrapper } from '@wazabi/ui'
 import { OneDollarStats } from '@/components/analytics/onedollarstats'
 import { HydrationErrorHandler } from '@/app/_shell/hydration-error-handler'
 import { QueryProvider } from '@/app/_shell/providers/query-provider'
@@ -189,7 +189,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <OneDollarStats />
         <PostHogProvider>
           <ThemeProvider>
-            <PrivyProviderWrapper appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID}>
+            <PrivyProviderWrapper
+              appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID}
+              logo="/logo/wazabi-icon-dark.png"
+            >
               <QueryProvider>
                 <SessionProvider>
                   <BrandedLayout>

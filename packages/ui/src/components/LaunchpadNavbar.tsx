@@ -17,18 +17,18 @@ function Logo() {
     return (
       <div className="flex items-center gap-2 opacity-0">
         <img src='/logo/Asset 1.svg' alt='Wazabi' className='h-8 w-auto' />
-        <img src='/logo/Asset 2@300x.png' alt='Wazabi' className='h-7 w-auto' />
+        <img src='/logo/wazabi-text-dark.png' alt='Wazabi' className='h-7 w-auto' />
       </div>
     )
   }
 
   return (
     <div className='flex items-center gap-2'>
-      <img src='/logo/Asset 1.svg' alt='Wazabi' className='h-8 w-auto' />
+      <img src={resolvedTheme === 'dark' ? '/logo/wazabi-icon-light.png' : '/logo/wazabi-icon-dark.png'} alt='Wazabi' className='h-8 w-auto rounded-xl' />
       <img
-        src={resolvedTheme === 'dark' ? '/logo/Asset 2@300x.png' : '/logo/Asset 3@300x.png'}
+        src={resolvedTheme === 'dark' ? '/logo/wazabi-text-dark.png' : '/logo/wazabi-text-light.png'}
         alt='Wazabi Text'
-        className='h-7 w-auto'
+        className='h-7 w-auto object-contain object-left brightness-0 opacity-90 dark:brightness-0 dark:invert'
       />
     </div>
   )
@@ -40,10 +40,10 @@ const isDev =
     (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
 const LAUNCHPAD_URL = isDev
   ? 'http://localhost:3000'
-  : process.env.NEXT_PUBLIC_LAUNCHPAD_URL || 'https://launchpad.megalith.run'
+  : process.env.NEXT_PUBLIC_LAUNCHPAD_URL || 'https://launchpad.wazabi.ai'
 const BUILDER_URL = isDev
   ? 'http://localhost:3001'
-  : process.env.NEXT_PUBLIC_BUILDER_URL || 'https://builder.megalith.run'
+  : process.env.NEXT_PUBLIC_BUILDER_URL || 'https://studio.wazabi.ai'
 
 export interface LaunchpadNavbarProps {
   currentApp?: 'launchpad' | 'builder' | string

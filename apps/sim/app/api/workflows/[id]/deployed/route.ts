@@ -1,5 +1,5 @@
-import { db, workflowDeploymentVersion } from '@sim/db'
-import { createLogger } from '@sim/logger'
+import { db, workflowDeploymentVersion } from '@wazabi/db'
+import { createLogger } from '@wazabi/logger'
 import { and, desc, eq } from 'drizzle-orm'
 import type { NextRequest, NextResponse } from 'next/server'
 import { verifyInternalToken } from '@/lib/auth/internal'

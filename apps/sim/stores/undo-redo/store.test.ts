@@ -20,7 +20,7 @@ import {
   createRemoveBlockEntry,
   createRemoveEdgeEntry,
   createUpdateParentEntry,
-} from '@sim/testing'
+} from '@wazabi/testing'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { runWithUndoRedoRecordingSuspended, useUndoRedoStore } from '@/stores/undo-redo/store'
 

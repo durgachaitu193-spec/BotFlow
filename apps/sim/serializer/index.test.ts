@@ -240,7 +240,7 @@ vi.mock('@/tools/utils', () => ({
 }))
 
 // Mock logger
-vi.mock('@sim/logger', () => ({
+vi.mock('@wazabi/logger', () => ({
   createLogger: () => ({
     error: vi.fn(),
     info: vi.fn(),

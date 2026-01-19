@@ -40,15 +40,15 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        find: '@sim/testing',
+        find: '@wazabi/testing',
         replacement: path.resolve(__dirname, '../../packages/testing/src'),
       },
       {
-        find: '@sim/db',
+        find: '@wazabi/db',
         replacement: path.resolve(__dirname, '../../packages/db'),
       },
       {
-        find: '@sim/logger',
+        find: '@wazabi/logger',
         replacement: path.resolve(__dirname, '../../packages/logger/src'),
       },
       {

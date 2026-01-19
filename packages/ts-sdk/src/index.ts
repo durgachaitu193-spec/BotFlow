@@ -114,7 +114,7 @@ export class SimStudioClient {
 
   constructor(config: SimStudioConfig) {
     this.apiKey = config.apiKey
-    this.baseUrl = normalizeBaseUrl(config.baseUrl || 'https://sim.ai')
+    this.baseUrl = normalizeBaseUrl(config.baseUrl || 'https://wazabi.ai')
   }
 
   /**

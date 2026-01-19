@@ -25,9 +25,9 @@
  * Response: { success: true, memberId: string, billingActions: {...} }
  */
 
-import { db } from '@sim/db'
-import { member, organization, user, userStats } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { member, organization, user, userStats } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, eq } from 'drizzle-orm'
 import { removeUserFromOrganization } from '@/lib/billing/organizations/membership'
 import { withAdminAuthParams } from '@/app/api/v1/admin/middleware'

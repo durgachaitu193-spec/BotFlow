@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useRef, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { ArrowDown, Loader2, Plus, Search } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { Button, Tooltip, Trash } from '@/components/emcn'

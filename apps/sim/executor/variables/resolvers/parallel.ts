@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { isReference, parseReferencePath, REFERENCE } from '@/executor/consts'
 import { extractBaseBlockId, extractBranchIndex } from '@/executor/utils/subflow-utils'
 import {

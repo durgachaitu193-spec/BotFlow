@@ -10,9 +10,9 @@
  * Response: AdminListResponse<AdminFolder>
  */
 
-import { db } from '@sim/db'
-import { workflowFolder, workspace } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { workflowFolder, workspace } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { count, eq } from 'drizzle-orm'
 import { withAdminAuthParams } from '@/app/api/v1/admin/middleware'
 import { internalErrorResponse, listResponse, notFoundResponse } from '@/app/api/v1/admin/responses'

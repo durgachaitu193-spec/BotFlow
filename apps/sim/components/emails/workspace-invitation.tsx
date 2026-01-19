@@ -11,7 +11,7 @@ import {
   Section,
   Text,
 } from '@react-email/components'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { baseStyles } from '@/components/emails/base-styles'
 import EmailFooter from '@/components/emails/footer'
 import { getBrandConfig } from '@/lib/branding/branding'

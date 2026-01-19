@@ -90,7 +90,7 @@ describe('Document By ID API Route', () => {
   beforeEach(async () => {
     resetMocks()
 
-    vi.doMock('@sim/db', () => ({
+    vi.doMock('@wazabi/db', () => ({
       db: mockDbChain,
     }))
 

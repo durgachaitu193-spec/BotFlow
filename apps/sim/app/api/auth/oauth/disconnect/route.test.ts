@@ -32,11 +32,11 @@ describe('OAuth Disconnect API Route', () => {
       getSession: mockGetSession,
     }))
 
-    vi.doMock('@sim/db', () => ({
+    vi.doMock('@wazabi/db', () => ({
       db: mockDb,
     }))
 
-    vi.doMock('@sim/db/schema', () => ({
+    vi.doMock('@wazabi/db/schema', () => ({
       account: { userId: 'userId', providerId: 'providerId' },
     }))
 
@@ -47,7 +47,7 @@ describe('OAuth Disconnect API Route', () => {
       or: vi.fn((...conditions) => ({ conditions, type: 'or' })),
     }))
 
-    vi.doMock('@sim/logger', () => ({
+    vi.doMock('@wazabi/logger', () => ({
       createLogger: vi.fn().mockReturnValue(mockLogger),
     }))
   })

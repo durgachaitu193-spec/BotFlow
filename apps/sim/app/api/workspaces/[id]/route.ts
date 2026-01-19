@@ -1,5 +1,5 @@
-import { workflow } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { workflow } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, eq, inArray } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
@@ -7,8 +7,8 @@ import { getSession } from '@/lib/auth'
 
 const logger = createLogger('WorkspaceByIdAPI')
 
-import { db } from '@sim/db'
-import { knowledgeBase, permissions, templates, workspace } from '@sim/db/schema'
+import { db } from '@wazabi/db'
+import { knowledgeBase, permissions, templates, workspace } from '@wazabi/db/schema'
 import { getUserEntityPermissions } from '@/lib/workspaces/permissions/utils'
 
 const patchWorkspaceSchema = z.object({

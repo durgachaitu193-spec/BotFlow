@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { betterAuthClient, useSession } from '@/lib/auth/auth-client'
 import { getErrorMessage } from '@/app/invite/[id]/utils'

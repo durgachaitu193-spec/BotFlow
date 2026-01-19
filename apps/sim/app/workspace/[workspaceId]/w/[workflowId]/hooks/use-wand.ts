@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { GenerationType } from '@/blocks/types'
 
 const logger = createLogger('useWand')

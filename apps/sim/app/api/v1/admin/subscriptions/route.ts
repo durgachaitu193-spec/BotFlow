@@ -12,9 +12,9 @@
  * Response: AdminListResponse<AdminSubscription>
  */
 
-import { db } from '@sim/db'
-import { subscription } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { subscription } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, count, eq, type SQL } from 'drizzle-orm'
 import { withAdminAuth } from '@/app/api/v1/admin/middleware'
 import { internalErrorResponse, listResponse } from '@/app/api/v1/admin/responses'

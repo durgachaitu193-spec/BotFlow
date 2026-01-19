@@ -13,6 +13,9 @@ export default {
     extend: {
       fontFamily: {
         season: ['var(--font-season)'],
+        comic: ['var(--font-season)'], // Using season for display/header
+        tactical: ['var(--font-soehne-mono)', 'monospace'], // Using soehne mono for tactical
+        hand: ['var(--font-inter)'], // Using inter for body
       },
       screens: {
         '3xl': '1920px',
@@ -24,6 +27,8 @@ export default {
         base: '15px',
       },
       colors: {
+        'acid-green': '#CBFF00',
+        'teal-mix': '#00ced1',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {

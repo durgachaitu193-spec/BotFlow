@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { usePathname, useRouter } from 'next/navigation'
 import { generateWorkspaceName } from '@/lib/workspaces/naming'
 import { useWorkflowRegistry } from '@/stores/workflows/registry/store'

@@ -197,6 +197,8 @@ export interface WorkflowActions {
   toggleBlockEnabled: (id: string) => void
   duplicateBlock: (id: string) => void
   toggleBlockHandles: (id: string) => void
+  setBlockEnabled: (id: string, enabled: boolean) => void
+  setBlockHandles: (id: string, enabled: boolean) => void
   updateBlockName: (
     id: string,
     name: string
@@ -229,6 +231,20 @@ export interface WorkflowActions {
   replaceWorkflowState: (
     workflowState: WorkflowState,
     options?: { updateLastSaved?: boolean }
+  ) => void
+  batchUpdatePositions: (updates: Array<{ id: string; position: Position }>) => void
+  batchAddBlocks: (
+    blocks: any[],
+    edges: any[],
+    subBlockValues: Record<string, Record<string, any>>
+  ) => void
+  batchRemoveBlocks: (ids: string[]) => void
+  batchAddEdges: (edges: Edge[]) => void
+  batchRemoveEdges: (ids: string[]) => void
+  batchToggleEnabled: (ids: string[]) => void
+  batchToggleHandles: (ids: string[]) => void
+  batchUpdateBlocksWithParent: (
+    updates: Array<{ id: string; position: Position; parentId?: string }>
   ) => void
 }
 

@@ -6,9 +6,9 @@
  * Response: AdminSingleResponse<WorkflowExportPayload>
  */
 
-import { db } from '@sim/db'
-import { workflow } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { workflow } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { eq } from 'drizzle-orm'
 import { loadWorkflowFromNormalizedTables } from '@/lib/workflows/persistence/utils'
 import { withAdminAuthParams } from '@/app/api/v1/admin/middleware'

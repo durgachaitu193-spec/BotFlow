@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { useQueryClient } from '@tanstack/react-query'
 import { Button } from '@/components/emcn'
 import { Skeleton } from '@/components/ui'

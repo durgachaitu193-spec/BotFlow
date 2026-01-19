@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import JSZip from 'jszip'
 import { sanitizeForExport } from '@/lib/workflows/sanitization/json-sanitizer'
 import { useFolderStore } from '@/stores/folders/store'

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useWallets } from '@privy-io/react-auth'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { formatEther } from 'viem'
 import { AlertTriangle, ArrowRightLeft, Check, ExternalLink, Loader2, RefreshCw } from 'lucide-react'
 import { Button, Input, Label } from '@/components/emcn'

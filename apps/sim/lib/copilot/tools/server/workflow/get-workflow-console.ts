@@ -1,6 +1,6 @@
-import { db } from '@sim/db'
-import { workflowExecutionLogs } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { workflowExecutionLogs } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { desc, eq } from 'drizzle-orm'
 import type { BaseServerTool } from '@/lib/copilot/tools/server/base-tool'
 

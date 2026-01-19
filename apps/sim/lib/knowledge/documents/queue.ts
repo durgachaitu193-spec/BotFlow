@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { getRedisClient } from '@/lib/core/config/redis'
 
 const logger = createLogger('DocumentQueue')

@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from 'crypto'
-import { db } from '@sim/db'
-import { document, embedding } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { document, embedding } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, asc, eq, ilike, inArray, sql } from 'drizzle-orm'
 import type {
   BatchOperationResult,

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { LucideIcon } from 'lucide-react'
 import {
   ArrowRight,
@@ -127,16 +127,16 @@ function PricingCard({
             : 'sm:border-[#E7E4EF] sm:border-r-2 sm:last:border-r-0',
         !tier.featured && !isBeforeFeatured && 'lg:[&:nth-child(4n)]:border-r-0',
         !tier.featured &&
-          !isBeforeFeatured &&
-          'sm:[&:nth-child(2n)]:border-r-0 lg:[&:nth-child(2n)]:border-r-2',
-        tier.featured ? 'z-10 bg-gradient-to-b from-[#8357FF] to-[#6F3DFA] text-white' : ''
+        !isBeforeFeatured &&
+        'sm:[&:nth-child(2n)]:border-r-0 lg:[&:nth-child(2n)]:border-r-2',
+        tier.featured ? 'z-10 bg-gradient-to-r from-[#1B9B8C] via-[#2DFFA8] to-[#1B9B8C] bg-[length:200%_100%] text-gray-900' : ''
       )}
     >
       <div
         className={cn(
           'flex h-full flex-col justify-between',
           tier.featured
-            ? 'border-2 border-[#6F3DFA] px-5 pt-4 pb-5 shadow-[inset_0_2px_4px_0_#9B77FF] sm:px-5 sm:pt-4 sm:pb-4'
+            ? 'border-2 border-[#1B9B8C] px-5 pt-4 pb-5 shadow-[0_8px_30px_rgba(45,255,168,0.3)] sm:px-5 sm:pt-4 sm:pb-4'
             : ''
         )}
       >
@@ -145,7 +145,7 @@ function PricingCard({
             <span
               className={cn(
                 'font-medium text-xs uppercase tracking-wider',
-                tier.featured ? 'text-white/90' : 'text-gray-500'
+                tier.featured ? 'text-gray-900/90' : 'text-gray-500'
               )}
             >
               {tier.name}
@@ -155,7 +155,7 @@ function PricingCard({
             <span
               className={cn(
                 'font-medium text-4xl leading-none',
-                tier.featured ? 'text-white' : 'text-black'
+                tier.featured ? 'text-gray-900' : 'text-black'
               )}
             >
               {tier.price}
@@ -168,10 +168,10 @@ function PricingCard({
                 <feature.icon
                   className={cn(
                     'mt-0.5 h-4 w-4 flex-shrink-0',
-                    tier.featured ? 'text-white/90' : 'text-gray-600'
+                    tier.featured ? 'text-gray-900/90' : 'text-gray-600'
                   )}
                 />
-                <span className={cn('text-sm', tier.featured ? 'text-white' : 'text-gray-700')}>
+                <span className={cn('text-sm', tier.featured ? 'text-gray-900' : 'text-gray-700')}>
                   {feature.text}
                 </span>
               </li>
@@ -185,7 +185,7 @@ function PricingCard({
               onClick={handleCtaClick}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              className='group inline-flex w-full items-center justify-center gap-2 rounded-[10px] border border-[#E8E8E8] bg-gradient-to-b from-[#F8F8F8] to-white px-3 py-[6px] font-medium text-[#6F3DFA] text-[14px] shadow-[inset_0_2px_4px_0_rgba(255,255,255,0.9)] transition-all'
+              className='group inline-flex w-full items-center justify-center gap-2 rounded-[10px] border border-[#E8E8E8] bg-gradient-to-b from-[#F8F8F8] to-white px-3 py-[6px] font-medium text-[#1B9B8C] text-[14px] shadow-[inset_0_2px_4px_0_rgba(255,255,255,0.9)] transition-all'
             >
               <span className='flex items-center gap-1'>
                 {tier.ctaText}

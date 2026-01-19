@@ -1,6 +1,6 @@
-import { db } from '@sim/db'
-import { idempotencyKey } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { idempotencyKey } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, eq, lt } from 'drizzle-orm'
 
 const logger = createLogger('IdempotencyCleanup')

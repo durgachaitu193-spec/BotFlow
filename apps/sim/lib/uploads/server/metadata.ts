@@ -1,6 +1,6 @@
-import { db } from '@sim/db'
-import { workspaceFiles } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { workspaceFiles } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, eq } from 'drizzle-orm'
 import type { StorageContext } from '../shared/types'
 

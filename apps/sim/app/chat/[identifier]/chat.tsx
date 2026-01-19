@@ -1,7 +1,7 @@
 'use client'
 
 import { type RefObject, useCallback, useEffect, useRef, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { v4 as uuidv4 } from 'uuid'
 import { noop } from '@/lib/core/utils/request'
 import { getFormattedGitHubStars } from '@/app/(landing)/actions/github'

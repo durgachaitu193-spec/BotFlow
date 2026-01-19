@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { z } from 'zod'
 import type { OutputConfig } from '@/stores/chat/store'
 

@@ -26,7 +26,7 @@ describe('Workflow By ID API Route', () => {
       randomUUID: vi.fn().mockReturnValue('mock-request-id-12345678'),
     })
 
-    vi.doMock('@sim/logger', () => ({
+    vi.doMock('@wazabi/logger', () => ({
       createLogger: vi.fn().mockReturnValue(mockLogger),
     }))
 
@@ -318,7 +318,7 @@ describe('Workflow By ID API Route', () => {
         isWorkspaceOwner: false,
       })
 
-      vi.doMock('@sim/db', () => ({
+      vi.doMock('@wazabi/db', () => ({
         db: {
           delete: vi.fn().mockReturnValue({
             where: vi.fn().mockResolvedValue([{ id: 'workflow-123' }]),
@@ -367,7 +367,7 @@ describe('Workflow By ID API Route', () => {
         isWorkspaceOwner: false,
       })
 
-      vi.doMock('@sim/db', () => ({
+      vi.doMock('@wazabi/db', () => ({
         db: {
           delete: vi.fn().mockReturnValue({
             where: vi.fn().mockResolvedValue([{ id: 'workflow-123' }]),
@@ -457,7 +457,7 @@ describe('Workflow By ID API Route', () => {
         isWorkspaceOwner: false,
       })
 
-      vi.doMock('@sim/db', () => ({
+      vi.doMock('@wazabi/db', () => ({
         db: {
           update: vi.fn().mockReturnValue({
             set: vi.fn().mockReturnValue({
@@ -510,7 +510,7 @@ describe('Workflow By ID API Route', () => {
         isWorkspaceOwner: false,
       })
 
-      vi.doMock('@sim/db', () => ({
+      vi.doMock('@wazabi/db', () => ({
         db: {
           update: vi.fn().mockReturnValue({
             set: vi.fn().mockReturnValue({

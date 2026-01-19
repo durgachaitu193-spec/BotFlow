@@ -1,5 +1,5 @@
 import { Sandbox } from '@e2b/code-interpreter'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { env } from '@/lib/core/config/env'
 import { CodeLanguage } from '@/lib/execution/languages'
 

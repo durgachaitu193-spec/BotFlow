@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { validateJiraCloudId, validateJiraIssueKey } from '@/lib/core/security/input-validation'

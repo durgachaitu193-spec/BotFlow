@@ -1,6 +1,6 @@
 'use client'
 
-import { LaunchpadNavbar } from '@sim/ui'
+import { LaunchpadNavbar } from '@wazabi/ui'
 import { Tooltip } from '@/components/emcn'
 import { GlobalCommandsProvider } from '@/app/workspace/[workspaceId]/providers/global-commands-provider'
 import { ProviderModelsLoader } from '@/app/workspace/[workspaceId]/providers/provider-models-loader'

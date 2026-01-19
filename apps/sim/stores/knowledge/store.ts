@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { create } from 'zustand'
 
 const logger = createLogger('KnowledgeStore')

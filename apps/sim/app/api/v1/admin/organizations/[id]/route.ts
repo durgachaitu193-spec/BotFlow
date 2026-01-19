@@ -17,9 +17,9 @@
  * Response: AdminSingleResponse<AdminOrganization>
  */
 
-import { db } from '@sim/db'
-import { member, organization, subscription } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { member, organization, subscription } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, count, eq } from 'drizzle-orm'
 import { withAdminAuthParams } from '@/app/api/v1/admin/middleware'
 import {

@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import '@/lib/uploads/core/setup.server'
 import { getSession } from '@/lib/auth'

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { AlertCircle, Loader2 } from 'lucide-react'
 import { Button, Textarea } from '@/components/emcn'
 import {

@@ -59,9 +59,10 @@ interface PrivyProviderWrapperProps {
   children: ReactNode
   appId?: string
   appUrl?: string
+  logo?: string
 }
 
-export function PrivyProviderWrapper({ children, appId, appUrl }: PrivyProviderWrapperProps) {
+export function PrivyProviderWrapper({ children, appId, appUrl, logo }: PrivyProviderWrapperProps) {
   const finalAppId = appId || process.env.NEXT_PUBLIC_PRIVY_APP_ID
 
   if (!finalAppId) {
@@ -100,9 +101,9 @@ export function PrivyProviderWrapper({ children, appId, appUrl }: PrivyProviderW
       appearance: {
         theme: 'dark' as const,
         accentColor: '#0EE0C6' as const,
-        logo: appUrl ? `${appUrl}/megalith.svg` : undefined,
+        logo: logo || (appUrl ? `${appUrl}/wazabi.svg` : undefined),
         showWalletLoginFirst: true,
-        landingHeader: 'MegalithLabs',
+        landingHeader: 'Wazabi',
       },
       embeddedWallets: {
         ethereum: {

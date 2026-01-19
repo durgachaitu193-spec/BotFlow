@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useSession } from '@/lib/auth/auth-client'

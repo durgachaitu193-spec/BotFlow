@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { usePrivy, useWallets } from '@privy-io/react-auth'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import clsx from 'clsx'
 import { Button } from '@/components/emcn'
 import {

@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { StartBlockPath } from '@/lib/workflows/triggers/triggers'
 import type { BlockOutput } from '@/blocks/types'
 import { DAGBuilder } from '@/executor/dag/builder'

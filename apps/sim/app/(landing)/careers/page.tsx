@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { Loader2, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -227,8 +227,8 @@ export default function CareersPage() {
                     onChange={(e) => setName(e.target.value)}
                     className={cn(
                       showErrors &&
-                        nameErrors.length > 0 &&
-                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                      nameErrors.length > 0 &&
+                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                     )}
                   />
                   {showErrors && nameErrors.length > 0 && (
@@ -252,8 +252,8 @@ export default function CareersPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     className={cn(
                       showErrors &&
-                        emailErrors.length > 0 &&
-                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                      emailErrors.length > 0 &&
+                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                     )}
                   />
                   {showErrors && emailErrors.length > 0 && (
@@ -292,8 +292,8 @@ export default function CareersPage() {
                     onChange={(e) => setPosition(e.target.value)}
                     className={cn(
                       showErrors &&
-                        positionErrors.length > 0 &&
-                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                      positionErrors.length > 0 &&
+                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                     )}
                   />
                   {showErrors && positionErrors.length > 0 && (
@@ -319,8 +319,8 @@ export default function CareersPage() {
                     onChange={(e) => setLinkedin(e.target.value)}
                     className={cn(
                       showErrors &&
-                        linkedinErrors.length > 0 &&
-                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                      linkedinErrors.length > 0 &&
+                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                     )}
                   />
                   {showErrors && linkedinErrors.length > 0 && (
@@ -343,8 +343,8 @@ export default function CareersPage() {
                     onChange={(e) => setPortfolio(e.target.value)}
                     className={cn(
                       showErrors &&
-                        portfolioErrors.length > 0 &&
-                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                      portfolioErrors.length > 0 &&
+                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                     )}
                   />
                   {showErrors && portfolioErrors.length > 0 && (
@@ -367,8 +367,8 @@ export default function CareersPage() {
                     <SelectTrigger
                       className={cn(
                         showErrors &&
-                          experienceErrors.length > 0 &&
-                          'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                        experienceErrors.length > 0 &&
+                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                       )}
                     >
                       <SelectValue placeholder='Select experience level' />
@@ -401,8 +401,8 @@ export default function CareersPage() {
                     onChange={(e) => setLocation(e.target.value)}
                     className={cn(
                       showErrors &&
-                        locationErrors.length > 0 &&
-                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                      locationErrors.length > 0 &&
+                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                     )}
                   />
                   {showErrors && locationErrors.length > 0 && (
@@ -426,8 +426,8 @@ export default function CareersPage() {
                   className={cn(
                     'min-h-[140px]',
                     showErrors &&
-                      messageErrors.length > 0 &&
-                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                    messageErrors.length > 0 &&
+                    'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                   )}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
@@ -475,8 +475,8 @@ export default function CareersPage() {
                       ref={fileInputRef}
                       className={cn(
                         showErrors &&
-                          resumeErrors.length > 0 &&
-                          'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                        resumeErrors.length > 0 &&
+                        'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                       )}
                     />
                   )}
@@ -496,7 +496,7 @@ export default function CareersPage() {
                 <Button
                   type='submit'
                   disabled={isSubmitting || submitStatus === 'success'}
-                  className='min-w-[200px] rounded-[10px] border border-[#6F3DFA] bg-gradient-to-b from-[#8357FF] to-[#6F3DFA] text-white shadow-[inset_0_2px_4px_0_#9B77FF] transition-all duration-300 hover:opacity-90 disabled:opacity-50'
+                  className='min-w-[200px] rounded-[10px] border-transparent bg-gradient-to-r from-[#1B9B8C] via-[#2DFFA8] to-[#1B9B8C] bg-[length:200%_100%] font-bold text-gray-900 shadow-[0_8px_30px_rgba(45,255,168,0.3),0_4px_12px_rgba(27,155,140,0.2)] transition-all duration-300 hover:bg-[100%_0] disabled:opacity-50'
                   size='lg'
                 >
                   {isSubmitting ? (

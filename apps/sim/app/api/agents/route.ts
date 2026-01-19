@@ -1,6 +1,6 @@
-import { db } from '@sim/db'
-import { agent } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { agent } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, desc, eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     const validatedData = CreateAgentSchema.parse(body)
 
     // Verify the workflow belongs to the user
-    const { workflow } = await import('@sim/db/schema')
+    const { workflow } = await import('@wazabi/db/schema')
     const [workflowRecord] = await db
       .select({ id: workflow.id, userId: workflow.userId })
       .from(workflow)

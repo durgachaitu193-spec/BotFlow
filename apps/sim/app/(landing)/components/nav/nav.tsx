@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { ArrowRight, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -114,9 +114,8 @@ export default function Nav({ hideAuthButtons = false, variant = 'landing' }: Na
   return (
     <nav
       aria-label='Primary navigation'
-      className={`${soehne.className} flex w-full items-center justify-between px-4 ${
-        variant === 'auth' ? 'pt-[20px] sm:pt-[16.5px]' : 'pt-[12px] sm:pt-[8.5px]'
-      } pb-[21px] sm:px-8 md:px-[44px]`}
+      className={`${soehne.className} flex w-full items-center justify-between px-4 ${variant === 'auth' ? 'pt-[20px] sm:pt-[16.5px]' : 'pt-[12px] sm:pt-[8.5px]'
+        } pb-[21px] sm:px-8 md:px-[44px]`}
       itemScope
       itemType='https://schema.org/SiteNavigationElement'
     >
@@ -182,7 +181,7 @@ export default function Nav({ hideAuthButtons = false, variant = 'landing' }: Na
             href='/signup'
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className='group inline-flex items-center justify-center gap-2 rounded-[10px] border border-[#6F3DFA] bg-gradient-to-b from-[#8357FF] to-[#6F3DFA] py-[6px] pr-[10px] pl-[12px] text-[14px] text-white shadow-[inset_0_2px_4px_0_#9B77FF] transition-all sm:text-[16px]'
+            className='group inline-flex items-center justify-center gap-2 rounded-[10px] border-transparent bg-gradient-to-r from-[#1B9B8C] via-[#2DFFA8] to-[#1B9B8C] bg-[length:200%_100%] py-[8px] pr-[10px] pl-[12px] text-[14px] font-bold text-gray-900 shadow-[0_8px_30px_rgba(45,255,168,0.3),0_4px_12px_rgba(27,155,140,0.2)] transition-all hover:bg-[100%_0] sm:text-[16px]'
             aria-label='Get started with Sim - Sign up for free'
             prefetch={true}
           >

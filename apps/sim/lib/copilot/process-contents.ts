@@ -1,6 +1,6 @@
-import { db } from '@sim/db'
-import { copilotChats, document, knowledgeBase, templates } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { copilotChats, document, knowledgeBase, templates } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, eq, isNull } from 'drizzle-orm'
 import { escapeRegExp } from '@/lib/core/utils/formatting'
 import { loadWorkflowFromNormalizedTables } from '@/lib/workflows/persistence/utils'
@@ -479,8 +479,8 @@ async function processExecutionLogFromDb(
   tag: string
 ): Promise<AgentContext | null> {
   try {
-    const { workflowExecutionLogs, workflow } = await import('@sim/db/schema')
-    const { db } = await import('@sim/db')
+    const { workflowExecutionLogs, workflow } = await import('@wazabi/db/schema')
+    const { db } = await import('@wazabi/db')
     const rows = await db
       .select({
         id: workflowExecutionLogs.id,

@@ -1,5 +1,5 @@
 import { createCipheriv, createDecipheriv, randomBytes } from 'crypto'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { env } from '@/lib/core/config/env'
 
 const logger = createLogger('Encryption')

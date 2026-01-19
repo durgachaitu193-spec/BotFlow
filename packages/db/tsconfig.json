@@ -10,8 +10,8 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@sim/db": ["./index.ts"],
-      "@sim/db/*": ["./*"]
+      "@wazabi/db": ["./index.ts"],
+      "@wazabi/db/*": ["./*"]
     },
     "resolveJsonModule": true,
     "noEmit": true

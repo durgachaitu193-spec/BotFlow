@@ -1,6 +1,6 @@
 'use client'
 
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { WorkspaceFileRecord } from '@/lib/uploads/contexts/workspace'
 
 const logger = createLogger('FileViewer')

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { ArrowRight, ChevronRight, Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -421,8 +421,8 @@ export default function LoginPage({
                 className={cn(
                   'rounded-[10px] shadow-sm transition-colors focus:border-gray-400 focus:ring-2 focus:ring-gray-100',
                   showEmailValidationError &&
-                    emailErrors.length > 0 &&
-                    'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                  emailErrors.length > 0 &&
+                  'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                 )}
               />
               {showEmailValidationError && emailErrors.length > 0 && (
@@ -459,8 +459,8 @@ export default function LoginPage({
                   className={cn(
                     'rounded-[10px] pr-10 shadow-sm transition-colors focus:border-gray-400 focus:ring-2 focus:ring-gray-100',
                     showValidationError &&
-                      passwordErrors.length > 0 &&
-                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                    passwordErrors.length > 0 &&
+                    'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                   )}
                 />
                 <button
@@ -486,7 +486,7 @@ export default function LoginPage({
             type='submit'
             onMouseEnter={() => setIsButtonHovered(true)}
             onMouseLeave={() => setIsButtonHovered(false)}
-            className='group inline-flex w-full items-center justify-center gap-2 rounded-[10px] border border-[#6F3DFA] bg-gradient-to-b from-[#8357FF] to-[#6F3DFA] py-[6px] pr-[10px] pl-[12px] text-[15px] text-white shadow-[inset_0_2px_4px_0_#9B77FF] transition-all'
+            className='group inline-flex w-full items-center justify-center gap-2 rounded-[10px] border-transparent bg-gradient-to-r from-[#1B9B8C] via-[#2DFFA8] to-[#1B9B8C] bg-[length:200%_100%] py-[8px] pr-[10px] pl-[12px] text-[15px] font-bold text-gray-900 shadow-[0_8px_30px_rgba(45,255,168,0.3),0_4px_12px_rgba(27,155,140,0.2)] transition-all hover:bg-[100%_0]'
             disabled={isLoading}
           >
             <span className='flex items-center gap-1'>
@@ -596,7 +596,7 @@ export default function LoginPage({
                 className={cn(
                   'rounded-[10px] shadow-sm transition-colors focus:border-gray-400 focus:ring-2 focus:ring-gray-100',
                   resetStatus.type === 'error' &&
-                    'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                  'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                 )}
               />
               {resetStatus.type === 'error' && (

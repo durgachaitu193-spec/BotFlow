@@ -3,7 +3,7 @@
  *
  * @vitest-environment node
  */
-import { drizzleOrmMock, loggerMock } from '@sim/testing'
+import { drizzleOrmMock, loggerMock } from '@wazabi/testing'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 describe('Copilot Auth Permissions', () => {
@@ -20,13 +20,13 @@ describe('Copilot Auth Permissions', () => {
     mockWhere.mockReturnValue({ limit: mockLimit })
     mockLimit.mockResolvedValue([])
 
-    vi.doMock('@sim/db', () => ({
+    vi.doMock('@wazabi/db', () => ({
       db: {
         select: mockSelect,
       },
     }))
 
-    vi.doMock('@sim/db/schema', () => ({
+    vi.doMock('@wazabi/db/schema', () => ({
       workflow: {
         id: 'id',
         userId: 'userId',
@@ -36,7 +36,7 @@ describe('Copilot Auth Permissions', () => {
 
     vi.doMock('drizzle-orm', () => drizzleOrmMock)
 
-    vi.doMock('@sim/logger', () => loggerMock)
+    vi.doMock('@wazabi/logger', () => loggerMock)
 
     vi.doMock('@/lib/workspaces/permissions/utils', () => ({
       getUserEntityPermissions: vi.fn(),

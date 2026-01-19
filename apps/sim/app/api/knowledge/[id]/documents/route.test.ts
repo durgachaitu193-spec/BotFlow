@@ -98,7 +98,7 @@ describe('Knowledge Base Documents API Route', () => {
   beforeEach(async () => {
     resetMocks()
 
-    vi.doMock('@sim/db', () => ({
+    vi.doMock('@wazabi/db', () => ({
       db: mockDbChain,
     }))
 

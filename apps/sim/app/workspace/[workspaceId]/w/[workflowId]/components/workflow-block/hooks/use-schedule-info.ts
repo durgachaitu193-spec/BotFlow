@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { parseCronToHumanReadable } from '@/lib/workflows/schedules/utils'
 import type { ScheduleInfo } from '../types'
 

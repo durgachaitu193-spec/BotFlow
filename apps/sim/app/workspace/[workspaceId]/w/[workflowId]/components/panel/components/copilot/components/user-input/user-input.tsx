@@ -8,7 +8,7 @@ import {
   useImperativeHandle,
   useState,
 } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { ArrowUp, AtSign, Image, Loader2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { createPortal } from 'react-dom'

@@ -2,7 +2,7 @@
  * Utility functions for tokenization
  */
 
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import {
   LLM_BLOCK_TYPES,
   MAX_PREVIEW_LENGTH,

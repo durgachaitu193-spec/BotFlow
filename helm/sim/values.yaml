@@ -2,7 +2,7 @@
 global:
   # Image registry and pull policy
   imageRegistry: "ghcr.io"
-  # Use registry for all images, not just simstudioai/* images
+  # Use registry for all images, not just wazabi-ai/* images
   useRegistryForAllImages: false
   imagePullSecrets: []
   
@@ -19,7 +19,7 @@ app:
   
   # Image configuration
   image:
-    repository: simstudioai/simstudio
+    repository: wazabi-ai/wazabistudio
     tag: latest
     pullPolicy: Always
   
@@ -76,7 +76,7 @@ app:
     # Email & Communication
     EMAIL_VERIFICATION_ENABLED: "false"                   # Enable email verification for user registration and login (defaults to false)
     RESEND_API_KEY: ""                                    # Resend API key for transactional emails
-    FROM_EMAIL_ADDRESS: ""                                # Complete from address (e.g., "Sim <noreply@domain.com>" or "DoNotReply@domain.com")
+    FROM_EMAIL_ADDRESS: ""                                # Complete from address (e.g., "Wazabi <noreply@domain.com>" or "DoNotReply@domain.com")
     EMAIL_DOMAIN: ""                                      # Domain for sending emails (fallback when FROM_EMAIL_ADDRESS not set)
     
     # OAuth Integration Credentials (leave empty if not using)
@@ -110,11 +110,11 @@ app:
     MANUAL_EXECUTION_LIMIT: "999999"                      # Manual execution bypass value
     
     # UI Branding & Whitelabeling Configuration
-    NEXT_PUBLIC_BRAND_NAME: "Sim"                         # Custom brand name
+    NEXT_PUBLIC_BRAND_NAME: "Wazabi"                         # Custom brand name
     NEXT_PUBLIC_BRAND_LOGO_URL: ""                        # Custom logo URL (leave empty for default)
     NEXT_PUBLIC_BRAND_FAVICON_URL: ""                     # Custom favicon URL (leave empty for default)
     NEXT_PUBLIC_CUSTOM_CSS_URL: ""                        # Custom stylesheet URL (leave empty for none)
-    NEXT_PUBLIC_SUPPORT_EMAIL: "help@sim.ai"             # Support email address
+    NEXT_PUBLIC_SUPPORT_EMAIL: "help@wazabi.ai"             # Support email address
     NEXT_PUBLIC_DOCUMENTATION_URL: ""                    # Documentation URL (leave empty for none)
     NEXT_PUBLIC_TERMS_URL: ""                            # Terms of service URL (leave empty for none)
     NEXT_PUBLIC_PRIVACY_URL: ""                          # Privacy policy URL (leave empty for none)
@@ -156,7 +156,7 @@ realtime:
   
   # Image configuration
   image:
-    repository: simstudioai/realtime
+    repository: wazabi-ai/realtime
     tag: latest
     pullPolicy: Always
   
@@ -233,7 +233,7 @@ migrations:
   
   # Image configuration
   image:
-    repository: simstudioai/migrations
+    repository: wazabi-ai/migrations
     tag: latest
     pullPolicy: Always
   
@@ -269,7 +269,7 @@ postgresql:
   auth:
     username: postgres
     password: ""  # REQUIRED - set via --set flag or external secret manager
-    database: sim
+    database: wazabi
   
   # Node selector for database pod scheduling (leave empty to allow scheduling on any node)
   nodeSelector: {}
@@ -338,7 +338,7 @@ postgresql:
   # Health checks
   livenessProbe:
     exec:
-      command: ["pg_isready", "-U", "postgres", "-d", "sim"]
+      command: ["pg_isready", "-U", "postgres", "-d", "wazabi"]
     initialDelaySeconds: 10
     periodSeconds: 5
   
@@ -465,14 +465,14 @@ ingress:
   
   # Main application host configuration
   app:
-    host: sim.local
+    host: wazabi.ai.local
     paths:
       - path: /
         pathType: Prefix
   
   # Realtime service host configuration
   realtime:
-    host: sim-ws.local
+    host: realtime.wazabi.ai.local
     paths:
       - path: /
         pathType: Prefix
@@ -480,7 +480,7 @@ ingress:
   # TLS configuration
   tls:
     enabled: false
-    secretName: sim-tls-secret
+    secretName: wazabi-tls-secret
 
 # Service Account configuration
 serviceAccount:
@@ -755,7 +755,7 @@ copilot:
   server:
     # Image configuration
     image:
-      repository: simstudioai/copilot
+      repository: wazabi-ai/copilot
       tag: latest
       pullPolicy: Always
     
@@ -928,7 +928,7 @@ copilot:
     
     # Image configuration (same as server)
     image:
-      repository: simstudioai/copilot
+      repository: wazabi-ai/copilot
       tag: latest
       pullPolicy: Always
     

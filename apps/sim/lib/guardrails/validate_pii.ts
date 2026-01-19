@@ -1,7 +1,7 @@
 import { spawn } from 'child_process'
 import fs from 'fs'
 import path from 'path'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 
 const logger = createLogger('PIIValidator')
 const DEFAULT_TIMEOUT = 30000 // 30 seconds

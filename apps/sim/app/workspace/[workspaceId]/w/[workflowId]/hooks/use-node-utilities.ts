@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { useReactFlow } from 'reactflow'
 import { BLOCK_DIMENSIONS, CONTAINER_DIMENSIONS } from '@/lib/workflows/blocks/block-dimensions'
 
@@ -331,7 +331,7 @@ export function useNodeUtilities(blocks: Record<string, any>) {
       nodeId: string,
       newParentId: string | null,
       updateBlockPosition: (id: string, position: { x: number; y: number }) => void,
-      updateParentId: (id: string, parentId: string, extent: 'parent') => void,
+      updateParentId: (id: string, parentId: string | null) => void,
       resizeCallback: () => void
     ) => {
       const node = getNodes().find((n) => n.id === nodeId)
@@ -344,14 +344,14 @@ export function useNodeUtilities(blocks: Record<string, any>) {
         const relativePosition = calculateRelativePosition(nodeId, newParentId)
 
         updateBlockPosition(nodeId, relativePosition)
-        updateParentId(nodeId, newParentId, 'parent')
+        updateParentId(nodeId, newParentId)
       } else if (currentParentId) {
         const absolutePosition = getNodeAbsolutePosition(nodeId)
 
         // First set the absolute position so the node visually stays in place
         updateBlockPosition(nodeId, absolutePosition)
         // Then clear the parent relationship in the store (empty string removes parentId/extent)
-        updateParentId(nodeId, '', 'parent')
+        updateParentId(nodeId, '')
       }
 
       resizeCallback()

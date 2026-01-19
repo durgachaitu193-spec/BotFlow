@@ -133,7 +133,7 @@ describe('Chat Identifier API Route', () => {
       validateAuthToken: vi.fn().mockReturnValue(true),
     }))
 
-    vi.doMock('@sim/logger', () => ({
+    vi.doMock('@wazabi/logger', () => ({
       createLogger: vi.fn().mockReturnValue({
         debug: vi.fn(),
         info: vi.fn(),
@@ -142,7 +142,7 @@ describe('Chat Identifier API Route', () => {
       }),
     }))
 
-    vi.doMock('@sim/db', () => {
+    vi.doMock('@wazabi/db', () => {
       const mockSelect = vi.fn().mockImplementation((fields) => {
         if (fields && fields.isDeployed !== undefined) {
           return {
@@ -211,7 +211,7 @@ describe('Chat Identifier API Route', () => {
     })
 
     it('should return 404 for non-existent identifier', async () => {
-      vi.doMock('@sim/db', () => {
+      vi.doMock('@wazabi/db', () => {
         const mockLimit = vi.fn().mockReturnValue([])
         const mockWhere = vi.fn().mockReturnValue({ limit: mockLimit })
         const mockFrom = vi.fn().mockReturnValue({ where: mockWhere })
@@ -239,7 +239,7 @@ describe('Chat Identifier API Route', () => {
     })
 
     it('should return 403 for inactive chat', async () => {
-      vi.doMock('@sim/db', () => {
+      vi.doMock('@wazabi/db', () => {
         const mockLimit = vi.fn().mockReturnValue([
           {
             id: 'chat-id',

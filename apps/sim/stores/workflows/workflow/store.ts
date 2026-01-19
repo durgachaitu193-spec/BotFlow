@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { Edge } from 'reactflow'
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
@@ -318,10 +318,10 @@ export const useWorkflowStore = create<WorkflowStore>()(
         const newData = !parentId
           ? {}
           : {
-              ...block.data,
-              parentId,
-              extent,
-            }
+            ...block.data,
+            parentId,
+            extent,
+          }
 
         // For removal we already set data to {}; for setting a parent keep as-is
 
@@ -586,6 +586,19 @@ export const useWorkflowStore = create<WorkflowStore>()(
         // Note: Socket.IO handles real-time sync automatically
       },
 
+      setBlockEnabled: (id: string, enabled: boolean) => {
+        set((state) => ({
+          blocks: {
+            ...state.blocks,
+            [id]: {
+              ...state.blocks[id],
+              enabled,
+            },
+          },
+        }))
+        get().updateLastSaved()
+      },
+
       duplicateBlock: (id: string) => {
         const block = get().blocks[id]
         if (!block) return
@@ -666,6 +679,19 @@ export const useWorkflowStore = create<WorkflowStore>()(
         set(newState)
         get().updateLastSaved()
         // Note: Socket.IO handles real-time sync automatically
+      },
+
+      setBlockHandles: (id: string, enabled: boolean) => {
+        set((state) => ({
+          blocks: {
+            ...state.blocks,
+            [id]: {
+              ...state.blocks[id],
+              horizontalHandles: enabled,
+            },
+          },
+        }))
+        get().updateLastSaved()
       },
 
       updateBlockName: (id: string, name: string) => {
@@ -1026,8 +1052,8 @@ export const useWorkflowStore = create<WorkflowStore>()(
             ...get().deploymentStatuses,
             ...(deploymentStatus
               ? {
-                  [activeWorkflowId]: deploymentStatus,
-                }
+                [activeWorkflowId]: deploymentStatus,
+              }
               : {}),
           },
         }
@@ -1276,6 +1302,256 @@ export const useWorkflowStore = create<WorkflowStore>()(
       // Function to convert UI parallel blocks to execution format
       generateParallelBlocks: () => {
         return generateParallelBlocks(get().blocks)
+      },
+
+      batchUpdatePositions: (updates) => {
+        set((state) => {
+          const newBlocks = { ...state.blocks }
+          let hasChanges = false
+
+          updates.forEach(({ id, position }) => {
+            if (newBlocks[id]) {
+              newBlocks[id] = {
+                ...newBlocks[id],
+                position,
+              }
+              hasChanges = true
+            }
+          })
+
+          if (!hasChanges) return state
+
+          return {
+            blocks: newBlocks,
+            edges: [...state.edges],
+            loops: { ...state.loops },
+            parallels: { ...state.parallels },
+          }
+        })
+        get().updateLastSaved()
+      },
+
+      batchAddBlocks: (blocks, edges, subBlockValues) => {
+        set((state) => {
+          const newBlocks = { ...state.blocks }
+
+          blocks.forEach((block) => {
+            // Ensure subBlocks are initialized
+            const subBlocks = block.subBlocks || {}
+
+            newBlocks[block.id] = {
+              ...block,
+              subBlocks,
+              outputs: block.outputs || {},
+              enabled: block.enabled ?? true,
+              horizontalHandles: block.horizontalHandles ?? true,
+              advancedMode: block.advancedMode ?? false,
+              triggerMode: block.triggerMode ?? false,
+              height: block.height ?? 0,
+              data: block.data || {},
+            }
+          })
+
+          const newEdges = [...state.edges, ...edges]
+
+          // Update subblock store
+          const activeWorkflowId = useWorkflowRegistry.getState().activeWorkflowId
+          if (activeWorkflowId && subBlockValues && Object.keys(subBlockValues).length > 0) {
+            const subBlockStore = useSubBlockStore.getState()
+            const currentWorkflowValues = subBlockStore.workflowValues[activeWorkflowId] || {}
+
+            useSubBlockStore.setState({
+              workflowValues: {
+                ...subBlockStore.workflowValues,
+                [activeWorkflowId]: {
+                  ...currentWorkflowValues,
+                  ...subBlockValues,
+                },
+              },
+            })
+          }
+
+          return {
+            blocks: newBlocks,
+            edges: newEdges,
+            loops: generateLoopBlocks(newBlocks),
+            parallels: generateParallelBlocks(newBlocks),
+          }
+        })
+        get().updateLastSaved()
+      },
+
+      batchRemoveBlocks: (ids) => {
+        const idsSet = new Set(ids)
+
+        // Also remove descendants
+        const blocksToRemove = new Set(ids)
+        const state = get()
+
+        const findAllDescendants = (parentId: string) => {
+          Object.values(state.blocks).forEach((block) => {
+            if (block.data?.parentId === parentId) {
+              blocksToRemove.add(block.id)
+              findAllDescendants(block.id)
+            }
+          })
+        }
+
+        ids.forEach(id => findAllDescendants(id))
+
+        set((state) => {
+          const newBlocks = { ...state.blocks }
+          blocksToRemove.forEach((id) => {
+            delete newBlocks[id]
+          })
+
+          const newEdges = state.edges.filter(
+            (edge) => !blocksToRemove.has(edge.source) && !blocksToRemove.has(edge.target)
+          )
+
+          // Cleanup subblock store
+          const activeWorkflowId = useWorkflowRegistry.getState().activeWorkflowId
+          if (activeWorkflowId) {
+            const subBlockStore = useSubBlockStore.getState()
+            const currentWorkflowValues = subBlockStore.workflowValues[activeWorkflowId]
+
+            if (currentWorkflowValues) {
+              const newWorkflowValues = { ...currentWorkflowValues }
+              blocksToRemove.forEach(id => {
+                delete newWorkflowValues[id]
+              })
+
+              useSubBlockStore.setState({
+                workflowValues: {
+                  ...subBlockStore.workflowValues,
+                  [activeWorkflowId]: newWorkflowValues
+                }
+              })
+            }
+          }
+
+          return {
+            blocks: newBlocks,
+            edges: newEdges,
+            loops: generateLoopBlocks(newBlocks),
+            parallels: generateParallelBlocks(newBlocks),
+          }
+        })
+        get().updateLastSaved()
+      },
+
+      batchAddEdges: (edges) => {
+        set((state) => {
+          // Filter out duplicates and cycles simply (detailed checks might be too expensive for batch, but we can do basic unique check)
+          const existingIds = new Set(state.edges.map(e => e.id))
+          const newEdgesToAdd = edges.filter(e => !existingIds.has(e.id))
+
+          return {
+            blocks: { ...state.blocks },
+            edges: [...state.edges, ...newEdgesToAdd],
+            loops: generateLoopBlocks(state.blocks),
+            parallels: { ...state.parallels }
+          }
+        })
+        get().updateLastSaved()
+      },
+
+      batchRemoveEdges: (ids) => {
+        const idsSet = new Set(ids)
+        set((state) => ({
+          blocks: { ...state.blocks },
+          edges: state.edges.filter(e => !idsSet.has(e.id)),
+          loops: generateLoopBlocks(state.blocks),
+          parallels: { ...state.parallels }
+        }))
+        get().updateLastSaved()
+      },
+
+      batchToggleEnabled: (ids) => {
+        set((state) => {
+          const newBlocks = { ...state.blocks }
+          let hasChanges = false
+
+          ids.forEach(id => {
+            if (newBlocks[id]) {
+              newBlocks[id] = {
+                ...newBlocks[id],
+                enabled: !newBlocks[id].enabled
+              }
+              hasChanges = true
+            }
+          })
+
+          if (!hasChanges) return state
+
+          return {
+            blocks: newBlocks,
+            edges: [...state.edges],
+            loops: { ...state.loops },
+            parallels: { ...state.parallels }
+          }
+        })
+        get().updateLastSaved()
+      },
+
+      batchToggleHandles: (ids) => {
+        set((state) => {
+          const newBlocks = { ...state.blocks }
+          let hasChanges = false
+
+          ids.forEach(id => {
+            if (newBlocks[id]) {
+              newBlocks[id] = {
+                ...newBlocks[id],
+                horizontalHandles: !newBlocks[id].horizontalHandles
+              }
+              hasChanges = true
+            }
+          })
+
+          if (!hasChanges) return state
+
+          return {
+            blocks: newBlocks,
+            edges: [...state.edges],
+            loops: { ...state.loops },
+            parallels: { ...state.parallels }
+          }
+        })
+        get().updateLastSaved()
+      },
+
+      batchUpdateBlocksWithParent: (updates) => {
+        set((state) => {
+          const newBlocks = { ...state.blocks }
+          let hasChanges = false
+
+          updates.forEach(({ id, position, parentId }) => {
+            const block = newBlocks[id]
+            if (block) {
+              const newData = !parentId
+                ? (({ parentId, extent, ...rest }) => rest)(block.data || {})
+                : { ...block.data, parentId, extent: 'parent' }
+
+              newBlocks[id] = {
+                ...block,
+                position,
+                data: newData as any
+              }
+              hasChanges = true
+            }
+          })
+
+          if (!hasChanges) return state
+
+          return {
+            blocks: newBlocks,
+            edges: [...state.edges],
+            loops: { ...state.loops },
+            parallels: { ...state.parallels }
+          }
+        })
+        get().updateLastSaved()
       },
 
       setDragStartPosition: (position) => {

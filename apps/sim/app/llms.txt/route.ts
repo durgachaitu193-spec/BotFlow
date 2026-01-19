@@ -1,11 +1,11 @@
 export async function GET() {
-  const llmsContent = `# Sim - AI Agent Workflow Builder
-Sim is an open-source AI agent workflow builder for production workflows. Developers at trail-blazing startups to Fortune 500 companies deploy agentic workflows on the Sim platform. 60,000+ developers already use Sim to build and ship AI automations with 100+ integrations. Sim is SOC2 and HIPAA compliant and is designed for secure, enterprise-grade AI automation.
+  const llmsContent = `# Wazabi - AI Agent Workflow Builder
+Wazabi is an open-source AI agent workflow builder for production workflows. Developers at trail-blazing startups to Fortune 500 companies deploy agentic workflows on the Sim platform. 60,000+ developers already use Sim to build and ship AI automations with 100+ integrations. Sim is SOC2 and HIPAA compliant and is designed for secure, enterprise-grade AI automation.
 
-Website: https://sim.ai
-App: https://sim.ai/workspace
-Docs: https://docs.sim.ai
-GitHub: https://github.com/simstudioai/sim
+Website: https://wazabi.ai
+App: https://wazabi.ai/workspace
+Docs: https://docs.wazabi.ai
+GitHub: https://github.com/Wazabi-Ai/workflow
 Region: global
 Primary language: en
 
@@ -32,9 +32,9 @@ Primary language: en
 - Execution: a single run of a workflow
 
 ## Getting Started
-- Quickstart: https://docs.sim.ai/quickstart
-- Product overview: https://docs.sim.ai
-- Source code: https://github.com/simstudioai/sim
+- Quickstart: https://docs.wazabi.ai/quickstart
+- Product overview: https://docs.wazabi.ai
+- Source code: https://github.com/Wazabi-Ai/workflow
 
 ## Safety & Reliability
 - SOC2 and HIPAA aligned security controls

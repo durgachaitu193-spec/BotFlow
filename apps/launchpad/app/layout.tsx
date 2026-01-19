@@ -13,9 +13,9 @@ const robotoMono = Roboto_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Megalith Labs - Epi-Agentic Infra',
+  title: 'Wazabi.ai - Epi-Agentic Infra',
   description: 'Epi-Agentic Infra for the Autonomous Agent Economy',
-  metadataBase: new URL('https://www.megalithlabs.ai/'),
+  metadataBase: new URL('https://wazabi.ai/'),
   openGraph: {
     images: [
       {

@@ -14,7 +14,7 @@ import type {
   workflow,
   workflowFolder,
   workspace,
-} from '@sim/db/schema'
+} from '@wazabi/db/schema'
 import type { InferSelectModel } from 'drizzle-orm'
 import type { Edge } from 'reactflow'
 import type { BlockState, Loop, Parallel } from '@/stores/workflows/workflow/types'

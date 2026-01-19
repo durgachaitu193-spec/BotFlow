@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import clsx from 'clsx'
 import { Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/emcn'

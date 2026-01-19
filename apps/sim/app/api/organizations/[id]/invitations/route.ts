@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { db } from '@sim/db'
+import { db } from '@wazabi/db'
 import {
   invitation,
   member,
@@ -8,8 +8,8 @@ import {
   type WorkspaceInvitationStatus,
   workspace,
   workspaceInvitation,
-} from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+} from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, eq, inArray, isNull, or } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import {

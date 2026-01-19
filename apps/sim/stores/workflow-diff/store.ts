@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { getClientTool } from '@/lib/copilot/tools/client/manager'

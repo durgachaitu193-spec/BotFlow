@@ -31,7 +31,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   }, [])
   return (
     <AuthBackground>
-      <main className='relative flex h-screen flex-col overflow-hidden font-geist-sans text-foreground'>
+      <main className='relative flex h-screen flex-col overflow-hidden font-geist-sans'>
         {pathname !== '/login' && <Nav hideAuthButtons={true} variant='auth' />}
 
         <div className='relative z-30 flex flex-1 items-center justify-center overflow-hidden px-4 pb-24'>

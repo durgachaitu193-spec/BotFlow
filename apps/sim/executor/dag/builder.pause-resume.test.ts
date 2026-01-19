@@ -3,7 +3,7 @@ import { BlockType } from '@/executor/consts'
 import { DAGBuilder } from '@/executor/dag/builder'
 import type { SerializedBlock, SerializedWorkflow } from '@/serializer/types'
 
-vi.mock('@sim/logger', () => ({
+vi.mock('@wazabi/logger', () => ({
   createLogger: vi.fn().mockReturnValue({
     debug: vi.fn(),
     info: vi.fn(),

@@ -1,6 +1,6 @@
 'use client'
 
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { Check } from 'lucide-react'
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@/components/emcn'
 import { client } from '@/lib/auth/auth-client'

@@ -49,14 +49,14 @@ describe('Copilot Checkpoints API Route', () => {
     mockInsert.mockReturnValue({ values: mockValues })
     mockValues.mockReturnValue({ returning: mockReturning })
 
-    vi.doMock('@sim/db', () => ({
+    vi.doMock('@wazabi/db', () => ({
       db: {
         select: mockSelect,
         insert: mockInsert,
       },
     }))
 
-    vi.doMock('@sim/db/schema', () => ({
+    vi.doMock('@wazabi/db/schema', () => ({
       copilotChats: mockCopilotChats,
       workflowCheckpoints: mockWorkflowCheckpoints,
     }))

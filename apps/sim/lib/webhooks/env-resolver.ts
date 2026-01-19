@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { getEffectiveDecryptedEnv } from '@/lib/environment/utils'
 import { extractEnvVarName, isEnvVarReference } from '@/executor/consts'
 

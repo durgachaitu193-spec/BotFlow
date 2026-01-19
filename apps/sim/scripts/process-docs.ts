@@ -1,9 +1,9 @@
 #!/usr/bin/env bun
 
 import path from 'path'
-import { db } from '@sim/db'
-import { docsEmbeddings } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { docsEmbeddings } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { sql } from 'drizzle-orm'
 import { type DocChunk, DocsChunker } from '@/lib/chunkers'
 import { isDev } from '@/lib/core/config/environment'

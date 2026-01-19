@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { formatDistanceToNow } from 'date-fns'
 import {
   ArrowLeft,

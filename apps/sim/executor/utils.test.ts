@@ -4,7 +4,7 @@ import {
   streamingResponseFormatProcessor,
 } from '@/executor/utils'
 
-vi.mock('@sim/logger', () => ({
+vi.mock('@wazabi/logger', () => ({
   createLogger: vi.fn().mockReturnValue({
     debug: vi.fn(),
     info: vi.fn(),

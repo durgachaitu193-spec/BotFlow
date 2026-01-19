@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { useQuery } from '@tanstack/react-query'
 import type { OpenRouterModelInfo, ProviderName } from '@/stores/providers'
 
