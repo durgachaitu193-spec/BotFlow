@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { PrivyProviderWrapper } from '@sim/ui'
+import { PrivyProviderWrapper } from '@wazabi/ui'
 import { AppProvider } from '@/context/AppContext'
 import { UserDetailsProvider } from '@/context/UserDetailContext'
 

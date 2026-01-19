@@ -1,5 +1,5 @@
-import { db } from '@sim/db'
-import { launchpadTokens } from '@sim/db/schema'
+import { db } from '@wazabi/db'
+import { launchpadTokens } from '@wazabi/db/schema'
 import { eq } from 'drizzle-orm'
 
 interface ISaveAssetID {

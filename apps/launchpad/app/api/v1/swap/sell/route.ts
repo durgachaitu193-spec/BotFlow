@@ -2,8 +2,8 @@
 
 import { ApiPromise, WsProvider } from '@polkadot/api'
 import { BN } from '@polkadot/util'
-import { db } from '@sim/db'
-import { launchpadHoldings, launchpadTokens, launchpadTransactions } from '@sim/db/schema'
+import { db } from '@wazabi/db'
+import { launchpadHoldings, launchpadTokens, launchpadTransactions } from '@wazabi/db/schema'
 import { and, eq } from 'drizzle-orm'
 import { StatusCodes } from 'http-status-codes'
 import { type NextRequest, NextResponse } from 'next/server'

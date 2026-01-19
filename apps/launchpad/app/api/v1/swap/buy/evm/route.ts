@@ -1,6 +1,6 @@
 import { BN } from '@polkadot/util'
-import { db } from '@sim/db'
-import { agent, launchpadHoldings, launchpadTokens, launchpadTransactions } from '@sim/db/schema'
+import { db } from '@wazabi/db'
+import { agent, launchpadHoldings, launchpadTokens, launchpadTransactions } from '@wazabi/db/schema'
 import { and, eq } from 'drizzle-orm'
 import { BigNumber } from 'ethers'
 import { StatusCodes } from 'http-status-codes'
