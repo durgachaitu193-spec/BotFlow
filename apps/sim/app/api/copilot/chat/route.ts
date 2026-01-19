@@ -20,7 +20,7 @@ import type { CopilotProviderConfig } from '@/lib/copilot/types'
 import { env } from '@/lib/core/config/env'
 import { CopilotFiles } from '@/lib/uploads'
 import { createFileContent } from '@/lib/uploads/utils/file-utils'
-import { tools } from '@/tools/registry'
+import toolMetadata from '@/tools/metadata.json'
 
 const logger = createLogger('CopilotChatAPI')
 
@@ -140,15 +140,15 @@ export async function POST(req: NextRequest) {
         contextsCount: Array.isArray(contexts) ? contexts.length : 0,
         contextsPreview: Array.isArray(contexts)
           ? contexts.map((c: any) => ({
-              kind: c?.kind,
-              chatId: c?.chatId,
-              workflowId: c?.workflowId,
-              executionId: (c as any)?.executionId,
-              label: c?.label,
-            }))
+            kind: c?.kind,
+            chatId: c?.chatId,
+            workflowId: c?.workflowId,
+            executionId: (c as any)?.executionId,
+            label: c?.label,
+          }))
           : undefined,
       })
-    } catch {}
+    } catch { }
     // Preprocess contexts server-side
     let agentContexts: Array<{ type: string; content: string }> = []
     if (Array.isArray(contexts) && contexts.length > 0) {
@@ -403,7 +403,7 @@ export async function POST(req: NextRequest) {
       try {
         const { createUserToolSchema } = await import('@/tools/params')
 
-        integrationTools = Object.entries(tools).map(([toolId, toolConfig]) => {
+        integrationTools = Object.entries(toolMetadata).map(([toolId, toolConfig]: [string, any]) => {
           const userSchema = createUserToolSchema(toolConfig)
           return {
             name: toolId,
@@ -466,7 +466,7 @@ export async function POST(req: NextRequest) {
         baseToolCount: baseTools.length,
         hasCredentials: !!credentials,
       })
-    } catch {}
+    } catch { }
 
     const simAgentResponse = await fetch(`${SIM_AGENT_API_URL}/api/chat-completion-streaming`, {
       method: 'POST',
@@ -507,8 +507,8 @@ export async function POST(req: NextRequest) {
         ...(Array.isArray(contexts) && contexts.length > 0 && { contexts }),
         ...(Array.isArray(contexts) &&
           contexts.length > 0 && {
-            contentBlocks: [{ type: 'contexts', contexts: contexts as any, timestamp: Date.now() }],
-          }),
+          contentBlocks: [{ type: 'contexts', contexts: contexts as any, timestamp: Date.now() }],
+        }),
       }
 
       // Create a pass-through stream that captures the response
@@ -706,7 +706,7 @@ export async function POST(req: NextRequest) {
                           reader.cancel()
                           break
                         }
-                      } catch {}
+                      } catch { }
                       // Do not forward the original error event
                     } else {
                       // Forward original event to client
@@ -903,8 +903,8 @@ export async function POST(req: NextRequest) {
         ...(Array.isArray(contexts) && contexts.length > 0 && { contexts }),
         ...(Array.isArray(contexts) &&
           contexts.length > 0 && {
-            contentBlocks: [{ type: 'contexts', contexts: contexts as any, timestamp: Date.now() }],
-          }),
+          contentBlocks: [{ type: 'contexts', contexts: contexts as any, timestamp: Date.now() }],
+        }),
       }
 
       const assistantMessage = {

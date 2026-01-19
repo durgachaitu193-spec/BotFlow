@@ -117,8 +117,8 @@ export async function executeTool(
     } else if (toolId.startsWith('mcp-')) {
       return await executeMcpTool(toolId, params, executionContext, requestId, startTimeISO)
     } else {
-      // For built-in tools, use the synchronous version
-      tool = getTool(toolId)
+      // For built-in tools, use the asynchronous version to support lazy loading
+      tool = await getToolAsync(toolId)
       if (!tool) {
         logger.error(`[${requestId}] Built-in tool not found: ${toolId}`)
       }
@@ -204,10 +204,10 @@ export async function executeTool(
         // Preserve credential for downstream transforms while removing it from request payload
         // so we don't leak it to external services.
         if (contextParams.credential) {
-          ;(contextParams as any)._credentialId = contextParams.credential
+          ; (contextParams as any)._credentialId = contextParams.credential
         }
         if (workflowId) {
-          ;(contextParams as any)._workflowId = workflowId
+          ; (contextParams as any)._workflowId = workflowId
         }
         // Clean up params we don't need to pass to the actual tool
         contextParams.credential = undefined
@@ -353,11 +353,10 @@ export async function executeTool(
           } else if (error.data.message) {
             errorMessage = `${errorMessage} - ${error.data.message}`
           } else if (error.data.error) {
-            errorMessage = `${errorMessage} - ${
-              typeof error.data.error === 'string'
+            errorMessage = `${errorMessage} - ${typeof error.data.error === 'string'
                 ? error.data.error
                 : JSON.stringify(error.data.error)
-            }`
+              }`
           }
         }
 

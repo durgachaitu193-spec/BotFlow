@@ -15,7 +15,7 @@ import { generateRequestId } from '@/lib/core/utils/request'
 import { getEffectiveDecryptedEnv } from '@/lib/environment/utils'
 import { refreshTokenIfNeeded } from '@/app/api/auth/oauth/utils'
 import { executeTool } from '@/tools'
-import { getTool } from '@/tools/utils'
+import { getToolAsync } from '@/tools/utils'
 
 const logger = createLogger('CopilotExecuteToolAPI')
 
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     try {
       const preview = JSON.stringify(body).slice(0, 300)
       logger.debug(`[${tracker.requestId}] Incoming execute-tool request`, { preview })
-    } catch {}
+    } catch { }
 
     const { toolCallId, toolName, arguments: toolArgs, workflowId } = ExecuteToolSchema.parse(body)
 
@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
     })
 
     // Get tool config from registry
-    const toolConfig = getTool(toolName)
+    const toolConfig = await getToolAsync(toolName)
     if (!toolConfig) {
       // Find similar tool names to help debug
       const { tools: allTools } = await import('@/tools/registry')

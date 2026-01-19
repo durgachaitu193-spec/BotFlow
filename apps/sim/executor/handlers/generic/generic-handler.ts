@@ -3,7 +3,7 @@ import { getBlock } from '@/blocks/index'
 import type { BlockHandler, ExecutionContext } from '@/executor/types'
 import type { SerializedBlock } from '@/serializer/types'
 import { executeTool } from '@/tools'
-import { getTool } from '@/tools/utils'
+import { getToolAsync } from '@/tools/utils'
 
 const logger = createLogger('GenericBlockHandler')
 
@@ -21,7 +21,7 @@ export class GenericBlockHandler implements BlockHandler {
     let tool = null
 
     if (!isMcpTool) {
-      tool = getTool(block.config.tool)
+      tool = await getToolAsync(block.config.tool)
       if (!tool) {
         throw new Error(`Tool not found: ${block.config.tool}`)
       }

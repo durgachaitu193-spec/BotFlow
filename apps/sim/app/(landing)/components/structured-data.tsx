@@ -4,26 +4,26 @@ export default function StructuredData() {
     '@graph': [
       {
         '@type': 'Organization',
-        '@id': 'https://sim.ai/#organization',
-        name: 'Sim',
-        alternateName: 'Sim Studio',
+        '@id': 'https://wazabi.ai/#organization',
+        name: 'Wazabi',
+        alternateName: 'Wazabi Studio',
         description:
           'Open-source AI agent workflow builder used by developers at trail-blazing startups to Fortune 500 companies',
-        url: 'https://sim.ai',
+        url: 'https://wazabi.ai',
         logo: {
           '@type': 'ImageObject',
-          '@id': 'https://sim.ai/#logo',
-          url: 'https://sim.ai/logo/b&w/text/b&w.svg',
-          contentUrl: 'https://sim.ai/logo/b&w/text/b&w.svg',
+          '@id': 'https://wazabi.ai/#logo',
+          url: 'https://wazabi.ai/logo/b&w/text/b&w.svg',
+          contentUrl: 'https://wazabi.ai/logo/b&w/text/b&w.svg',
           width: 49.78314,
           height: 24.276,
-          caption: 'Sim Logo',
+          caption: 'Wazabi Logo',
         },
-        image: { '@id': 'https://sim.ai/#logo' },
+        image: { '@id': 'https://wazabi.ai/#logo' },
         sameAs: [
-          'https://x.com/simdotai',
-          'https://github.com/simstudioai/sim',
-          'https://www.linkedin.com/company/simstudioai/',
+          'https://x.com/wazabidotai',
+          'https://github.com/wazabi-ai/wazabi',
+          'https://www.linkedin.com/company/wazabistudioai/',
           'https://discord.gg/Hr4UWYEcTT',
         ],
         contactPoint: {
@@ -34,21 +34,21 @@ export default function StructuredData() {
       },
       {
         '@type': 'WebSite',
-        '@id': 'https://sim.ai/#website',
-        url: 'https://sim.ai',
-        name: 'Sim - AI Agent Workflow Builder',
+        '@id': 'https://wazabi.ai/#website',
+        url: 'https://wazabi.ai',
+        name: 'Wazabi - AI Agent Workflow Builder',
         description:
           'Open-source AI agent workflow builder. 60,000+ developers build and deploy agentic workflows. SOC2 and HIPAA compliant.',
         publisher: {
-          '@id': 'https://sim.ai/#organization',
+          '@id': 'https://wazabi.ai/#organization',
         },
         potentialAction: [
           {
             '@type': 'SearchAction',
-            '@id': 'https://sim.ai/#searchaction',
+            '@id': 'https://wazabi.ai/#searchaction',
             target: {
               '@type': 'EntryPoint',
-              urlTemplate: 'https://sim.ai/search?q={search_term_string}',
+              urlTemplate: 'https://wazabi.ai/search?q={search_term_string}',
             },
             'query-input': 'required name=search_term_string',
           },
@@ -57,46 +57,46 @@ export default function StructuredData() {
       },
       {
         '@type': 'WebPage',
-        '@id': 'https://sim.ai/#webpage',
-        url: 'https://sim.ai',
-        name: 'Sim - Workflows for LLMs | Build AI Agent Workflows',
+        '@id': 'https://wazabi.ai/#webpage',
+        url: 'https://wazabi.ai',
+        name: 'Wazabi - Workflows for LLMs | Build AI Agent Workflows',
         isPartOf: {
-          '@id': 'https://sim.ai/#website',
+          '@id': 'https://wazabi.ai/#website',
         },
         about: {
-          '@id': 'https://sim.ai/#software',
+          '@id': 'https://wazabi.ai/#software',
         },
         datePublished: '2024-01-01T00:00:00+00:00',
         dateModified: new Date().toISOString(),
         description:
-          'Build and deploy AI agent workflows with Sim. Visual drag-and-drop interface for creating powerful LLM-powered automations.',
+          'Build and deploy AI agent workflows with Wazabi. Visual drag-and-drop interface for creating powerful LLM-powered automations.',
         breadcrumb: {
-          '@id': 'https://sim.ai/#breadcrumb',
+          '@id': 'https://wazabi.ai/#breadcrumb',
         },
         inLanguage: 'en-US',
         potentialAction: [
           {
             '@type': 'ReadAction',
-            target: ['https://sim.ai'],
+            target: ['https://wazabi.ai'],
           },
         ],
       },
       {
         '@type': 'BreadcrumbList',
-        '@id': 'https://sim.ai/#breadcrumb',
+        '@id': 'https://wazabi.ai/#breadcrumb',
         itemListElement: [
           {
             '@type': 'ListItem',
             position: 1,
             name: 'Home',
-            item: 'https://sim.ai',
+            item: 'https://wazabi.ai',
           },
         ],
       },
       {
         '@type': 'SoftwareApplication',
-        '@id': 'https://sim.ai/#software',
-        name: 'Sim - AI Agent Workflow Builder',
+        '@id': 'https://wazabi.ai/#software',
+        name: 'Wazabi - AI Agent Workflow Builder',
         description:
           'Open-source AI agent workflow builder used by 60,000+ developers. Build agentic workflows with visual drag-and-drop interface. SOC2 and HIPAA compliant. Integrate with 100+ apps.',
         applicationCategory: 'DeveloperApplication',
@@ -106,7 +106,7 @@ export default function StructuredData() {
         offers: [
           {
             '@type': 'Offer',
-            '@id': 'https://sim.ai/#offer-free',
+            '@id': 'https://wazabi.ai/#offer-free',
             name: 'Community Plan',
             price: '0',
             priceCurrency: 'USD',
@@ -114,7 +114,7 @@ export default function StructuredData() {
             itemCondition: 'https://schema.org/NewCondition',
             availability: 'https://schema.org/InStock',
             seller: {
-              '@id': 'https://sim.ai/#organization',
+              '@id': 'https://wazabi.ai/#organization',
             },
             eligibleRegion: {
               '@type': 'Place',
@@ -123,7 +123,7 @@ export default function StructuredData() {
           },
           {
             '@type': 'Offer',
-            '@id': 'https://sim.ai/#offer-pro',
+            '@id': 'https://wazabi.ai/#offer-pro',
             name: 'Pro Plan',
             price: '20',
             priceCurrency: 'USD',
@@ -138,12 +138,12 @@ export default function StructuredData() {
             itemCondition: 'https://schema.org/NewCondition',
             availability: 'https://schema.org/InStock',
             seller: {
-              '@id': 'https://sim.ai/#organization',
+              '@id': 'https://wazabi.ai/#organization',
             },
           },
           {
             '@type': 'Offer',
-            '@id': 'https://sim.ai/#offer-team',
+            '@id': 'https://wazabi.ai/#offer-team',
             name: 'Team Plan',
             price: '40',
             priceCurrency: 'USD',
@@ -158,7 +158,7 @@ export default function StructuredData() {
             itemCondition: 'https://schema.org/NewCondition',
             availability: 'https://schema.org/InStock',
             seller: {
-              '@id': 'https://sim.ai/#organization',
+              '@id': 'https://wazabi.ai/#organization',
             },
           },
         ],
@@ -184,37 +184,37 @@ export default function StructuredData() {
         screenshot: [
           {
             '@type': 'ImageObject',
-            url: 'https://sim.ai/screenshots/workflow-builder.png',
-            caption: 'Sim workflow builder interface',
+            url: 'https://wazabi.ai/screenshots/workflow-builder.png',
+            caption: 'wazabi workflow builder interface',
           },
         ],
       },
       {
         '@type': 'FAQPage',
-        '@id': 'https://sim.ai/#faq',
+        '@id': 'https://wazabi.ai/#faq',
         mainEntity: [
           {
             '@type': 'Question',
-            name: 'What is Sim?',
+            name: 'What is wazabi?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Sim is an open-source AI agent workflow builder used by 60,000+ developers at trail-blazing startups to Fortune 500 companies. It provides a visual drag-and-drop interface for building and deploying agentic workflows. Sim is SOC2 and HIPAA compliant.',
+              text: 'Wazabi is an open-source AI agent workflow builder used by 60,000+ developers at trail-blazing startups to Fortune 500 companies. It provides a visual drag-and-drop interface for building and deploying agentic workflows. wazabi is SOC2 and HIPAA compliant.',
             },
           },
           {
             '@type': 'Question',
-            name: 'Which AI models does Sim support?',
+            name: 'Which AI models does wazabi support?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Sim supports all major AI models including OpenAI (GPT-5, GPT-4o), Anthropic (Claude), Google (Gemini), xAI (Grok), Mistral, Perplexity, and many more. You can also connect to open-source models via Ollama.',
+              text: 'Wazabi supports all major AI models including OpenAI (GPT-5, GPT-4o), Anthropic (Claude), Google (Gemini), xAI (Grok), Mistral, Perplexity, and many more. You can also connect to open-source models via Ollama.',
             },
           },
           {
             '@type': 'Question',
-            name: 'Do I need coding skills to use Sim?',
+            name: 'Do I need coding skills to use wazabi?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'No coding skills are required! Sim features a visual drag-and-drop interface that makes it easy to build AI workflows. However, developers can also use custom functions and our API for advanced use cases.',
+              text: 'No coding skills are required! wazabi features a visual drag-and-drop interface that makes it easy to build AI workflows. However, developers can also use custom functions and our API for advanced use cases.',
             },
           },
         ],
@@ -229,7 +229,7 @@ export default function StructuredData() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       {/* LLM-friendly semantic HTML comments */}
-      {/* About: Sim is a visual workflow builder for AI agents and large language models (LLMs) */}
+      {/* About: wazabi is a visual workflow builder for AI agents and large language models (LLMs) */}
       {/* Purpose: Enable users to create AI-powered automations without coding */}
       {/* Features: Drag-and-drop interface, 100+ integrations, multi-model support */}
       {/* Use cases: Email automation, chatbots, data analysis, content generation */}

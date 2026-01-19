@@ -5,7 +5,7 @@ import { WalletButton } from './WalletButton'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 
-function Logo() {
+function Logo({ app = 'launchpad' }: { app?: 'launchpad' | 'builder' | string }) {
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
@@ -13,22 +13,48 @@ function Logo() {
     setMounted(true)
   }, [])
 
+  // Determine logo paths based on app
+  // Determine logo paths based on app
+  const getLogoPaths = () => {
+    if (app === 'builder') {
+      return {
+        icon: resolvedTheme === 'dark' ? '/logo/wazabi-icon-light.png' : '/logo/wazabi-icon-dark.png',
+        text: resolvedTheme === 'dark' ? '/logo/wazabi-text-dark.png' : '/logo/wazabi-text-light.png',
+      }
+    }
+    // Launchpad specific branding - always use white text/dark mode assets
+    return {
+      icon: '/logo/wazabi-icon-light.png',
+      text: '/logo/wazabi-text-dark.png',
+    }
+  }
+
   if (!mounted) {
+    const initialLogos = getLogoPaths()
     return (
       <div className="flex items-center gap-2 opacity-0">
-        <img src='/logo/Asset 1.svg' alt='Wazabi' className='h-8 w-auto' />
-        <img src='/logo/wazabi-text-dark.png' alt='Wazabi' className='h-7 w-auto' />
+        <img src={initialLogos.icon} alt='Wazabi' className='h-8 w-auto' />
+        <img src={initialLogos.text} alt='Wazabi' className='h-7 w-auto' />
       </div>
     )
   }
 
+  const { icon, text } = getLogoPaths()
+
   return (
     <div className='flex items-center gap-2'>
-      <img src={resolvedTheme === 'dark' ? '/logo/wazabi-icon-light.png' : '/logo/wazabi-icon-dark.png'} alt='Wazabi' className='h-8 w-auto rounded-xl' />
       <img
-        src={resolvedTheme === 'dark' ? '/logo/wazabi-text-dark.png' : '/logo/wazabi-text-light.png'}
+        src={icon}
+        alt={app === 'builder' ? 'Wazabi Studio' : 'Wazabi Launchpad'}
+        className='h-8 w-auto rounded-xl'
+      />
+      <img
+        src={text}
         alt='Wazabi Text'
-        className='h-7 w-auto object-contain object-left brightness-0 opacity-90 dark:brightness-0 dark:invert'
+        className={app === 'builder'
+          ? 'h-7 w-auto object-contain object-left brightness-0 opacity-90 dark:brightness-0 dark:invert'
+          : 'h-6 w-auto object-contain object-left brightness-0 opacity-90 dark:brightness-0 dark:invert'
+        }
       />
     </div>
   )
@@ -52,7 +78,7 @@ export interface LaunchpadNavbarProps {
 }
 
 export function LaunchpadNavbar({ currentApp, onSwitchApp, onSignOut }: LaunchpadNavbarProps) {
-  const bgColor = currentApp === 'launchpad' ? 'rgba(0, 249, 207, 0.16)' : 'rgba(139, 195, 74, 0.16)'
+  const bgColor = currentApp === 'launchpad' ? '#000000' : 'rgba(139, 195, 74, 0.16)'
 
   const handleSwitch = (app: 'launchpad' | 'builder') => {
     if (onSwitchApp) {
@@ -72,7 +98,7 @@ export function LaunchpadNavbar({ currentApp, onSwitchApp, onSignOut }: Launchpa
       style={{ backgroundColor: `var(--navbar-bg, ${bgColor})` }}
     >
       <div className='flex items-center gap-2'>
-        <Logo />
+        <Logo app={currentApp} />
       </div>
 
       <div className='flex items-center gap-4'>
@@ -103,7 +129,7 @@ export function LaunchpadNavbar({ currentApp, onSwitchApp, onSignOut }: Launchpa
         </div> */}
 
         <div className='ml-2 flex items-center border-white/10 border-l pl-4'>
-          <WalletButton onSignOut={onSignOut} />
+          <WalletButton onSignOut={onSignOut} logoutRedirectPath="/" />
         </div>
       </div>
     </header>

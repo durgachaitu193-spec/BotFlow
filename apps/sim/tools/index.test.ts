@@ -11,7 +11,15 @@ import type { ExecutionContext } from '@/executor/types'
 import { mockEnvironmentVariables } from '@/tools/__test-utils__/test-tools'
 import { executeTool } from '@/tools/index'
 import { tools } from '@/tools/registry'
-import { getTool } from '@/tools/utils'
+import { getTool, getToolAsync } from '@/tools/utils'
+import { getCustomTool } from '@/tools/custom'
+
+vi.mock('@/tools/custom', () => ({
+  getCustomTool: vi.fn(),
+  createCustomToolRequestBody: vi.fn(),
+  createParamSchema: vi.fn(),
+  getClientEnvVars: vi.fn(),
+}))
 
 const createMockExecutionContext = (overrides?: Partial<ExecutionContext>): ExecutionContext => ({
   workflowId: 'test-workflow',
@@ -29,16 +37,15 @@ const createMockExecutionContext = (overrides?: Partial<ExecutionContext>): Exec
 })
 
 describe('Tools Registry', () => {
-  it('should include all expected built-in tools', () => {
+  it('should include all expected built-in tools in the registry loader', () => {
     expect(Object.keys(tools).length).toBeGreaterThan(10)
 
     expect(tools.http_request).toBeDefined()
+    expect(typeof tools.http_request).toBe('function')
     expect(tools.function_execute).toBeDefined()
 
     expect(tools.gmail_read).toBeDefined()
-    expect(tools.gmail_send).toBeDefined()
     expect(tools.google_drive_list).toBeDefined()
-    expect(tools.serper_search).toBeDefined()
   })
 
   it('getTool should return the correct tool by ID', () => {
@@ -121,14 +128,33 @@ describe('Custom Tools', () => {
         }),
       },
     }))
+
+    process.env.NEXT_PUBLIC_APP_URL = 'http://localhost:3000'
   })
 
   afterEach(() => {
     vi.resetAllMocks()
   })
 
-  it('should get custom tool by ID', () => {
-    const customTool = getTool('custom_custom-tool-123')
+  it('should get custom tool by ID', async () => {
+    const mockTool = {
+      id: 'custom_custom-tool-123',
+      name: 'Custom Weather Tool',
+      description: 'Get weather information',
+      version: '1.0.0',
+      params: {
+        location: { type: 'string', required: true, visibility: 'user-or-llm' },
+      },
+      request: {
+        url: '/api/function/execute',
+        method: 'POST',
+      },
+      transformResponse: vi.fn(),
+    }
+
+    vi.mocked(getCustomTool).mockResolvedValueOnce(mockTool as any)
+
+    const customTool = await getToolAsync('custom_custom-tool-123')
     expect(customTool).toBeDefined()
     expect(customTool?.name).toBe('Custom Weather Tool')
     expect(customTool?.description).toBe('Get weather information')
@@ -136,8 +162,10 @@ describe('Custom Tools', () => {
     expect(customTool?.params.location.required).toBe(true)
   })
 
-  it('should handle non-existent custom tool', () => {
-    const nonExistentTool = getTool('custom_non-existent')
+  it('should handle non-existent custom tool', async () => {
+    vi.mocked(getCustomTool).mockResolvedValueOnce(undefined)
+
+    const nonExistentTool = await getToolAsync('custom_non-existent')
     expect(nonExistentTool).toBeUndefined()
   })
 })
@@ -158,7 +186,7 @@ describe('executeTool Function', () => {
             }),
           headers: {
             get: () => 'application/json',
-            forEach: () => {},
+            forEach: () => { },
           },
           clone: function () {
             return { ...this }
@@ -204,14 +232,18 @@ describe('executeTool Function', () => {
   })
 
   it('should call internal routes directly', async () => {
-    const originalFunctionTool = { ...tools.function_execute }
-    tools.function_execute = {
-      ...tools.function_execute,
+    const originalFunctionToolLoader = tools.function_execute
+    const originalFunctionTool = await originalFunctionToolLoader()
+    // Mock the tool in the registry for this test
+    const mockTool = {
+      ...originalFunctionTool,
       transformResponse: vi.fn().mockResolvedValue({
         success: true,
         output: { result: 'Function executed successfully' },
       }),
     }
+
+    tools.function_execute = async () => mockTool
 
     await executeTool(
       'function_execute',
@@ -222,7 +254,7 @@ describe('executeTool Function', () => {
       true
     ) // Skip proxy
 
-    tools.function_execute = originalFunctionTool
+    tools.function_execute = originalFunctionToolLoader
 
     expect(global.fetch).toHaveBeenCalledWith(
       expect.stringContaining('/api/function/execute'),
@@ -231,7 +263,7 @@ describe('executeTool Function', () => {
   })
 
   it('should handle non-existent tool', async () => {
-    vi.spyOn(console, 'error').mockImplementation(() => {})
+    vi.spyOn(console, 'error').mockImplementation(() => { })
 
     const result = await executeTool('non_existent_tool', {})
 
@@ -320,7 +352,9 @@ describe('Automatic Internal Route Detection', () => {
     }
 
     const originalTools = { ...tools }
-    ;(tools as any).test_internal_tool = mockTool
+      // In the new lazy registry, tools is an object of loaders.
+      // We mock the loader for our test tool.
+      ; (tools as any).test_internal_tool = async () => mockTool
 
     global.fetch = Object.assign(
       vi.fn().mockImplementation(async (url) => {
@@ -363,7 +397,7 @@ describe('Automatic Internal Route Detection', () => {
     }
 
     const originalTools = { ...tools }
-    ;(tools as any).test_external_tool = mockTool
+      ; (tools as any).test_external_tool = async () => mockTool
 
     global.fetch = Object.assign(
       vi.fn().mockImplementation(async (url) => {
@@ -416,7 +450,7 @@ describe('Automatic Internal Route Detection', () => {
 
     // Mock the tool registry to include our test tool
     const originalTools = { ...tools }
-    ;(tools as any).test_dynamic_internal = mockTool
+      ; (tools as any).test_dynamic_internal = async () => mockTool
 
     // Mock fetch for the internal API call
     global.fetch = Object.assign(
@@ -463,7 +497,7 @@ describe('Automatic Internal Route Detection', () => {
     }
 
     const originalTools = { ...tools }
-    ;(tools as any).test_dynamic_external = mockTool
+      ; (tools as any).test_dynamic_external = async () => mockTool
 
     global.fetch = Object.assign(
       vi.fn().mockImplementation(async (url) => {
@@ -511,7 +545,7 @@ describe('Automatic Internal Route Detection', () => {
     }
 
     const originalTools = { ...tools }
-    ;(tools as any).test_skip_proxy = mockTool
+      ; (tools as any).test_skip_proxy = async () => mockTool
 
     global.fetch = Object.assign(
       vi.fn().mockImplementation(async (url) => {

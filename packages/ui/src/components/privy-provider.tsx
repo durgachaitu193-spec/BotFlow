@@ -82,7 +82,10 @@ export function PrivyProviderWrapper({ children, appId, appUrl, logo }: PrivyPro
     )
   }
 
-  console.log('[PrivyProviderWrapper] Initializing with App ID:', `${finalAppId?.slice(0, 6)}...`)
+  console.log('[PrivyProviderWrapper] Initializing with App ID:', finalAppId)
+  console.log('[PrivyProviderWrapper] App URL:', appUrl)
+  console.log('[PrivyProviderWrapper] Logo:', logo)
+
   console.warn(
     '[PrivyProviderWrapper] If you see 403 errors, ensure http://localhost:3000 and http://localhost:3001 are in your Privy Dashboard Allowed Domains'
   )

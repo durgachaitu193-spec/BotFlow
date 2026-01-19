@@ -359,7 +359,7 @@ async function processBlockMetadata(blockId: string, tag: string): Promise<Agent
   try {
     // Reuse registry to match get_blocks_metadata tool result
     const { registry: blockRegistry } = await import('@/blocks/registry')
-    const { tools: toolsRegistry } = await import('@/tools/registry')
+    const toolMetadata = (await import('@/tools/metadata.json')).default
     const SPECIAL_BLOCKS_METADATA: Record<string, any> = {}
 
     let metadata: any = {}
@@ -400,7 +400,7 @@ async function processBlockMetadata(blockId: string, tag: string): Promise<Agent
     if (Array.isArray(metadata.tools) && metadata.tools.length > 0) {
       metadata.toolDetails = {}
       for (const toolId of metadata.tools) {
-        const tool = (toolsRegistry as any)[toolId]
+        const tool = (toolMetadata as any)[toolId]
         if (tool) {
           metadata.toolDetails[toolId] = { name: tool.name, description: tool.description }
         }
@@ -516,9 +516,9 @@ async function processExecutionLogFromDb(
       // Include trace spans and any available details without being huge
       executionData: log.executionData
         ? {
-            traceSpans: (log.executionData as any).traceSpans || undefined,
-            errorDetails: (log.executionData as any).errorDetails || undefined,
-          }
+          traceSpans: (log.executionData as any).traceSpans || undefined,
+          errorDetails: (log.executionData as any).errorDetails || undefined,
+        }
         : undefined,
       cost: log.cost || undefined,
     }

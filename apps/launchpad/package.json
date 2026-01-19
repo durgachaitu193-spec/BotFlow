@@ -21,6 +21,7 @@
     "@polkadot/react-identicon": "^3.6.6",
     "@polkadot/util": "^12.6.2",
     "@polkadot/util-crypto": "^12.6.2",
+    "@privy-io/react-auth": "3.11.0",
     "@wazabi/db": "workspace:*",
     "@wazabi/ui": "workspace:*",
     "antd": "6.0.1",

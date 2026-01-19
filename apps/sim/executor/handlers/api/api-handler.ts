@@ -3,7 +3,7 @@ import { BlockType, HTTP } from '@/executor/consts'
 import type { BlockHandler, ExecutionContext } from '@/executor/types'
 import type { SerializedBlock } from '@/serializer/types'
 import { executeTool } from '@/tools'
-import { getTool } from '@/tools/utils'
+import { getToolAsync } from '@/tools/utils'
 
 const logger = createLogger('ApiBlockHandler')
 
@@ -20,7 +20,7 @@ export class ApiBlockHandler implements BlockHandler {
     block: SerializedBlock,
     inputs: Record<string, any>
   ): Promise<any> {
-    const tool = getTool(block.config.tool)
+    const tool = await getToolAsync(block.config.tool)
     if (!tool) {
       throw new Error(`Tool not found: ${block.config.tool}`)
     }
@@ -64,7 +64,7 @@ export class ApiBlockHandler implements BlockHandler {
             if (trimmedBody.startsWith('{') || trimmedBody.startsWith('[')) {
               processedInputs.body = JSON.parse(trimmedBody)
             }
-          } catch (e) {}
+          } catch (e) { }
         } else if (processedInputs.body === null) {
           processedInputs.body = undefined
         }

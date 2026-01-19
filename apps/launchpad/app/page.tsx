@@ -10,37 +10,6 @@ export default function Home() {
     <DashboardLayout>
       <div className='relative isolate w-full'>
         {/* Background Sections */}
-        <div className='-z-10 pointer-events-none absolute top-0 right-0 left-0 h-[800px] w-full'>
-          <div className='relative h-full w-full'>
-            <img
-              src='/background/launchpadbackground1.png'
-              alt=''
-              className='absolute inset-0 h-full w-full object-cover'
-            />
-            <div
-              className='absolute inset-0'
-              style={{
-                background: 'linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, #000000 100%)',
-              }}
-            />
-          </div>
-        </div>
-
-        <div className='-z-10 pointer-events-none absolute top-[800px] right-0 left-0 h-[800px] w-full'>
-          <div className='relative h-full w-full'>
-            <img
-              src='/background/launchpadbackground2.png'
-              alt=''
-              className='absolute inset-0 h-full w-full object-cover'
-            />
-            <div
-              className='absolute inset-0'
-              style={{
-                background: 'linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, #000000 100%)',
-              }}
-            />
-          </div>
-        </div>
 
         {/* Top Section: Trending & Spotlight */}
         <div className='mb-6'>

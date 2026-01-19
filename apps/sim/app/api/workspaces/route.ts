@@ -19,6 +19,11 @@ export async function GET() {
   const session = await getSession()
 
   if (!session?.user?.id) {
+    logger.warn('Unauthorized access attempt to /api/workspaces', {
+      hasSession: !!session,
+      hasUser: !!session?.user,
+      hasUserId: !!session?.user?.id,
+    })
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -42,9 +47,6 @@ export async function GET() {
 
     return NextResponse.json({ workspaces: [defaultWorkspace] })
   }
-
-  // If user has workspaces but might have orphaned workflows, migrate them
-  await ensureWorkflowsHaveWorkspace(session.user.id, userWorkspaces[0].workspace.id)
 
   // Format the response with permission information
   const workspacesWithPermissions = userWorkspaces.map(
@@ -192,24 +194,3 @@ async function migrateExistingWorkflows(userId: string, workspaceId: string) {
     .where(and(eq(workflow.userId, userId), isNull(workflow.workspaceId)))
 }
 
-// Helper function to ensure all workflows have a workspace
-async function ensureWorkflowsHaveWorkspace(userId: string, defaultWorkspaceId: string) {
-  // First check if there are any orphaned workflows
-  const orphanedWorkflows = await db
-    .select()
-    .from(workflow)
-    .where(and(eq(workflow.userId, userId), isNull(workflow.workspaceId)))
-
-  if (orphanedWorkflows.length > 0) {
-    // Directly update any workflows that don't have a workspace ID in a single query
-    await db
-      .update(workflow)
-      .set({
-        workspaceId: defaultWorkspaceId,
-        updatedAt: new Date(),
-      })
-      .where(and(eq(workflow.userId, userId), isNull(workflow.workspaceId)))
-
-    logger.info(`Fixed ${orphanedWorkflows.length} orphaned workflows for user ${userId}`)
-  }
-}

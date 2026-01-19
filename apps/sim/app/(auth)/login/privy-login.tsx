@@ -106,6 +106,7 @@ export default function PrivyLogin() {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // Ensure cookies are sent and stored
         body: JSON.stringify({
           user: privyUserData,
           walletAddress: finalWalletAddress,

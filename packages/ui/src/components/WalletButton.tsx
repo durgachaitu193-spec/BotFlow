@@ -16,12 +16,18 @@ import {
 
 export interface WalletButtonProps {
   onSignOut?: () => Promise<void> | void
+  logoutRedirectPath?: string
 }
 
-export function WalletButton({ onSignOut }: WalletButtonProps) {
+export function WalletButton({ onSignOut, logoutRedirectPath }: WalletButtonProps) {
   const router = useRouter()
   const { ready, authenticated, logout: privyLogout, user, login } = usePrivy()
   const { wallets } = useWallets()
+
+  useEffect(() => {
+    console.log('[WalletButton] Status Change:', { ready, authenticated, user: !!user, wallets: wallets?.length })
+  }, [ready, authenticated, user, wallets])
+
   const [isCopied, setIsCopied] = useState(false)
   const [walletAddress, setWalletAddress] = useState<string | null>(null)
 
@@ -58,23 +64,30 @@ export function WalletButton({ onSignOut }: WalletButtonProps) {
   const handleDisconnect = async () => {
     try {
       // If Privy is authenticated, logout from Privy and clear the cookie
+      // If Privy is authenticated, logout from Privy and clear the cookie
       if (authenticated) {
-        try {
-          // Clear the privy-user-id cookie via API
-          await fetch('/api/auth/privy/logout', {
-            method: 'POST',
-            credentials: 'include',
-          }).catch(() => {
-            document.cookie = 'sim-privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
-            document.cookie =
-              'launchpad-privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
-            document.cookie = 'privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
-          })
+        // try {
+        //   // Clear the privy-user-id cookie via API
+        //   await fetch('/api/auth/privy/logout', {
+        //     method: 'POST',
+        //     credentials: 'include',
+        //   }).catch(() => {
+        //     document.cookie = 'sim-privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+        //     document.cookie =
+        //       'launchpad-privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+        //     document.cookie = 'privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+        //   })
 
-          // Logout from Privy
+        //   // Logout from Privy
+        //   await privyLogout()
+        // } catch (privyError) {
+        //   console.error('Error during Privy logout:', { error: privyError })
+        // }
+
+        try {
           await privyLogout()
-        } catch (privyError) {
-          console.error('Error during Privy logout:', { error: privyError })
+        } catch (e) {
+          console.error('Privy logout failed:', e)
         }
 
         // Clear user data
@@ -83,10 +96,18 @@ export function WalletButton({ onSignOut }: WalletButtonProps) {
         }
       }
 
-      router.push('/login?fromLogout=true')
+      if (logoutRedirectPath) {
+        router.push(logoutRedirectPath)
+      } else {
+        router.push('/login?fromLogout=true')
+      }
     } catch (error) {
       console.error('Error disconnecting wallet:', { error })
-      router.push('/login?fromLogout=true')
+      if (logoutRedirectPath) {
+        router.push(logoutRedirectPath)
+      } else {
+        router.push('/login?fromLogout=true')
+      }
     }
   }
 
@@ -97,14 +118,28 @@ export function WalletButton({ onSignOut }: WalletButtonProps) {
 
   // If not authenticated, show connect button
   if (!authenticated) {
+    console.log('[WalletButton] Not authenticated, rendering connect button. Ready:', ready)
     return (
       <Button
         variant='outline'
-        onClick={() => login()}
+        disabled={!ready}
+        onClick={() => {
+          console.log('[WalletButton] Connect clicked')
+          if (!login) {
+            console.error('[WalletButton] login function is undefined!')
+            return
+          }
+          console.log('[WalletButton] Calling login()...')
+          try {
+            login()
+          } catch (e) {
+            console.error('[WalletButton] Login failed:', e)
+          }
+        }}
         className='h-9 rounded-full border border-white/10 bg-white/5 px-4 font-medium text-white text-xs shadow-sm transition-all duration-200 hover:border-white/20 hover:bg-white/10'
       >
         <Wallet className='mr-2 h-3.5 w-3.5' />
-        Connect Wallet
+        {ready ? 'Connect Wallet' : 'Loading...'}
       </Button>
     )
   }

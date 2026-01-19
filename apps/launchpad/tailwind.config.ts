@@ -5,6 +5,7 @@ const config: Config = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    '../../packages/ui/src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
@@ -19,6 +20,8 @@ const config: Config = {
           secondary: 'var(--accent-secondary)',
           tertiary: '#00C2FF',
           muted: '#2A2A2A',
+          DEFAULT: 'rgba(255, 255, 255, 0.1)',
+          foreground: '#FFFFFF',
         },
         text: {
           primary: '#FFFFFF',
@@ -29,6 +32,36 @@ const config: Config = {
           success: '#00FF94',
           warning: '#F59E0B',
           error: '#EF4444',
+        },
+        // Shadcn UI Colors
+        border: 'rgba(255, 255, 255, 0.1)',
+        input: 'rgba(255, 255, 255, 0.1)',
+        ring: 'var(--accent-primary)',
+        background: '#0A0A0F',
+        foreground: '#FFFFFF',
+        primary: {
+          DEFAULT: 'var(--accent-primary)',
+          foreground: '#000000',
+        },
+        secondary: {
+          DEFAULT: 'var(--accent-secondary)',
+          foreground: '#000000',
+        },
+        destructive: {
+          DEFAULT: '#EF4444',
+          foreground: '#FFFFFF',
+        },
+        muted: {
+          DEFAULT: '#2A2A2A',
+          foreground: '#A1A1AA',
+        },
+        popover: {
+          DEFAULT: '#121218',
+          foreground: '#FFFFFF',
+        },
+        card: {
+          DEFAULT: '#121218',
+          foreground: '#FFFFFF',
         },
       },
       fontFamily: {

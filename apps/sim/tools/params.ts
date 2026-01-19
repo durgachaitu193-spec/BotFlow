@@ -1,6 +1,6 @@
 import { createLogger } from '@wazabi/logger'
 import type { ParameterVisibility, ToolConfig } from '@/tools/types'
-import { getTool } from '@/tools/utils'
+import { getToolMetadata, type ToolConfigMetadata } from '@/tools/utils'
 
 const logger = createLogger('ToolsParams')
 type ToolParamDefinition = ToolConfig['params'][string]
@@ -103,7 +103,7 @@ export interface ToolParameterConfig {
 }
 
 export interface ToolWithParameters {
-  toolConfig: ToolConfig
+  toolConfig: ToolConfig | ToolConfigMetadata
   allParameters: ToolParameterConfig[]
   userInputParameters: ToolParameterConfig[] // Parameters shown to user
   requiredParameters: ToolParameterConfig[] // Must be filled by user or LLM
@@ -144,7 +144,7 @@ export function getToolParametersConfig(
   blockType?: string
 ): ToolWithParameters | null {
   try {
-    const toolConfig = getTool(toolId)
+    const toolConfig = getToolMetadata(toolId)
     if (!toolConfig) {
       logger.warn(`Tool not found: ${toolId}`)
       return null
@@ -359,7 +359,9 @@ function buildParameterSchema(
   return propertySchema
 }
 
-export function createUserToolSchema(toolConfig: ToolConfig): ToolSchema {
+export function createUserToolSchema(
+  toolConfig: ToolConfig | ToolConfigMetadata
+): ToolSchema {
   const schema: ToolSchema = {
     type: 'object',
     properties: {},
@@ -384,7 +386,7 @@ export function createUserToolSchema(toolConfig: ToolConfig): ToolSchema {
 }
 
 export async function createLLMToolSchema(
-  toolConfig: ToolConfig,
+  toolConfig: ToolConfig | ToolConfigMetadata,
   userProvidedParams: Record<string, unknown>
 ): Promise<ToolSchema> {
   const schema: ToolSchema = {
