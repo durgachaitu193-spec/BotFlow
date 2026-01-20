@@ -41,10 +41,14 @@ export const buildTimeCSPDirectives: CSPDirectives = {
     'https://apis.google.com',
     'https://assets.onedollarstats.com',
     'https://challenges.cloudflare.com',
+    // Cloudflare analytics
+    'https://static.cloudflareinsights.com',
     // Privy script sources
     'https://auth.privy.io',
     'https://*.privy.io',
     'https://privy.wazabi.ai',
+    // Coinbase wallet
+    'https://*.coinbase.com',
   ],
 
   'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
@@ -77,6 +81,11 @@ export const buildTimeCSPDirectives: CSPDirectives = {
     'https://explorer-api.walletconnect.com',
     'https://*.walletconnect.com',
     'https://*.walletconnect.org',
+    // Privy auth images
+    'https://auth.privy.io',
+    'https://*.privy.io',
+    // Analytics
+    'https://collector.onedollarstats.com',
     ...getHostnameFromUrl(env.NEXT_PUBLIC_BRAND_LOGO_URL),
     ...getHostnameFromUrl(env.NEXT_PUBLIC_BRAND_FAVICON_URL),
     ...getHostnameFromUrl(env.NEXT_PUBLIC_APP_URL),
@@ -114,6 +123,13 @@ export const buildTimeCSPDirectives: CSPDirectives = {
     'wss://www.walletlink.org',
     'https://*.rpc.privy.systems',
     'https://explorer-api.walletconnect.com',
+    // Coinbase wallet
+    'https://*.coinbase.com',
+    'https://cca-lite.coinbase.com',
+    'https://api.web3modal.org',
+    // Cloudflare
+    'https://cloudflareinsights.com',
+    'https://static.cloudflareinsights.com',
     ...getHostnameFromUrl(env.NEXT_PUBLIC_BRAND_LOGO_URL),
     ...getHostnameFromUrl(env.NEXT_PUBLIC_PRIVACY_URL),
     ...getHostnameFromUrl(env.NEXT_PUBLIC_TERMS_URL),
@@ -129,6 +145,8 @@ export const buildTimeCSPDirectives: CSPDirectives = {
     'https://verify.walletconnect.com',
     'https://verify.walletconnect.org',
     'https://challenges.cloudflare.com',
+    // Coinbase wallet
+    'https://*.coinbase.com',
   ],
 
   'child-src': [
@@ -137,6 +155,8 @@ export const buildTimeCSPDirectives: CSPDirectives = {
     'https://privy.wazabi.ai',
     'https://verify.walletconnect.com',
     'https://verify.walletconnect.org',
+    // Coinbase wallet
+    'https://*.coinbase.com',
   ],
 
   'frame-ancestors': ["'self'"],
@@ -189,14 +209,14 @@ export function generateRuntimeCSP(): string {
 
   return `
     default-src 'self';
-    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.google.com https://apis.google.com https://assets.onedollarstats.com https://challenges.cloudflare.com https://auth.privy.io https://*.privy.io https://privy.wazabi.ai;
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.google.com https://apis.google.com https://assets.onedollarstats.com https://challenges.cloudflare.com https://static.cloudflareinsights.com https://auth.privy.io https://*.privy.io https://privy.wazabi.ai https://*.coinbase.com;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    img-src 'self' data: blob: https://*.googleusercontent.com https://*.google.com https://*.atlassian.com https://cdn.discordapp.com https://*.githubusercontent.com https://explorer-api.walletconnect.com https://*.walletconnect.com https://*.walletconnect.org ${brandLogoDomain} ${brandFaviconDomain};
+    img-src 'self' data: blob: https://*.googleusercontent.com https://*.google.com https://*.atlassian.com https://cdn.discordapp.com https://*.githubusercontent.com https://explorer-api.walletconnect.com https://*.walletconnect.com https://*.walletconnect.org https://auth.privy.io https://*.privy.io https://collector.onedollarstats.com https://*.coinbase.com ${brandLogoDomain} ${brandFaviconDomain};
     media-src 'self' blob:;
     font-src 'self' https://fonts.gstatic.com;
-    connect-src 'self' https://privy.wazabi.ai ${appUrl} ${ollamaUrl} ${socketUrl} ${socketWsUrl} https://api.browser-use.com https://api.exa.ai https://api.firecrawl.dev https://*.googleapis.com https://*.amazonaws.com https://*.s3.amazonaws.com https://*.blob.core.windows.net https://api.github.com https://github.com/* https://*.atlassian.com https://*.supabase.co https://collector.onedollarstats.com https://auth.privy.io wss://relay.walletconnect.com wss://relay.walletconnect.org wss://www.walletlink.org https://*.rpc.privy.systems https://explorer-api.walletconnect.com ${dynamicDomainsStr};
-    frame-src https://drive.google.com https://docs.google.com https://*.google.com https://auth.privy.io https://privy.wazabi.ai https://verify.walletconnect.com https://verify.walletconnect.org https://challenges.cloudflare.com;
-    child-src https://auth.privy.io https://privy.wazabi.ai https://verify.walletconnect.com https://verify.walletconnect.org;
+    connect-src 'self' https://privy.wazabi.ai ${appUrl} ${ollamaUrl} ${socketUrl} ${socketWsUrl} https://api.browser-use.com https://api.exa.ai https://api.firecrawl.dev https://*.googleapis.com https://*.amazonaws.com https://*.s3.amazonaws.com https://*.blob.core.windows.net https://api.github.com https://github.com/* https://*.atlassian.com https://*.supabase.co https://collector.onedollarstats.com https://auth.privy.io wss://relay.walletconnect.com wss://relay.walletconnect.org wss://www.walletlink.org https://*.rpc.privy.systems https://explorer-api.walletconnect.com https://*.coinbase.com https://cca-lite.coinbase.com https://api.web3modal.org https://cloudflareinsights.com https://static.cloudflareinsights.com ${dynamicDomainsStr};
+    frame-src https://drive.google.com https://docs.google.com https://*.google.com https://auth.privy.io https://privy.wazabi.ai https://verify.walletconnect.com https://verify.walletconnect.org https://challenges.cloudflare.com https://*.coinbase.com;
+    child-src https://auth.privy.io https://privy.wazabi.ai https://verify.walletconnect.com https://verify.walletconnect.org https://*.coinbase.com;
     frame-ancestors 'self';
     form-action 'self';
     base-uri 'self';

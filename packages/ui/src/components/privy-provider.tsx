@@ -121,7 +121,7 @@ export function PrivyProviderWrapper({ children, appId, appUrl, logo }: PrivyPro
       },
       storageMethod: 'localStorage' as const,
     }),
-    [appUrl]
+    [appUrl, logo]
   )
 
   return (

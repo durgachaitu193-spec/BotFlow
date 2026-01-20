@@ -192,8 +192,9 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        // Exclude Vercel internal resources and static assets from strict COEP, Google Drive Picker to prevent 'refused to connect' issue
-        source: '/((?!_next|_vercel|api|favicon.ico|w/.*|workspace/.*|api/tools/drive).*)',
+        // Exclude pages that need wallet popups (login, workspace, w) and internal resources from strict COEP/COOP
+        // This allows Privy/Coinbase wallet SDK popups to work properly
+        source: '/((?!_next|_vercel|api|favicon.ico|w/.*|workspace/.*|login|api/tools/drive).*)',
         headers: [
           {
             key: 'Cross-Origin-Embedder-Policy',
@@ -201,13 +202,14 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin',
+            value: 'same-origin-allow-popups',
           },
         ],
       },
       {
-        // For main app routes, Google Drive Picker, and Vercel resources - use permissive policies
-        source: '/(w/.*|workspace/.*|api/tools/drive|_next/.*|_vercel/.*)',
+        // For main app routes, login, Google Drive Picker, and Vercel resources - use permissive policies
+        // Required for wallet connection popups (Privy, Coinbase Wallet, etc.)
+        source: '/(w/.*|workspace/.*|login|api/tools/drive|_next/.*|_vercel/.*)',
         headers: [
           {
             key: 'Cross-Origin-Embedder-Policy',
@@ -215,7 +217,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Cross-Origin-Opener-Policy',
-            value: 'unsafe-none',
+            value: 'same-origin-allow-popups',
           },
         ],
       },
