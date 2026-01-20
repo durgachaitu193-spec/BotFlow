@@ -12,7 +12,8 @@ import { DEFAULT_CHAIN } from './didRegistry'
 
 const logger = createLogger('TokenFactory')
 
-export const TOKEN_FACTORY_ADDRESS = '0xb0ba7A078728966224dB6bdc9647bF8b68b3C1e0'
+// BSC Mainnet TokenFactory
+export const TOKEN_FACTORY_ADDRESS = '0x2809f1ab5126976Cd711417d8c917deF32d915FB'
 
 export const TOKEN_FACTORY_ABI = [
   {
