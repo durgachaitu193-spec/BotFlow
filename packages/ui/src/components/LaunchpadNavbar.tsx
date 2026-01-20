@@ -33,21 +33,15 @@ function Logo({ app = 'launchpad' }: { app?: 'launchpad' | 'builder' | string })
     const initialLogos = getLogoPaths()
     return (
       <div className="flex items-center gap-2 opacity-0">
-        <img src={initialLogos.icon} alt='Wazabi' className='h-8 w-auto' />
         <img src={initialLogos.text} alt='Wazabi' className='h-7 w-auto' />
       </div>
     )
   }
 
-  const { icon, text } = getLogoPaths()
+  const { text } = getLogoPaths()
 
   return (
     <div className='flex items-center gap-2'>
-      <img
-        src={icon}
-        alt={app === 'builder' ? 'Wazabi Studio' : 'Wazabi Launchpad'}
-        className='h-8 w-auto rounded-xl'
-      />
       <img
         src={text}
         alt='Wazabi Text'

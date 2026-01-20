@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useCreateWallet, usePrivy, useWallets } from '@wazabi/ui'
 import { motion } from 'framer-motion'
 import { useTheme } from 'next-themes'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { useSession } from '@/lib/auth/auth-client'
 import type { PrivyUserData } from '@/lib/privy/types'
@@ -52,11 +52,13 @@ export default function PrivyLogin() {
   const { wallets } = useWallets()
   const { createWallet } = useCreateWallet()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { data, refetch } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
   const [isCreatingWallet, setIsCreatingWallet] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const isFromLogout = searchParams.get('fromLogout') === 'true'
 
   const hasRedirected = useRef(false)
   const hasSynced = useRef(false)
@@ -135,6 +137,13 @@ export default function PrivyLogin() {
   useEffect(() => {
     // Wait for Privy readiness and auth
     if (!ready || !authenticated || !user?.id) return
+
+    // If coming from logout, do NOT auto-redirect or sync
+    // Instead, we should probably ensure we are logged out
+    if (isFromLogout) {
+      console.log('Detected fromLogout param, skipping auto-sync')
+      return
+    }
 
     const userId = user.id
     const now = Date.now()
@@ -231,6 +240,38 @@ export default function PrivyLogin() {
   }
 
   if (authenticated && user) {
+    if (isFromLogout) {
+      // If we are still authenticated but came from logout, likely state is not settled
+      // We can attempt to logout again or just show a message
+      if (ready) {
+        // Attempt to ensure logout if we are STUCK here
+        /* 
+           Note: We avoid an infinite loop by not calling logout() in a loop without checks. 
+           But typically we just want to show "Finishing sign out..." and maybe 
+           reload after a second if it doesn't clear.
+        */
+        setTimeout(() => {
+          // If we are still here after 2s, force a full reload to clear state
+          if (window.location.search.includes('fromLogout')) {
+            const newUrl = new URL(window.location.href)
+            newUrl.searchParams.delete('fromLogout')
+            window.location.href = newUrl.toString()
+          }
+        }, 2000)
+      }
+
+      return (
+        <div className='space-y-1 text-center'>
+          <h1 className={`${season.className} font-medium text-[32px] text-zinc-900 dark:text-white tracking-tight`}>
+            Finishing sign out...
+          </h1>
+          <p className={`${season.className} mt-2 font-[380] text-[16px] text-zinc-500 dark:text-gray-400`}>
+            Please wait...
+          </p>
+        </div>
+      )
+    }
+
     if (error) {
       return (
         <div className='mx-auto max-w-md space-y-4 rounded-2xl border border-red-500/20 bg-black/50 p-6 text-center backdrop-blur-sm'>
@@ -276,16 +317,16 @@ export default function PrivyLogin() {
       <div className='w-full space-y-8 rounded-3xl border border-white/40 bg-white/60 p-8 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-black/50 dark:shadow-2xl'>
         <div className='space-y-10 text-center'>
           <div className='flex items-center gap-2'>
-            <img
+            {/* <img
               src='/logo/wazabi-icon-dark.png'
               alt='Wazabi'
               className='hidden h-8 w-auto rounded-xl dark:block'
-            />
-            <img
+            /> */}
+            {/* <img
               src='/logo/wazabi-icon-light.png'
               alt='Wazabi'
               className='block h-8 w-auto rounded-xl dark:hidden'
-            />
+            /> */}
             <img
               src='/logo/wazabi-text-dark.png'
               alt='Wazabi Text'
@@ -302,17 +343,18 @@ export default function PrivyLogin() {
         <p className={`${season.className} font-[380] text-[18px] text-zinc-600 dark:text-gray-300`}>
           Sign in with your social account or connect your wallet to get started.
         </p>
+        <div className='space-y-6'>
+          <Button
+            onClick={handleLogin}
+            disabled={isLoading || !ready}
+            className={`auth-button-gradient flex w-full items-center justify-center gap-2 rounded-[14px] py-6 font-medium text-[17px] transition-all duration-200 ${season.className}`}
+          >
+            {!ready ? 'Initializing...' : isLoading ? 'Connecting...' : 'Connect Wallet / Sign In'}
+          </Button>
+        </div>
       </div>
 
-      <div className='space-y-6'>
-        <Button
-          onClick={handleLogin}
-          disabled={isLoading || !ready}
-          className={`auth-button-gradient flex w-full items-center justify-center gap-2 rounded-[14px] py-6 font-medium text-[17px] transition-all duration-200 ${season.className}`}
-        >
-          {!ready ? 'Initializing...' : isLoading ? 'Connecting...' : 'Connect Wallet / Sign In'}
-        </Button>
-      </div>
+
     </div>
   )
 }

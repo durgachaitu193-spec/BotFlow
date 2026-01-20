@@ -66,23 +66,23 @@ export function WalletButton({ onSignOut, logoutRedirectPath }: WalletButtonProp
       // If Privy is authenticated, logout from Privy and clear the cookie
       // If Privy is authenticated, logout from Privy and clear the cookie
       if (authenticated) {
-        // try {
-        //   // Clear the privy-user-id cookie via API
-        //   await fetch('/api/auth/privy/logout', {
-        //     method: 'POST',
-        //     credentials: 'include',
-        //   }).catch(() => {
-        //     document.cookie = 'sim-privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
-        //     document.cookie =
-        //       'launchpad-privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
-        //     document.cookie = 'privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
-        //   })
+        try {
+          // Clear the privy-user-id cookie via API
+          await fetch('/api/auth/privy/logout', {
+            method: 'POST',
+            credentials: 'include',
+          }).catch(() => {
+            document.cookie = 'sim-privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+            document.cookie =
+              'launchpad-privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+            document.cookie = 'privy-user-id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+          })
 
-        //   // Logout from Privy
-        //   await privyLogout()
-        // } catch (privyError) {
-        //   console.error('Error during Privy logout:', { error: privyError })
-        // }
+          // Logout from Privy
+          await privyLogout()
+        } catch (privyError) {
+          console.error('Error during Privy logout:', { error: privyError })
+        }
 
         try {
           await privyLogout()

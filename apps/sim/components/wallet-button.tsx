@@ -84,6 +84,14 @@ export function WalletButton() {
     } catch (error) {
       logger.error('Error disconnecting wallet:', { error })
       router.push('/login?fromLogout=true')
+    } finally {
+      // Force clear specific local storage items that might persist
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('privy:token')
+        localStorage.removeItem('privy:refresh_token')
+        localStorage.removeItem('privy:user')
+        sessionStorage.clear()
+      }
     }
   }
 
