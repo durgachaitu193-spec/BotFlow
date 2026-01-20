@@ -2259,7 +2259,7 @@ export const editWorkflowServerTool: BaseServerTool<EditWorkflowParams, any> = {
     }
 
     // Validate the workflow state
-    const validation = validateWorkflowState(modifiedWorkflowState, { sanitize: true })
+    const validation = await validateWorkflowState(modifiedWorkflowState, { sanitize: true })
 
     if (!validation.valid) {
       logger.error('Edited workflow state is invalid', {

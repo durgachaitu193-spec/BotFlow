@@ -275,31 +275,43 @@ export default function PrivyLogin() {
     >
       <div className='w-full space-y-8 rounded-3xl border border-white/40 bg-white/60 p-8 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-black/50 dark:shadow-2xl'>
         <div className='space-y-10 text-center'>
-          <div className='flex justify-center'>
-            <div className='flex items-center gap-2'>
-              <img src={resolvedTheme === 'dark' ? '/logo/wazabi-icon-dark.png' : '/logo/wazabi-icon-light.png'} alt='Wazabi' className='h-8 w-auto rounded-xl' />
-              <img
-                src={resolvedTheme === 'dark' ? '/logo/wazabi-text-dark.png' : '/logo/wazabi-text-light.png'}
-                alt='Wazabi Text'
-                className='h-7 w-auto object-contain object-left brightness-0 opacity-90 dark:brightness-0 dark:invert'
-              />
-            </div>
+          <div className='flex items-center gap-2'>
+            <img
+              src='/logo/wazabi-icon-dark.png'
+              alt='Wazabi'
+              className='hidden h-8 w-auto rounded-xl dark:block'
+            />
+            <img
+              src='/logo/wazabi-icon-light.png'
+              alt='Wazabi'
+              className='block h-8 w-auto rounded-xl dark:hidden'
+            />
+            <img
+              src='/logo/wazabi-text-dark.png'
+              alt='Wazabi Text'
+              className='hidden h-7 w-auto object-contain object-left brightness-0 opacity-90 dark:block dark:brightness-0 dark:invert'
+            />
+            <img
+              src='/logo/wazabi-text-light.png'
+              alt='Wazabi Text'
+              className='block h-7 w-auto object-contain object-left brightness-0 opacity-90 dark:hidden'
+            />
           </div>
-
-          <p className={`${season.className} font-[380] text-[18px] text-zinc-600 dark:text-gray-300`}>
-            Sign in with your social account or connect your wallet to get started.
-          </p>
         </div>
 
-        <div className='space-y-6'>
-          <Button
-            onClick={handleLogin}
-            disabled={isLoading || !ready}
-            className={`auth-button-gradient flex w-full items-center justify-center gap-2 rounded-[14px] py-6 font-medium text-[17px] transition-all duration-200 ${season.className}`}
-          >
-            {!ready ? 'Initializing...' : isLoading ? 'Connecting...' : 'Connect Wallet / Sign In'}
-          </Button>
-        </div>
+        <p className={`${season.className} font-[380] text-[18px] text-zinc-600 dark:text-gray-300`}>
+          Sign in with your social account or connect your wallet to get started.
+        </p>
+      </div>
+
+      <div className='space-y-6'>
+        <Button
+          onClick={handleLogin}
+          disabled={isLoading || !ready}
+          className={`auth-button-gradient flex w-full items-center justify-center gap-2 rounded-[14px] py-6 font-medium text-[17px] transition-all duration-200 ${season.className}`}
+        >
+          {!ready ? 'Initializing...' : isLoading ? 'Connecting...' : 'Connect Wallet / Sign In'}
+        </Button>
       </div>
     </div>
   )

@@ -377,7 +377,7 @@ export const useWorkflowDiffStore = create<WorkflowDiffState & WorkflowDiffActio
             blocks: mergedBlocks,
           }
           const cleanState = stripWorkflowDiffMarkers(cloneWorkflowState(mergedState))
-          const validation = validateWorkflowState(cleanState, { sanitize: true })
+          const validation = await validateWorkflowState(cleanState, { sanitize: true })
 
           if (!validation.valid) {
             const errorMessage = `Cannot apply changes: ${validation.errors.join('; ')}`
@@ -442,7 +442,7 @@ export const useWorkflowDiffStore = create<WorkflowDiffState & WorkflowDiffActio
                 diffCreated: true,
                 diffAccepted: true,
               }),
-            }).catch(() => {})
+            }).catch(() => { })
           }
 
           const toolCallId = await findLatestEditWorkflowToolCallId()
@@ -540,7 +540,7 @@ export const useWorkflowDiffStore = create<WorkflowDiffState & WorkflowDiffActio
                 diffCreated: true,
                 diffAccepted: false,
               }),
-            }).catch(() => {})
+            }).catch(() => { })
           }
 
           const toolCallId = await findLatestEditWorkflowToolCallId()
