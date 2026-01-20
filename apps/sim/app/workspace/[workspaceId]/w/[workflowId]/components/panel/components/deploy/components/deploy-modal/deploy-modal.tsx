@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { usePrivy, useWallets } from '@privy-io/react-auth'
+import { usePrivy, useWallets } from '@wazabi/ui'
 import { createLogger } from '@wazabi/logger'
 import clsx from 'clsx'
 import { Button } from '@/components/emcn'
@@ -335,7 +335,7 @@ export function DeployModal({
       try {
         setIsRegisteringAgent(true)
         logger.info('Starting agent registration after API deployment', { workflowId })
-        
+
         // Force a small delay to ensure wallets are ready
         if (!walletsReady) {
           for (let i = 0; i < 10; i++) {
@@ -345,9 +345,9 @@ export function DeployModal({
             }
           }
         }
-        
+
         const agentResult = await registerOrUpdateAgentForDeployment()
-        
+
         if (agentResult) {
           logger.info('Agent registered/updated successfully after deployment', {
             agentId: agentResult.agentId,
@@ -791,19 +791,19 @@ export function DeployModal({
 
     // Get wallet address - try multiple sources
     let walletAddress: string | undefined = undefined
-    
+
     // First try wallets array
     if (wallets && wallets.length > 0 && wallets[0]?.address) {
       walletAddress = wallets[0].address
     }
-    
+
     // Fallback to user.wallet.address if wallets array is empty
     if (!walletAddress && user?.wallet?.address) {
       walletAddress = typeof user.wallet.address === 'string'
         ? user.wallet.address
         : (user.wallet.address as any)?.address
     }
-    
+
     if (!walletAddress) {
       logger.warn('Cannot register agent: no wallet address - wallet may not be connected')
       // Don't fail silently - this is important for agent registration
@@ -814,7 +814,7 @@ export function DeployModal({
     // Get provider from wallets array - we need the actual wallet object to get provider
     let provider: any = null
     let walletToUse = wallets?.[0]
-    
+
     // If wallets array is empty but we have wallet address from user, wait a bit for wallets to populate
     if (!walletToUse && walletAddress && walletsReady) {
       // Wait up to 2 seconds for wallets to populate
@@ -826,7 +826,7 @@ export function DeployModal({
         }
       }
     }
-    
+
     try {
       if (walletToUse) {
         provider = await walletToUse.getEthereumProvider()
@@ -1070,29 +1070,29 @@ export function DeployModal({
       // 2. Build updated metadata with BOTH API and chat info
       const metadata: AgentMetadata = existingAgent
         ? {
-            // Preserve ALL existing metadata
-            ...existingAgent.metadata,
-            // Update chat-related fields
-            chatIdentifier: chatFormData.identifier,
-            chatTitle: chatFormData.title,
-            chatDescription: chatFormData.description,
-            chatAuthType: chatFormData.authType as any,
-            chatUrl: `${window.location.origin}/chat/${chatFormData.identifier}`,
-          }
+          // Preserve ALL existing metadata
+          ...existingAgent.metadata,
+          // Update chat-related fields
+          chatIdentifier: chatFormData.identifier,
+          chatTitle: chatFormData.title,
+          chatDescription: chatFormData.description,
+          chatAuthType: chatFormData.authType as any,
+          chatUrl: `${window.location.origin}/chat/${chatFormData.identifier}`,
+        }
         : {
-            // New agent - build complete metadata (shouldn't happen if API was deployed)
-            workflowId,
-            workflowName: workflowMetadata?.name,
-            deployedAt: new Date().toISOString(),
-            // API info
-            apiEndpoint: deploymentInfo?.endpoint,
-            // Chat info
-            chatIdentifier: chatFormData.identifier,
-            chatTitle: chatFormData.title,
-            chatDescription: chatFormData.description,
-            chatAuthType: chatFormData.authType as any,
-            chatUrl: `${window.location.origin}/chat/${chatFormData.identifier}`,
-          }
+          // New agent - build complete metadata (shouldn't happen if API was deployed)
+          workflowId,
+          workflowName: workflowMetadata?.name,
+          deployedAt: new Date().toISOString(),
+          // API info
+          apiEndpoint: deploymentInfo?.endpoint,
+          // Chat info
+          chatIdentifier: chatFormData.identifier,
+          chatTitle: chatFormData.title,
+          chatDescription: chatFormData.description,
+          chatAuthType: chatFormData.authType as any,
+          chatUrl: `${window.location.origin}/chat/${chatFormData.identifier}`,
+        }
 
       if (existingAgent) {
         // UPDATE existing agent metadata with chat details
@@ -1378,7 +1378,7 @@ export function DeployModal({
                       logger.error('Error during agent update:', error)
                     }
                   }}
-                  onVersionActivated={() => {}}
+                  onVersionActivated={() => { }}
                 />
               </ModalTabsContent>
 
@@ -1448,7 +1448,7 @@ export function DeployModal({
               // isUndeploying={isUndeploying}
               onDeploy={onDeploy}
               onRedeploy={handleRedeploy}
-              // onUndeploy={() => setShowUndeployConfirm(true)}
+            // onUndeploy={() => setShowUndeployConfirm(true)}
             />
           )}
           {activeTab === 'chat' && (

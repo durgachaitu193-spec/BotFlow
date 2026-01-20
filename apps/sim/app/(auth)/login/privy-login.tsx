@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useCreateWallet, usePrivy, useWallets } from '@privy-io/react-auth'
+import { useCreateWallet, usePrivy, useWallets } from '@wazabi/ui'
 import { motion } from 'framer-motion'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'

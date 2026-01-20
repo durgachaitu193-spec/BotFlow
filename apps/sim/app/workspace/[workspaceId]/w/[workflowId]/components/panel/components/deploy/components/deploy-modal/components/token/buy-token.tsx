@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useWallets } from '@privy-io/react-auth'
+import { useWallets } from '@wazabi/ui'
 import { createLogger } from '@wazabi/logger'
 import { formatEther } from 'viem'
 import { AlertTriangle, ArrowRightLeft, Check, ExternalLink, Loader2, RefreshCw } from 'lucide-react'

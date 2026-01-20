@@ -130,6 +130,10 @@ export const buildTimeCSPDirectives: CSPDirectives = {
     // Cloudflare
     'https://cloudflareinsights.com',
     'https://static.cloudflareinsights.com',
+    // ThirdWeb RPC endpoints (used by Privy for blockchain connections)
+    'https://*.rpc.thirdweb.com',
+    'https://56.rpc.thirdweb.com',
+    'https://97.rpc.thirdweb.com',
     ...getHostnameFromUrl(env.NEXT_PUBLIC_BRAND_LOGO_URL),
     ...getHostnameFromUrl(env.NEXT_PUBLIC_PRIVACY_URL),
     ...getHostnameFromUrl(env.NEXT_PUBLIC_TERMS_URL),
@@ -214,7 +218,7 @@ export function generateRuntimeCSP(): string {
     img-src 'self' data: blob: https://*.googleusercontent.com https://*.google.com https://*.atlassian.com https://cdn.discordapp.com https://*.githubusercontent.com https://explorer-api.walletconnect.com https://*.walletconnect.com https://*.walletconnect.org https://auth.privy.io https://*.privy.io https://collector.onedollarstats.com https://*.coinbase.com ${brandLogoDomain} ${brandFaviconDomain};
     media-src 'self' blob:;
     font-src 'self' https://fonts.gstatic.com;
-    connect-src 'self' https://privy.wazabi.ai ${appUrl} ${ollamaUrl} ${socketUrl} ${socketWsUrl} https://api.browser-use.com https://api.exa.ai https://api.firecrawl.dev https://*.googleapis.com https://*.amazonaws.com https://*.s3.amazonaws.com https://*.blob.core.windows.net https://api.github.com https://github.com/* https://*.atlassian.com https://*.supabase.co https://collector.onedollarstats.com https://auth.privy.io wss://relay.walletconnect.com wss://relay.walletconnect.org wss://www.walletlink.org https://*.rpc.privy.systems https://explorer-api.walletconnect.com https://*.coinbase.com https://cca-lite.coinbase.com https://api.web3modal.org https://cloudflareinsights.com https://static.cloudflareinsights.com ${dynamicDomainsStr};
+    connect-src 'self' https://privy.wazabi.ai ${appUrl} ${ollamaUrl} ${socketUrl} ${socketWsUrl} https://api.browser-use.com https://api.exa.ai https://api.firecrawl.dev https://*.googleapis.com https://*.amazonaws.com https://*.s3.amazonaws.com https://*.blob.core.windows.net https://api.github.com https://github.com/* https://*.atlassian.com https://*.supabase.co https://collector.onedollarstats.com https://auth.privy.io wss://relay.walletconnect.com wss://relay.walletconnect.org wss://www.walletlink.org https://*.rpc.privy.systems https://explorer-api.walletconnect.com https://*.coinbase.com https://cca-lite.coinbase.com https://api.web3modal.org https://cloudflareinsights.com https://static.cloudflareinsights.com https://*.rpc.thirdweb.com https://56.rpc.thirdweb.com https://97.rpc.thirdweb.com ${dynamicDomainsStr};
     frame-src https://drive.google.com https://docs.google.com https://*.google.com https://auth.privy.io https://privy.wazabi.ai https://verify.walletconnect.com https://verify.walletconnect.org https://challenges.cloudflare.com https://*.coinbase.com;
     child-src https://auth.privy.io https://privy.wazabi.ai https://verify.walletconnect.com https://verify.walletconnect.org https://*.coinbase.com;
     frame-ancestors 'self';

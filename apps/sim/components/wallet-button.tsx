@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { usePrivy, useWallets } from '@privy-io/react-auth'
+import { usePrivy, useWallets } from '@wazabi/ui'
 import { createLogger } from '@wazabi/logger'
 import { Check, Copy, LogOut, Wallet } from 'lucide-react'
 import { useRouter } from 'next/navigation'
