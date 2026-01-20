@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { LOOP, PARALLEL, PARSING, REFERENCE } from '@/executor/consts'
 import type { SerializedParallel } from '@/serializer/types'
 

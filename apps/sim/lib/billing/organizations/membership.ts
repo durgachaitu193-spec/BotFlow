@@ -6,15 +6,15 @@
  */
 
 import { randomUUID } from 'crypto'
-import { db } from '@sim/db'
+import { db } from '@wazabi/db'
 import {
   member,
   organization,
   subscription as subscriptionTable,
   user,
   userStats,
-} from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+} from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, eq, sql } from 'drizzle-orm'
 import { requireStripeClient } from '@/lib/billing/stripe-client'
 import { validateSeatAvailability } from '@/lib/billing/validation/seat-management'

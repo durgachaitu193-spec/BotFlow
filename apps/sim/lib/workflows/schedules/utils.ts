@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { Cron } from 'croner'
 import cronstrue from 'cronstrue'
 import { formatDateTime } from '@/lib/core/utils/formatting'

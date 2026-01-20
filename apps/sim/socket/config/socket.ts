@@ -1,5 +1,5 @@
 import type { Server as HttpServer } from 'http'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { Server } from 'socket.io'
 import { env } from '@/lib/core/config/env'
 import { isProd } from '@/lib/core/config/feature-flags'

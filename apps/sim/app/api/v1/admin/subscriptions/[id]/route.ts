@@ -23,9 +23,9 @@
  * Response: AdminSingleResponse<AdminSubscription & { sideEffects }>
  */
 
-import { db } from '@sim/db'
-import { member, subscription } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { member, subscription } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { eq } from 'drizzle-orm'
 import { syncUsageLimitsFromSubscription } from '@/lib/billing/core/usage'
 import { withAdminAuthParams } from '@/app/api/v1/admin/middleware'

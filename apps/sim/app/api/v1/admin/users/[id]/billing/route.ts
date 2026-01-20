@@ -18,9 +18,9 @@
  * Response: AdminSingleResponse<{ success: true, updated: string[], warnings: string[] }>
  */
 
-import { db } from '@sim/db'
-import { member, organization, subscription, user, userStats } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { member, organization, subscription, user, userStats } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { eq, or } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
 import { getHighestPrioritySubscription } from '@/lib/billing/core/subscription'

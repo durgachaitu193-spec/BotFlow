@@ -1,5 +1,5 @@
 import { createCipheriv, createDecipheriv, randomBytes } from 'crypto'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { env } from '@/lib/core/config/env'
 
 const logger = createLogger('ApiKeyCrypto')
@@ -97,11 +97,11 @@ export async function decryptApiKey(encryptedValue: string): Promise<{ decrypted
 }
 
 /**
- * Generates a standardized API key with the 'megalith_' prefix (legacy format)
+ * Generates a standardized API key with the 'wazabi_' prefix (legacy format)
  * @returns A new API key string
  */
 export function generateApiKey(): string {
-  return `megalith_${randomBytes(24).toString('base64url')}`
+  return `wazabi_${randomBytes(24).toString('base64url')}`
 }
 
 /**
@@ -124,8 +124,8 @@ export function isEncryptedApiKeyFormat(apiKey: string): boolean {
 /**
  * Determines if an API key uses the legacy format based on prefix
  * @param apiKey - The API key to check
- * @returns true if the key uses the legacy format (megalith_ prefix)
+ * @returns true if the key uses the legacy format (wazabi_ prefix)
  */
 export function isLegacyApiKeyFormat(apiKey: string): boolean {
-  return apiKey.startsWith('megalith_') && !apiKey.startsWith('sk-sim-')
+  return apiKey.startsWith('wazabi_') && !apiKey.startsWith('sk-sim-')
 }

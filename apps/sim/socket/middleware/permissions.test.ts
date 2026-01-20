@@ -12,7 +12,7 @@ import {
   expectPermissionDenied,
   ROLE_ALLOWED_OPERATIONS,
   SOCKET_OPERATIONS,
-} from '@sim/testing'
+} from '@wazabi/testing'
 import { describe, expect, it } from 'vitest'
 import { checkRolePermission } from '@/socket/middleware/permissions'
 

@@ -1,4 +1,4 @@
-import { createLoopBlock } from '@sim/testing'
+import { createLoopBlock } from '@wazabi/testing'
 import { describe, expect, it } from 'vitest'
 import type { BlockState } from '@/stores/workflows/workflow/types'
 import { convertLoopBlockToLoop } from '@/stores/workflows/workflow/utils'

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { Check, ChevronDown, Copy, Eye, EyeOff } from 'lucide-react'
 import { Button, Combobox, Input, Switch, Textarea } from '@/components/emcn'
 import { Skeleton } from '@/components/ui'

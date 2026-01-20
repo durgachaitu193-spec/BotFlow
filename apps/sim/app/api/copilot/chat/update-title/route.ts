@@ -3,9 +3,9 @@
  * @remarks Kept for reference - may be removed in future cleanup
  */
 
-import { db } from '@sim/db'
-import { copilotChats } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { copilotChats } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'

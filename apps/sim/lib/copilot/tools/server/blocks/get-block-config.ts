@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { BaseServerTool } from '@/lib/copilot/tools/server/base-tool'
 import {
   type GetBlockConfigInputType,
@@ -8,7 +8,7 @@ import {
 import { registry as blockRegistry } from '@/blocks/registry'
 import type { SubBlockConfig } from '@/blocks/types'
 import { PROVIDER_DEFINITIONS } from '@/providers/models'
-import { tools as toolsRegistry } from '@/tools/registry'
+import { getToolAsync, getToolMetadata } from '@/tools/utils'
 
 interface InputFieldSchema {
   type: string
@@ -249,7 +249,7 @@ function mapSubBlockTypeToSchemaType(type: string): string {
 /**
  * Extracts output schema from block config or tool
  */
-function extractOutputs(blockConfig: any, operation?: string): Record<string, OutputFieldSchema> {
+async function extractOutputs(blockConfig: any, operation?: string): Promise<Record<string, OutputFieldSchema>> {
   const outputs: Record<string, OutputFieldSchema> = {}
 
   // If operation is specified, try to get outputs from the specific tool
@@ -258,7 +258,7 @@ function extractOutputs(blockConfig: any, operation?: string): Record<string, Ou
       const toolSelector = blockConfig.tools?.config?.tool
       if (typeof toolSelector === 'function') {
         const toolId = toolSelector({ operation })
-        const tool = toolsRegistry[toolId]
+        const tool = await getToolAsync(toolId)
         if (tool?.outputs) {
           for (const [key, def] of Object.entries(tool.outputs)) {
             const typedDef = def as { type: string; description?: string }
@@ -327,7 +327,7 @@ export const getBlockConfigServerTool: BaseServerTool<
 
     const subBlocks = Array.isArray(blockConfig.subBlocks) ? blockConfig.subBlocks : []
     const inputs = extractInputsFromSubBlocks(subBlocks, operation)
-    const outputs = extractOutputs(blockConfig, operation)
+    const outputs = await extractOutputs(blockConfig, operation)
 
     const result = {
       blockType,

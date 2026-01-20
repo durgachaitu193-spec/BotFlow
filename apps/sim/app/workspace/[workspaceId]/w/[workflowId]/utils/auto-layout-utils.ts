@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import {
   DEFAULT_HORIZONTAL_SPACING,
   DEFAULT_LAYOUT_PADDING,

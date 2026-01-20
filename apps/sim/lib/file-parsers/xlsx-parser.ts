@@ -1,5 +1,5 @@
 import { existsSync } from 'fs'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import * as XLSX from 'xlsx'
 import type { FileParseResult, FileParser } from '@/lib/file-parsers/types'
 import { sanitizeTextForUTF8 } from '@/lib/file-parsers/utils'

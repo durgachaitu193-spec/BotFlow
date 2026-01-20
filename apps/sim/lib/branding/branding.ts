@@ -24,11 +24,11 @@ export interface BrandConfig {
  * Default brand configuration values
  */
 const defaultConfig: BrandConfig = {
-  name: 'MegalithLabs',
+  name: 'Wazabi.ai',
   logoUrl: undefined,
   faviconUrl: '/favicon/favicon.ico',
   customCssUrl: undefined,
-  supportEmail: 'help@megalithlabs.ai',
+  supportEmail: 'help@wazabi.ai',
   documentationUrl: undefined,
   termsUrl: undefined,
   privacyUrl: undefined,

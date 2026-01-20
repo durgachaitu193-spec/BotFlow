@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { Check, Clipboard, Plus, Search } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import {

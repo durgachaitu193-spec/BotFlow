@@ -386,7 +386,7 @@ export function mockExecutionDependencies() {
     })),
   }))
 
-  vi.mock('@sim/db', () => ({
+  vi.mock('@wazabi/db', () => ({
     db: mockDb,
     // Add common schema exports that tests might need
     webhook: {
@@ -456,7 +456,7 @@ export async function getMockedDependencies() {
   const workflowUtilsModule = await import('@/lib/workflows/utils')
   const executorModule = await import('@/executor')
   const serializerModule = await import('@/serializer')
-  const dbModule = await import('@sim/db')
+  const dbModule = await import('@wazabi/db')
 
   return {
     decryptSecret: encryptionModule.decryptSecret,
@@ -489,7 +489,7 @@ export function mockScheduleStatusDb({
   schedule?: any[]
   workflow?: any[]
 } = {}) {
-  vi.doMock('@sim/db', () => {
+  vi.doMock('@wazabi/db', () => {
     let callCount = 0
 
     const select = vi.fn().mockImplementation(() => ({
@@ -530,7 +530,7 @@ export function mockScheduleExecuteDb({
   workflowRecord?: any
   envRecord?: any
 }): void {
-  vi.doMock('@sim/db', () => {
+  vi.doMock('@wazabi/db', () => {
     const select = vi.fn().mockImplementation(() => ({
       from: vi.fn().mockImplementation((table: any) => {
         const tbl = String(table)
@@ -605,7 +605,7 @@ export function mockAuth(user: MockUser = mockUser): MockAuthResult {
  * Mock common schema patterns
  */
 export function mockCommonSchemas() {
-  vi.doMock('@sim/db/schema', () => ({
+  vi.doMock('@wazabi/db/schema', () => ({
     workflowFolder: {
       id: 'id',
       userId: 'userId',
@@ -658,7 +658,7 @@ export function mockDrizzleOrm() {
  * Mock knowledge-related database schemas
  */
 export function mockKnowledgeSchemas() {
-  vi.doMock('@sim/db/schema', () => ({
+  vi.doMock('@wazabi/db/schema', () => ({
     knowledgeBase: {
       id: 'kb_id',
       userId: 'user_id',
@@ -732,7 +732,7 @@ export function mockKnowledgeSchemas() {
  * Mock console logger
  */
 export function mockConsoleLogger() {
-  vi.doMock('@sim/logger', () => ({
+  vi.doMock('@wazabi/logger', () => ({
     createLogger: vi.fn().mockReturnValue(mockLogger),
   }))
 }
@@ -1199,7 +1199,7 @@ export function createMockDatabase(options: MockDatabaseOptions = {}) {
     transaction: createTransactionMock(),
   }
 
-  vi.doMock('@sim/db', () => ({ db: mockDb }))
+  vi.doMock('@wazabi/db', () => ({ db: mockDb }))
 
   return {
     mockDb,

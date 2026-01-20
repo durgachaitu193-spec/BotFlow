@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { TypeformInsightsParams, TypeformInsightsResponse } from '@/tools/typeform/types'
 import type { ToolConfig } from '@/tools/types'
 

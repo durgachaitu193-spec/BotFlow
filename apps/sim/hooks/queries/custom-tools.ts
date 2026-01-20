@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { CustomToolDefinition, CustomToolSchema } from '@/stores/custom-tools'
 import { useCustomToolsStore } from '@/stores/custom-tools'

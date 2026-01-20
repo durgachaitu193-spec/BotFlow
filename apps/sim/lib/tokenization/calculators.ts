@@ -2,7 +2,7 @@
  * Cost calculation functions for tokenization
  */
 
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { createTokenizationError } from '@/lib/tokenization/errors'
 import {
   estimateInputTokens,

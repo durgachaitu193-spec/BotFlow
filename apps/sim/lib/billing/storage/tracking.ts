@@ -4,9 +4,9 @@
  * Only tracks when billing is enabled
  */
 
-import { db } from '@sim/db'
-import { organization, userStats } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { organization, userStats } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { eq, sql } from 'drizzle-orm'
 import { isBillingEnabled } from '@/lib/core/config/environment'
 

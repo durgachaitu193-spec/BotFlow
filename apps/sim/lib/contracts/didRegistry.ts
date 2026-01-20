@@ -1,8 +1,8 @@
-// DID Registry Contract Configuration
-export const DID_REGISTRY_ADDRESS = '0xE0579eB8cb426cD70743731Fdb94Aad2877C582D' as const
+// DID Registry Contract Configuration (BSC Mainnet Proxy)
+export const DID_REGISTRY_ADDRESS = '0x8BB4b56685877FE034dCA371A2C14b5de78C96bC' as const
 
-// Username Registry Contract Configuration
-export const USERNAME_REGISTRY_ADDRESS = '0x9EFfBd00883006c36E146Eb2F4Ac7494498ea2C6' as const
+// Username Registry Contract Configuration (BSC Mainnet Proxy)
+export const USERNAME_REGISTRY_ADDRESS = '0x364a432b0bB50b997DcA090E9b72A31c22f92D22' as const
 
 // Binance Smart Chain Mainnet (BSC Mainnet)
 export const BSC_MAINNET = {
@@ -58,8 +58,8 @@ export const BSC_TESTNET = {
   testnet: true,
 } as const
 
-// Default to testnet for now
-export const DEFAULT_CHAIN = BSC_TESTNET
+// Default to BSC Mainnet for production
+export const DEFAULT_CHAIN = BSC_MAINNET
 
 // Contract ABI for DID Registry
 export const DID_REGISTRY_ABI = [

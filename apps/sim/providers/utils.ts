@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { getEnv, isTruthy } from '@/lib/core/config/env'
 import { isHosted } from '@/lib/core/config/environment'
 import { anthropicProvider } from '@/providers/anthropic'
@@ -34,6 +34,8 @@ import { vllmProvider } from '@/providers/vllm'
 import { xAIProvider } from '@/providers/xai'
 import { useCustomToolsStore } from '@/stores/custom-tools/store'
 import { useProvidersStore } from '@/stores/providers/store'
+import { executeTool } from '@/tools'
+import { getToolAsync, validateRequiredParametersAfterMerge } from '@/tools/utils'
 
 const logger = createLogger('ProviderUtils')
 
@@ -290,9 +292,10 @@ export function generateStructuredOutputInstructions(responseFormat: any): strin
     if (field.type === 'object' && field.properties) {
       return `{
     ${Object.entries(field.properties)
-      .map(([key, prop]: [string, any]) => `"${key}": ${prop.type === 'number' ? '0' : '"value"'}`)
-      .join(',\n    ')}
-  }`
+          .map(([key, prop]: [string, any]) => `"${key}": ${prop.type === 'number' ? '0' : '"value"'}`)
+          .join(',\n    ')
+        }
+} `
     }
     return field.type === 'string'
       ? '"value"'
@@ -304,17 +307,17 @@ export function generateStructuredOutputInstructions(responseFormat: any): strin
   }
 
   const exampleFormat = responseFormat.fields
-    .map((field: any) => `  "${field.name}": ${generateFieldStructure(field)}`)
+    .map((field: any) => `  "${field.name}": ${generateFieldStructure(field)} `)
     .join(',\n')
 
   const fieldDescriptions = responseFormat.fields
     .map((field: any) => {
       let desc = `${field.name} (${field.type})`
-      if (field.description) desc += `: ${field.description}`
+      if (field.description) desc += `: ${field.description} `
       if (field.type === 'object' && field.properties) {
         desc += '\nProperties:'
         Object.entries(field.properties).forEach(([key, prop]: [string, any]) => {
-          desc += `\n  - ${key} (${(prop as any).type}): ${(prop as any).description || ''}`
+          desc += `\n - ${key} (${(prop as any).type}): ${(prop as any).description || ''} `
         })
       }
       return desc
@@ -331,7 +334,7 @@ Field descriptions:
 ${fieldDescriptions}
 
 Your response MUST be valid JSON and include all the specified fields with their correct types.
-Each metric should be an object containing 'score' (number) and 'reasoning' (string).`
+Each metric should be an object containing 'score'(number) and 'reasoning'(string).`
 }
 
 export function extractAndParseJSON(content: string): any {
@@ -369,7 +372,7 @@ export function extractAndParseJSON(content: string): any {
       })
 
       throw new Error(
-        `Failed to parse JSON after cleanup: ${innerError instanceof Error ? innerError.message : 'Unknown error'}`
+        `Failed to parse JSON after cleanup: ${innerError instanceof Error ? innerError.message : 'Unknown error'} `
       )
     }
   }
@@ -386,7 +389,7 @@ export function transformCustomTool(customTool: any): ProviderToolConfig {
   }
 
   return {
-    id: `custom_${customTool.id}`, // Prefix with 'custom_' to identify custom tools
+    id: `custom_${customTool.id} `, // Prefix with 'custom_' to identify custom tools
     name: schema.function.name,
     description: schema.function.description || '',
     params: {}, // This will be derived from parameters
@@ -421,16 +424,16 @@ export async function transformBlockTool(
   options: {
     selectedOperation?: string
     getAllBlocks: () => any[]
-    getTool: (toolId: string) => any
+    getToolMetadata: (toolId: string) => any
     getToolAsync?: (toolId: string) => Promise<any>
   }
 ): Promise<ProviderToolConfig | null> {
-  const { selectedOperation, getAllBlocks, getTool, getToolAsync } = options
+  const { selectedOperation, getAllBlocks, getToolMetadata, getToolAsync } = options
 
   // Get the block definition
   const blockDef = getAllBlocks().find((b: any) => b.type === block.type)
   if (!blockDef) {
-    logger.warn(`Block definition not found for type: ${block.type}`)
+    logger.warn(`Block definition not found for type: ${block.type} `)
     return null
   }
 
@@ -464,7 +467,7 @@ export async function transformBlockTool(
   }
 
   if (!toolId) {
-    logger.warn(`No tool ID found for block: ${block.type}`)
+    logger.warn(`No tool ID found for block: ${block.type} `)
     return null
   }
 
@@ -474,13 +477,13 @@ export async function transformBlockTool(
   if (toolId.startsWith('custom_') && getToolAsync) {
     // Use the async version for custom tools
     toolConfig = await getToolAsync(toolId)
-  } else {
-    // Use the synchronous version for built-in tools
-    toolConfig = getTool(toolId)
+  } else if (getToolAsync) {
+    // Use the asynchronous version for built-in tools
+    toolConfig = await getToolAsync(toolId)
   }
 
   if (!toolConfig) {
-    logger.warn(`Tool config not found for ID: ${toolId}`)
+    logger.warn(`Tool config not found for ID: ${toolId} `)
     return null
   }
 
@@ -588,17 +591,17 @@ export function formatCost(cost: number): string {
   if (cost === undefined || cost === null) return '—'
 
   if (cost >= 1) {
-    return `$${cost.toFixed(2)}`
+    return `$${cost.toFixed(2)} `
   }
   if (cost >= 0.01) {
-    return `$${cost.toFixed(3)}`
+    return `$${cost.toFixed(3)} `
   }
   if (cost >= 0.001) {
-    return `$${cost.toFixed(4)}`
+    return `$${cost.toFixed(4)} `
   }
   if (cost > 0) {
     const places = Math.max(4, Math.abs(Math.floor(Math.log10(cost))) + 3)
-    return `$${cost.toFixed(places)}`
+    return `$${cost.toFixed(places)} `
   }
   return '$0'
 }
@@ -657,14 +660,14 @@ export function getApiKey(provider: string, model: string, userProvidedKey?: str
           return userProvidedKey!
         }
 
-        throw new Error(`No API key available for ${provider} ${model}`)
+        throw new Error(`No API key available for ${provider} ${model} `)
       }
     }
   }
 
   // For all other cases, require user-provided key
   if (!hasUserKey) {
-    throw new Error(`API key is required for ${provider} ${model}`)
+    throw new Error(`API key is required for ${provider} ${model} `)
   }
 
   return userProvidedKey!
@@ -687,12 +690,12 @@ export function prepareToolsWithUsageControl(
 ): {
   tools: any[] | undefined
   toolChoice:
-    | 'auto'
-    | 'none'
-    | { type: 'function'; function: { name: string } }
-    | { type: 'tool'; name: string }
-    | { type: 'any'; any: { model: string; name: string } }
-    | undefined
+  | 'auto'
+  | 'none'
+  | { type: 'function'; function: { name: string } }
+  | { type: 'tool'; name: string }
+  | { type: 'any'; any: { model: string; name: string } }
+  | undefined
   toolConfig?: {
     // Add toolConfig for Google's format
     functionCallingConfig: {
@@ -724,7 +727,7 @@ export function prepareToolsWithUsageControl(
   const hasFilteredTools = filteredTools.length < tools.length
   if (hasFilteredTools) {
     logger.info(
-      `Filtered out ${tools.length - filteredTools.length} tools with usageControl='none'`
+      `Filtered out ${tools.length - filteredTools.length} tools with usageControl = 'none'`
     )
   }
 
@@ -754,11 +757,11 @@ export function prepareToolsWithUsageControl(
   // For Google, we'll use a separate toolConfig object
   let toolConfig:
     | {
-        functionCallingConfig: {
-          mode: 'AUTO' | 'ANY' | 'NONE'
-          allowedFunctionNames?: string[]
-        }
+      functionCallingConfig: {
+        mode: 'AUTO' | 'ANY' | 'NONE'
+        allowedFunctionNames?: string[]
       }
+    }
     | undefined
 
   if (forcedTools.length > 0) {
@@ -792,11 +795,11 @@ export function prepareToolsWithUsageControl(
       }
     }
 
-    logger.info(`Forcing use of tool: ${forcedTool.id}`)
+    logger.info(`Forcing use of tool: ${forcedTool.id} `)
 
     if (forcedTools.length > 1) {
       logger.info(
-        `Multiple tools set to 'force' mode (${forcedToolIds.join(', ')}). Will cycle through them sequentially.`
+        `Multiple tools set to 'force' mode(${forcedToolIds.join(', ')}).Will cycle through them sequentially.`
       )
     }
   } else {
@@ -839,11 +842,11 @@ export function trackForcedToolUsage(
   hasUsedForcedTool: boolean
   usedForcedTools: string[]
   nextToolChoice?:
-    | 'auto'
-    | { type: 'function'; function: { name: string } }
-    | { type: 'tool'; name: string }
-    | { type: 'any'; any: { model: string; name: string } }
-    | null
+  | 'auto'
+  | { type: 'function'; function: { name: string } }
+  | { type: 'tool'; name: string }
+  | { type: 'any'; any: { model: string; name: string } }
+  | null
   nextToolConfig?: {
     functionCallingConfig: {
       mode: 'AUTO' | 'ANY' | 'NONE'
@@ -856,11 +859,11 @@ export function trackForcedToolUsage(
   let nextToolChoice = originalToolChoice
   let nextToolConfig:
     | {
-        functionCallingConfig: {
-          mode: 'AUTO' | 'ANY' | 'NONE'
-          allowedFunctionNames?: string[]
-        }
+      functionCallingConfig: {
+        mode: 'AUTO' | 'ANY' | 'NONE'
+        allowedFunctionNames?: string[]
       }
+    }
     | undefined
 
   const updatedUsedForcedTools = [...usedForcedTools]
@@ -882,8 +885,8 @@ export function trackForcedToolUsage(
     // For other providers
     forcedToolNames = [
       originalToolChoice?.function?.name ||
-        originalToolChoice?.name ||
-        originalToolChoice?.any?.name,
+      originalToolChoice?.name ||
+      originalToolChoice?.any?.name,
     ].filter(Boolean)
   }
 
@@ -932,7 +935,7 @@ export function trackForcedToolUsage(
         }
 
         logger.info(
-          `Forced tool(s) ${usedTools.join(', ')} used, switching to next forced tool(s): ${remainingTools.join(', ')}`
+          `Forced tool(s) ${usedTools.join(', ')} used, switching to next forced tool(s): ${remainingTools.join(', ')} `
         )
       } else {
         // All forced tools have been used, switch to auto mode
@@ -1022,13 +1025,13 @@ export function prepareToolExecution(
     ...toolParams,
     ...(request.workflowId
       ? {
-          _context: {
-            workflowId: request.workflowId,
-            ...(request.workspaceId ? { workspaceId: request.workspaceId } : {}),
-            ...(request.chatId ? { chatId: request.chatId } : {}),
-            ...(request.userId ? { userId: request.userId } : {}),
-          },
-        }
+        _context: {
+          workflowId: request.workflowId,
+          ...(request.workspaceId ? { workspaceId: request.workspaceId } : {}),
+          ...(request.chatId ? { chatId: request.chatId } : {}),
+          ...(request.userId ? { userId: request.userId } : {}),
+        },
+      }
       : {}),
     ...(request.environmentVariables ? { envVars: request.environmentVariables } : {}),
     ...(request.workflowVariables ? { workflowVariables: request.workflowVariables } : {}),

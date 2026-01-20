@@ -1,4 +1,4 @@
-import { syncPrivyUser } from '@sim/db/privy-sync'
+import { syncPrivyUser } from '@wazabi/db/privy-sync'
 import { type NextRequest, NextResponse } from 'next/server'
 
 /**

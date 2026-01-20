@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { useDuplicateFolderMutation } from '@/hooks/queries/folders'
 import { useFolderStore } from '@/stores/folders/store'
 

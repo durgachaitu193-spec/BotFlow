@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { SIM_AGENT_API_URL_DEFAULT } from '@/lib/copilot/constants'

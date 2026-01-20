@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { EVALUATOR } from '@/executor/consts'
 
 const logger = createLogger('JSONUtils')

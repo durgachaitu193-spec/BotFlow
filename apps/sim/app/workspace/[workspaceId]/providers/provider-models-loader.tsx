@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { useProviderModels } from '@/hooks/queries/providers'
 import {
   updateOllamaProviderModels,

@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'fs'
 import { join } from 'path'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { BaseServerTool } from '@/lib/copilot/tools/server/base-tool'
 import {
   type GetBlocksMetadataInput,
@@ -10,7 +10,7 @@ import { registry as blockRegistry } from '@/blocks/registry'
 import type { BlockConfig } from '@/blocks/types'
 import { AuthMode } from '@/blocks/types'
 import { PROVIDER_DEFINITIONS } from '@/providers/models'
-import { tools as toolsRegistry } from '@/tools/registry'
+import { getToolAsync, getToolMetadata } from '@/tools/utils'
 import { getTrigger, isTriggerValid } from '@/triggers'
 import { SYSTEM_SUBBLOCK_IDS } from '@/triggers/consts'
 
@@ -148,7 +148,7 @@ export const getBlocksMetadataServerTool: BaseServerTool<
         }
         const tools: CopilotToolMetadata[] = Array.isArray(blockConfig.tools?.access)
           ? blockConfig.tools!.access.map((toolId) => {
-            const tool = toolsRegistry[toolId]
+            const tool = getToolMetadata(toolId)
             if (!tool) return { id: toolId, name: toolId }
             return {
               id: toolId,
@@ -224,7 +224,7 @@ export const getBlocksMetadataServerTool: BaseServerTool<
         const operations: Record<string, any> = {}
         for (const opId of operationIds) {
           const resolvedToolId = resolveToolIdForOperation(blockConfig, opId)
-          const toolCfg = resolvedToolId ? toolsRegistry[resolvedToolId] : undefined
+          const toolCfg = resolvedToolId ? getToolMetadata(resolvedToolId) : undefined
           const toolParams: Record<string, any> = toolCfg?.params || {}
           const toolOutputs: Record<string, any> = toolCfg?.outputs || {}
           const filteredToolParams: Record<string, any> = {}

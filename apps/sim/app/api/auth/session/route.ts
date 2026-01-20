@@ -1,5 +1,5 @@
-import { db } from '@sim/db'
-import { user } from '@sim/db/schema'
+import { db } from '@wazabi/db'
+import { user } from '@wazabi/db/schema'
 import { eq } from 'drizzle-orm'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'

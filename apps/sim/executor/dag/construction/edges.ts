@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { EDGE, isConditionBlockType, isRouterBlockType } from '@/executor/consts'
 import type { DAG } from '@/executor/dag/builder'
 import {

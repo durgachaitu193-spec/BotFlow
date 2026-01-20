@@ -1,6 +1,6 @@
-import { db } from '@sim/db'
-import { account, webhook, workflow } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { account, webhook, workflow } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, eq, sql } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
 import { pollingIdempotency } from '@/lib/core/idempotency/service'
@@ -240,7 +240,7 @@ export async function pollGmailWebhooks() {
 
     for (const webhookData of activeWebhooks) {
       const promise = enqueue(webhookData)
-        .then(() => {})
+        .then(() => { })
         .catch((err) => {
           logger.error('Unexpected error in webhook processing:', err)
           failureCount++
@@ -653,7 +653,7 @@ async function processEmails(
             headers: {
               'Content-Type': 'application/json',
               'X-Webhook-Secret': webhookData.secret || '',
-              'User-Agent': 'SimStudio/1.0',
+              'User-Agent': 'Wazabi/1.0',
             },
             body: JSON.stringify(payload),
           })

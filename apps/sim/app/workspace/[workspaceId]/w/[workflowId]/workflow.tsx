@@ -11,7 +11,7 @@ import ReactFlow, {
   useReactFlow,
 } from 'reactflow'
 import 'reactflow/dist/style.css'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { Loader2 } from 'lucide-react'
 import type { OAuthConnectEventDetail } from '@/lib/copilot/tools/client/other/oauth-request-access'
 import type { OAuthProvider } from '@/lib/oauth'
@@ -765,7 +765,7 @@ const WorkflowContent = React.memo(() => {
                   block: b,
                   distance: Math.sqrt(
                     (b.position.x - relativePosition.x) ** 2 +
-                      (b.position.y - relativePosition.y) ** 2
+                    (b.position.y - relativePosition.y) ** 2
                   ),
                 }))
                 .sort((a, b) => a.distance - b.distance)[0]?.block
@@ -1170,10 +1170,15 @@ const WorkflowContent = React.memo(() => {
       event.preventDefault()
 
       try {
-        const raw = event.dataTransfer.getData('application/json')
+        let raw = event.dataTransfer.getData('application/json')
+        if (!raw) {
+          raw = event.dataTransfer.getData('text/plain')
+        }
         if (!raw) return
         const data = JSON.parse(raw)
         if (!data?.type) return
+
+        logger.info('Workflow: onDrop received', { data })
 
         const reactFlowBounds = event.currentTarget.getBoundingClientRect()
         const position = screenToFlowPosition({
@@ -1223,10 +1228,17 @@ const WorkflowContent = React.memo(() => {
   // Handle drag over for ReactFlow canvas
   const onDragOver = useCallback(
     (event: React.DragEvent) => {
+      // Always prevent default to allow drop
       event.preventDefault()
 
-      // Only handle toolbar items
-      if (!event.dataTransfer?.types.includes('application/json')) return
+      if (event.dataTransfer) {
+        event.dataTransfer.dropEffect = 'move'
+      }
+
+      logger.info('Workflow: onDragOver accepted', {
+        canEdit: effectivePermissions.canEdit,
+        types: event.dataTransfer.types
+      })
 
       try {
         const reactFlowBounds = event.currentTarget.getBoundingClientRect()
@@ -1535,7 +1547,7 @@ const WorkflowContent = React.memo(() => {
     resizeLoopNodesWrapper()
 
     // No need for cleanup with direct function
-    return () => {}
+    return () => { }
   }, [nodes, resizeLoopNodesWrapper])
 
   // Special effect to handle cleanup after node deletion
@@ -1559,7 +1571,7 @@ const WorkflowContent = React.memo(() => {
 
         // Update the node to remove parent reference and use absolute position
         collaborativeUpdateBlockPosition(id, absolutePosition)
-        updateParentId(id, '', 'parent')
+        updateParentId(id, '')
       }
     })
   }, [blocks, collaborativeUpdateBlockPosition, updateParentId, getNodeAbsolutePosition])
@@ -1629,7 +1641,7 @@ const WorkflowContent = React.memo(() => {
         const sourceParentId =
           blocks[sourceNode.id]?.data?.parentId ||
           (connection.sourceHandle === 'loop-start-source' ||
-          connection.sourceHandle === 'parallel-start-source'
+            connection.sourceHandle === 'parallel-start-source'
             ? connection.source
             : undefined)
         const targetParentId = blocks[targetNode.id]?.data?.parentId
@@ -1678,9 +1690,9 @@ const WorkflowContent = React.memo(() => {
           type: 'workflowEdge',
           data: isInsideContainer
             ? {
-                parentId,
-                isInsideContainer,
-              }
+              parentId,
+              isInsideContainer,
+            }
             : undefined,
         })
       }
@@ -1862,7 +1874,7 @@ const WorkflowContent = React.memo(() => {
 
       // Emit collaborative position update for the final position
       // This ensures other users see the smooth final position
-      collaborativeUpdateBlockPosition(node.id, node.position, true)
+      collaborativeUpdateBlockPosition(node.id, node.position)
 
       // Record single move entry on drag end to avoid micro-moves
       try {
@@ -1885,7 +1897,7 @@ const WorkflowContent = React.memo(() => {
           }
           setDragStartPosition(null)
         }
-      } catch {}
+      } catch { }
 
       // Don't process parent changes if the node hasn't actually changed parent or is being moved within same parent
       if (potentialParentId === dragStartParentId) return
@@ -1986,7 +1998,7 @@ const WorkflowContent = React.memo(() => {
                 block: b,
                 distance: Math.sqrt(
                   (b.position.x - relativePositionBefore.x) ** 2 +
-                    (b.position.y - relativePositionBefore.y) ** 2
+                  (b.position.y - relativePositionBefore.y) ** 2
                 ),
               }))
               .sort((a, b) => a.distance - b.distance)[0]?.block
@@ -2066,7 +2078,7 @@ const WorkflowContent = React.memo(() => {
     try {
       // Clear current design selection when clicking on empty canvas
       usePanelEditorStore.getState().clearCurrentBlock()
-    } catch {}
+    } catch { }
   }, [])
 
   // Edge selection

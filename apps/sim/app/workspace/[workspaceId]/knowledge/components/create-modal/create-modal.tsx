@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { AlertCircle, Check, Loader2, X } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'

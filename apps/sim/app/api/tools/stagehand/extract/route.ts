@@ -1,5 +1,5 @@
 import { Stagehand } from '@browserbasehq/stagehand'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { env } from '@/lib/core/config/env'

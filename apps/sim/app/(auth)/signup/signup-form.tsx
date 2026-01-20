@@ -1,7 +1,7 @@
 'use client'
 
 import { Suspense, useEffect, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { ArrowRight, ChevronRight, Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -390,14 +390,14 @@ function SignupFormContent({
         const hasOnlySSO = ssoEnabled && !emailEnabled && !hasSocial
         return hasOnlySSO
       })() && (
-        <div className={`${inter.className} mt-8`}>
-          <SSOLoginButton
-            callbackURL={redirectUrl || '/workspace'}
-            variant='primary'
-            primaryClassName={buttonClass}
-          />
-        </div>
-      )}
+          <div className={`${inter.className} mt-8`}>
+            <SSOLoginButton
+              callbackURL={redirectUrl || '/workspace'}
+              variant='primary'
+              primaryClassName={buttonClass}
+            />
+          </div>
+        )}
 
       {/* Email/Password Form - show unless explicitly disabled */}
       {!isFalsy(getEnv('NEXT_PUBLIC_EMAIL_PASSWORD_SIGNUP_ENABLED')) && (
@@ -420,8 +420,8 @@ function SignupFormContent({
                 className={cn(
                   'rounded-[10px] shadow-sm transition-colors focus:border-gray-400 focus:ring-2 focus:ring-gray-100',
                   showNameValidationError &&
-                    nameErrors.length > 0 &&
-                    'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                  nameErrors.length > 0 &&
+                  'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                 )}
               />
               {showNameValidationError && nameErrors.length > 0 && (
@@ -448,7 +448,7 @@ function SignupFormContent({
                 className={cn(
                   'rounded-[10px] shadow-sm transition-colors focus:border-gray-400 focus:ring-2 focus:ring-gray-100',
                   (emailError || (showEmailValidationError && emailErrors.length > 0)) &&
-                    'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                  'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                 )}
               />
               {showEmailValidationError && emailErrors.length > 0 && (
@@ -482,8 +482,8 @@ function SignupFormContent({
                   className={cn(
                     'rounded-[10px] pr-10 shadow-sm transition-colors focus:border-gray-400 focus:ring-2 focus:ring-gray-100',
                     showValidationError &&
-                      passwordErrors.length > 0 &&
-                      'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
+                    passwordErrors.length > 0 &&
+                    'border-red-500 focus:border-red-500 focus:ring-red-100 focus-visible:ring-red-500'
                   )}
                 />
                 <button
@@ -509,7 +509,7 @@ function SignupFormContent({
             type='submit'
             onMouseEnter={() => setIsButtonHovered(true)}
             onMouseLeave={() => setIsButtonHovered(false)}
-            className='group inline-flex w-full items-center justify-center gap-2 rounded-[10px] border border-[#6F3DFA] bg-gradient-to-b from-[#8357FF] to-[#6F3DFA] py-[6px] pr-[10px] pl-[12px] text-[15px] text-white shadow-[inset_0_2px_4px_0_#9B77FF] transition-all'
+            className='group inline-flex w-full items-center justify-center gap-2 rounded-[10px] border-transparent bg-gradient-to-r from-[#1B9B8C] via-[#2DFFA8] to-[#1B9B8C] bg-[length:200%_100%] py-[8px] pr-[10px] pl-[12px] text-[15px] font-bold text-gray-900 shadow-[0_8px_30px_rgba(45,255,168,0.3),0_4px_12px_rgba(27,155,140,0.2)] transition-all hover:bg-[100%_0]'
             disabled={isLoading}
           >
             <span className='flex items-center gap-1'>
@@ -536,15 +536,15 @@ function SignupFormContent({
         const showDivider = (emailEnabled || hasOnlySSO) && showBottomSection
         return showDivider
       })() && (
-        <div className={`${inter.className} relative my-6 font-light`}>
-          <div className='absolute inset-0 flex items-center'>
-            <div className='auth-divider w-full border-t' />
+          <div className={`${inter.className} relative my-6 font-light`}>
+            <div className='absolute inset-0 flex items-center'>
+              <div className='auth-divider w-full border-t' />
+            </div>
+            <div className='relative flex justify-center text-sm'>
+              <span className='bg-white px-4 font-[340] text-muted-foreground'>Or continue with</span>
+            </div>
           </div>
-          <div className='relative flex justify-center text-sm'>
-            <span className='bg-white px-4 font-[340] text-muted-foreground'>Or continue with</span>
-          </div>
-        </div>
-      )}
+        )}
 
       {(() => {
         const ssoEnabled = isTruthy(getEnv('NEXT_PUBLIC_SSO_ENABLED'))
@@ -554,28 +554,28 @@ function SignupFormContent({
         const showBottomSection = hasSocial || (ssoEnabled && !hasOnlySSO)
         return showBottomSection
       })() && (
-        <div
-          className={cn(
-            inter.className,
-            isFalsy(getEnv('NEXT_PUBLIC_EMAIL_PASSWORD_SIGNUP_ENABLED')) ? 'mt-8' : undefined
-          )}
-        >
-          <SocialLoginButtons
-            githubAvailable={githubAvailable}
-            googleAvailable={googleAvailable}
-            callbackURL={redirectUrl || '/workspace'}
-            isProduction={isProduction}
-          >
-            {isTruthy(getEnv('NEXT_PUBLIC_SSO_ENABLED')) && (
-              <SSOLoginButton
-                callbackURL={redirectUrl || '/workspace'}
-                variant='outline'
-                primaryClassName={buttonClass}
-              />
+          <div
+            className={cn(
+              inter.className,
+              isFalsy(getEnv('NEXT_PUBLIC_EMAIL_PASSWORD_SIGNUP_ENABLED')) ? 'mt-8' : undefined
             )}
-          </SocialLoginButtons>
-        </div>
-      )}
+          >
+            <SocialLoginButtons
+              githubAvailable={githubAvailable}
+              googleAvailable={googleAvailable}
+              callbackURL={redirectUrl || '/workspace'}
+              isProduction={isProduction}
+            >
+              {isTruthy(getEnv('NEXT_PUBLIC_SSO_ENABLED')) && (
+                <SSOLoginButton
+                  callbackURL={redirectUrl || '/workspace'}
+                  variant='outline'
+                  primaryClassName={buttonClass}
+                />
+              )}
+            </SocialLoginButtons>
+          </div>
+        )}
 
       <div className={`${inter.className} pt-6 text-center font-light text-[14px]`}>
         <span className='font-normal'>Already have an account? </span>

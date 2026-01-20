@@ -1,5 +1,5 @@
 // Hook for x402 payment integration with Privy
-import { usePrivy, useWallets } from '@privy-io/react-auth'
+import { usePrivy, useWallets } from '@wazabi/ui'
 import { useCallback } from 'react'
 import {
     createPublicClient,
@@ -115,6 +115,61 @@ export function useX402Privy() {
                     if (!prefill.stargate) {
                         throw new Error('No facilitator configured for this token')
                     }
+
+                    // Check if we have sufficient allowance for the Stargate contract
+                    logger('Checking token allowance...')
+                    const currentAllowance = await publicClient.readContract({
+                        address: prefill.token,
+                        abi: [
+                            {
+                                type: 'function',
+                                name: 'allowance',
+                                stateMutability: 'view',
+                                inputs: [
+                                    { name: 'owner', type: 'address' },
+                                    { name: 'spender', type: 'address' },
+                                ],
+                                outputs: [{ type: 'uint256' }],
+                            },
+                        ],
+                        functionName: 'allowance',
+                        args: [wallet.address as `0x${string}`, prefill.stargate],
+                    }) as bigint
+
+                    // If allowance is insufficient, request approval
+                    if (currentAllowance < amountBigInt) {
+                        logger('Insufficient allowance. Requesting approval...')
+                        // Request unlimited approval to avoid repeated approvals
+                        const maxUint256 = BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
+                        const approvalHash = await walletClient.writeContract({
+                            account: wallet.address as `0x${string}`,
+                            chain: targetChain,
+                            address: prefill.token,
+                            abi: [
+                                {
+                                    type: 'function',
+                                    name: 'approve',
+                                    stateMutability: 'nonpayable',
+                                    inputs: [
+                                        { name: 'spender', type: 'address' },
+                                        { name: 'amount', type: 'uint256' },
+                                    ],
+                                    outputs: [{ type: 'bool' }],
+                                },
+                            ],
+                            functionName: 'approve',
+                            args: [prefill.stargate, maxUint256],
+                        })
+                        logger(`Approval tx submitted: ${approvalHash}`)
+
+                        // Wait for approval confirmation
+                        logger('Waiting for approval confirmation...')
+                        await publicClient.waitForTransactionReceipt({ hash: approvalHash })
+                        logger('Approval confirmed!')
+                    } else {
+                        logger('Sufficient allowance already exists.')
+                    }
+
                     const res = await signERC20ViaFacilitator({
                         publicClient,
                         walletClient,

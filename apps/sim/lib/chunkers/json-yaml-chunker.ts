@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import * as yaml from 'js-yaml'
 import type { Chunk, ChunkerOptions } from '@/lib/chunkers/types'
 import { getAccurateTokenCount } from '@/lib/tokenization'

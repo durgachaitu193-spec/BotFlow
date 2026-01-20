@@ -1,7 +1,7 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { getBlock } from '@/blocks/registry'
 import type { WorkflowState } from '@/stores/workflows/workflow/types'
-import { getTool } from '@/tools/utils'
+import { getToolAsync, getToolMetadata } from '@/tools/utils'
 
 const logger = createLogger('WorkflowValidation')
 
@@ -122,10 +122,10 @@ export interface WorkflowValidationResult {
  * Comprehensive workflow state validation
  * Checks all tool references, block types, and required fields
  */
-export function validateWorkflowState(
+export async function validateWorkflowState(
   workflowState: WorkflowState,
   options: { sanitize?: boolean } = {}
-): WorkflowValidationResult {
+): Promise<WorkflowValidationResult> {
   const errors: string[] = []
   const warnings: string[] = []
   let sanitizedState = workflowState
@@ -152,15 +152,15 @@ export function validateWorkflowState(
         continue
       }
 
-      // Check if block type exists
-      const blockConfig = getBlock(block.type)
-
       // Special handling for container blocks (loop and parallel)
       if (block.type === 'loop' || block.type === 'parallel') {
         // These are valid container types, they don't need block configs
         sanitizedBlocks[blockId] = block
         continue
       }
+
+      // Check if block type exists
+      const blockConfig = getBlock(block.type)
 
       if (!blockConfig) {
         errors.push(`Block ${block.name || blockId}: unknown block type '${block.type}'`)
@@ -172,23 +172,13 @@ export function validateWorkflowState(
 
       // Validate tool references in blocks that use tools
       if (block.type === 'api' || block.type === 'generic') {
-        // For API and generic blocks, the tool is determined by the block's tool configuration
-        // In the workflow state, we need to check if the block type has valid tool access
-        const blockConfig = getBlock(block.type)
-        if (blockConfig?.tools?.access) {
-          // API block has static tool access
-          const toolIds = blockConfig.tools.access
-          for (const toolId of toolIds) {
-            const validationError = validateToolReference(toolId, block.type, block.name)
-            if (validationError) {
-              errors.push(validationError)
-            }
+        const toolId = (block as any).config?.tool
+        if (toolId) {
+          const validationError = await validateToolReference(toolId, block.type, block.name)
+          if (validationError) {
+            errors.push(validationError)
           }
         }
-      } else if (block.type === 'knowledge' || block.type === 'supabase' || block.type === 'mcp') {
-        // These blocks have dynamic tool selection based on operation
-        // The actual tool validation happens at runtime based on the operation value
-        // For now, just ensure the block type is valid (already checked above)
       }
 
       // Special validation for agent blocks
@@ -259,11 +249,11 @@ export function validateWorkflowState(
  * Validate tool reference for a specific block
  * Returns null if valid, error message if invalid
  */
-export function validateToolReference(
+export async function validateToolReference(
   toolId: string | undefined,
   blockType: string,
   blockName?: string
-): string | null {
+): Promise<string | null> {
   if (!toolId) return null
 
   // Check if it's a custom tool or MCP tool
@@ -271,8 +261,8 @@ export function validateToolReference(
   const isMcpTool = toolId.startsWith('mcp-')
 
   if (!isCustomTool && !isMcpTool) {
-    // For built-in tools, verify they exist
-    const tool = getTool(toolId)
+    // For built-in tools, verify they exist by checking metadata
+    const tool = getToolMetadata(toolId)
     if (!tool) {
       return `Block ${blockName || 'unknown'} (${blockType}): references non-existent tool '${toolId}'`
     }

@@ -16,15 +16,15 @@
  * Response: { success: true, deleted: number }
  */
 
-import { db } from '@sim/db'
+import { db } from '@wazabi/db'
 import {
   workflow,
   workflowBlocks,
   workflowEdges,
   workflowSchedule,
   workspace,
-} from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+} from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { count, eq, inArray } from 'drizzle-orm'
 import { NextResponse } from 'next/server'
 import { withAdminAuthParams } from '@/app/api/v1/admin/middleware'

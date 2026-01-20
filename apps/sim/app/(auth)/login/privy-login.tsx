@@ -1,15 +1,14 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useCreateWallet, usePrivy, useWallets } from '@privy-io/react-auth'
+import { useCreateWallet, usePrivy, useWallets } from '@wazabi/ui'
 import { motion } from 'framer-motion'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useTheme } from 'next-themes'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { useSession } from '@/lib/auth/auth-client'
 import type { PrivyUserData } from '@/lib/privy/types'
-import { inter } from '@/app/_styles/fonts/inter/inter'
-import { soehne } from '@/app/_styles/fonts/soehne/soehne'
+import { season } from '@/app/_styles/fonts/season/season'
 
 /**
  * Transform Privy user object to our PrivyUserData structure
@@ -29,12 +28,12 @@ const transformPrivyUser = (privyUser: any): PrivyUserData => {
     })),
     wallet: privyUser.wallet
       ? {
-          address: privyUser.wallet.address,
-          walletClientType: privyUser.wallet.walletClientType,
-          chainType: privyUser.wallet.chainType,
-          createdAt: privyUser.wallet.createdAt,
-          ...privyUser.wallet,
-        }
+        address: privyUser.wallet.address,
+        walletClientType: privyUser.wallet.walletClientType,
+        chainType: privyUser.wallet.chainType,
+        createdAt: privyUser.wallet.createdAt,
+        ...privyUser.wallet,
+      }
       : undefined,
     wallets: privyUser.wallets?.map((wallet: any) => ({
       address: wallet.address,
@@ -49,14 +48,17 @@ const transformPrivyUser = (privyUser: any): PrivyUserData => {
 
 export default function PrivyLogin() {
   const { ready, authenticated, login, user } = usePrivy()
+  const { resolvedTheme } = useTheme()
   const { wallets } = useWallets()
   const { createWallet } = useCreateWallet()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { data, refetch } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
   const [isCreatingWallet, setIsCreatingWallet] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const isFromLogout = searchParams.get('fromLogout') === 'true'
 
   const hasRedirected = useRef(false)
   const hasSynced = useRef(false)
@@ -106,6 +108,7 @@ export default function PrivyLogin() {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // Ensure cookies are sent and stored
         body: JSON.stringify({
           user: privyUserData,
           walletAddress: finalWalletAddress,
@@ -134,6 +137,13 @@ export default function PrivyLogin() {
   useEffect(() => {
     // Wait for Privy readiness and auth
     if (!ready || !authenticated || !user?.id) return
+
+    // If coming from logout, do NOT auto-redirect or sync
+    // Instead, we should probably ensure we are logged out
+    if (isFromLogout) {
+      console.log('Detected fromLogout param, skipping auto-sync')
+      return
+    }
 
     const userId = user.id
     const now = Date.now()
@@ -230,16 +240,48 @@ export default function PrivyLogin() {
   }
 
   if (authenticated && user) {
+    if (isFromLogout) {
+      // If we are still authenticated but came from logout, likely state is not settled
+      // We can attempt to logout again or just show a message
+      if (ready) {
+        // Attempt to ensure logout if we are STUCK here
+        /* 
+           Note: We avoid an infinite loop by not calling logout() in a loop without checks. 
+           But typically we just want to show "Finishing sign out..." and maybe 
+           reload after a second if it doesn't clear.
+        */
+        setTimeout(() => {
+          // If we are still here after 2s, force a full reload to clear state
+          if (window.location.search.includes('fromLogout')) {
+            const newUrl = new URL(window.location.href)
+            newUrl.searchParams.delete('fromLogout')
+            window.location.href = newUrl.toString()
+          }
+        }, 2000)
+      }
+
+      return (
+        <div className='space-y-1 text-center'>
+          <h1 className={`${season.className} font-medium text-[32px] text-zinc-900 dark:text-white tracking-tight`}>
+            Finishing sign out...
+          </h1>
+          <p className={`${season.className} mt-2 font-[380] text-[16px] text-zinc-500 dark:text-gray-400`}>
+            Please wait...
+          </p>
+        </div>
+      )
+    }
+
     if (error) {
       return (
-        <div className='mx-auto max-w-md space-y-4 rounded-2xl border border-red-500/20 bg-black/20 p-6 text-center backdrop-blur-sm'>
-          <h1 className={`${soehne.className} font-medium text-[24px] text-red-400 tracking-tight`}>
+        <div className='mx-auto max-w-md space-y-4 rounded-2xl border border-red-500/20 bg-black/50 p-6 text-center backdrop-blur-sm'>
+          <h1 className={`${season.className} font-medium text-[24px] text-red-500 tracking-tight`}>
             Authentication Error
           </h1>
-          <p className={`${inter.className} font-[380] text-[16px] text-gray-200`}>{error}</p>
+          <p className={`${season.className} font-[380] text-[16px] text-zinc-600 dark:text-gray-300`}>{error}</p>
           <Button
             onClick={() => window.location.reload()}
-            className='mt-4 border border-white/10 bg-white/10 text-white hover:bg-white/20'
+            className='mt-4 border border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-50 dark:border-white/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/20'
           >
             Retry Connection
           </Button>
@@ -258,10 +300,10 @@ export default function PrivyLogin() {
 
     return (
       <div className='space-y-1 text-center'>
-        <h1 className={`${soehne.className} font-medium text-[32px] text-white tracking-tight`}>
+        <h1 className={`${season.className} font-medium text-[32px] text-zinc-900 dark:text-white tracking-tight`}>
           {statusMessage}
         </h1>
-        <p className={`${inter.className} mt-2 font-[380] text-[16px] text-gray-200`}>
+        <p className={`${season.className} mt-2 font-[380] text-[16px] text-zinc-500 dark:text-gray-400`}>
           Please wait...
         </p>
       </div>
@@ -269,45 +311,50 @@ export default function PrivyLogin() {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className='m relative flex min-h-screen items-center justify-center px-4'
+    <div
+      className='w-full'
     >
-      <div className='w-full max-w-md space-y-8 rounded-3xl border border-black/20 bg-black/10 p-8 shadow-2xl backdrop-blur-2xl '>
+      <div className='w-full space-y-8 rounded-3xl border border-white/40 bg-white/60 p-8 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-black/50 dark:shadow-2xl'>
         <div className='space-y-10 text-center'>
-          <div className='flex justify-center'>
-            <Image
-              src='/logo/lockup_ow.png'
-              alt='Megalith Logo'
-              width={240}
-              height={80}
-              className='h-6 w-auto object-contain'
-              priority
+          <div className='flex items-center gap-2'>
+            {/* <img
+              src='/logo/wazabi-icon-dark.png'
+              alt='Wazabi'
+              className='hidden h-8 w-auto rounded-xl dark:block'
+            /> */}
+            {/* <img
+              src='/logo/wazabi-icon-light.png'
+              alt='Wazabi'
+              className='block h-8 w-auto rounded-xl dark:hidden'
+            /> */}
+            <img
+              src='/logo/wazabi-text-dark.png'
+              alt='Wazabi Text'
+              className='hidden h-7 w-auto object-contain object-left brightness-0 opacity-90 dark:block dark:brightness-0 dark:invert'
+            />
+            <img
+              src='/logo/wazabi-text-light.png'
+              alt='Wazabi Text'
+              className='block h-7 w-auto object-contain object-left brightness-0 opacity-90 dark:hidden'
             />
           </div>
-
-          <p className={`${inter.className} font-[380] text-[18px] text-gray-200`}>
-            Sign in with your social account or connect your wallet to get started.
-          </p>
         </div>
 
+        <p className={`${season.className} font-[380] text-[18px] text-zinc-600 dark:text-gray-300`}>
+          Sign in with your social account or connect your wallet to get started.
+        </p>
         <div className='space-y-6'>
           <Button
             onClick={handleLogin}
             disabled={isLoading || !ready}
-            className='auth-button-gradient flex w-full items-center justify-center gap-2 rounded-[12px] py-4 font-medium text-[17px] text-white transition-all duration-200 '
+            className={`auth-button-gradient flex w-full items-center justify-center gap-2 rounded-[14px] py-6 font-medium text-[17px] transition-all duration-200 ${season.className}`}
           >
             {!ready ? 'Initializing...' : isLoading ? 'Connecting...' : 'Connect Wallet / Sign In'}
           </Button>
-
-          {/* <p className={`${inter.className} text-center font-light text-[15px] text-gray-200`}>
-            By signing in, you agree to our Terms of Service and Privacy Policy
-          </p> */}
         </div>
       </div>
-    </motion.div>
+
+
+    </div>
   )
 }

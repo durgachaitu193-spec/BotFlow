@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { encodeSSE } from '@/lib/core/utils/sse'
 import type { ExecutionResult } from '@/executor/types'
 

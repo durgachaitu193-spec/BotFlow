@@ -46,7 +46,7 @@ describe('Schedule Configuration API Route', () => {
       },
     }
 
-    vi.doMock('@sim/db', () => {
+    vi.doMock('@wazabi/db', () => {
       let callCount = 0
       const mockInsert = {
         values: vi.fn().mockImplementation(() => ({
@@ -187,7 +187,7 @@ describe('Schedule Configuration API Route', () => {
    * Test error handling
    */
   it('should handle errors gracefully', async () => {
-    vi.doMock('@sim/db', () => ({
+    vi.doMock('@wazabi/db', () => ({
       db: {
         select: vi.fn().mockImplementation(() => ({
           from: vi.fn().mockImplementation(() => ({

@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 const logger = createLogger('UserProfileQuery')
@@ -19,6 +19,7 @@ export interface UserProfile {
   name: string
   email: string
   image: string | null
+  userDID: string | null
   createdAt: string
   updatedAt: string
 }
@@ -40,6 +41,7 @@ async function fetchUserProfile(): Promise<UserProfile> {
     name: user.name || '',
     email: user.email || '',
     image: user.image || null,
+    userDID: user.userDID || null,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   }

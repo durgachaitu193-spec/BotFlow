@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { BaseServerTool } from '@/lib/copilot/tools/server/base-tool'
 import {
   type GetBlockOptionsInputType,
@@ -6,7 +6,7 @@ import {
   type GetBlockOptionsResultType,
 } from '@/lib/copilot/tools/shared/schemas'
 import { registry as blockRegistry } from '@/blocks/registry'
-import { tools as toolsRegistry } from '@/tools/registry'
+import { getToolAsync } from '@/tools/utils'
 
 export const getBlockOptionsServerTool: BaseServerTool<
   GetBlockOptionsInputType,
@@ -38,7 +38,7 @@ export const getBlockOptionsServerTool: BaseServerTool<
           const toolSelector = blockConfig.tools?.config?.tool
           if (typeof toolSelector === 'function') {
             const toolId = toolSelector({ operation: opId })
-            const tool = toolsRegistry[toolId]
+            const tool = await getToolAsync(toolId)
             if (tool) {
               toolDescription = tool.description
             }
@@ -57,7 +57,7 @@ export const getBlockOptionsServerTool: BaseServerTool<
       // No operation dropdown - list all accessible tools
       const accessibleTools = blockConfig.tools?.access || []
       for (const toolId of accessibleTools) {
-        const tool = toolsRegistry[toolId]
+        const tool = await getToolAsync(toolId)
         if (tool) {
           operations.push({
             id: toolId,

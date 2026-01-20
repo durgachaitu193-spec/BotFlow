@@ -9,7 +9,7 @@
  */
 
 import { createHash, timingSafeEqual } from 'crypto'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { NextRequest } from 'next/server'
 import { env } from '@/lib/core/config/env'
 

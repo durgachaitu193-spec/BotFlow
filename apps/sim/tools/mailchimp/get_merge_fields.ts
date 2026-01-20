@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { ToolConfig } from '@/tools/types'
 import type { MailchimpMergeField } from './types'
 import { buildMailchimpUrl, handleMailchimpError } from './types'

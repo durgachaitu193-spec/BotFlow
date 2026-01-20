@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { Crown, Eye, EyeOff } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import {

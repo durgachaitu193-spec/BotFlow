@@ -9,7 +9,7 @@ import {
   useMemo,
   useRef,
 } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { useRouter } from 'next/navigation'
 
 const logger = createLogger('GlobalCommands')

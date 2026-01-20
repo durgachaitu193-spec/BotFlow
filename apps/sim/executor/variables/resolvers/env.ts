@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { extractEnvVarName, isEnvVarReference } from '@/executor/consts'
 import type { ResolutionContext, Resolver } from '@/executor/variables/resolvers/reference'
 

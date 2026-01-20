@@ -1,5 +1,5 @@
-import { db } from '@sim/db'
-import { workspace as workspaceTable } from '@sim/db/schema'
+import { db } from '@wazabi/db'
+import { workspace as workspaceTable } from '@wazabi/db/schema'
 import { eq } from 'drizzle-orm'
 
 interface WorkspaceBillingSettings {

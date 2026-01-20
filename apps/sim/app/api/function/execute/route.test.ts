@@ -28,7 +28,7 @@ describe('Function Execute API Route', () => {
       })),
     }))
 
-    vi.doMock('@sim/logger', () => ({
+    vi.doMock('@wazabi/logger', () => ({
       createLogger: vi.fn().mockReturnValue(mockLogger),
     }))
 

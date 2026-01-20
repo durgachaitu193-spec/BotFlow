@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { usePrivy, useWallets } from '@privy-io/react-auth'
-import { createLogger } from '@sim/logger'
+import { usePrivy, useWallets } from '@wazabi/ui'
+import { createLogger } from '@wazabi/logger'
 import { Check, Copy, LogOut, Wallet } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -84,6 +84,14 @@ export function WalletButton() {
     } catch (error) {
       logger.error('Error disconnecting wallet:', { error })
       router.push('/login?fromLogout=true')
+    } finally {
+      // Force clear specific local storage items that might persist
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('privy:token')
+        localStorage.removeItem('privy:refresh_token')
+        localStorage.removeItem('privy:user')
+        sessionStorage.clear()
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 const logger = createLogger('NotificationQueries')

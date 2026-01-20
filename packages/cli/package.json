@@ -1,11 +1,11 @@
 {
-  "name": "simstudio",
+  "name": "@wazabi/cli",
   "version": "0.1.19",
-  "description": "Sim CLI - Run Sim with a single command",
+  "description": "Wazabi CLI - Run Wazabi with a single command",
   "main": "dist/index.js",
   "type": "module",
   "bin": {
-    "simstudio": "dist/index.js"
+    "wazabistudio": "dist/index.js"
   },
   "scripts": {
     "build": "bun run build:tsc",
@@ -28,7 +28,7 @@
     "automation",
     "docker"
   ],
-  "author": "Sim",
+  "author": "Wazabi",
   "license": "Apache-2.0",
   "dependencies": {
     "chalk": "^4.1.2",

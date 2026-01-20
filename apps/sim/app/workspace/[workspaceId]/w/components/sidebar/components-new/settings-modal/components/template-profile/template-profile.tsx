@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { Camera, Globe, Linkedin, Mail } from 'lucide-react'
 import Image from 'next/image'
 import { Button, Combobox, Input, Textarea } from '@/components/emcn'

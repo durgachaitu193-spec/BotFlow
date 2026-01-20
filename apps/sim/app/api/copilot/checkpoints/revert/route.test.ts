@@ -35,13 +35,13 @@ describe('Copilot Checkpoints Revert API Route', () => {
     mockWhere.mockReturnValue({ then: mockThen })
     mockThen.mockResolvedValue(null) // Default: no data found
 
-    vi.doMock('@sim/db', () => ({
+    vi.doMock('@wazabi/db', () => ({
       db: {
         select: mockSelect,
       },
     }))
 
-    vi.doMock('@sim/db/schema', () => ({
+    vi.doMock('@wazabi/db/schema', () => ({
       workflowCheckpoints: {
         id: 'id',
         userId: 'userId',

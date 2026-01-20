@@ -14,9 +14,9 @@
  * Response: { workflowId: string, name: string, success: true }
  */
 
-import { db } from '@sim/db'
-import { workflow, workspace } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { workflow, workspace } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { eq } from 'drizzle-orm'
 import { NextResponse } from 'next/server'
 import { saveWorkflowToNormalizedTables } from '@/lib/workflows/persistence/utils'

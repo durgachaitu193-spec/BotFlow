@@ -59,20 +59,32 @@
       "@/serializer/*": [
         "./serializer/*"
       ],
-      "@sim/testing": [
+      "@wazabi/testing": [
         "../../packages/testing/src"
       ],
-      "@sim/testing/*": [
+      "@wazabi/testing/*": [
         "../../packages/testing/src/*"
       ],
-      "@sim/db": [
+      "@wazabi/db": [
         "../../packages/db"
       ],
-      "@sim/db/privy-sync": [
+      "@wazabi/db/privy-sync": [
         "../../packages/db/src/privy-sync"
       ],
-      "@sim/db/*": [
+      "@wazabi/db/*": [
         "../../packages/db/*"
+      ],
+      "@wazabi/logger": [
+        "../../packages/logger/src"
+      ],
+      "@wazabi/logger/*": [
+        "../../packages/logger/src/*"
+      ],
+      "@wazabi/ui": [
+        "../../packages/ui/src"
+      ],
+      "@wazabi/ui/*": [
+        "../../packages/ui/src/*"
       ],
       "@/executor": [
         "./executor"

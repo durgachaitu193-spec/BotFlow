@@ -1,10 +1,10 @@
-import { db } from '@sim/db'
+import { db } from '@wazabi/db'
 import {
   workflow,
   workspaceNotificationDelivery,
   workspaceNotificationSubscription,
-} from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+} from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, eq, or, sql } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'
 import { isTriggerDevEnabled } from '@/lib/core/config/environment'

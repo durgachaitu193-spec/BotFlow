@@ -1,5 +1,5 @@
-import { db, webhook, workflow } from '@sim/db'
-import { createLogger } from '@sim/logger'
+import { db, webhook, workflow } from '@wazabi/db'
+import { createLogger } from '@wazabi/logger'
 import { tasks } from '@trigger.dev/sdk'
 import { and, eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'

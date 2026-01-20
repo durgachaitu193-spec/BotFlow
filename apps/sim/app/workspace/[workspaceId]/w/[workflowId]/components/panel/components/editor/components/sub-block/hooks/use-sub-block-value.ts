@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { isEqual } from 'lodash'
 import { useCollaborativeWorkflow } from '@/hooks/use-collaborative-workflow'
 import { getProviderFromModel } from '@/providers/utils'

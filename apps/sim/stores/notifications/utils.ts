@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { useCopilotStore } from '@/stores/panel/copilot/store'
 import { usePanelStore } from '@/stores/panel/store'
 

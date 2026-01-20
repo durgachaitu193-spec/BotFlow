@@ -8,7 +8,7 @@
  * // vitest.config.ts
  * export default defineConfig({
  *   test: {
- *     setupFiles: ['@sim/testing/setup'],
+ *     setupFiles: ['@wazabi/testing/setup'],
  *   },
  * })
  * ```

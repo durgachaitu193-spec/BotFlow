@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { getCostMultiplier } from '@/lib/core/config/environment'
 import type { StreamingExecution } from '@/executor/types'
 import type { ProviderRequest, ProviderResponse } from '@/providers/types'

@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { Chunk, StructuredDataOptions } from '@/lib/chunkers/types'
 
 const logger = createLogger('StructuredDataChunker')

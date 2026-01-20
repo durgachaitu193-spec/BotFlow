@@ -120,7 +120,7 @@ describe('Custom Tools API Routes', () => {
     mockDelete.mockReturnValue({ where: mockWhere })
 
     // Mock database
-    vi.doMock('@sim/db', () => ({
+    vi.doMock('@wazabi/db', () => ({
       db: {
         select: mockSelect,
         insert: mockInsert,
@@ -175,7 +175,7 @@ describe('Custom Tools API Routes', () => {
     }))
 
     // Mock schema
-    vi.doMock('@sim/db/schema', () => ({
+    vi.doMock('@wazabi/db/schema', () => ({
       customTools: {
         id: 'id',
         workspaceId: 'workspaceId',
@@ -209,7 +209,7 @@ describe('Custom Tools API Routes', () => {
     }))
 
     // Mock logger
-    vi.doMock('@sim/logger', () => ({
+    vi.doMock('@wazabi/logger', () => ({
       createLogger: vi.fn().mockReturnValue({
         info: vi.fn(),
         error: vi.fn(),

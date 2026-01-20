@@ -1,6 +1,6 @@
-import { db } from '@sim/db'
-import { environment, workspaceEnvironment } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { environment, workspaceEnvironment } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { eq } from 'drizzle-orm'
 import { decryptSecret } from '@/lib/core/security/encryption'
 

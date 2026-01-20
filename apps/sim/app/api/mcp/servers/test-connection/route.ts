@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { NextRequest } from 'next/server'
 import { getEffectiveDecryptedEnv } from '@/lib/environment/utils'
 import { McpClient } from '@/lib/mcp/client'

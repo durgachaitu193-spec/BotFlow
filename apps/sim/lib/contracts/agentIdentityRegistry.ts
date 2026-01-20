@@ -1,5 +1,5 @@
-// Agent Identity Registry Contract Configuration
-export const AGENT_IDENTITY_REGISTRY_ADDRESS = '0xEc53F132acf831B6ECa04562D0eDa11e4ff780BE' as const
+// Agent Identity Registry Contract Configuration (BSC Mainnet Proxy)
+export const AGENT_IDENTITY_REGISTRY_ADDRESS = '0x1211D4Eb47bfd99F105184C4f04030Fd441d7D8f' as const
 
 // Full Contract ABI for AgentIdentityRegistry
 export const AGENT_IDENTITY_REGISTRY_ABI = [
@@ -763,7 +763,7 @@ export const AGENT_IDENTITY_REGISTRY_ABI = [
       },
     ],
     name: 'reactivateAgent',
-    outputs: [    ],
+    outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },

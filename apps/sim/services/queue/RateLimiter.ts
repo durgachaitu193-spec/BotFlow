@@ -1,6 +1,6 @@
-import { db } from '@sim/db'
-import { userRateLimits } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { userRateLimits } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { eq, sql } from 'drizzle-orm'
 import { getHighestPrioritySubscription } from '@/lib/billing/core/subscription'
 import {

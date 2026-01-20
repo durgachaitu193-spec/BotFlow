@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { Check, Loader2, Server, X, XCircle } from 'lucide-react'
 import {
   BaseClientTool,

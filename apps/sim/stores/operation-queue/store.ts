@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { create } from 'zustand'
 
 const logger = createLogger('OperationQueue')
@@ -240,14 +240,15 @@ export const useOperationQueueStore = create<OperationQueueState>((set, get) => 
       (operation.operation.operation === 'variable-update' &&
         operation.operation.target === 'variable')
 
-    const maxRetries = isSubblockOrVariable ? 5 : 3 // 5 retries for text, 3 for structural
+    // Unified max retries: 5 for everything to be more robust with batches
+    const maxRetries = 5
 
     if (operation.retryCount < maxRetries) {
       const newRetryCount = operation.retryCount + 1
       // Faster retries for subblock/variable, exponential for structural
       const delay = isSubblockOrVariable
         ? Math.min(1000 * newRetryCount, 3000) // 1s, 2s, 3s, 3s, 3s (cap at 3s)
-        : 2 ** newRetryCount * 1000 // 2s, 4s, 8s (exponential for structural)
+        : 2 ** newRetryCount * 1000 // 2s, 4s, 8s, 16s, 32s (exponential)
 
       logger.warn(
         `Operation failed, retrying in ${delay}ms (attempt ${newRetryCount}/${maxRetries})`,
@@ -311,8 +312,8 @@ export const useOperationQueueStore = create<OperationQueueState>((set, get) => 
 
     const nextOperation = currentRegisteredWorkflowId
       ? state.operations.find(
-          (op) => op.status === 'pending' && op.workflowId === currentRegisteredWorkflowId
-        )
+        (op) => op.status === 'pending' && op.workflowId === currentRegisteredWorkflowId
+      )
       : state.operations.find((op) => op.status === 'pending')
     if (!nextOperation) {
       return
@@ -353,12 +354,15 @@ export const useOperationQueueStore = create<OperationQueueState>((set, get) => 
     }
 
     // Create operation timeout - longer for subblock/variable updates to handle reconnects
+    // Also using longer timeout for structural ops like batch-add-blocks which can be large
     const isSubblockOrVariable =
       (nextOperation.operation.operation === 'subblock-update' &&
         nextOperation.operation.target === 'subblock') ||
       (nextOperation.operation.operation === 'variable-update' &&
         nextOperation.operation.target === 'variable')
-    const timeoutDuration = isSubblockOrVariable ? 15000 : 5000 // 15s for text edits, 5s for structural ops
+
+    // Unified timeout: 15s for everything
+    const timeoutDuration = 15000
 
     const timeoutId = setTimeout(() => {
       logger.warn(`Operation timeout - no server response after ${timeoutDuration}ms`, {

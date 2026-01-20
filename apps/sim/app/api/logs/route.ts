@@ -1,12 +1,12 @@
-import { db } from '@sim/db'
+import { db } from '@wazabi/db'
 import {
   pausedExecutions,
   permissions,
   workflow,
   workflowDeploymentVersion,
   workflowExecutionLogs,
-} from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+} from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, desc, eq, isNotNull, isNull, or, type SQL, sql } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'

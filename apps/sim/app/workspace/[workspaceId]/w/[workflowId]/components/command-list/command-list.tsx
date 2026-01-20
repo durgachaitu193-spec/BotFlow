@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { Layout, LibraryBig, Search } from 'lucide-react'
 import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
@@ -153,6 +153,8 @@ export function CommandList() {
 
       const data = JSON.parse(raw) as { type?: string; enableTriggerMode?: boolean }
       if (!data?.type || data.type === 'connectionBlock') return
+
+      logger.info('CommandList: handleDrop', { type: data.type })
 
       const overlayDropEvent = new CustomEvent('toolbar-drop-on-empty-workflow-overlay', {
         detail: {

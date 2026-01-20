@@ -1,6 +1,6 @@
-import { db } from '@sim/db'
-import { member, subscription, user, userStats } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { member, subscription, user, userStats } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, eq, inArray } from 'drizzle-orm'
 import {
   checkEnterprisePlan,

@@ -15,9 +15,9 @@
  * Response: AdminSingleResponse<{ success: true, seats: number }>
  */
 
-import { db } from '@sim/db'
-import { organization, subscription } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { organization, subscription } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, eq } from 'drizzle-orm'
 import { getOrganizationSeatAnalytics } from '@/lib/billing/validation/seat-management'
 import { withAdminAuthParams } from '@/app/api/v1/admin/middleware'

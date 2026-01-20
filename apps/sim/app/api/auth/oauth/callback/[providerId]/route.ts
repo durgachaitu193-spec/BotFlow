@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto'
-import { account, db } from '@sim/db'
-import { createLogger } from '@sim/logger'
+import { account, db } from '@wazabi/db'
+import { createLogger } from '@wazabi/logger'
 import { and, eq } from 'drizzle-orm'
 import { cookies } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'
@@ -236,7 +236,8 @@ export async function GET(
     }
 
     // If we don't have accountId from ID token, try to fetch from provider's userinfo endpoint
-    if (!accountId && providerConfig.userInfoUrl) {
+    // For some providers (e.g. Notion) we should always hit userinfo since they don't provide ID tokens.
+    if ((!accountId || providerId === 'notion') && providerConfig.userInfoUrl) {
       try {
         const userInfoHeaders: HeadersInit = {
           Authorization: `Bearer ${accessToken}`,
@@ -248,6 +249,9 @@ export async function GET(
         } else if (providerId === 'linear') {
           // Linear uses GraphQL, so we need to send a GraphQL query
           userInfoHeaders['Content-Type'] = 'application/json'
+        } else if (providerId === 'notion') {
+          // Notion requires a version header for most API calls, including /v1/users/me.
+          userInfoHeaders['Notion-Version'] = '2022-06-28'
         }
 
         let userInfoResponse: Response
@@ -305,6 +309,31 @@ export async function GET(
               accountId = userInfo.data.id
               name = userInfo.data.name || userInfo.data.username || name
             }
+          } else if (providerId === 'notion') {
+            // Notion response: { id, name, person: { email } } or { id, name, bot: { owner: { user: { ... } } } }
+            // Prefer Notion's stable user id; use email if available (requires integration capability).
+            const notionId = userInfo.id
+            const notionName = userInfo.name || userInfo.bot?.owner?.user?.name
+            const notionEmail =
+              userInfo.person?.email ||
+              userInfo.bot?.owner?.user?.person?.email ||
+              userInfo.bot?.owner?.user?.email
+
+            name = notionName || name
+            email = notionEmail || email
+
+            // If provider returned a real email, use it; otherwise use Notion id.
+            if (
+              typeof notionEmail === 'string' &&
+              notionEmail.includes('@') &&
+              !notionEmail.includes('@reown.local') &&
+              !notionEmail.includes('@notion.user') &&
+              !notionEmail.includes('@local')
+            ) {
+              accountId = notionEmail
+            } else if (typeof notionId === 'string' && notionId.length > 0) {
+              accountId = notionId
+            }
           } else {
             // Standard OAuth2 userinfo format
             accountId = userInfo.sub || userInfo.id || userInfo.user_id || userInfo.email
@@ -317,12 +346,18 @@ export async function GET(
       }
     }
 
-    // Use email as accountId fallback
-    if (!accountId && email) {
+    // Use ONLY provider-derived details for accountId (no DB fallback).
+    // Prefer a real provider email if present; otherwise keep provider-provided accountId; otherwise generate.
+    if (
+      typeof email === 'string' &&
+      email.includes('@') &&
+      !email.includes('@reown.local') &&
+      !email.includes('@notion.user') &&
+      !email.includes('@local')
+    ) {
       accountId = email
     }
 
-    // Use providerId as accountId fallback
     if (!accountId) {
       accountId = `${providerId}-${Date.now()}`
     }

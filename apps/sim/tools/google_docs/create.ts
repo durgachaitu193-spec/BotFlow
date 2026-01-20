@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { GoogleDocsCreateResponse, GoogleDocsToolParams } from '@/tools/google_docs/types'
 import type { ToolConfig } from '@/tools/types'
 

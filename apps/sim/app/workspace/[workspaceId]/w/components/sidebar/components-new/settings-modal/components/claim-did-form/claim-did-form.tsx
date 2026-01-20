@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { usePrivy, useWallets } from '@privy-io/react-auth'
-import { createLogger } from '@sim/logger'
+import { usePrivy, useWallets } from '@wazabi/ui'
+import { createLogger } from '@wazabi/logger'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Check, Loader2 } from 'lucide-react'
 import { type Chain, createPublicClient, createWalletClient, custom, http } from 'viem'
@@ -651,9 +651,9 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                       className={cn(
                         'h-11 border-border bg-muted/30 pr-10 text-foreground transition-all duration-200',
                         usernameAvailable === true &&
-                          'border-green-500 focus-visible:border-green-500 focus-visible:ring-green-500/20',
+                        'border-green-500 focus-visible:border-green-500 focus-visible:ring-green-500/20',
                         usernameAvailable === false &&
-                          'border-destructive focus-visible:border-destructive focus-visible:ring-destructive/20'
+                        'border-destructive focus-visible:border-destructive focus-visible:ring-destructive/20'
                       )}
                     />
                     <div className='-translate-y-1/2 absolute top-1/2 right-3'>

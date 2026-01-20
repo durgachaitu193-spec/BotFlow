@@ -7,7 +7,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 vi.mock('drizzle-orm')
-vi.mock('@sim/logger', () => ({
+vi.mock('@wazabi/logger', () => ({
   createLogger: vi.fn(() => ({
     info: vi.fn(),
     debug: vi.fn(),
@@ -15,7 +15,7 @@ vi.mock('@sim/logger', () => ({
     error: vi.fn(),
   })),
 }))
-vi.mock('@sim/db')
+vi.mock('@wazabi/db')
 vi.mock('@/lib/knowledge/documents/utils', () => ({
   retryWithExponentialBackoff: (fn: any) => fn(),
 }))

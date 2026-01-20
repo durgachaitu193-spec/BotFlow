@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { usePrivy } from '@privy-io/react-auth'
-import { createLogger } from '@sim/logger'
+import { usePrivy } from '@wazabi/ui'
+import { createLogger } from '@wazabi/logger'
 import { formatDistanceToNow } from 'date-fns'
 import {
   ArrowLeft,
@@ -549,7 +549,7 @@ export default function TemplateDetails({ isWorkspaceContext = false }: Template
                 {canEditTemplate && currentUserId && (
                   <>
                     {(isWorkspaceContext || template.workflowId) &&
-                    !showWorkspaceSelectorForEdit ? (
+                      !showWorkspaceSelectorForEdit ? (
                       <Button
                         variant='active'
                         onClick={handleEditTemplate}
@@ -613,8 +613,8 @@ export default function TemplateDetails({ isWorkspaceContext = false }: Template
                           const callbackUrl =
                             isWorkspaceContext && workspaceId
                               ? encodeURIComponent(
-                                  `/workspace/${workspaceId}/templates/${template.id}?use=true`
-                                )
+                                `/workspace/${workspaceId}/templates/${template.id}?use=true`
+                              )
                               : encodeURIComponent(`/templates/${template.id}`)
                           router.push(`/login?callbackUrl=${callbackUrl}`)
                         }}

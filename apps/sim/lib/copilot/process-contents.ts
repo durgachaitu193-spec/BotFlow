@@ -1,6 +1,6 @@
-import { db } from '@sim/db'
-import { copilotChats, document, knowledgeBase, templates } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { copilotChats, document, knowledgeBase, templates } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { and, eq, isNull } from 'drizzle-orm'
 import { escapeRegExp } from '@/lib/core/utils/formatting'
 import { loadWorkflowFromNormalizedTables } from '@/lib/workflows/persistence/utils'
@@ -359,7 +359,7 @@ async function processBlockMetadata(blockId: string, tag: string): Promise<Agent
   try {
     // Reuse registry to match get_blocks_metadata tool result
     const { registry: blockRegistry } = await import('@/blocks/registry')
-    const { tools: toolsRegistry } = await import('@/tools/registry')
+    const toolMetadata = (await import('@/tools/metadata.json')).default
     const SPECIAL_BLOCKS_METADATA: Record<string, any> = {}
 
     let metadata: any = {}
@@ -400,7 +400,7 @@ async function processBlockMetadata(blockId: string, tag: string): Promise<Agent
     if (Array.isArray(metadata.tools) && metadata.tools.length > 0) {
       metadata.toolDetails = {}
       for (const toolId of metadata.tools) {
-        const tool = (toolsRegistry as any)[toolId]
+        const tool = (toolMetadata as any)[toolId]
         if (tool) {
           metadata.toolDetails[toolId] = { name: tool.name, description: tool.description }
         }
@@ -479,8 +479,8 @@ async function processExecutionLogFromDb(
   tag: string
 ): Promise<AgentContext | null> {
   try {
-    const { workflowExecutionLogs, workflow } = await import('@sim/db/schema')
-    const { db } = await import('@sim/db')
+    const { workflowExecutionLogs, workflow } = await import('@wazabi/db/schema')
+    const { db } = await import('@wazabi/db')
     const rows = await db
       .select({
         id: workflowExecutionLogs.id,
@@ -516,9 +516,9 @@ async function processExecutionLogFromDb(
       // Include trace spans and any available details without being huge
       executionData: log.executionData
         ? {
-            traceSpans: (log.executionData as any).traceSpans || undefined,
-            errorDetails: (log.executionData as any).errorDetails || undefined,
-          }
+          traceSpans: (log.executionData as any).traceSpans || undefined,
+          errorDetails: (log.executionData as any).errorDetails || undefined,
+        }
         : undefined,
       cost: log.cost || undefined,
     }

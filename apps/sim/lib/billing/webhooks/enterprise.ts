@@ -1,6 +1,6 @@
-import { db } from '@sim/db'
-import { organization, subscription, user } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { organization, subscription, user } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { eq } from 'drizzle-orm'
 import type Stripe from 'stripe'
 import {

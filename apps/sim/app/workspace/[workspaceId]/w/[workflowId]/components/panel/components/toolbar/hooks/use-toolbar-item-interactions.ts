@@ -1,5 +1,5 @@
 import { useCallback, useRef } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { createDragPreview, type DragItemInfo } from '../components'
 
 const logger = createLogger('ToolbarItemInteractions')
@@ -43,15 +43,16 @@ export function useToolbarItemInteractions({
         return
       }
 
+      logger.info('ToolbarItem: Drag start', { type, enableTriggerMode })
+
       try {
-        e.dataTransfer.setData(
-          'application/json',
-          JSON.stringify({
-            type,
-            enableTriggerMode,
-          })
-        )
-        e.dataTransfer.effectAllowed = 'move'
+        const data = JSON.stringify({
+          type,
+          enableTriggerMode,
+        })
+        e.dataTransfer.setData('application/json', data)
+        e.dataTransfer.setData('text/plain', data)
+        e.dataTransfer.effectAllowed = 'copyMove'
 
         // Create and set custom drag preview if item info is provided
         if (dragItemInfo) {

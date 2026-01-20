@@ -3,7 +3,7 @@
  * Provides clean error handling and type safety for browser storage operations
  */
 
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 
 const logger = createLogger('BrowserStorage')
 

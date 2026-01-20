@@ -1,5 +1,5 @@
-import { db, user } from '@sim/db'
-import { createLogger } from '@sim/logger'
+import { db, user } from '@wazabi/db'
+import { createLogger } from '@wazabi/logger'
 import { eq } from 'drizzle-orm'
 import { cookies } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'

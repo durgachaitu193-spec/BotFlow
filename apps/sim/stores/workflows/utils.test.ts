@@ -4,7 +4,7 @@ import {
   createFunctionBlock,
   createLoopBlock,
   createStarterBlock,
-} from '@sim/testing'
+} from '@wazabi/testing'
 import { describe, expect, it } from 'vitest'
 import { getUniqueBlockName, normalizeName } from './utils'
 

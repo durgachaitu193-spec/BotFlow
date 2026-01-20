@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { Star, User } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { VerifiedBadge } from '@/components/ui/verified-badge'

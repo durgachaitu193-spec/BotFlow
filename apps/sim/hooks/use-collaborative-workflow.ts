@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { Edge } from 'reactflow'
 import { useSession } from '@/lib/auth/auth-client'
 import { useSocket } from '@/app/workspace/providers/socket-provider'
@@ -638,8 +638,8 @@ export function useCollaborativeWorkflow() {
         return
       }
 
-      if (!isInActiveRoom()) {
-        logger.debug('Skipping operation - not in active workflow', {
+      if (!activeWorkflowId) {
+        logger.debug('Skipping operation - no active workflow', {
           currentWorkflowId,
           activeWorkflowId,
           operation,
@@ -680,8 +680,8 @@ export function useCollaborativeWorkflow() {
         previousPositions?: Map<string, { x: number; y: number; parentId?: string }>
       }
     ) => {
-      if (!isInActiveRoom()) {
-        logger.debug('Skipping batch position update - not in active workflow')
+      if (!activeWorkflowId) {
+        logger.debug('Skipping batch position update - no active workflow')
         return
       }
 
@@ -851,8 +851,8 @@ export function useCollaborativeWorkflow() {
         affectedEdges: Edge[]
       }>
     ) => {
-      if (!isInActiveRoom()) {
-        logger.debug('Skipping batch update parent - not in active workflow')
+      if (!activeWorkflowId) {
+        logger.debug('Skipping batch update parent - no active workflow')
         return
       }
 
@@ -969,8 +969,8 @@ export function useCollaborativeWorkflow() {
 
   const collaborativeBatchAddEdges = useCallback(
     (edges: Edge[], options?: { skipUndoRedo?: boolean }) => {
-      if (!isInActiveRoom()) {
-        logger.debug('Skipping batch add edges - not in active workflow')
+      if (!activeWorkflowId) {
+        logger.debug('Skipping batch add edges - no active workflow')
         return false
       }
 
@@ -1002,8 +1002,8 @@ export function useCollaborativeWorkflow() {
 
   const collaborativeBatchRemoveEdges = useCallback(
     (edgeIds: string[], options?: { skipUndoRedo?: boolean }) => {
-      if (!isInActiveRoom()) {
-        logger.debug('Skipping batch remove edges - not in active workflow')
+      if (!activeWorkflowId) {
+        logger.debug('Skipping batch remove edges - no active workflow')
         return false
       }
 
@@ -1063,8 +1063,8 @@ export function useCollaborativeWorkflow() {
         return
       }
 
-      if (!isInActiveRoom()) {
-        logger.debug('Skipping subblock update - not in active workflow', {
+      if (!activeWorkflowId) {
+        logger.debug('Skipping subblock update - no active workflow', {
           currentWorkflowId,
           activeWorkflowId,
           blockId,
@@ -1125,8 +1125,8 @@ export function useCollaborativeWorkflow() {
     (blockId: string, subblockId: string, value: any) => {
       if (isApplyingRemoteChange.current) return
 
-      if (!isInActiveRoom()) {
-        logger.debug('Skipping tag selection - not in active workflow', {
+      if (!activeWorkflowId) {
+        logger.debug('Skipping tag selection - no active workflow', {
           currentWorkflowId,
           activeWorkflowId,
           blockId,
@@ -1410,7 +1410,7 @@ export function useCollaborativeWorkflow() {
           VARIABLE_OPERATIONS.ADD,
           OPERATION_TARGETS.VARIABLE,
           payloadWithProcessedName,
-          () => {}
+          () => { }
         )
       }
 
@@ -1444,8 +1444,8 @@ export function useCollaborativeWorkflow() {
       subBlockValues: Record<string, Record<string, unknown>> = {},
       options?: { skipUndoRedo?: boolean }
     ) => {
-      if (!isInActiveRoom()) {
-        logger.debug('Skipping batch add blocks - not in active workflow')
+      if (!activeWorkflowId) {
+        logger.debug('Skipping batch add blocks - no active workflow')
         return false
       }
 
@@ -1496,8 +1496,8 @@ export function useCollaborativeWorkflow() {
 
   const collaborativeBatchRemoveBlocks = useCallback(
     (blockIds: string[], options?: { skipUndoRedo?: boolean }) => {
-      if (!isInActiveRoom()) {
-        logger.debug('Skipping batch remove blocks - not in active workflow')
+      if (!activeWorkflowId) {
+        logger.debug('Skipping batch remove blocks - no active workflow')
         return false
       }
 
@@ -1608,6 +1608,84 @@ export function useCollaborativeWorkflow() {
     collaborativeBatchRemoveEdges,
     collaborativeSetSubblockValue,
     collaborativeSetTagSelection,
+
+    // Wrappers for backward compatibility
+    collaborativeAddBlock: useCallback(
+      (
+        id: string,
+        type: string,
+        name: string,
+        position: Position,
+        data?: Record<string, any>,
+        parentId?: string,
+        extent?: 'parent',
+        edge?: Edge,
+        triggerMode?: boolean
+      ) => {
+        // Resolve trigger mode from explicit arg or data object
+        const resolvedTriggerMode = triggerMode ?? data?.triggerMode ?? data?.enableTriggerMode
+
+        const block: BlockState = {
+          id,
+          type,
+          name,
+          position,
+          data: { ...data, parentId, extent },
+          subBlocks: {},
+          outputs: {},
+          enabled: true,
+          triggerMode: resolvedTriggerMode,
+        }
+        const edges = edge ? [edge] : []
+        collaborativeBatchAddBlocks([block], edges)
+      },
+      [collaborativeBatchAddBlocks]
+    ),
+
+    collaborativeRemoveBlock: useCallback(
+      (id: string) => {
+        collaborativeBatchRemoveBlocks([id])
+      },
+      [collaborativeBatchRemoveBlocks]
+    ),
+
+    collaborativeAddEdge: useCallback(
+      (edge: Edge) => {
+        collaborativeBatchAddEdges([edge])
+      },
+      [collaborativeBatchAddEdges]
+    ),
+
+    collaborativeRemoveEdge: useCallback(
+      (edgeId: string) => {
+        collaborativeBatchRemoveEdges([edgeId])
+      },
+      [collaborativeBatchRemoveEdges]
+    ),
+
+    collaborativeUpdateBlockPosition: useCallback(
+      (id: string, position: Position) => {
+        collaborativeBatchUpdatePositions([{ id, position }])
+      },
+      [collaborativeBatchUpdatePositions]
+    ),
+
+    collaborativeUpdateParentId: useCallback(
+      (id: string, newParentId: string | null) => {
+        const block = workflowStore.blocks[id]
+        if (!block) return
+
+        collaborativeBatchUpdateParent([
+          {
+            blockId: id,
+            newParentId,
+            newPosition: block.position,
+            affectedEdges: [],
+          },
+        ])
+      },
+      [collaborativeBatchUpdateParent, workflowStore]
+    ),
 
     // Collaborative variable operations
     collaborativeUpdateVariable,

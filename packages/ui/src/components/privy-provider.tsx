@@ -59,9 +59,10 @@ interface PrivyProviderWrapperProps {
   children: ReactNode
   appId?: string
   appUrl?: string
+  logo?: string
 }
 
-export function PrivyProviderWrapper({ children, appId, appUrl }: PrivyProviderWrapperProps) {
+export function PrivyProviderWrapper({ children, appId, appUrl, logo }: PrivyProviderWrapperProps) {
   const finalAppId = appId || process.env.NEXT_PUBLIC_PRIVY_APP_ID
 
   if (!finalAppId) {
@@ -81,7 +82,10 @@ export function PrivyProviderWrapper({ children, appId, appUrl }: PrivyProviderW
     )
   }
 
-  console.log('[PrivyProviderWrapper] Initializing with App ID:', `${finalAppId?.slice(0, 6)}...`)
+  console.log('[PrivyProviderWrapper] Initializing with App ID:', finalAppId)
+  console.log('[PrivyProviderWrapper] App URL:', appUrl)
+  console.log('[PrivyProviderWrapper] Logo:', logo)
+
   console.warn(
     '[PrivyProviderWrapper] If you see 403 errors, ensure http://localhost:3000 and http://localhost:3001 are in your Privy Dashboard Allowed Domains'
   )
@@ -100,9 +104,9 @@ export function PrivyProviderWrapper({ children, appId, appUrl }: PrivyProviderW
       appearance: {
         theme: 'dark' as const,
         accentColor: '#0EE0C6' as const,
-        logo: appUrl ? `${appUrl}/megalith.svg` : undefined,
+        logo: logo || (appUrl ? `${appUrl}/wazabi.svg` : undefined),
         showWalletLoginFirst: true,
-        landingHeader: 'MegalithLabs',
+        landingHeader: 'Wazabi',
       },
       embeddedWallets: {
         ethereum: {
@@ -117,7 +121,7 @@ export function PrivyProviderWrapper({ children, appId, appUrl }: PrivyProviderW
       },
       storageMethod: 'localStorage' as const,
     }),
-    [appUrl]
+    [appUrl, logo]
   )
 
   return (

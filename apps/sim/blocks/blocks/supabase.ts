@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { SupabaseIcon } from '@/components/icons'
 import { AuthMode, type BlockConfig } from '@/blocks/types'
 import type { SupabaseResponse } from '@/tools/supabase/types'

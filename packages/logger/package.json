@@ -1,5 +1,5 @@
 {
-  "name": "@sim/logger",
+  "name": "@wazabi/logger",
   "version": "0.1.0",
   "private": true,
   "type": "module",

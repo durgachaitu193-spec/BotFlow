@@ -1,7 +1,7 @@
 'use server'
 
-import { db } from '@sim/db'
-import { launchpadHoldings, launchpadTokens } from '@sim/db/schema'
+import { db } from '@wazabi/db'
+import { launchpadHoldings, launchpadTokens } from '@wazabi/db/schema'
 import { desc, eq } from 'drizzle-orm'
 
 export interface Holder {

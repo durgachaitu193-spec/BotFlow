@@ -85,7 +85,7 @@ vi.stubGlobal(
   })
 )
 
-vi.mock('@sim/db', () => {
+vi.mock('@wazabi/db', () => {
   const selectBuilder = {
     from(table: any) {
       return {

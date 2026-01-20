@@ -1,14 +1,16 @@
 'use client'
 
 import { useState } from 'react'
-import { usePrivy, useWallets } from '@privy-io/react-auth'
-import { createLogger } from '@sim/logger'
+import { usePrivy, useWallets } from '@wazabi/ui'
+import { createLogger } from '@wazabi/logger'
 import { AlertTriangle, Loader2, X } from 'lucide-react'
 import { Button, Input, Label } from '@/components/emcn'
 import { Alert, AlertDescription } from '@/components/ui'
 import { createTokenForAgent } from '@/lib/contracts/tokenFactory'
 import { updateAgentMetadata } from '@/lib/contracts/agentRegistry'
 import { buildAgentMetadata, type AgentMetadata } from '@/lib/contracts/agentMetadata'
+import { AddLiquidity } from './add-liquidity'
+import { BuyToken } from './buy-token'
 
 const logger = createLogger('TokenDeploy')
 
@@ -39,6 +41,7 @@ export function TokenDeploy({
   const [tokenImagePreview, setTokenImagePreview] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+  const [createdTokenAddress, setCreatedTokenAddress] = useState<string | null>(null)
 
   const handleTokenImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -164,6 +167,9 @@ export function TokenDeploy({
         throw new Error('Token creation failed: no result returned')
       }
 
+      // Store created token address for liquidity component
+      setCreatedTokenAddress(tokenResult.tokenAddress)
+
       logger.info('Token created successfully', {
         agentId: agentData.agentId,
         tokenAddress: tokenResult.tokenAddress,
@@ -216,7 +222,7 @@ export function TokenDeploy({
         setSuccess(true)
         setError(
           'Token created successfully, but failed to update agent metadata. Token address: ' +
-            tokenResult.tokenAddress
+          tokenResult.tokenAddress
         )
       }
     } catch (error: any) {
@@ -253,20 +259,44 @@ export function TokenDeploy({
         </Alert>
       )}
 
-      {success && !error && (
-        <Alert>
-          <AlertDescription>
-            Token created successfully! Agent metadata has been updated with token details.
-          </AlertDescription>
-        </Alert>
+      {success && !error && createdTokenAddress && (
+        <div className="space-y-4">
+          <Alert>
+            <AlertDescription>
+              Token created successfully! Buy some tokens first, then add liquidity to PancakeSwap.
+            </AlertDescription>
+          </Alert>
+          <BuyToken
+            tokenAddress={createdTokenAddress}
+            tokenName={tokenName}
+            tokenSymbol={tokenSymbol}
+          />
+          <AddLiquidity
+            tokenAddress={createdTokenAddress}
+            tokenSymbol={tokenSymbol}
+            tokenName={tokenName}
+          />
+        </div>
       )}
 
-      {hasToken && (
-        <Alert>
-          <AlertDescription>
-            This agent already has a token: {agentData.metadata.tokenAddress}
-          </AlertDescription>
-        </Alert>
+      {hasToken && !success && (
+        <div className="space-y-4">
+          <Alert>
+            <AlertDescription>
+              This agent already has a token: {agentData.metadata.tokenAddress}
+            </AlertDescription>
+          </Alert>
+          <BuyToken
+            tokenAddress={agentData.metadata.tokenAddress!}
+            tokenName={agentData.metadata.tokenName || 'Token'}
+            tokenSymbol={agentData.metadata.tokenSymbol || 'TOKEN'}
+          />
+          <AddLiquidity
+            tokenAddress={agentData.metadata.tokenAddress!}
+            tokenSymbol={agentData.metadata.tokenSymbol || 'TOKEN'}
+            tokenName={agentData.metadata.tokenName || 'Token'}
+          />
+        </div>
       )}
 
       <div className='space-y-[12px]'>

@@ -40,7 +40,7 @@ export const EmailFooter = ({ baseUrl = getBaseUrl(), unsubscribe }: EmailFooter
                     </Link>
                   </td>
                   <td align='center' style={{ padding: '0 8px' }}>
-                    <Link href='https://github.com/simstudioai/sim' rel='noopener noreferrer'>
+                    <Link href='https://github.com/Wazabi-Ai/workflow' rel='noopener noreferrer'>
                       <Img
                         src={`${baseUrl}/static/github-icon.png`}
                         width='24'

@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import clsx from 'clsx'
 import { X } from 'lucide-react'
 import { useParams } from 'next/navigation'

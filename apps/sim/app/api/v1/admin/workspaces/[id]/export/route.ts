@@ -11,9 +11,9 @@
  *   - JSON: WorkspaceExportPayload
  */
 
-import { db } from '@sim/db'
-import { workflow, workflowFolder, workspace } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { workflow, workflowFolder, workspace } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { eq } from 'drizzle-orm'
 import { NextResponse } from 'next/server'
 import { exportWorkspaceToZip } from '@/lib/workflows/operations/import-export'

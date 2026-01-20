@@ -1,12 +1,12 @@
-import { db } from '@sim/db'
+import { db } from '@wazabi/db'
 import {
   member,
   userStats,
   user as userTable,
   workflow,
   workflowExecutionLogs,
-} from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+} from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { eq, sql } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'
 import { getHighestPrioritySubscription } from '@/lib/billing/core/subscription'

@@ -3,7 +3,7 @@ import { vi } from 'vitest'
 // Mock common dependencies used across executor handler tests
 
 // Logger
-vi.mock('@sim/logger', () => ({
+vi.mock('@wazabi/logger', () => ({
   createLogger: vi.fn(() => ({
     info: vi.fn(),
     error: vi.fn(),

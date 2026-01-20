@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { HandlerDependencies } from '@/socket/handlers/workflow'
 import type { AuthenticatedSocket } from '@/socket/middleware/auth'
 import type { RoomManager } from '@/socket/rooms/manager'

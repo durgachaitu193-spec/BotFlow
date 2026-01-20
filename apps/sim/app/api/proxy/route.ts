@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
@@ -9,7 +9,7 @@ import { validateProxyUrl } from '@/lib/core/security/input-validation'
 import { generateRequestId } from '@/lib/core/utils/request'
 import { getBaseUrl } from '@/lib/core/utils/urls'
 import { executeTool } from '@/tools'
-import { getTool, validateRequiredParametersAfterMerge } from '@/tools/utils'
+import { getToolAsync, validateRequiredParametersAfterMerge } from '@/tools/utils'
 
 const logger = createLogger('ProxyAPI')
 
@@ -295,7 +295,7 @@ export async function POST(request: NextRequest) {
 
     logger.info(`[${requestId}] Processing tool: ${toolId}`)
 
-    const tool = getTool(toolId)
+    const tool = await getToolAsync(toolId)
 
     if (!tool) {
       logger.error(`[${requestId}] Tool not found: ${toolId}`)
@@ -323,7 +323,7 @@ export async function POST(request: NextRequest) {
     const hasFileOutputs =
       tool.outputs &&
       Object.values(tool.outputs).some(
-        (output) => output.type === 'file' || output.type === 'file[]'
+        (output: any) => output.type === 'file' || output.type === 'file[]'
       )
 
     const result = await executeTool(

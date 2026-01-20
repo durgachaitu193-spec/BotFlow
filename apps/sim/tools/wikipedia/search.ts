@@ -41,7 +41,7 @@ export const searchTool: ToolConfig<WikipediaSearchParams, WikipediaSearchRespon
     },
     method: 'GET',
     headers: () => ({
-      'User-Agent': 'SimStudio/1.0 (https://sim.ai)',
+      'User-Agent': 'Wazabi/1.0 (https://wazabi.ai)',
       Accept: 'application/json',
     }),
   },

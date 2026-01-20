@@ -1,3 +1,3 @@
-import { db } from '@sim/db'
+import { db } from '@wazabi/db'
 
 export { db }

@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { ResponseFormatStreamProcessor } from '@/executor/types'
 
 const logger = createLogger('ExecutorUtils')

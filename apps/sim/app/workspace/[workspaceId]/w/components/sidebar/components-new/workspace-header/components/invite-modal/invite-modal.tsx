@@ -1,7 +1,7 @@
 'use client'
 
 import React, { type KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react'
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { Loader2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { Button, Input, Label } from '@/components/emcn'

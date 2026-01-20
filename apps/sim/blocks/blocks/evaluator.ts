@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { ChartBarIcon } from '@/components/icons'
 import { isHosted } from '@/lib/core/config/environment'
 import type { BlockConfig, ParamType } from '@/blocks/types'

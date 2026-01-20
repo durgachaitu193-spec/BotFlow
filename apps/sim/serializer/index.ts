@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import type { Edge } from 'reactflow'
 import { BlockPathCalculator } from '@/lib/workflows/blocks/block-path-calculator'
 import { getBlock } from '@/blocks'

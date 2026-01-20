@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import {
   CONTAINER_PADDING_X,
   CONTAINER_PADDING_Y,

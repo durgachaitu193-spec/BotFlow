@@ -1,5 +1,5 @@
-import { db } from '@sim/db'
-import { user } from '@sim/db/schema'
+import { db } from '@wazabi/db'
+import { user } from '@wazabi/db/schema'
 import { eq } from 'drizzle-orm'
 import { cookies } from 'next/headers'
 
@@ -13,6 +13,7 @@ export async function getSession() {
     const privyUserId = cookieStore.get('sim-privy-user-id')?.value
 
     if (!privyUserId) {
+      console.log('[getSession] No sim-privy-user-id cookie found')
       return null
     }
 
@@ -31,6 +32,7 @@ export async function getSession() {
       .limit(1)
 
     if (!userData) {
+      console.log('[getSession] No user found for ID:', privyUserId)
       return null
     }
 

@@ -1,6 +1,6 @@
-import { db } from '@sim/db'
-import { copilotFeedback } from '@sim/db/schema'
-import { createLogger } from '@sim/logger'
+import { db } from '@wazabi/db'
+import { copilotFeedback } from '@wazabi/db/schema'
+import { createLogger } from '@wazabi/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import {

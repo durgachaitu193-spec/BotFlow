@@ -2,6 +2,9 @@ import { ethers } from 'ethers'
 import type { PublicClient, WalletClient } from 'viem'
 import { facilitatorAbiViem, tokenAbiViem } from '@/lib/x402-tokens'
 
+// x402 v2 Protocol Version
+export const X402_VERSION = 2
+
 export const BSC_CHAIN_ID_DEC = 56
 export const BSC_CHAIN_ID_HEX = '0x38'
 export const BSC_RPC =
@@ -10,9 +13,20 @@ export const BSC_RPC =
   'https://bsc-dataseed.binance.org/'
 export const BASE_RPC =
   process.env.NEXT_PUBLIC_BASE_RPC_URL || process.env.BASE_RPC_URL || 'https://mainnet.base.org'
-export const X402_BASE = process.env.NEXT_PUBLIC_X402_BASE_URL || 'https://x402.megalithlabs.ai'
+
+// Wazabi Facilitator URL
+// Defaulting to localhost for development/testing as requested
+export const X402_BASE = process.env.NEXT_PUBLIC_X402_BASE_URL || 'http://localhost:4022'
+
 export const FORCE_ERC20 = process.env.NEXT_PUBLIC_FORCE_ERC20 === '1'
 export const FORCE_EIP3009 = process.env.NEXT_PUBLIC_FORCE_EIP3009 === '1'
+
+/**
+ * Convert chain ID to CAIP-2 network identifier
+ */
+export function getNetworkId(chainId: number): string {
+  return `eip155:${chainId}`
+}
 
 export type Prefill = {
   recipient: `0x${string}`
@@ -99,21 +113,21 @@ export async function detectToken(
       abi: tokenAbiViem,
       functionName: 'name',
     })) as string
-  } catch {}
+  } catch { }
   try {
     version = (await publicClient.readContract({
       address: tokenAddr as `0x${string}`,
       abi: tokenAbiViem,
       functionName: 'version',
     })) as string
-  } catch {}
+  } catch { }
   try {
     symbol = (await publicClient.readContract({
       address: tokenAddr as `0x${string}`,
       abi: tokenAbiViem,
       functionName: 'symbol',
     })) as string
-  } catch {}
+  } catch { }
   try {
     decimals = Number(
       await publicClient.readContract({
@@ -122,7 +136,7 @@ export async function detectToken(
         functionName: 'decimals',
       })
     )
-  } catch {}
+  } catch { }
 
   try {
     const testNonce = ethers.hexlify(ethers.randomBytes(32))
@@ -188,38 +202,48 @@ export async function signEIP3009(params: {
     primaryType: 'TransferWithAuthorization',
     message,
   })
-  const networkName =
-    params.chainId === 56 ? 'bsc' : params.chainId === 8453 ? 'base' : `${params.chainId}`
-  const scheme = 'eip3009'
+
+  // v2: Use CAIP-2 network identifier
+  const networkId = getNetworkId(params.chainId)
+  const scheme = 'exact'
+
   const payload = {
-    x402Version: 1,
     paymentPayload: {
-      x402Version: 1,
-      scheme,
-      network: networkName,
+      x402Version: X402_VERSION,
+      resource: {
+        url: 'x402://payment',
+        description: 'EIP-3009 payment authorization',
+        mimeType: 'application/json',
+      },
+      accepted: {
+        scheme,
+        network: networkId,
+        asset: params.tokenAddr,
+        amount: message.value.toString(),
+        payTo: params.to,
+        maxTimeoutSeconds: 300,
+        extra: {},
+      },
       payload: {
         signature: sig,
         authorization: {
           from: message.from,
           to: message.to,
           value: message.value.toString(),
-          validAfter: Number(message.validAfter),
-          validBefore: Number(message.validBefore),
+          validAfter: message.validAfter.toString(),
+          validBefore: message.validBefore.toString(),
           nonce: message.nonce,
         },
       },
     },
     paymentRequirements: {
       scheme,
-      network: networkName,
+      network: networkId,
       asset: params.tokenAddr,
+      amount: message.value.toString(),
       payTo: params.to,
-      maxAmountRequired: message.value.toString(),
-      resource: 'x402 payment',
-      description: 'EIP3009 authorization',
-      mimeType: 'application/json',
-      outputSchema: { txHash: 'string' },
-      maxTimeoutSeconds: 30,
+      maxTimeoutSeconds: 300,
+      extra: {},
     },
   }
   return { payload }
@@ -245,8 +269,9 @@ export async function signERC20ViaFacilitator(params: {
     args: [params.from as `0x${string}`, params.tokenAddr as `0x${string}`],
   })) as bigint
 
+  // v2: Updated domain name to Wazabi
   const domain = {
-    name: 'Megalith',
+    name: 'Wazabi',
     version: '1',
     chainId: params.chainId,
     verifyingContract: params.facilitator,
@@ -278,15 +303,30 @@ export async function signERC20ViaFacilitator(params: {
     primaryType: 'ERC20Payment',
     message,
   })
-  const networkName2 =
-    params.chainId === 56 ? 'bsc' : params.chainId === 8453 ? 'base' : `${params.chainId}`
-  const scheme2 = 'exact'
+
+  // v2: Use CAIP-2 network identifier
+  const networkId = getNetworkId(params.chainId)
+  const scheme = 'stargate'
+
   const payload = {
-    x402Version: 1,
     paymentPayload: {
-      x402Version: 1,
-      scheme: scheme2,
-      network: networkName2,
+      x402Version: X402_VERSION,
+      resource: {
+        url: 'x402://payment',
+        description: 'ERC-20 payment via Wazabi Stargate',
+        mimeType: 'application/json',
+      },
+      accepted: {
+        scheme,
+        network: networkId,
+        asset: params.tokenAddr,
+        amount: message.value.toString(),
+        payTo: params.to,
+        maxTimeoutSeconds: 300,
+        extra: {
+          stargateAddress: params.facilitator,
+        },
+      },
       payload: {
         signature: sig,
         authorization: {
@@ -294,23 +334,22 @@ export async function signERC20ViaFacilitator(params: {
           from: message.from,
           to: message.to,
           value: message.value.toString(),
-          validAfter: Number(message.validAfter),
-          validBefore: Number(message.validBefore),
           nonce: message.nonce.toString(),
+          validAfter: message.validAfter.toString(),
+          validBefore: message.validBefore.toString(),
         },
       },
     },
     paymentRequirements: {
-      scheme: scheme2,
-      network: networkName2,
+      scheme,
+      network: networkId,
       asset: params.tokenAddr,
+      amount: message.value.toString(),
       payTo: params.to,
-      maxAmountRequired: message.value.toString(),
-      resource: 'x402 payment',
-      description: 'ERC20 facilitator authorization',
-      mimeType: 'application/json',
-      outputSchema: { txHash: 'string' },
-      maxTimeoutSeconds: 30,
+      maxTimeoutSeconds: 300,
+      extra: {
+        stargateAddress: params.facilitator,
+      },
     },
   }
   return { payload }
@@ -349,7 +388,7 @@ export async function verifyThenSettle(payload: unknown, logger?: (msg: string) 
       throw new Error(vj?.invalidReason || 'verify failed')
     }
     logger?.('✅ Verify OK')
-  } catch {}
+  } catch { }
 
   logger?.('🚀 Sending /settle request...')
   const sr = await fetch(`${X402_BASE}/settle`, {
@@ -364,7 +403,7 @@ export async function verifyThenSettle(payload: unknown, logger?: (msg: string) 
   }
   try {
     const js = JSON.parse(settleText)
-    const tx = js?.txHash || js?.hash || '<no tx hash>'
+    const tx = js?.transaction || js?.txHash || js?.hash || '<no tx hash>'
     logger?.(`✅ Settlement complete: ${tx}`)
     return js
   } catch {

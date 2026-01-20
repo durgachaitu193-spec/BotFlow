@@ -1,4 +1,4 @@
-import { createLogger } from '@sim/logger'
+import { createLogger } from '@wazabi/logger'
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { withOptimisticUpdate } from '@/lib/core/utils/optimistic-update'
@@ -103,12 +103,12 @@ export const useWorkflowRegistry = create<WorkflowRegistry>()(
             state.hydration.phase === 'state-loading'
               ? state.hydration
               : {
-                  phase: 'metadata-ready',
-                  workspaceId,
-                  workflowId: null,
-                  requestId: null,
-                  error: null,
-                },
+                phase: 'metadata-ready',
+                workspaceId,
+                workflowId: null,
+                requestId: null,
+                error: null,
+              },
         }))
       },
 
@@ -284,6 +284,62 @@ export const useWorkflowRegistry = create<WorkflowRegistry>()(
       loadWorkflowState: async (workflowId: string) => {
         const { workflows } = get()
 
+        // Handle optimistic/temporary workflows without fetching
+        if (workflowId.startsWith('temp-workflow-')) {
+          const requestId = createRequestId()
+
+          set((state) => ({
+            error: null,
+            hydration: {
+              phase: 'state-loading',
+              workspaceId: state.hydration.workspaceId,
+              workflowId,
+              requestId,
+              error: null,
+            },
+          }))
+
+          logger.info(`Loading optimistic workflow state for ${workflowId}`)
+
+          const { workflowState } = buildDefaultWorkflowArtifacts()
+
+          // Ensure we have a valid state structure
+          const safeWorkflowState = {
+            blocks: workflowState.blocks || {},
+            edges: workflowState.edges || [],
+            loops: workflowState.loops || {},
+            parallels: workflowState.parallels || {},
+            isDeployed: false,
+            deployedAt: undefined,
+            deploymentStatuses: {},
+            lastSaved: Date.now(),
+          }
+
+          useWorkflowStore.setState(safeWorkflowState)
+          useSubBlockStore.getState().initializeFromWorkflow(workflowId, safeWorkflowState.blocks)
+
+          window.dispatchEvent(
+            new CustomEvent('active-workflow-changed', {
+              detail: { workflowId },
+            })
+          )
+
+          set((state) => ({
+            activeWorkflowId: workflowId,
+            error: null,
+            deploymentStatuses: {},
+            hydration: {
+              phase: 'ready',
+              workspaceId: state.hydration.workspaceId,
+              workflowId,
+              requestId,
+              error: null,
+            },
+          }))
+
+          return
+        }
+
         if (!workflows[workflowId]) {
           const message = `Workflow not found: ${workflowId}`
           logger.error(message)
@@ -345,16 +401,16 @@ export const useWorkflowRegistry = create<WorkflowRegistry>()(
           const nextDeploymentStatuses =
             workflowData?.isDeployed || workflowData?.deployedAt
               ? {
-                  ...get().deploymentStatuses,
-                  [workflowId]: {
-                    isDeployed: workflowData.isDeployed || false,
-                    deployedAt: workflowData.deployedAt
-                      ? new Date(workflowData.deployedAt)
-                      : undefined,
-                    apiKey: workflowData.apiKey || undefined,
-                    needsRedeployment: false,
-                  },
-                }
+                ...get().deploymentStatuses,
+                [workflowId]: {
+                  isDeployed: workflowData.isDeployed || false,
+                  deployedAt: workflowData.deployedAt
+                    ? new Date(workflowData.deployedAt)
+                    : undefined,
+                  apiKey: workflowData.apiKey || undefined,
+                  needsRedeployment: false,
+                },
+              }
               : get().deploymentStatuses
 
           const currentHydration = get().hydration
@@ -615,14 +671,14 @@ export const useWorkflowRegistry = create<WorkflowRegistry>()(
             subBlockValues: { ...useSubBlockStore.getState().workflowValues },
             workflowStoreState: isDeletingActiveWorkflow
               ? {
-                  blocks: { ...useWorkflowStore.getState().blocks },
-                  edges: [...useWorkflowStore.getState().edges],
-                  loops: { ...useWorkflowStore.getState().loops },
-                  parallels: { ...useWorkflowStore.getState().parallels },
-                  isDeployed: useWorkflowStore.getState().isDeployed,
-                  deployedAt: useWorkflowStore.getState().deployedAt,
-                  lastSaved: useWorkflowStore.getState().lastSaved,
-                }
+                blocks: { ...useWorkflowStore.getState().blocks },
+                edges: [...useWorkflowStore.getState().edges],
+                loops: { ...useWorkflowStore.getState().loops },
+                parallels: { ...useWorkflowStore.getState().parallels },
+                isDeployed: useWorkflowStore.getState().isDeployed,
+                deployedAt: useWorkflowStore.getState().deployedAt,
+                lastSaved: useWorkflowStore.getState().lastSaved,
+              }
               : null,
           }),
           optimisticUpdate: () => {
