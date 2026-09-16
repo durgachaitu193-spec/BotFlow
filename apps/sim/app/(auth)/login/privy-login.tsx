@@ -315,15 +315,21 @@ export default function PrivyLogin() {
       {/* No card: the content floats directly on the ink backdrop, which keeps
           the focus on the mark and the single action. */}
       <div className='w-full'>
-        {/* Light-coloured wordmark: white BOT + orange FLOW. No
-            brightness/invert filters — they would strip out the orange. */}
+        {/* Wordmark only — the node symbol already carries the backdrop, so
+            repeating it here would be redundant.
+            Sized generously because the asset has heavy transparent padding:
+            the glyphs are only ~a third of the PNG's height, so h-20 renders
+            letters at roughly 26px. Light variant = white BOT + orange FLOW;
+            no brightness/invert filters, they would strip out the orange. */}
         <img
           src='/logo/botflow-text-light.png'
           alt='BotFlow'
-          className='h-8 w-auto object-contain object-left'
+          className='h-16 w-auto object-contain object-left md:h-20'
         />
 
-        <p className='mt-8 font-brand text-[11.5px] font-medium tracking-[0.34em] text-[rgba(242,242,242,0.40)] uppercase'>
+        {/* mt is small on purpose: the wordmark PNG's own transparent padding
+            already supplies most of the gap. */}
+        <p className='mt-2 font-brand text-[11.5px] font-medium tracking-[0.34em] text-[rgba(242,242,242,0.40)] uppercase'>
           Build <span className='text-[#ff6a00]'>•</span> Deploy{' '}
           <span className='text-[#ff6a00]'>•</span> Connect
         </p>
