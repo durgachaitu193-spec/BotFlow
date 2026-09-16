@@ -1,5 +1,5 @@
 // Agent Identity Registry Contract Configuration (BSC Mainnet Proxy)
-export const AGENT_IDENTITY_REGISTRY_ADDRESS = '0x1211D4Eb47bfd99F105184C4f04030Fd441d7D8f' as const
+export const AGENT_IDENTITY_REGISTRY_ADDRESS = '0xC262d3Eb3B00D5403C6F82740685F932814035e0' as const
 
 // Full Contract ABI for AgentIdentityRegistry
 export const AGENT_IDENTITY_REGISTRY_ABI = [

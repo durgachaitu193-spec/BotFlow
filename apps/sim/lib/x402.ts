@@ -269,9 +269,9 @@ export async function signERC20ViaFacilitator(params: {
     args: [params.from as `0x${string}`, params.tokenAddr as `0x${string}`],
   })) as bigint
 
-  // v2: Updated domain name to Wazabi
+  // v2: Domain name must match BotFlowStargate's EIP-712 domain separator
   const domain = {
-    name: 'Wazabi',
+    name: 'BotFlow',
     version: '1',
     chainId: params.chainId,
     verifyingContract: params.facilitator,
