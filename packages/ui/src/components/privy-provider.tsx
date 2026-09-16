@@ -113,7 +113,9 @@ export function PrivyProviderWrapper({ children, appId, appUrl, logo }: PrivyPro
           createOnLogin: 'users-without-wallets' as const,
         },
       },
-      supportedChains: [BSC_TESTNET, BSC_MAINNET],
+      // Mainnet only — BSC_TESTNET is kept defined for a future staging chain
+      supportedChains: [BSC_MAINNET],
+      defaultChain: BSC_MAINNET,
       session: {
         duration: '30d' as const,
         renew: true,

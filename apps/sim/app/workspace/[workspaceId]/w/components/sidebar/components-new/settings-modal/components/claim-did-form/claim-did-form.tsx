@@ -113,9 +113,8 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
             const chainIdNumber = Number.parseInt(chainId as string, 16)
             setCurrentChainId(chainIdNumber)
 
-            if (chainIdNumber === BSC_TESTNET.id) {
-              setSelectedChain(BSC_TESTNET)
-            } else if (chainIdNumber === BSC_MAINNET.id) {
+            // Mainnet only: never adopt the wallet's chain if it is not mainnet
+            if (chainIdNumber === BSC_MAINNET.id) {
               setSelectedChain(BSC_MAINNET)
             }
           }
@@ -146,10 +145,8 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
               const chainIdNumber = Number.parseInt(chainIdString, 16)
               setCurrentChainId(chainIdNumber)
 
-              if (chainIdNumber === BSC_TESTNET.id) {
-                setSelectedChain(BSC_TESTNET)
-                setCheckError(null)
-              } else if (chainIdNumber === BSC_MAINNET.id) {
+              // Mainnet only: never adopt the wallet's chain if it is not mainnet
+              if (chainIdNumber === BSC_MAINNET.id) {
                 setSelectedChain(BSC_MAINNET)
                 setCheckError(null)
               }
@@ -512,7 +509,8 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                   <Label className='font-medium text-muted-foreground text-sm'>
                     Select Network
                   </Label>
-                  <div className='grid grid-cols-2 gap-3'>
+                  <div className='grid grid-cols-1 gap-3'>
+                    {/* Testnet disabled - mainnet only
                     <button
                       onClick={() => {
                         setSelectedChain(BSC_TESTNET)
@@ -562,6 +560,7 @@ export function ClaimDidForm({ onSuccess }: ClaimDidFormProps) {
                         BSC Testnet
                       </span>
                     </button>
+                    */}
 
                     <button
                       onClick={() => {

@@ -1,7 +1,7 @@
 import { createLogger } from '@wazabi/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
-import { BSC_MAINNET, BSC_TESTNET } from '@/lib/contracts/didRegistry'
+import { BSC_MAINNET } from '@/lib/contracts/didRegistry'
 import { checkUsernameAvailability } from '@/lib/did/utils'
 
 const logger = createLogger('UsernameCheckAPI')
@@ -15,14 +15,13 @@ export async function GET(request: NextRequest) {
     }
 
     const username = request.nextUrl.searchParams.get('username')
-    const chainParam = request.nextUrl.searchParams.get('chain') || 'testnet'
 
     if (!username || !username.trim()) {
       return NextResponse.json({ available: false, error: 'Username is required' }, { status: 400 })
     }
 
-    // Select chain based on parameter
-    const chain = chainParam === 'mainnet' ? BSC_MAINNET : BSC_TESTNET
+    // Mainnet only — the `chain` query param is ignored
+    const chain = BSC_MAINNET
 
     logger.info('Checking username availability', {
       username: username.trim(),
