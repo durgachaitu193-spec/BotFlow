@@ -805,9 +805,13 @@ export function DeployModal({
     }
 
     if (!walletAddress) {
-      logger.warn('Cannot register agent: no wallet address - wallet may not be connected')
-      // Don't fail silently - this is important for agent registration
-      // But we don't want to block deployment if wallet isn't connected
+      // Deployment itself is allowed to continue, but nothing reaches the chain
+      // from here: no registration, no deployment-state update, no wallet prompt.
+      logger.error(
+        'Skipping all on-chain work: no wallet address. Deployment will continue, but the ' +
+          'agent will not be registered or updated on-chain.',
+        { walletsReady, walletCount: wallets?.length ?? 0, hasUserWallet: !!user?.wallet }
+      )
       return null
     }
 
@@ -837,7 +841,13 @@ export function DeployModal({
     }
 
     if (!provider) {
-      logger.warn('Cannot register agent: no wallet provider - wallet may not be connected')
+      // Nothing on-chain can happen without a provider, and we return before
+      // the agent lookup below, so this is the end of the road for this click.
+      logger.error(
+        'Skipping all on-chain work: no wallet provider. The wallet is not connected, ' +
+          'so no transaction will be proposed and no wallet prompt will appear.',
+        { walletAddress, walletsReady, walletCount: wallets?.length ?? 0 }
+      )
       return null
     }
 
@@ -853,7 +863,17 @@ export function DeployModal({
           logger.info('Found existing agent, will update deployment state', {
             agentId: existingAgent.agentId,
           })
+        } else {
+          logger.info('No agent registered for this workflow yet; will register a new one')
         }
+      } else {
+        // Previously indistinguishable from "no agent exists": a 401 here meant
+        // the update branch was skipped with no wallet prompt and no error.
+        logger.error(
+          'Could not look up the existing agent; treating this workflow as unregistered. ' +
+            'If an agent does exist on-chain, its deployment state will NOT be updated.',
+          { status: existingAgentResponse.status, workflowId }
+        )
       }
 
       // Get current workflow state for deployment state
