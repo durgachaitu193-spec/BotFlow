@@ -2,33 +2,26 @@
 
 import clsx from 'clsx'
 import { WalletButton } from './WalletButton'
-import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 
 function Logo({ app = 'launchpad' }: { app?: 'launchpad' | 'builder' | string }) {
-  const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  // Determine logo paths based on app
-  // Determine logo paths based on app
-  const getLogoPaths = () => {
-    if (app === 'builder') {
-      return {
-        icon: resolvedTheme === 'dark' ? '/logo/botflow-icon-light.png' : '/logo/botflow-icon-dark.png',
-        // "-light" is the light-coloured wordmark, so it belongs on the dark theme
-        text: resolvedTheme === 'dark' ? '/logo/botflow-text-light.png' : '/logo/botflow-text-dark.png',
-      }
-    }
-    // Launchpad specific branding - always use white text/dark mode assets
-    return {
-      icon: '/logo/botflow-icon-light.png',
-      text: '/logo/botflow-text-light.png',
-    }
-  }
+  /**
+   * The navbar is transparent and sits on the app chrome, which is dark in
+   * both apps and in both themes (the workspace shell, and bg-bg-deep in the
+   * launchpad). So the wordmark is NOT theme-switched: keying it off
+   * resolvedTheme rendered the dark-ink variant — an invisible "BOT" next to
+   * an orange "FLOW" — whenever the theme resolved to light.
+   */
+  const getLogoPaths = () => ({
+    icon: '/logo/botflow-icon-light.png',
+    text: '/logo/botflow-text-light.png',
+  })
 
   if (!mounted) {
     const initialLogos = getLogoPaths()
@@ -73,7 +66,9 @@ export interface LaunchpadNavbarProps {
 }
 
 export function LaunchpadNavbar({ currentApp, onSwitchApp, onSignOut }: LaunchpadNavbarProps) {
-  const bgColor = currentApp === 'launchpad' ? '#000000' : 'rgba(139, 195, 74, 0.16)'
+  // Was rgba(139,195,74,0.16) — a green tint left over from the old palette,
+  // which gave the builder chrome an olive cast. Ink with a faint brand warmth.
+  const bgColor = currentApp === 'launchpad' ? '#000000' : 'rgba(255, 106, 0, 0.06)'
 
   const handleSwitch = (app: 'launchpad' | 'builder') => {
     if (onSwitchApp) {
