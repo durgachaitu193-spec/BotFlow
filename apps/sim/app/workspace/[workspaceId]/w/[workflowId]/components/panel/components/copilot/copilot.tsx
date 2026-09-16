@@ -385,8 +385,9 @@ export const Copilot = forwardRef<CopilotRef, CopilotProps>(({ panelWidth }, ref
       <div
         ref={copilotContainerRef}
         onClickCapture={handleCopilotClickCapture}
-        className='flex h-full flex-col overflow-hidden'
+        className='relative flex h-full flex-col overflow-hidden'
       >
+        <div className='flex h-full flex-col opacity-30 pointer-events-none select-none blur-[1.5px] grayscale transition-all'>
         {/* Header */}
         <div className='flex flex-shrink-0 items-center justify-between rounded-[4px] bg-[var(--surface-5)] px-[12px] py-[8px]'>
           <h2 className='font-medium text-[14px] text-[var(--text-primary)]'>
@@ -599,6 +600,18 @@ export const Copilot = forwardRef<CopilotRef, CopilotProps>(({ panelWidth }, ref
             )}
           </>
         )}
+        </div>
+
+        {/* Coming Soon Watermark Overlay */}
+        <div className='pointer-events-none absolute inset-0 z-50 flex h-full w-full select-none items-center justify-center overflow-hidden'>
+          {/* Scale with the panel so the text never overflows a narrow panel */}
+          <span
+            className='whitespace-nowrap font-black tracking-[0.2em] text-[var(--text-primary)] opacity-40 mix-blend-overlay drop-shadow-lg'
+            style={{ fontSize: `${Math.max(14, Math.min(44, (panelWidth - 40) / 9))}px` }}
+          >
+            COMING SOON
+          </span>
+        </div>
       </div>
     </>
   )

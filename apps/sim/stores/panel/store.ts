@@ -10,8 +10,9 @@ const MIN_PANEL_WIDTH = 260
 
 /**
  * Default panel tab
+ * Copilot is disabled ("coming soon"), so open on the toolbar instead
  */
-const DEFAULT_TAB: PanelTab = 'copilot'
+const DEFAULT_TAB: PanelTab = 'toolbar'
 
 export const usePanelStore = create<PanelState>()(
   persist(
@@ -41,6 +42,15 @@ export const usePanelStore = create<PanelState>()(
     }),
     {
       name: 'panel-state',
+      // v1: copilot is disabled, move anyone persisted on that tab to the default
+      version: 1,
+      migrate: (persisted: unknown, version: number) => {
+        const state = persisted as Partial<PanelState> | undefined
+        if (version < 1 && state?.activeTab === 'copilot') {
+          return { ...state, activeTab: DEFAULT_TAB }
+        }
+        return state
+      },
       onRehydrateStorage: () => (state) => {
         // Sync CSS variables with stored state after rehydration
         if (state && typeof window !== 'undefined') {
