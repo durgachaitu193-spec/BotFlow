@@ -8,7 +8,10 @@ import { getBaseUrl } from '@/lib/core/utils/urls'
 export function generateBrandedMetadata(override: Partial<Metadata> = {}): Metadata {
   const brand = getBrandConfig()
 
-  const defaultTitle = brand.name
+  // Matches the marketing site's tab title so the two read as one product.
+  // Custom brands keep their own name rather than inheriting the tagline.
+  const defaultTitle =
+    brand.name === 'BotFlow' ? 'BotFlow — Build. Deploy. Connect.' : brand.name
   const summaryFull = `BotFlow is the AI automation platform for creators, teams and businesses. Build and deploy AI agents, connect your tools, and settle payments onchain — on your terms.`
   const summaryShort = `BotFlow is the AI automation platform for creators, teams and businesses.`
 
