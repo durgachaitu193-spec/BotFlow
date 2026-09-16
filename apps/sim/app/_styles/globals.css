@@ -880,17 +880,17 @@ input[type="search"]::-ms-clear {
    (components/ui/dialog.tsx) sit at z-[10000000]. So a Privy popup opened
    from inside a dialog — e.g. the claim-DID form in the settings modal —
    appeared behind it and could not be reached.
-   Radix also sets pointer-events:none on <body> while a modal dialog is open,
-   which would leave the Privy popup visible but unclickable, so pointer
-   events are re-enabled on the Privy portal too.
-   ------------------------------------------------------------------ */
-#privy-dialog-backdrop {
-  z-index: 10000001 !important;
-  pointer-events: auto !important;
-}
 
-#privy-dialog,
-#privy-modal-content {
-  z-index: 10000002 !important;
+   Only the dialog ROOT is lifted. Do not set z-index on
+   #privy-dialog-backdrop or #privy-modal-content individually: the backdrop
+   carries Privy's own backdrop-filter: blur(3px), and re-stacking it against
+   its siblings puts that blur over the modal's own content instead of behind
+   it. Lifting the root preserves Privy's internal layering.
+
+   Radix also sets pointer-events:none on <body> while a modal is open, which
+   would leave the popup visible but unclickable.
+   ------------------------------------------------------------------ */
+#privy-dialog {
+  z-index: 10000001 !important;
   pointer-events: auto !important;
 }
