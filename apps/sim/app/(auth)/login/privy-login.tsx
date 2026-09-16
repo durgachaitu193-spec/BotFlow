@@ -311,53 +311,45 @@ export default function PrivyLogin() {
   }
 
   return (
-    <div
-      className='w-full'
-    >
-      <div className='w-full space-y-8 rounded-3xl border border-white/40 bg-white/60 p-8 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-black/50 dark:shadow-2xl'>
-        <div className='space-y-10 text-center'>
-          <div className='flex items-center gap-2'>
-            {/* <img
-              src='/logo/botflow-icon-dark.png'
-              alt='BotFlow'
-              className='hidden h-8 w-auto rounded-xl dark:block'
-            /> */}
-            {/* <img
-              src='/logo/botflow-icon-light.png'
-              alt='BotFlow'
-              className='block h-8 w-auto rounded-xl dark:hidden'
-            /> */}
-            {/* No brightness/invert filters: those flattened the old mark to a
-                single colour and would strip the orange out of FLOW. Each theme
-                gets the wordmark variant drawn for that background instead. */}
-            <img
-              src='/logo/botflow-text-light.png'
-              alt='BotFlow'
-              className='hidden h-9 w-auto object-contain object-left dark:block'
-            />
-            <img
-              src='/logo/botflow-text-dark.png'
-              alt='BotFlow'
-              className='block h-9 w-auto object-contain object-left dark:hidden'
-            />
-          </div>
-        </div>
+    <div className='w-full'>
+      {/* No card: the content floats directly on the ink backdrop, which keeps
+          the focus on the mark and the single action. */}
+      <div className='w-full'>
+        {/* Light-coloured wordmark: white BOT + orange FLOW. No
+            brightness/invert filters — they would strip out the orange. */}
+        <img
+          src='/logo/botflow-text-light.png'
+          alt='BotFlow'
+          className='h-8 w-auto object-contain object-left'
+        />
 
-        <p className={`${season.className} font-[380] text-[18px] text-zinc-600 dark:text-gray-300`}>
+        <p className='mt-8 font-brand text-[11.5px] font-medium tracking-[0.34em] text-[rgba(242,242,242,0.40)] uppercase'>
+          Build <span className='text-[#ff6a00]'>•</span> Deploy{' '}
+          <span className='text-[#ff6a00]'>•</span> Connect
+        </p>
+
+        <h1 className='mt-3 font-brand text-[30px] leading-[1.12] font-bold tracking-[-0.02em] text-white'>
+          A smarter way to
+          <br />
+          build <span className='text-[#ff6a00]'>what&apos;s next.</span>
+        </h1>
+
+        <p className='mt-4 text-[15px] leading-relaxed text-[rgba(242,242,242,0.62)]'>
           Sign in with your social account or connect your wallet to get started.
         </p>
-        <div className='space-y-6'>
-          <Button
-            onClick={handleLogin}
-            disabled={isLoading || !ready}
-            className={`auth-button-gradient flex w-full items-center justify-center gap-2 rounded-[14px] py-6 font-medium text-[17px] transition-all duration-200 ${season.className}`}
-          >
-            {!ready ? 'Initializing...' : isLoading ? 'Connecting...' : 'Connect Wallet / Sign In'}
-          </Button>
-        </div>
+
+        <Button
+          onClick={handleLogin}
+          disabled={isLoading || !ready}
+          className='auth-button-gradient mt-8 flex w-full items-center justify-center gap-2 rounded-full py-6 font-brand text-[16px] font-medium transition-all duration-200'
+        >
+          {!ready ? 'Initializing...' : isLoading ? 'Connecting...' : 'Connect Wallet / Sign In'}
+        </Button>
+
+        <p className='mt-5 text-center text-[12.5px] text-[rgba(242,242,242,0.40)]'>
+          Agents with onchain identity. Payments that settle themselves.
+        </p>
       </div>
-
-
     </div>
   )
 }

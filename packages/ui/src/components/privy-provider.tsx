@@ -102,7 +102,8 @@ export function PrivyProviderWrapper({ children, appId, appUrl, logo }: PrivyPro
         'apple' as const,
       ],
       appearance: {
-        theme: 'dark' as const,
+        // Ink, matching the marketing site and the auth backdrop (Privy accepts a hex here)
+        theme: '#0b0b0b' as const,
         accentColor: '#FF6A00' as const,
         logo: logo || (appUrl ? `${appUrl}/logo/botflow-icon-light.png` : undefined),
         showWalletLoginFirst: true,

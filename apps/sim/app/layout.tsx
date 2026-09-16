@@ -204,7 +204,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ThemeProvider>
             <PrivyProviderWrapper
               appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID}
-              logo="/logo/botflow-icon-dark.png"
+              logo="/logo/botflow-icon-light.png"
             >
               <QueryProvider>
                 <SessionProvider>

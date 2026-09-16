@@ -9,7 +9,7 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <PrivyProviderWrapper
       appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID}
-      logo="/logo/botflow-icon-dark.png"
+      logo="/logo/botflow-icon-light.png"
     >
       <AppProvider>
         <UserDetailsProvider>{children}</UserDetailsProvider>

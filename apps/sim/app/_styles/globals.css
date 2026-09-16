@@ -659,12 +659,12 @@ input[type="search"]::-ms-clear {
   }
 
   .auth-button-gradient {
-    background: linear-gradient(to right, #1B9B8C, #2DFFA8, #1B9B8C) !important;
+    /* BotFlow brand orange, matching the marketing site's primary button */
+    background: linear-gradient(to right, #ff6a00, #ff8c3a, #ff6a00) !important;
     background-size: 200% 100% !important;
     border: none !important;
-    color: #111827 !important;
-    /* gray-900 */
-    box-shadow: 0 8px 30px rgba(45, 255, 168, 0.3), 0 4px 12px rgba(27, 155, 140, 0.2) !important;
+    color: #1a0d03 !important;
+    box-shadow: 0 8px 30px rgba(255, 106, 0, 0.32), 0 4px 12px rgba(255, 106, 0, 0.2) !important;
   }
 
   .auth-button-gradient:hover {
@@ -893,4 +893,44 @@ input[type="search"]::-ms-clear {
 #privy-dialog {
   z-index: 10000001 !important;
   pointer-events: auto !important;
+}
+
+/* ------------------------------------------------------------------
+   Auth backdrop — subtle BotFlow flow diagram
+   ------------------------------------------------------------------ */
+.auth-flow-pulse {
+  stroke-dasharray: 24 150;
+  animation: auth-flow-run 3.4s linear infinite;
+}
+
+@keyframes auth-flow-run {
+  to {
+    stroke-dashoffset: -174;
+  }
+}
+
+.auth-flow-node {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: auth-flow-pop 4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+@keyframes auth-flow-pop {
+  0%,
+  64%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  24% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-flow-pulse,
+  .auth-flow-node {
+    animation: none !important;
+  }
 }
