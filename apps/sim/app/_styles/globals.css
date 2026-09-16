@@ -873,3 +873,24 @@ input[type="search"]::-ms-clear {
     linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
   background-size: 50px 50px;
 } */
+/* ------------------------------------------------------------------
+   Privy modal stacking
+
+   Privy renders its dialog at z-index 999999, but our Radix dialogs
+   (components/ui/dialog.tsx) sit at z-[10000000]. So a Privy popup opened
+   from inside a dialog — e.g. the claim-DID form in the settings modal —
+   appeared behind it and could not be reached.
+   Radix also sets pointer-events:none on <body> while a modal dialog is open,
+   which would leave the Privy popup visible but unclickable, so pointer
+   events are re-enabled on the Privy portal too.
+   ------------------------------------------------------------------ */
+#privy-dialog-backdrop {
+  z-index: 10000001 !important;
+  pointer-events: auto !important;
+}
+
+#privy-dialog,
+#privy-modal-content {
+  z-index: 10000002 !important;
+  pointer-events: auto !important;
+}
