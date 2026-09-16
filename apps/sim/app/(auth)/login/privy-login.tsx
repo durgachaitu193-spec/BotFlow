@@ -77,7 +77,7 @@ function AuthStatus({ title }: { title: string }) {
 }
 
 export default function PrivyLogin() {
-  const { ready, authenticated, login, user } = usePrivy()
+  const { ready, authenticated, login, user, getAccessToken } = usePrivy()
   const { resolvedTheme } = useTheme()
   const { wallets } = useWallets()
   const { createWallet } = useCreateWallet()
@@ -133,10 +133,18 @@ export default function PrivyLogin() {
         walletAddress: finalWalletAddress,
       })
 
+      // The sync endpoint mints our session cookie, so it verifies this token
+      // with Privy and refuses to trust the body on its own.
+      const accessToken = await getAccessToken()
+      if (!accessToken) {
+        throw new Error('Could not obtain a Privy access token; cannot sync session')
+      }
+
       const response = await fetch('/api/auth/privy/sync', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
         },
         credentials: 'include', // Ensure cookies are sent and stored
         body: JSON.stringify({
