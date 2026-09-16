@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { Socket } from 'socket.io'
 import { auth } from '@/lib/auth'
 import { ANONYMOUS_USER, ANONYMOUS_USER_ID } from '@/lib/auth'

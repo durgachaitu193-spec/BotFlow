@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { BlockType, HTTP } from '@/executor/consts'
 import type { BlockHandler, ExecutionContext } from '@/executor/types'
 import type { SerializedBlock } from '@/serializer/types'

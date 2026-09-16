@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { Chunk, StructuredDataOptions } from '@/lib/chunkers/types'
 
 const logger = createLogger('StructuredDataChunker')

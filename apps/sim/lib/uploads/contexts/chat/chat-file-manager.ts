@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { processExecutionFiles } from '@/lib/execution/files'
 import type { UserFile } from '@/executor/types'
 

@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { AzureOpenAI } from 'openai'
 import { env } from '@/lib/core/config/env'
 import type { StreamingExecution } from '@/executor/types'

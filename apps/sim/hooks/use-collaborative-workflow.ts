@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { Edge } from 'reactflow'
 import { useSession } from '@/lib/auth/auth-client'
 import { useSocket } from '@/app/workspace/providers/socket-provider'

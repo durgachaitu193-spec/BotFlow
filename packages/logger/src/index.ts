@@ -1,5 +1,5 @@
 /**
- * @wazabi/logger
+ * @botflow/logger
  *
  * Framework-agnostic logging utilities for the Sim platform.
  * Provides standardized console logging with environment-aware configuration.
@@ -294,7 +294,7 @@ export class Logger {
  *
  * @example
  * ```typescript
- * import { createLogger } from '@wazabi/logger'
+ * import { createLogger } from '@botflow/logger'
  *
  * const logger = createLogger('MyComponent')
  *

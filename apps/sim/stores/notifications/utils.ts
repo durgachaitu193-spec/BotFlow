@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useCopilotStore } from '@/stores/panel/copilot/store'
 import { usePanelStore } from '@/stores/panel/store'
 

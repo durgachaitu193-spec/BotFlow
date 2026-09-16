@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { verifyCronAuth } from '@/lib/auth/internal'
 import { cleanupExpiredIdempotencyKeys, getIdempotencyKeyStats } from '@/lib/core/idempotency'

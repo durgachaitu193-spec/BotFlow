@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import {
   Building2,
   Check,

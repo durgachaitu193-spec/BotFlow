@@ -10,7 +10,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { History, Plus } from 'lucide-react'
 import {
   Button,

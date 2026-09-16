@@ -1,6 +1,6 @@
-import { db } from '@wazabi/db'
-import { docsEmbeddings } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { docsEmbeddings } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { sql } from 'drizzle-orm'
 import type { BaseServerTool } from '@/lib/copilot/tools/server/base-tool'
 

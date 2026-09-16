@@ -59,31 +59,31 @@
       "@/serializer/*": [
         "./serializer/*"
       ],
-      "@wazabi/testing": [
+      "@botflow/testing": [
         "../../packages/testing/src"
       ],
-      "@wazabi/testing/*": [
+      "@botflow/testing/*": [
         "../../packages/testing/src/*"
       ],
-      "@wazabi/db": [
+      "@botflow/db": [
         "../../packages/db"
       ],
-      "@wazabi/db/privy-sync": [
+      "@botflow/db/privy-sync": [
         "../../packages/db/src/privy-sync"
       ],
-      "@wazabi/db/*": [
+      "@botflow/db/*": [
         "../../packages/db/*"
       ],
-      "@wazabi/logger": [
+      "@botflow/logger": [
         "../../packages/logger/src"
       ],
-      "@wazabi/logger/*": [
+      "@botflow/logger/*": [
         "../../packages/logger/src/*"
       ],
-      "@wazabi/ui": [
+      "@botflow/ui": [
         "../../packages/ui/src"
       ],
-      "@wazabi/ui/*": [
+      "@botflow/ui/*": [
         "../../packages/ui/src/*"
       ],
       "@/executor": [

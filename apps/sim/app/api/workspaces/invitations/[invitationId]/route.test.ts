@@ -94,11 +94,11 @@ describe('Workspace Invitation [invitationId] API Route', () => {
       transaction: mockTransaction,
     }
 
-    vi.doMock('@wazabi/db', () => ({
+    vi.doMock('@botflow/db', () => ({
       db: mockDbChain,
     }))
 
-    vi.doMock('@wazabi/db/schema', () => ({
+    vi.doMock('@botflow/db/schema', () => ({
       workspaceInvitation: {
         id: 'id',
         workspaceId: 'workspaceId',
@@ -381,7 +381,7 @@ describe('Workspace Invitation [invitationId] API Route', () => {
         then: vi.fn().mockRejectedValue(new Error('Database connection failed')),
       }
 
-      vi.doMock('@wazabi/db', () => ({ db: mockErrorDb }))
+      vi.doMock('@botflow/db', () => ({ db: mockErrorDb }))
       vi.doMock('@/lib/auth', () => ({
         getSession: vi.fn().mockResolvedValue({ user: mockUser }),
       }))
@@ -403,7 +403,7 @@ describe('Workspace Invitation [invitationId] API Route', () => {
             mockEnv[variable as keyof typeof mockEnv] ?? process.env[variable],
         }
       })
-      vi.doMock('@wazabi/db/schema', () => ({
+      vi.doMock('@botflow/db/schema', () => ({
         workspaceInvitation: { id: 'id' },
       }))
       vi.doMock('drizzle-orm', () => ({

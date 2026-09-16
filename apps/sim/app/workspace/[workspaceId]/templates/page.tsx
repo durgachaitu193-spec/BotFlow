@@ -1,5 +1,5 @@
-import { db } from '@wazabi/db'
-import { settings, templateCreators, templateStars, templates, user } from '@wazabi/db/schema'
+import { db } from '@botflow/db'
+import { settings, templateCreators, templateStars, templates, user } from '@botflow/db/schema'
 import { and, desc, eq, sql } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
 import { getSession } from '@/lib/auth'

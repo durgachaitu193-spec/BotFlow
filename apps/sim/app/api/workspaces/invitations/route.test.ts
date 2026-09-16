@@ -43,11 +43,11 @@ describe('Workspace Invitations API Route', () => {
       values: mockInsertValues,
     }
 
-    vi.doMock('@wazabi/db', () => ({
+    vi.doMock('@botflow/db', () => ({
       db: mockDbChain,
     }))
 
-    vi.doMock('@wazabi/db/schema', () => ({
+    vi.doMock('@botflow/db/schema', () => ({
       user: { id: 'user_id', email: 'user_email', name: 'user_name', image: 'user_image' },
       workspace: { id: 'workspace_id', name: 'workspace_name', ownerId: 'owner_id' },
       permissions: {

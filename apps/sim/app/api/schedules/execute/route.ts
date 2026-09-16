@@ -1,5 +1,5 @@
-import { db, workflowSchedule } from '@wazabi/db'
-import { createLogger } from '@wazabi/logger'
+import { db, workflowSchedule } from '@botflow/db'
+import { createLogger } from '@botflow/logger'
 import { tasks } from '@trigger.dev/sdk'
 import { and, eq, isNull, lt, lte, not, or } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'

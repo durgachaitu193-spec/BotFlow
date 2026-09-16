@@ -27,7 +27,7 @@ export const pageContentTool: ToolConfig<WikipediaPageContentParams, WikipediaPa
     },
     method: 'GET',
     headers: () => ({
-      'User-Agent': 'Wazabi/1.0 (https://wazabi.ai)',
+      'User-Agent': 'BotFlow/1.0 (https://botflow.ai)',
       Accept:
         'text/html; charset=utf-8; profile="https://www.mediawiki.org/wiki/Specs/HTML/2.1.0"',
     }),

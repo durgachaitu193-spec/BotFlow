@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { AgentIcon } from '@/components/icons'
 import { isHosted } from '@/lib/core/config/environment'
 import type { BlockConfig } from '@/blocks/types'

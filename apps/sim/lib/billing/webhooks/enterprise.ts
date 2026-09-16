@@ -1,6 +1,6 @@
-import { db } from '@wazabi/db'
-import { organization, subscription, user } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { organization, subscription, user } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { eq } from 'drizzle-orm'
 import type Stripe from 'stripe'
 import {

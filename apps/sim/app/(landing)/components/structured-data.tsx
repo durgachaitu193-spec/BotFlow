@@ -4,26 +4,26 @@ export default function StructuredData() {
     '@graph': [
       {
         '@type': 'Organization',
-        '@id': 'https://wazabi.ai/#organization',
-        name: 'Wazabi',
-        alternateName: 'Wazabi Studio',
+        '@id': 'https://botflow.ai/#organization',
+        name: 'BotFlow',
+        alternateName: 'BotFlow Studio',
         description:
           'Open-source AI agent workflow builder used by developers at trail-blazing startups to Fortune 500 companies',
-        url: 'https://wazabi.ai',
+        url: 'https://botflow.ai',
         logo: {
           '@type': 'ImageObject',
-          '@id': 'https://wazabi.ai/#logo',
-          url: 'https://wazabi.ai/logo/b&w/text/b&w.svg',
-          contentUrl: 'https://wazabi.ai/logo/b&w/text/b&w.svg',
+          '@id': 'https://botflow.ai/#logo',
+          url: 'https://botflow.ai/logo/b&w/text/b&w.svg',
+          contentUrl: 'https://botflow.ai/logo/b&w/text/b&w.svg',
           width: 49.78314,
           height: 24.276,
-          caption: 'Wazabi Logo',
+          caption: 'BotFlow Logo',
         },
-        image: { '@id': 'https://wazabi.ai/#logo' },
+        image: { '@id': 'https://botflow.ai/#logo' },
         sameAs: [
-          'https://x.com/wazabidotai',
+          'https://x.com/botflow',
           'https://github.com/wazabi-ai/wazabi',
-          'https://www.linkedin.com/company/wazabistudioai/',
+          'https://www.linkedin.com/company/botflow/',
           'https://discord.gg/Hr4UWYEcTT',
         ],
         contactPoint: {
@@ -34,21 +34,21 @@ export default function StructuredData() {
       },
       {
         '@type': 'WebSite',
-        '@id': 'https://wazabi.ai/#website',
-        url: 'https://wazabi.ai',
-        name: 'Wazabi - AI Agent Workflow Builder',
+        '@id': 'https://botflow.ai/#website',
+        url: 'https://botflow.ai',
+        name: 'BotFlow - AI Agent Workflow Builder',
         description:
           'Open-source AI agent workflow builder. 60,000+ developers build and deploy agentic workflows. SOC2 and HIPAA compliant.',
         publisher: {
-          '@id': 'https://wazabi.ai/#organization',
+          '@id': 'https://botflow.ai/#organization',
         },
         potentialAction: [
           {
             '@type': 'SearchAction',
-            '@id': 'https://wazabi.ai/#searchaction',
+            '@id': 'https://botflow.ai/#searchaction',
             target: {
               '@type': 'EntryPoint',
-              urlTemplate: 'https://wazabi.ai/search?q={search_term_string}',
+              urlTemplate: 'https://botflow.ai/search?q={search_term_string}',
             },
             'query-input': 'required name=search_term_string',
           },
@@ -57,46 +57,46 @@ export default function StructuredData() {
       },
       {
         '@type': 'WebPage',
-        '@id': 'https://wazabi.ai/#webpage',
-        url: 'https://wazabi.ai',
-        name: 'Wazabi - Workflows for LLMs | Build AI Agent Workflows',
+        '@id': 'https://botflow.ai/#webpage',
+        url: 'https://botflow.ai',
+        name: 'BotFlow - Workflows for LLMs | Build AI Agent Workflows',
         isPartOf: {
-          '@id': 'https://wazabi.ai/#website',
+          '@id': 'https://botflow.ai/#website',
         },
         about: {
-          '@id': 'https://wazabi.ai/#software',
+          '@id': 'https://botflow.ai/#software',
         },
         datePublished: '2024-01-01T00:00:00+00:00',
         dateModified: new Date().toISOString(),
         description:
-          'Build and deploy AI agent workflows with Wazabi. Visual drag-and-drop interface for creating powerful LLM-powered automations.',
+          'Build and deploy AI agent workflows with BotFlow. Visual drag-and-drop interface for creating powerful LLM-powered automations.',
         breadcrumb: {
-          '@id': 'https://wazabi.ai/#breadcrumb',
+          '@id': 'https://botflow.ai/#breadcrumb',
         },
         inLanguage: 'en-US',
         potentialAction: [
           {
             '@type': 'ReadAction',
-            target: ['https://wazabi.ai'],
+            target: ['https://botflow.ai'],
           },
         ],
       },
       {
         '@type': 'BreadcrumbList',
-        '@id': 'https://wazabi.ai/#breadcrumb',
+        '@id': 'https://botflow.ai/#breadcrumb',
         itemListElement: [
           {
             '@type': 'ListItem',
             position: 1,
             name: 'Home',
-            item: 'https://wazabi.ai',
+            item: 'https://botflow.ai',
           },
         ],
       },
       {
         '@type': 'SoftwareApplication',
-        '@id': 'https://wazabi.ai/#software',
-        name: 'Wazabi - AI Agent Workflow Builder',
+        '@id': 'https://botflow.ai/#software',
+        name: 'BotFlow - AI Agent Workflow Builder',
         description:
           'Open-source AI agent workflow builder used by 60,000+ developers. Build agentic workflows with visual drag-and-drop interface. SOC2 and HIPAA compliant. Integrate with 100+ apps.',
         applicationCategory: 'DeveloperApplication',
@@ -106,7 +106,7 @@ export default function StructuredData() {
         offers: [
           {
             '@type': 'Offer',
-            '@id': 'https://wazabi.ai/#offer-free',
+            '@id': 'https://botflow.ai/#offer-free',
             name: 'Community Plan',
             price: '0',
             priceCurrency: 'USD',
@@ -114,7 +114,7 @@ export default function StructuredData() {
             itemCondition: 'https://schema.org/NewCondition',
             availability: 'https://schema.org/InStock',
             seller: {
-              '@id': 'https://wazabi.ai/#organization',
+              '@id': 'https://botflow.ai/#organization',
             },
             eligibleRegion: {
               '@type': 'Place',
@@ -123,7 +123,7 @@ export default function StructuredData() {
           },
           {
             '@type': 'Offer',
-            '@id': 'https://wazabi.ai/#offer-pro',
+            '@id': 'https://botflow.ai/#offer-pro',
             name: 'Pro Plan',
             price: '20',
             priceCurrency: 'USD',
@@ -138,12 +138,12 @@ export default function StructuredData() {
             itemCondition: 'https://schema.org/NewCondition',
             availability: 'https://schema.org/InStock',
             seller: {
-              '@id': 'https://wazabi.ai/#organization',
+              '@id': 'https://botflow.ai/#organization',
             },
           },
           {
             '@type': 'Offer',
-            '@id': 'https://wazabi.ai/#offer-team',
+            '@id': 'https://botflow.ai/#offer-team',
             name: 'Team Plan',
             price: '40',
             priceCurrency: 'USD',
@@ -158,7 +158,7 @@ export default function StructuredData() {
             itemCondition: 'https://schema.org/NewCondition',
             availability: 'https://schema.org/InStock',
             seller: {
-              '@id': 'https://wazabi.ai/#organization',
+              '@id': 'https://botflow.ai/#organization',
             },
           },
         ],
@@ -184,21 +184,21 @@ export default function StructuredData() {
         screenshot: [
           {
             '@type': 'ImageObject',
-            url: 'https://wazabi.ai/screenshots/workflow-builder.png',
+            url: 'https://botflow.ai/screenshots/workflow-builder.png',
             caption: 'wazabi workflow builder interface',
           },
         ],
       },
       {
         '@type': 'FAQPage',
-        '@id': 'https://wazabi.ai/#faq',
+        '@id': 'https://botflow.ai/#faq',
         mainEntity: [
           {
             '@type': 'Question',
             name: 'What is wazabi?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Wazabi is an open-source AI agent workflow builder used by 60,000+ developers at trail-blazing startups to Fortune 500 companies. It provides a visual drag-and-drop interface for building and deploying agentic workflows. wazabi is SOC2 and HIPAA compliant.',
+              text: 'BotFlow is an open-source AI agent workflow builder used by 60,000+ developers at trail-blazing startups to Fortune 500 companies. It provides a visual drag-and-drop interface for building and deploying agentic workflows. wazabi is SOC2 and HIPAA compliant.',
             },
           },
           {
@@ -206,7 +206,7 @@ export default function StructuredData() {
             name: 'Which AI models does wazabi support?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Wazabi supports all major AI models including OpenAI (GPT-5, GPT-4o), Anthropic (Claude), Google (Gemini), xAI (Grok), Mistral, Perplexity, and many more. You can also connect to open-source models via Ollama.',
+              text: 'BotFlow supports all major AI models including OpenAI (GPT-5, GPT-4o), Anthropic (Claude), Google (Gemini), xAI (Grok), Mistral, Perplexity, and many more. You can also connect to open-source models via Ollama.',
             },
           },
           {

@@ -1,5 +1,5 @@
 import { createCipheriv, createDecipheriv, randomBytes } from 'crypto'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { env } from '@/lib/core/config/env'
 
 const logger = createLogger('ApiKeyCrypto')

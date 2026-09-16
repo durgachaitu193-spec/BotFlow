@@ -17,7 +17,7 @@
  */
 
 import { context, type Span, SpanStatusCode, trace } from '@opentelemetry/api'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { TraceSpan } from '@/lib/logs/types'
 
 /**

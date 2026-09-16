@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { ExtractParams, ExtractResponse } from '@/tools/firecrawl/types'
 import type { ToolConfig } from '@/tools/types'
 

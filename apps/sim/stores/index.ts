@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useCustomToolsStore } from '@/stores/custom-tools/store'
 import { useExecutionStore } from '@/stores/execution/store'
 import { useCopilotStore } from '@/stores/panel/copilot/store'

@@ -2,9 +2,9 @@
  * MCP Service - Clean stateless service for MCP operations
  */
 
-import { db } from '@wazabi/db'
-import { mcpServers } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { mcpServers } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { and, eq, isNull } from 'drizzle-orm'
 import { isTest } from '@/lib/core/config/environment'
 import { generateRequestId } from '@/lib/core/utils/request'

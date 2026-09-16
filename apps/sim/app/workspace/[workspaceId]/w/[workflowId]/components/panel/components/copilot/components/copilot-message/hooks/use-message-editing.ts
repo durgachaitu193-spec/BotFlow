@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useCopilotStore } from '@/stores/panel/copilot/store'
 import type { CopilotMessage } from '@/stores/panel/copilot/types'
 

@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useParams } from 'next/navigation'
 import { Handle, type NodeProps, Position, useUpdateNodeInternals } from 'reactflow'
 import { Badge } from '@/components/emcn/components/badge/badge'

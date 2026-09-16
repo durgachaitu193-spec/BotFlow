@@ -1,13 +1,13 @@
 import { render } from '@react-email/components'
-import { db } from '@wazabi/db'
+import { db } from '@botflow/db'
 import {
   member,
   organization,
   subscription as subscriptionTable,
   user,
   userStats,
-} from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+} from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { and, eq, inArray } from 'drizzle-orm'
 import type Stripe from 'stripe'
 import PaymentFailedEmail from '@/components/emails/billing/payment-failed-email'

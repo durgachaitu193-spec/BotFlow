@@ -1,5 +1,5 @@
-import { db } from '@wazabi/db'
-import { account, workflow as workflowTable } from '@wazabi/db/schema'
+import { db } from '@botflow/db'
+import { account, workflow as workflowTable } from '@botflow/db/schema'
 import { eq } from 'drizzle-orm'
 import type { NextRequest } from 'next/server'
 import { checkHybridAuth } from '@/lib/auth/hybrid'

@@ -11,7 +11,7 @@ import {
   Section,
   Text,
 } from '@react-email/components'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { format } from 'date-fns'
 import { baseStyles } from '@/components/emails/base-styles'
 import EmailFooter from '@/components/emails/footer'

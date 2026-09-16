@@ -103,10 +103,10 @@ export function PrivyProviderWrapper({ children, appId, appUrl, logo }: PrivyPro
       ],
       appearance: {
         theme: 'dark' as const,
-        accentColor: '#0EE0C6' as const,
-        logo: logo || (appUrl ? `${appUrl}/wazabi.svg` : undefined),
+        accentColor: '#FF6A00' as const,
+        logo: logo || (appUrl ? `${appUrl}/logo/botflow-icon-light.png` : undefined),
         showWalletLoginFirst: true,
-        landingHeader: 'Wazabi',
+        landingHeader: 'BotFlow',
       },
       embeddedWallets: {
         ethereum: {

@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { BlockType, LOOP, type SentinelType } from '@/executor/consts'
 import type { DAG, DAGNode } from '@/executor/dag/builder'
 import { buildSentinelEndId, buildSentinelStartId } from '@/executor/utils/subflow-utils'

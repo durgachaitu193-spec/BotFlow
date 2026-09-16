@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import imageCompression from 'browser-image-compression'
 import { X } from 'lucide-react'
 import Image from 'next/image'

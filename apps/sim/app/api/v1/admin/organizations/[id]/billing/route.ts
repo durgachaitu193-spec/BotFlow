@@ -15,9 +15,9 @@
  * Response: AdminSingleResponse<{ success: true, orgUsageLimit: string | null }>
  */
 
-import { db } from '@wazabi/db'
-import { organization } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { organization } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { eq } from 'drizzle-orm'
 import { getOrganizationBillingData } from '@/lib/billing/core/organization'
 import { withAdminAuthParams } from '@/app/api/v1/admin/middleware'

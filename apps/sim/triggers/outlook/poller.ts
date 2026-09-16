@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { OutlookIcon } from '@/components/icons'
 import { useSubBlockStore } from '@/stores/workflows/subblock/store'
 import type { TriggerConfig } from '@/triggers/types'

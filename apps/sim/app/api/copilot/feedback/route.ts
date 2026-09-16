@@ -1,6 +1,6 @@
-import { db } from '@wazabi/db'
-import { copilotFeedback } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { copilotFeedback } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import {

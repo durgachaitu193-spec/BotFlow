@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { HubSpotGetCompanyParams, HubSpotGetCompanyResponse } from '@/tools/hubspot/types'
 import type { ToolConfig } from '@/tools/types'
 

@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { PipedriveGetDealParams, PipedriveGetDealResponse } from '@/tools/pipedrive/types'
 import type { ToolConfig } from '@/tools/types'
 

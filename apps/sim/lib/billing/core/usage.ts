@@ -1,6 +1,6 @@
-import { db } from '@wazabi/db'
-import { member, organization, settings, user, userStats } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { member, organization, settings, user, userStats } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { eq, inArray } from 'drizzle-orm'
 import {
   getEmailSubject,

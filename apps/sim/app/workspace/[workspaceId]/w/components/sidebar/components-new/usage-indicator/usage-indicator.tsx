@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useQueryClient } from '@tanstack/react-query'
 import { Button } from '@/components/emcn'
 import { Skeleton } from '@/components/ui'

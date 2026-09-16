@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useWorkflowRegistry } from '@/stores/workflows/registry/store'
 import { useSubBlockStore } from '@/stores/workflows/subblock/store'
 

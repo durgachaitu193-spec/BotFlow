@@ -1,11 +1,11 @@
 {
-  "name": "@wazabi/cli",
+  "name": "@botflow/cli",
   "version": "0.1.19",
-  "description": "Wazabi CLI - Run Wazabi with a single command",
+  "description": "BotFlow CLI - Run BotFlow with a single command",
   "main": "dist/index.js",
   "type": "module",
   "bin": {
-    "wazabistudio": "dist/index.js"
+    "botflowstudio": "dist/index.js"
   },
   "scripts": {
     "build": "bun run build:tsc",
@@ -28,7 +28,7 @@
     "automation",
     "docker"
   ],
-  "author": "Wazabi",
+  "author": "BotFlow",
   "license": "Apache-2.0",
   "dependencies": {
     "chalk": "^4.1.2",

@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { LaunchpadNavbar, type LaunchpadNavbarProps } from '@wazabi/ui'
+import { LaunchpadNavbar, type LaunchpadNavbarProps } from '@botflow/ui'
 import clsx from 'clsx'
 import Sidebar from '@/components/Sidebar'
 import CreateToken from '@/create/components/createToken'

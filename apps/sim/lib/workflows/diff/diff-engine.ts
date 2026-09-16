@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { Edge } from 'reactflow'
 import { v4 as uuidv4 } from 'uuid'
 import type { BlockWithDiff } from '@/lib/workflows/diff/types'

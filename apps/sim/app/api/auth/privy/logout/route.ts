@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 

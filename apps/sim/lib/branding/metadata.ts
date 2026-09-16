@@ -9,8 +9,8 @@ export function generateBrandedMetadata(override: Partial<Metadata> = {}): Metad
   const brand = getBrandConfig()
 
   const defaultTitle = brand.name
-  const summaryFull = `Wazabi is the epi-agentic infrastructure for the autonomous agent economy. A no-code builder for on-chain verified, trustless AI agents: build, deploy, and monetize with 100+ apps integrated, instant gasless, EVM-native x402 agent-to-agent payments, and a Launchpad to graduate tokenised agents into an active trading pool.`
-  const summaryShort = `Wazabi is the epi-agentic infrastructure for the autonomous agent economy.`
+  const summaryFull = `BotFlow is the epi-agentic infrastructure for the autonomous agent economy. A no-code builder for on-chain verified, trustless AI agents: build, deploy, and monetize with 100+ apps integrated, instant gasless, EVM-native x402 agent-to-agent payments, and a Launchpad to graduate tokenised agents into an active trading pool.`
+  const summaryShort = `BotFlow is the epi-agentic infrastructure for the autonomous agent economy.`
 
   return {
     title: {
@@ -67,7 +67,7 @@ export function generateBrandedMetadata(override: Partial<Metadata> = {}): Metad
       siteName: brand.name,
       images: [
         {
-          url: brand.logoUrl || '/logo/wazabineons.png',
+          url: brand.logoUrl || '/logo/botflow-icon-light.png',
           width: 1200,
           height: 630,
           alt: brand.name,
@@ -78,9 +78,9 @@ export function generateBrandedMetadata(override: Partial<Metadata> = {}): Metad
       card: 'summary_large_image',
       title: defaultTitle,
       description: summaryFull,
-      images: [brand.logoUrl || '/logo/wazabineons.png'],
-      creator: '@Wazabi_ai',
-      site: '@Wazabi_ai',
+      images: [brand.logoUrl || '/logo/botflow-icon-light.png'],
+      creator: '@BotFlow_ai',
+      site: '@BotFlow_ai',
     },
     manifest: '/manifest.webmanifest',
     icons: {
@@ -129,10 +129,10 @@ export function generateStructuredData() {
   return {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Wazabi',
+    name: 'BotFlow',
     description:
-      'Wazabi is the epi-agentic infrastructure for the autonomous agent economy. A no-code builder for on-chain verified, trustless AI agents: build, deploy, and monetize with 100+ apps integrated, instant gasless, EVM-native x402 agent-to-agent payments, and a Launchpad to graduate tokenised agents into an active trading pool.',
-    url: 'https://wazabi.ai/',
+      'BotFlow is the epi-agentic infrastructure for the autonomous agent economy. A no-code builder for on-chain verified, trustless AI agents: build, deploy, and monetize with 100+ apps integrated, instant gasless, EVM-native x402 agent-to-agent payments, and a Launchpad to graduate tokenised agents into an active trading pool.',
+    url: 'https://botflow.ai/',
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web Browser',
     offers: {
@@ -141,8 +141,8 @@ export function generateStructuredData() {
     },
     creator: {
       '@type': 'Organization',
-      name: 'Wazabi.ai',
-      url: 'https://wazabi.ai/',
+      name: 'BotFlow',
+      url: 'https://botflow.ai/',
     },
     featureList: [
       'Visual AI Agent Builder',

@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import clsx from 'clsx'
 import { ChevronRight, Folder, FolderOpen } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'

@@ -1,5 +1,5 @@
 import { Cerebras } from '@cerebras/cerebras_cloud_sdk'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { StreamingExecution } from '@/executor/types'
 import { getProviderDefaultModel, getProviderModels } from '@/providers/models'
 import type {

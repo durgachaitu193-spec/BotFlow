@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { v4 as uuidv4 } from 'uuid'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'

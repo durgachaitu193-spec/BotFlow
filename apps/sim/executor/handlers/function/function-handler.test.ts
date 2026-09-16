@@ -6,7 +6,7 @@ import type { ExecutionContext } from '@/executor/types'
 import type { SerializedBlock } from '@/serializer/types'
 import { executeTool } from '@/tools'
 
-vi.mock('@wazabi/logger', () => ({
+vi.mock('@botflow/logger', () => ({
   createLogger: vi.fn(() => ({
     info: vi.fn(),
     error: vi.fn(),

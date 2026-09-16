@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { GenerationType } from '@/blocks/types'
 
 const logger = createLogger('useWand')

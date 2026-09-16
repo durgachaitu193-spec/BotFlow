@@ -1,6 +1,6 @@
 'use server'
 
-import type { Logger } from '@wazabi/logger'
+import type { Logger } from '@botflow/logger'
 import type { StorageContext } from '@/lib/uploads'
 import { isExecutionFile } from '@/lib/uploads/contexts/execution/utils'
 import { inferContextFromKey } from '@/lib/uploads/utils/file-utils'

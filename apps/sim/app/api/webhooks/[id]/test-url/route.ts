@@ -1,5 +1,5 @@
-import { db, webhook, workflow } from '@wazabi/db'
-import { createLogger } from '@wazabi/logger'
+import { db, webhook, workflow } from '@botflow/db'
+import { createLogger } from '@botflow/logger'
 import { eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'

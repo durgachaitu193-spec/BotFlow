@@ -1,5 +1,5 @@
 // Lazy require in setState to avoid circular init issues
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { LucideIcon } from 'lucide-react'
 
 const baseToolLogger = createLogger('BaseClientTool')

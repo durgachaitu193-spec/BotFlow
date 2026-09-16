@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { Groq } from 'groq-sdk'
 import type { StreamingExecution } from '@/executor/types'
 import { getProviderDefaultModel, getProviderModels } from '@/providers/models'

@@ -64,7 +64,7 @@ describe('Azure Blob Storage Client', () => {
       },
     }))
 
-    vi.doMock('@wazabi/logger', () => ({
+    vi.doMock('@botflow/logger', () => ({
       createLogger: vi.fn().mockReturnValue({
         debug: vi.fn(),
         info: vi.fn(),

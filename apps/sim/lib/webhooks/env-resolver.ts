@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { getEffectiveDecryptedEnv } from '@/lib/environment/utils'
 import { extractEnvVarName, isEnvVarReference } from '@/executor/consts'
 

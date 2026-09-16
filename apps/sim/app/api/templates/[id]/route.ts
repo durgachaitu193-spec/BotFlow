@@ -1,6 +1,6 @@
-import { db } from '@wazabi/db'
-import { member, templateCreators, templates, workflow } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { member, templateCreators, templates, workflow } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { and, eq, or, sql } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     // Check if user has starred (only if authenticated)
     let isStarred = false
     if (session?.user?.id) {
-      const { templateStars } = await import('@wazabi/db/schema')
+      const { templateStars } = await import('@botflow/db/schema')
       const starResult = await db
         .select()
         .from(templateStars)

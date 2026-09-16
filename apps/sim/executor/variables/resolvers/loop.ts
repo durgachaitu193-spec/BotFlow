@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { isReference, parseReferencePath, REFERENCE } from '@/executor/consts'
 import { extractBaseBlockId } from '@/executor/utils/subflow-utils'
 import {

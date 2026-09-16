@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { env } from '@/lib/core/config/env'
 import { isRetryableError, retryWithExponentialBackoff } from '@/lib/knowledge/documents/utils'
 import { batchByTokenLimit, getTotalTokenCount } from '@/lib/tokenization'

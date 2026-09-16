@@ -1,8 +1,8 @@
 import { sso } from '@better-auth/sso'
 import { stripe } from '@better-auth/stripe'
-import { db } from '@wazabi/db'
-import * as schema from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import * as schema from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { nextCookies } from 'better-auth/next-js'
@@ -330,7 +330,7 @@ export const auth = betterAuth({
               const profileResponse = await fetch('https://api.github.com/user', {
                 headers: {
                   Authorization: `Bearer ${tokens.accessToken}`,
-                  'User-Agent': 'Wazabi.ai',
+                  'User-Agent': 'BotFlow',
                 },
               })
 
@@ -348,7 +348,7 @@ export const auth = betterAuth({
                 const emailsResponse = await fetch('https://api.github.com/user/emails', {
                   headers: {
                     Authorization: `Bearer ${tokens.accessToken}`,
-                    'User-Agent': 'Wazabi.ai',
+                    'User-Agent': 'BotFlow',
                   },
                 })
 
@@ -1318,7 +1318,7 @@ export const auth = betterAuth({
               const response = await fetch('https://oauth.reddit.com/api/v1/me', {
                 headers: {
                   Authorization: `Bearer ${tokens.accessToken}`,
-                  'User-Agent': 'Wazabi.ai/1.0',
+                  'User-Agent': 'BotFlow/1.0',
                 },
               })
 
@@ -2076,7 +2076,7 @@ export const auth = betterAuth({
 
               const result = await sendEmail({
                 to: invitation.email,
-                subject: `${inviterName} has invited you to join ${organization.name} on Wazabi`,
+                subject: `${inviterName} has invited you to join ${organization.name} on BotFlow`,
                 html,
                 from: getFromEmailAddress(),
                 emailType: 'transactional',

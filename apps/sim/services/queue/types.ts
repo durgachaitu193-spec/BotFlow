@@ -1,4 +1,4 @@
-import type { userRateLimits } from '@wazabi/db/schema'
+import type { userRateLimits } from '@botflow/db/schema'
 import type { InferSelectModel } from 'drizzle-orm'
 import { env } from '@/lib/core/config/env'
 

@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { Loader2, MinusCircle, Play, XCircle } from 'lucide-react'
 import { v4 as uuidv4 } from 'uuid'
 import {

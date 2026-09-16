@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto'
-import { account, db } from '@wazabi/db'
-import { createLogger } from '@wazabi/logger'
+import { account, db } from '@botflow/db'
+import { createLogger } from '@botflow/logger'
 import { and, eq } from 'drizzle-orm'
 import { cookies } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'

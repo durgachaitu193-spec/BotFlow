@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import clsx from 'clsx'
 import { useParams, usePathname } from 'next/navigation'
 import { Skeleton } from '@/components/ui/skeleton'

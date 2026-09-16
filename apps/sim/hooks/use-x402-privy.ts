@@ -1,5 +1,5 @@
 // Hook for x402 payment integration with Privy
-import { usePrivy, useWallets } from '@wazabi/ui'
+import { usePrivy, useWallets } from '@botflow/ui'
 import { useCallback } from 'react'
 import {
     createPublicClient,

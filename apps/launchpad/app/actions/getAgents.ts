@@ -1,6 +1,6 @@
 'use server'
 
-import { agent } from '@wazabi/db/schema'
+import { agent } from '@botflow/db/schema'
 import { desc } from 'drizzle-orm'
 import type { Agent } from '@/lib/agentsData'
 import { db } from '@/db'

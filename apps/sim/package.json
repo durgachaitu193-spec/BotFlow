@@ -1,5 +1,5 @@
 {
-  "name": "wazabi",
+  "name": "botflow",
   "version": "0.1.0",
   "private": true,
   "license": "Apache-2.0",
@@ -70,8 +70,9 @@
     "@radix-ui/react-visually-hidden": "1.2.4",
     "@react-email/components": "^0.0.34",
     "@react-email/render": "2.0.0",
-    "@wazabi/logger": "workspace:*",
-    "@wazabi/ui": "workspace:*",
+    "@botflow/logger": "workspace:*",
+    "@botflow/db": "workspace:*",
+    "@botflow/ui": "workspace:*",
     "@trigger.dev/sdk": "4.1.2",
     "@types/react-window": "2.0.0",
     "@types/three": "0.177.0",
@@ -149,7 +150,7 @@
     "zustand": "^4.5.7"
   },
   "devDependencies": {
-    "@wazabi/testing": "workspace:*",
+    "@botflow/testing": "workspace:*",
     "@testing-library/jest-dom": "^6.6.3",
     "@trigger.dev/build": "4.1.2",
     "@types/html-to-text": "9.0.4",

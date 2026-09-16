@@ -47,11 +47,11 @@ describe('OAuth Credentials API Route', () => {
       evaluateScopeCoverage: mockEvaluateScopeCoverage,
     }))
 
-    vi.doMock('@wazabi/db', () => ({
+    vi.doMock('@botflow/db', () => ({
       db: mockDb,
     }))
 
-    vi.doMock('@wazabi/db/schema', () => ({
+    vi.doMock('@botflow/db/schema', () => ({
       account: { userId: 'userId', providerId: 'providerId' },
       user: { email: 'email', id: 'id' },
     }))
@@ -65,7 +65,7 @@ describe('OAuth Credentials API Route', () => {
       jwtDecode: vi.fn(),
     }))
 
-    vi.doMock('@wazabi/logger', () => ({
+    vi.doMock('@botflow/logger', () => ({
       createLogger: vi.fn().mockReturnValue(mockLogger),
     }))
 

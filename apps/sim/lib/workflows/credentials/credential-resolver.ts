@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { getProviderIdFromServiceId } from '@/lib/oauth/oauth'
 import { getBlock } from '@/blocks/index'
 import type { SubBlockConfig } from '@/blocks/types'

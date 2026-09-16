@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { ToolCall, TraceSpan } from '@/lib/logs/types'
 import { stripCustomToolPrefix } from '@/lib/workflows/common'
 import { isWorkflowBlockType } from '@/executor/consts'

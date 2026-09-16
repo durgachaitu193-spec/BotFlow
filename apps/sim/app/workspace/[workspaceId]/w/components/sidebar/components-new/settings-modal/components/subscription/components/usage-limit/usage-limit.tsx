@@ -1,7 +1,7 @@
 'use client'
 
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { Check, Pencil, X } from 'lucide-react'
 import { Button } from '@/components/emcn'
 import { cn } from '@/lib/core/utils/cn'

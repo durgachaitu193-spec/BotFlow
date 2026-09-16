@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { McpServerStatusConfig, McpTool, StoredMcpTool } from '@/lib/mcp/types'
 import { sanitizeForHttp, sanitizeHeaders } from '@/lib/mcp/utils'

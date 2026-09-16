@@ -12,7 +12,7 @@ import ReactFlow, {
 } from 'reactflow'
 import 'reactflow/dist/style.css'
 
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { cn } from '@/lib/core/utils/cn'
 import { NoteBlock } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/note-block/note-block'
 import { SubflowNodeComponent } from '@/app/workspace/[workspaceId]/w/[workflowId]/components/subflows/subflow-node'

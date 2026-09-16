@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { MicrosoftTeamsAttachment } from '@/tools/microsoft_teams/types'
 import type { ToolFileData } from '@/tools/types'
 

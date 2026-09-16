@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { ChevronDown, Info, Plus, X } from 'lucide-react'
 import { Tooltip } from '@/components/emcn'
 import {

@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { checkHybridAuth } from '@/lib/auth/hybrid'
 import { downloadFileFromStorage } from '@/lib/uploads/utils/file-utils.server'

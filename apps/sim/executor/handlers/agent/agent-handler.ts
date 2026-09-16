@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { createMcpToolId } from '@/lib/mcp/utils'
 import { getAllBlocks } from '@/blocks'
 import type { BlockOutput } from '@/blocks/types'

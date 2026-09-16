@@ -1,6 +1,6 @@
-import { db } from '@wazabi/db'
-import { account, document, knowledgeBase, mcpServers, workflow } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { account, document, knowledgeBase, mcpServers, workflow } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { and, eq, inArray, isNull } from 'drizzle-orm'
 
 const logger = createLogger('SelectorValidator')

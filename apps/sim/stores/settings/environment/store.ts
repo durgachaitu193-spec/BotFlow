@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { create } from 'zustand'
 import { fetchPersonalEnvironment } from '@/lib/environment/api'
 import type { EnvironmentStore, EnvironmentVariable } from '@/stores/settings/environment/types'

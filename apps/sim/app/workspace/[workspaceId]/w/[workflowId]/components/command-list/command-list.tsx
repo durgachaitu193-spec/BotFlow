@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { Layout, LibraryBig, Search } from 'lucide-react'
 import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'

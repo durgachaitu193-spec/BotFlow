@@ -11,7 +11,7 @@ import ReactFlow, {
   useReactFlow,
 } from 'reactflow'
 import 'reactflow/dist/style.css'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { Loader2 } from 'lucide-react'
 import type { OAuthConnectEventDetail } from '@/lib/copilot/tools/client/other/oauth-request-access'
 import type { OAuthProvider } from '@/lib/oauth'

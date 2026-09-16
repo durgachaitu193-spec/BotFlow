@@ -1,6 +1,6 @@
 import { existsSync } from 'fs'
 import { join, resolve, sep } from 'path'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { NextResponse } from 'next/server'
 import { UPLOAD_DIR } from '@/lib/uploads/config'
 import { sanitizeFileKey } from '@/lib/uploads/utils/file-utils'

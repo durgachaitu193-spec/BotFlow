@@ -10,11 +10,11 @@ function formatStarCount(num: number): string {
 export async function GET() {
   try {
     const token = env.GITHUB_TOKEN
-    const response = await fetch('https://api.github.com/repos/Wazabi-Ai/workflow', {
+    const response = await fetch('https://api.github.com/repos/BotFlow-Ai/workflow', {
       headers: {
         Accept: 'application/vnd.github+json',
         'X-GitHub-Api-Version': '2022-11-28',
-        'User-Agent': 'Wazabi/1.0',
+        'User-Agent': 'BotFlow/1.0',
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       next: { revalidate: 3600 },

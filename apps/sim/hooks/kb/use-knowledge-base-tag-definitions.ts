@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { TagSlot } from '@/lib/knowledge/constants'
 
 const logger = createLogger('useKnowledgeBaseTagDefinitions')

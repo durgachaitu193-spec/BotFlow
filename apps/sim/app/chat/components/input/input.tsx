@@ -9,7 +9,7 @@ import { VoiceInput } from '@/app/chat/components/input/voice-input'
 
 const logger = createLogger('ChatInput')
 
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 
 const PLACEHOLDER_MOBILE = 'Enter a message'
 const PLACEHOLDER_DESKTOP = 'Enter a message or click the mic to speak'

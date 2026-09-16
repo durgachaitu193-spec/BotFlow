@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { Check, Copy, Plus, Search } from 'lucide-react'
 import { Button } from '@/components/emcn'
 import {

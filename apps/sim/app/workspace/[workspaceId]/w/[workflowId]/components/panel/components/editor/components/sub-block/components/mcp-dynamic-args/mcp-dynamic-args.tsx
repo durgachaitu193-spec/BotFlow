@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useParams } from 'next/navigation'
 import { Combobox, Input, Label, Textarea } from '@/components/emcn/components'
 import { Slider } from '@/components/ui/slider'

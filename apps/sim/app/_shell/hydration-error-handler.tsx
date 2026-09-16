@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 
 const logger = createLogger('RootLayout')
 

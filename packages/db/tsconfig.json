@@ -10,8 +10,8 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@wazabi/db": ["./index.ts"],
-      "@wazabi/db/*": ["./*"]
+      "@botflow/db": ["./index.ts"],
+      "@botflow/db/*": ["./*"]
     },
     "resolveJsonModule": true,
     "noEmit": true

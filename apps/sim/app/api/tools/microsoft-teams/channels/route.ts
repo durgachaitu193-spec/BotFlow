@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { NextResponse } from 'next/server'
 import { authorizeCredentialUse } from '@/lib/auth/credential-access'
 import { refreshAccessTokenIfNeeded } from '@/app/api/auth/oauth/utils'

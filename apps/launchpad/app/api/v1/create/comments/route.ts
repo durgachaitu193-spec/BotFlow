@@ -1,6 +1,6 @@
 import { cryptoWaitReady, signatureVerify } from '@polkadot/util-crypto'
-import { db } from '@wazabi/db'
-import { launchpadComments } from '@wazabi/db/schema'
+import { db } from '@botflow/db'
+import { launchpadComments } from '@botflow/db/schema'
 import { StatusCodes } from 'http-status-codes'
 import { type NextRequest, NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid'

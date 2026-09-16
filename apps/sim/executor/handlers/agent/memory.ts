@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { getAccurateTokenCount } from '@/lib/tokenization/estimators'
 import type { AgentInputs, Message } from '@/executor/handlers/agent/types'
 import type { ExecutionContext } from '@/executor/types'
@@ -426,8 +426,8 @@ export class Memory {
    */
   private async fetchFromMemoryDirect(workflowId: string, key: string): Promise<Message[]> {
     try {
-      const { db } = await import('@wazabi/db')
-      const { memory } = await import('@wazabi/db/schema')
+      const { db } = await import('@botflow/db')
+      const { memory } = await import('@botflow/db/schema')
       const { and, eq } = await import('drizzle-orm')
 
       const result = await db
@@ -559,8 +559,8 @@ export class Memory {
     message: Message
   ): Promise<void> {
     try {
-      const { db } = await import('@wazabi/db')
-      const { memory } = await import('@wazabi/db/schema')
+      const { db } = await import('@botflow/db')
+      const { memory } = await import('@botflow/db/schema')
       const { sql } = await import('drizzle-orm')
       const { randomUUID } = await import('node:crypto')
 
@@ -605,8 +605,8 @@ export class Memory {
     messages: Message[]
   ): Promise<void> {
     try {
-      const { db } = await import('@wazabi/db')
-      const { memory } = await import('@wazabi/db/schema')
+      const { db } = await import('@botflow/db')
+      const { memory } = await import('@botflow/db/schema')
       const { randomUUID } = await import('node:crypto')
 
       const now = new Date()

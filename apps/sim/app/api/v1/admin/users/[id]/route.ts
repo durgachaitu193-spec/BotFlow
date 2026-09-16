@@ -6,9 +6,9 @@
  * Response: AdminSingleResponse<AdminUser>
  */
 
-import { db } from '@wazabi/db'
-import { user } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { user } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { eq } from 'drizzle-orm'
 import { withAdminAuthParams } from '@/app/api/v1/admin/middleware'
 import {

@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { nanoid } from 'nanoid'
 import { type NextRequest, NextResponse } from 'next/server'
 import { verifyCronAuth } from '@/lib/auth/internal'

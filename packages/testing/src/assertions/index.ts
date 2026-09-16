@@ -9,7 +9,7 @@
  *   expectBlockExists,
  *   expectEdgeConnects,
  *   expectExecutionOrder,
- * } from '@wazabi/testing/assertions'
+ * } from '@botflow/testing/assertions'
  *
  * // Workflow assertions
  * expectBlockExists(workflow.blocks, 'agent-1', 'agent')

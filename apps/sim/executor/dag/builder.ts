@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { EdgeConstructor } from '@/executor/dag/construction/edges'
 import { LoopConstructor } from '@/executor/dag/construction/loops'
 import { NodeConstructor } from '@/executor/dag/construction/nodes'

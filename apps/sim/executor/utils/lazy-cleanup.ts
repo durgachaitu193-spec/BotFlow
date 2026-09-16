@@ -1,6 +1,6 @@
-import { db } from '@wazabi/db'
-import { workflowBlocks } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { workflowBlocks } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { and, eq } from 'drizzle-orm'
 
 const logger = createLogger('LazyCleanup')

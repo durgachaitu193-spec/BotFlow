@@ -33,7 +33,7 @@ describe('Chat Edit API Route', () => {
     mockSet.mockReturnValue({ where: mockWhere })
     mockDelete.mockReturnValue({ where: mockWhere })
 
-    vi.doMock('@wazabi/db', () => ({
+    vi.doMock('@botflow/db', () => ({
       db: {
         select: mockSelect,
         update: mockUpdate,
@@ -41,11 +41,11 @@ describe('Chat Edit API Route', () => {
       },
     }))
 
-    vi.doMock('@wazabi/db/schema', () => ({
+    vi.doMock('@botflow/db/schema', () => ({
       chat: { id: 'id', identifier: 'identifier', userId: 'userId' },
     }))
 
-    vi.doMock('@wazabi/logger', () => ({
+    vi.doMock('@botflow/logger', () => ({
       createLogger: vi.fn().mockReturnValue({
         info: vi.fn(),
         error: vi.fn(),

@@ -3,7 +3,7 @@
  * This is the SINGLE source of truth for workflow execution
  */
 
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { Edge } from 'reactflow'
 import { z } from 'zod'
 import { getPersonalAndWorkspaceEnv } from '@/lib/environment/utils'

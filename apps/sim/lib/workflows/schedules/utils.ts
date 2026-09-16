@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { Cron } from 'croner'
 import cronstrue from 'cronstrue'
 import { formatDateTime } from '@/lib/core/utils/formatting'

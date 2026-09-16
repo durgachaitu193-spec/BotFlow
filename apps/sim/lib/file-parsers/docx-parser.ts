@@ -1,5 +1,5 @@
 import { readFile } from 'fs/promises'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import mammoth from 'mammoth'
 import type { FileParseResult, FileParser } from '@/lib/file-parsers/types'
 

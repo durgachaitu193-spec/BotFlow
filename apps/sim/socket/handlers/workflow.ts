@@ -1,5 +1,5 @@
-import { db, user } from '@wazabi/db'
-import { createLogger } from '@wazabi/logger'
+import { db, user } from '@botflow/db'
+import { createLogger } from '@botflow/logger'
 import { eq } from 'drizzle-orm'
 import { getWorkflowState } from '@/socket/database/operations'
 import type { AuthenticatedSocket } from '@/socket/middleware/auth'

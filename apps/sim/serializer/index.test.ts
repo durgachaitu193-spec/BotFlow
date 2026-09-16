@@ -240,7 +240,7 @@ vi.mock('@/tools/utils', () => ({
 }))
 
 // Mock logger
-vi.mock('@wazabi/logger', () => ({
+vi.mock('@botflow/logger', () => ({
   createLogger: () => ({
     error: vi.fn(),
     info: vi.fn(),

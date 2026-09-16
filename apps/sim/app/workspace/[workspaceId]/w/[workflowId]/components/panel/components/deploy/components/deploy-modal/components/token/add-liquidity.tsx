@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { useWallets } from '@wazabi/ui'
-import { createLogger } from '@wazabi/logger'
+import { useWallets } from '@botflow/ui'
+import { createLogger } from '@botflow/logger'
 import { parseEther, parseUnits, formatUnits, formatEther } from 'viem'
 import { AlertTriangle, Check, ExternalLink, Info, Loader2, RefreshCw } from 'lucide-react'
 import { Button, Input, Label } from '@/components/emcn'

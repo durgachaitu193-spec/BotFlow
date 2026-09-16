@@ -6,9 +6,9 @@
  * Response: AdminSingleResponse<AdminWorkspaceDetail>
  */
 
-import { db } from '@wazabi/db'
-import { workflow, workflowFolder, workspace } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { workflow, workflowFolder, workspace } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { count, eq } from 'drizzle-orm'
 import { withAdminAuthParams } from '@/app/api/v1/admin/middleware'
 import {

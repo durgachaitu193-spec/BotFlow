@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { NextRequest } from 'next/server'
 import { z } from 'zod'
 import { generateRequestId } from '@/lib/core/utils/request'

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { Button } from '@/components/emcn'
 import { UserAvatar } from '@/components/user-avatar/user-avatar'
 import type { Invitation, Member, Organization } from '@/lib/workspaces/organization'

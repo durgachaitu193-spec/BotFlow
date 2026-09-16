@@ -25,12 +25,12 @@ export function createMockLogger() {
 }
 
 /**
- * Mock module for @wazabi/logger.
+ * Mock module for @botflow/logger.
  * Use with vi.mock() to replace the real logger.
  *
  * @example
  * ```ts
- * vi.mock('@wazabi/logger', () => loggerMock)
+ * vi.mock('@botflow/logger', () => loggerMock)
  * ```
  */
 export const loggerMock = {

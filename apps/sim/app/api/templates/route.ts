@@ -1,4 +1,4 @@
-import { db } from '@wazabi/db'
+import { db } from '@botflow/db'
 import {
   member,
   templateCreators,
@@ -7,8 +7,8 @@ import {
   user,
   workflow,
   workflowDeploymentVersion,
-} from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+} from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { and, desc, eq, ilike, or, sql } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid'

@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { NextRequest } from 'next/server'
 import { getParsedBody, withMcpAuth } from '@/lib/mcp/middleware'
 import { mcpService } from '@/lib/mcp/service'

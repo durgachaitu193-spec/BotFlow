@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { NextResponse } from 'next/server'
 import { getUserEntityPermissions } from '@/lib/workspaces/permissions/utils'
 

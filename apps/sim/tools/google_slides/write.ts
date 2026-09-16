@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { GoogleSlidesToolParams, GoogleSlidesWriteResponse } from '@/tools/google_slides/types'
 import type { ToolConfig } from '@/tools/types'
 

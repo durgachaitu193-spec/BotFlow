@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { ParameterVisibility, ToolConfig } from '@/tools/types'
 import { getToolMetadata, type ToolConfigMetadata } from '@/tools/utils'
 

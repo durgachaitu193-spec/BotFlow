@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import { Layout, Search } from 'lucide-react'
 import { Button } from '@/components/emcn'
 import { Input } from '@/components/ui/input'
-// import { createLogger } from '@wazabi/logger'
+// import { createLogger } from '@botflow/logger'
 import type { CreatorProfileDetails } from '@/app/_types/creator-profile'
 import {
   TemplateCard,

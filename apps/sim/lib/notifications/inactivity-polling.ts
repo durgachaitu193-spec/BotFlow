@@ -1,11 +1,11 @@
-import { db } from '@wazabi/db'
+import { db } from '@botflow/db'
 import {
   workflow,
   workflowExecutionLogs,
   workspaceNotificationDelivery,
   workspaceNotificationSubscription,
-} from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+} from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { and, eq, gte, sql } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'
 import { env, isTruthy } from '@/lib/core/config/env'

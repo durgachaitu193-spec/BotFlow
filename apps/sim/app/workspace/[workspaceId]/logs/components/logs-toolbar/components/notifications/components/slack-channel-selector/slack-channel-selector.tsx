@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { Hash, Lock } from 'lucide-react'
 import { Combobox, type ComboboxOption } from '@/components/emcn'
 

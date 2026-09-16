@@ -1,7 +1,7 @@
 'use client'
 
 import { Component, type ReactNode, useEffect } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { Panel } from '@/app/workspace/[workspaceId]/w/[workflowId]/components'
 import { SidebarNew } from '@/app/workspace/[workspaceId]/w/components/sidebar/sidebar-new'
 import { ReactFlowProvider } from 'reactflow'

@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { generateFolderName } from '@/lib/workspaces/naming'
 import { useCreateFolder } from '@/hooks/queries/folders'
 

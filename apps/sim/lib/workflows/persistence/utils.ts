@@ -7,8 +7,8 @@ import {
   workflowDeploymentVersion,
   workflowEdges,
   workflowSubflows,
-} from '@wazabi/db'
-import { createLogger } from '@wazabi/logger'
+} from '@botflow/db'
+import { createLogger } from '@botflow/logger'
 import type { InferSelectModel } from 'drizzle-orm'
 import { and, desc, eq, sql } from 'drizzle-orm'
 import type { Edge } from 'reactflow'

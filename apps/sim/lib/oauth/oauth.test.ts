@@ -31,7 +31,7 @@ vi.mock('@/lib/core/config/env', () => ({
   },
 }))
 
-vi.mock('@wazabi/logger', () => ({
+vi.mock('@botflow/logger', () => ({
   createLogger: vi.fn().mockReturnValue({
     info: vi.fn(),
     error: vi.fn(),

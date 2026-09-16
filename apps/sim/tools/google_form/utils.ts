@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 
 export const FORMS_API_BASE = 'https://forms.googleapis.com/v1'
 

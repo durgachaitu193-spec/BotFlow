@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useParams } from 'next/navigation'
 import { Button } from '@/components/emcn/components/button/button'
 import { Trash } from '@/components/emcn/icons/trash'

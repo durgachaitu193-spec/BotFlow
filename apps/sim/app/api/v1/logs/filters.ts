@@ -1,4 +1,4 @@
-import { workflow, workflowExecutionLogs } from '@wazabi/db/schema'
+import { workflow, workflowExecutionLogs } from '@botflow/db/schema'
 import { and, desc, eq, gte, inArray, lte, type SQL, sql } from 'drizzle-orm'
 
 export interface LogFilters {

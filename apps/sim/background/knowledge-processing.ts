@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { task } from '@trigger.dev/sdk'
 import { env } from '@/lib/core/config/env'
 import { processDocumentAsync } from '@/lib/knowledge/documents/service'

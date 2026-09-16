@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { Twilio } from 'twilio'
 import { env } from '@/lib/core/config/env'
 

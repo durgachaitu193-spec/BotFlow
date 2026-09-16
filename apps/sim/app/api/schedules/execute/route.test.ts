@@ -59,7 +59,7 @@ describe('Scheduled Workflow Execution API Route', () => {
       or: vi.fn((...conditions) => ({ type: 'or', conditions })),
     }))
 
-    vi.doMock('@wazabi/db', () => {
+    vi.doMock('@botflow/db', () => {
       const returningSchedules = [
         {
           id: 'schedule-1',
@@ -136,7 +136,7 @@ describe('Scheduled Workflow Execution API Route', () => {
       or: vi.fn((...conditions) => ({ type: 'or', conditions })),
     }))
 
-    vi.doMock('@wazabi/db', () => {
+    vi.doMock('@botflow/db', () => {
       const returningSchedules = [
         {
           id: 'schedule-1',
@@ -208,7 +208,7 @@ describe('Scheduled Workflow Execution API Route', () => {
       or: vi.fn((...conditions) => ({ type: 'or', conditions })),
     }))
 
-    vi.doMock('@wazabi/db', () => {
+    vi.doMock('@botflow/db', () => {
       const mockReturning = vi.fn().mockReturnValue([])
       const mockWhere = vi.fn().mockReturnValue({ returning: mockReturning })
       const mockSet = vi.fn().mockReturnValue({ where: mockWhere })
@@ -267,7 +267,7 @@ describe('Scheduled Workflow Execution API Route', () => {
       or: vi.fn((...conditions) => ({ type: 'or', conditions })),
     }))
 
-    vi.doMock('@wazabi/db', () => {
+    vi.doMock('@botflow/db', () => {
       const returningSchedules = [
         {
           id: 'schedule-1',

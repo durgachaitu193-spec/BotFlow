@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { BlockOutput } from '@/blocks/types'
 import { BlockType, CONDITION, DEFAULTS, EDGE } from '@/executor/consts'
 import type { BlockHandler, ExecutionContext } from '@/executor/types'

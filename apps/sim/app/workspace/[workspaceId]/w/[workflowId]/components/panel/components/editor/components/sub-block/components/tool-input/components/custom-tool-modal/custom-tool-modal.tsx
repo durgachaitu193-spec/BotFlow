@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { AlertCircle, Wand2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import {

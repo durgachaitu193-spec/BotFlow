@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { getHighestPrioritySubscription } from '@/lib/billing/core/subscription'
 import { authenticateV1Request } from '@/app/api/v1/auth'

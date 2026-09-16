@@ -8,7 +8,7 @@
  * // vitest.config.ts
  * export default defineConfig({
  *   test: {
- *     setupFiles: ['@wazabi/testing/setup'],
+ *     setupFiles: ['@botflow/testing/setup'],
  *   },
  * })
  * ```

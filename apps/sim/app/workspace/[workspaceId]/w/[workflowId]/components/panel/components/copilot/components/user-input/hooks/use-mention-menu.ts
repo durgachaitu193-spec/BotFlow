@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { ChatContext } from '@/stores/panel/copilot/types'
 import { SCROLL_TOLERANCE } from '../constants'
 

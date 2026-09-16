@@ -1,5 +1,5 @@
 import { readFile } from 'fs/promises'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { checkHybridAuth } from '@/lib/auth/hybrid'

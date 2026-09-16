@@ -13,6 +13,7 @@ export default {
     extend: {
       fontFamily: {
         season: ['var(--font-season)'],
+        brand: ['var(--font-brand)', 'var(--font-season)'], // BotFlow brand display face
         comic: ['var(--font-season)'], // Using season for display/header
         tactical: ['var(--font-soehne-mono)', 'monospace'], // Using soehne mono for tactical
         hand: ['var(--font-inter)'], // Using inter for body

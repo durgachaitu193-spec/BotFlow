@@ -1,7 +1,7 @@
 'use server'
 
-import { db } from '@wazabi/db'
-import { launchpadComments } from '@wazabi/db/schema'
+import { db } from '@botflow/db'
+import { launchpadComments } from '@botflow/db/schema'
 import { desc, eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 

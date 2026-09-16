@@ -1,5 +1,5 @@
 {
-  "name": "@wazabi/db",
+  "name": "@botflow/db",
   "version": "0.1.0",
   "private": true,
   "type": "module",

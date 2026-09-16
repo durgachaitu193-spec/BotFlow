@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useRouter } from 'next/navigation'
 
 const logger = createLogger('useDuplicateWorkspace')

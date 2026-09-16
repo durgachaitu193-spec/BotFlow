@@ -1,12 +1,12 @@
 import { createHmac } from 'crypto'
-import { db } from '@wazabi/db'
+import { db } from '@botflow/db'
 import {
   account,
   workflow as workflowTable,
   workspaceNotificationDelivery,
   workspaceNotificationSubscription,
-} from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+} from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { task } from '@trigger.dev/sdk'
 import { and, eq, isNull, lte, or, sql } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'

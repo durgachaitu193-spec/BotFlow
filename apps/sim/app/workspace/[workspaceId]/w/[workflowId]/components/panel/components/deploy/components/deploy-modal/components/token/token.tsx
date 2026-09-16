@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { usePrivy, useWallets } from '@wazabi/ui'
-import { createLogger } from '@wazabi/logger'
+import { usePrivy, useWallets } from '@botflow/ui'
+import { createLogger } from '@botflow/logger'
 import { AlertTriangle, Loader2, X } from 'lucide-react'
 import { Button, Input, Label } from '@/components/emcn'
 import { Alert, AlertDescription } from '@/components/ui'

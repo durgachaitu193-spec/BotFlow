@@ -36,7 +36,7 @@ describe('OAuth Token API Routes', () => {
       refreshTokenIfNeeded: mockRefreshTokenIfNeeded,
     }))
 
-    vi.doMock('@wazabi/logger', () => ({
+    vi.doMock('@botflow/logger', () => ({
       createLogger: vi.fn().mockReturnValue(mockLogger),
     }))
 

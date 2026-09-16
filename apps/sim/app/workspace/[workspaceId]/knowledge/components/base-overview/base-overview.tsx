@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { Check, Copy, LibraryBig } from 'lucide-react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'

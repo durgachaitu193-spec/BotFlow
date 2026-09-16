@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { z } from 'zod'
 import type { BaseServerTool } from '@/lib/copilot/tools/server/base-tool'
 import { registry as blockRegistry } from '@/blocks/registry'

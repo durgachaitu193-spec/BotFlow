@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useShallow } from 'zustand/react/shallow'
 import { useWorkflowRegistry } from '@/stores/workflows/registry/store'
 import { useWorkflowStore } from '@/stores/workflows/workflow/store'

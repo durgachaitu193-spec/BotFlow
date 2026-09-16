@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { MicrosoftOneDriveIcon } from '@/components/icons'
 import type { BlockConfig } from '@/blocks/types'
 import { AuthMode } from '@/blocks/types'

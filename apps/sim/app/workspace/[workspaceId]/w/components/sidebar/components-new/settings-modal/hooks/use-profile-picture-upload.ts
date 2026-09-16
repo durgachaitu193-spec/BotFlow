@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 
 const logger = createLogger('ProfilePictureUpload')
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB

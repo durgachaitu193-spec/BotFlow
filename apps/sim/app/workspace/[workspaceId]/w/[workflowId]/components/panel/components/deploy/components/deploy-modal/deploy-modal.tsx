@@ -1,8 +1,8 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { usePrivy, useWallets } from '@wazabi/ui'
-import { createLogger } from '@wazabi/logger'
+import { usePrivy, useWallets } from '@botflow/ui'
+import { createLogger } from '@botflow/logger'
 import clsx from 'clsx'
 import { Button } from '@/components/emcn'
 import {

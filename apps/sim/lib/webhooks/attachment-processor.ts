@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { uploadFileFromRawData } from '@/lib/uploads/contexts/execution'
 import type { UserFile } from '@/executor/types'
 

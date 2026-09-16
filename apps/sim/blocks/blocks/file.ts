@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { DocumentIcon } from '@/components/icons'
 import type { BlockConfig, SubBlockType } from '@/blocks/types'
 import type { FileParserOutput } from '@/tools/file/types'

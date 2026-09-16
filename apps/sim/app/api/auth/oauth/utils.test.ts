@@ -31,7 +31,7 @@ describe('OAuth Utils', () => {
       getSession: vi.fn().mockResolvedValue(mockSession),
     }))
 
-    vi.doMock('@wazabi/db', () => ({
+    vi.doMock('@botflow/db', () => ({
       db: mockDb,
     }))
 
@@ -39,7 +39,7 @@ describe('OAuth Utils', () => {
       refreshOAuthToken: mockRefreshOAuthToken,
     }))
 
-    vi.doMock('@wazabi/logger', () => ({
+    vi.doMock('@botflow/logger', () => ({
       createLogger: vi.fn().mockReturnValue(mockLogger),
     }))
   })

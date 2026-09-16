@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { WorkflowState } from '@/stores/workflows/workflow/types'
 import { updateDeploymentState } from './agentRegistry'
 

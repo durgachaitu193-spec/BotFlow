@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { Skeleton } from '@/components/ui'
 import { useSession } from '@/lib/auth/auth-client'
 import { DEFAULT_TEAM_TIER_COST_LIMIT } from '@/lib/billing/constants'

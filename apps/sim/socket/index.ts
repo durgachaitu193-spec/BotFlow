@@ -1,5 +1,5 @@
 import { createServer } from 'http'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { env } from '@/lib/core/config/env'
 import { createSocketIOServer } from '@/socket/config/socket'
 import { setupAllHandlers } from '@/socket/handlers'

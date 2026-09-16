@@ -32,14 +32,14 @@ describe('Copilot Chat Update Messages API Route', () => {
     mockUpdate.mockReturnValue({ set: mockSet })
     mockSet.mockReturnValue({ where: vi.fn().mockResolvedValue(undefined) }) // Different where for update
 
-    vi.doMock('@wazabi/db', () => ({
+    vi.doMock('@botflow/db', () => ({
       db: {
         select: mockSelect,
         update: mockUpdate,
       },
     }))
 
-    vi.doMock('@wazabi/db/schema', () => ({
+    vi.doMock('@botflow/db/schema', () => ({
       copilotChats: {
         id: 'id',
         userId: 'userId',

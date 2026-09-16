@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { BlockType } from '@/executor/consts'
 import type { DAG } from '@/executor/dag/builder'
 import type { EdgeManager } from '@/executor/execution/edge-manager'

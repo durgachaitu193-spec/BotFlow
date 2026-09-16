@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { buildTraceSpans } from '@/lib/logs/execution/trace-spans/trace-spans'
 import type { TraceSpan } from '@/lib/logs/types'
 import type { BlockOutput } from '@/blocks/types'

@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { JiraRetrieveParams, JiraRetrieveResponse } from '@/tools/jira/types'
 import { getJiraCloudId } from '@/tools/jira/utils'
 import type { ToolConfig } from '@/tools/types'

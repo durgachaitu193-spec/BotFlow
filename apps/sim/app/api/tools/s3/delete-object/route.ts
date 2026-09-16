@@ -1,5 +1,5 @@
 import { DeleteObjectCommand, S3Client } from '@aws-sdk/client-s3'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { checkHybridAuth } from '@/lib/auth/hybrid'

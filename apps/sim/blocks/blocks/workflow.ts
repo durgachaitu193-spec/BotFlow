@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { WorkflowIcon } from '@/components/icons'
 import type { BlockConfig } from '@/blocks/types'
 import { useWorkflowRegistry } from '@/stores/workflows/registry/store'

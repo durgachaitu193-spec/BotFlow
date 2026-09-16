@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import {

@@ -1,6 +1,6 @@
-import { db } from '@wazabi/db'
-import { userRateLimits } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { userRateLimits } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { eq, sql } from 'drizzle-orm'
 import { getHighestPrioritySubscription } from '@/lib/billing/core/subscription'
 import {

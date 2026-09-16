@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto'
-import { db } from '@wazabi/db'
-import { document, embedding, knowledgeBaseTagDefinitions } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { document, embedding, knowledgeBaseTagDefinitions } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { and, eq, isNotNull, isNull, sql } from 'drizzle-orm'
 import {
   getSlotsForFieldType,

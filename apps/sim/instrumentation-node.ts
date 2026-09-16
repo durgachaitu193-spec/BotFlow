@@ -3,7 +3,7 @@
  */
 
 import { DiagConsoleLogger, DiagLogLevel, diag } from '@opentelemetry/api'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { env } from './lib/core/config/env'
 
 diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.ERROR)
@@ -11,7 +11,7 @@ diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.ERROR)
 const logger = createLogger('OTelInstrumentation')
 
 const DEFAULT_TELEMETRY_CONFIG = {
-  endpoint: env.TELEMETRY_ENDPOINT || 'https://telemetry.wazabi.ai/v1/trace',
+  endpoint: env.TELEMETRY_ENDPOINT || 'https://telemetry.botflow.ai/v1/trace',
   serviceName: 'sim-studio',
   serviceVersion: '0.1.0',
   serverSide: { enabled: true },

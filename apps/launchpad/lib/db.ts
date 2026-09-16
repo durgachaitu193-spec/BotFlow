@@ -1,3 +1,3 @@
-import { db } from '@wazabi/db'
+import { db } from '@botflow/db'
 
 export { db }

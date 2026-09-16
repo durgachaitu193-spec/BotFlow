@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useSubBlockStore } from '@/stores/workflows/subblock/store'
 import { getTrigger, isTriggerValid } from '@/triggers'
 import { SYSTEM_SUBBLOCK_IDS } from '@/triggers/consts'

@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { isTest } from '@/lib/core/config/environment'
 import { getBaseUrl } from '@/lib/core/utils/urls'
 import type { TableRow } from '@/tools/types'

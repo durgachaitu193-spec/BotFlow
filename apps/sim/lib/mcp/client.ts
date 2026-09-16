@@ -11,7 +11,7 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js'
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js'
 import type { ListToolsResult, Tool } from '@modelcontextprotocol/sdk/types.js'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import {
   McpConnectionError,
   type McpConnectionStatus,

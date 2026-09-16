@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useCreateWallet, usePrivy, useWallets } from '@wazabi/ui'
+import { useCreateWallet, usePrivy, useWallets } from '@botflow/ui'
 import { motion } from 'framer-motion'
 import { useTheme } from 'next-themes'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -318,24 +318,27 @@ export default function PrivyLogin() {
         <div className='space-y-10 text-center'>
           <div className='flex items-center gap-2'>
             {/* <img
-              src='/logo/wazabi-icon-dark.png'
-              alt='Wazabi'
+              src='/logo/botflow-icon-dark.png'
+              alt='BotFlow'
               className='hidden h-8 w-auto rounded-xl dark:block'
             /> */}
             {/* <img
-              src='/logo/wazabi-icon-light.png'
-              alt='Wazabi'
+              src='/logo/botflow-icon-light.png'
+              alt='BotFlow'
               className='block h-8 w-auto rounded-xl dark:hidden'
             /> */}
+            {/* No brightness/invert filters: those flattened the old mark to a
+                single colour and would strip the orange out of FLOW. Each theme
+                gets the wordmark variant drawn for that background instead. */}
             <img
-              src='/logo/wazabi-text-dark.png'
-              alt='Wazabi Text'
-              className='hidden h-7 w-auto object-contain object-left brightness-0 opacity-90 dark:block dark:brightness-0 dark:invert'
+              src='/logo/botflow-text-light.png'
+              alt='BotFlow'
+              className='hidden h-9 w-auto object-contain object-left dark:block'
             />
             <img
-              src='/logo/wazabi-text-light.png'
-              alt='Wazabi Text'
-              className='block h-7 w-auto object-contain object-left brightness-0 opacity-90 dark:hidden'
+              src='/logo/botflow-text-dark.png'
+              alt='BotFlow'
+              className='block h-9 w-auto object-contain object-left dark:hidden'
             />
           </div>
         </div>

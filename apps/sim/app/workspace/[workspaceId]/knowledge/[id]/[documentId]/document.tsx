@@ -1,7 +1,7 @@
 'use client'
 
 import { Suspense, startTransition, useCallback, useEffect, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { ChevronLeft, ChevronRight, Circle, CircleOff, FileText, Plus } from 'lucide-react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Button, Tooltip } from '@/components/emcn'

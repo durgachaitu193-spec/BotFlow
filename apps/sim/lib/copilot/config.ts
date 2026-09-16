@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { AGENT_MODE_SYSTEM_PROMPT } from '@/lib/copilot/prompts'
 import { getProviderDefaultModel } from '@/providers/models'
 import type { ProviderId } from '@/providers/types'

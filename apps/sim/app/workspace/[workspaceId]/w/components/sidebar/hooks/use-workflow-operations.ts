@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useRouter } from 'next/navigation'
 import { useCreateWorkflow, useWorkflows } from '@/hooks/queries/workflows'
 import { useWorkflowDiffStore } from '@/stores/workflow-diff/store'

@@ -1,7 +1,7 @@
 import { createHash } from 'crypto'
-import { db } from '@wazabi/db'
-import { workflowExecutionSnapshots } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { workflowExecutionSnapshots } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { and, eq, lt } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'
 import type {

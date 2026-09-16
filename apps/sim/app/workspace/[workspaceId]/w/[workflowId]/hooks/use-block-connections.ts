@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useShallow } from 'zustand/react/shallow'
 import { getBlockOutputs } from '@/lib/workflows/blocks/block-outputs'
 import { BlockPathCalculator } from '@/lib/workflows/blocks/block-path-calculator'

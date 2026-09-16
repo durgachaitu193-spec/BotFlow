@@ -1,5 +1,5 @@
 {
-  "name": "@wazabi/ui",
+  "name": "@botflow/ui",
   "version": "0.0.0",
   "private": true,
   "exports": {

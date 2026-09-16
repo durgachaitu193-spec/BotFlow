@@ -24,11 +24,11 @@ export interface BrandConfig {
  * Default brand configuration values
  */
 const defaultConfig: BrandConfig = {
-  name: 'Wazabi.ai',
+  name: 'BotFlow',
   logoUrl: undefined,
   faviconUrl: '/favicon/favicon.ico',
   customCssUrl: undefined,
-  supportEmail: 'help@wazabi.ai',
+  supportEmail: 'help@botflow.ai',
   documentationUrl: undefined,
   termsUrl: undefined,
   privacyUrl: undefined,

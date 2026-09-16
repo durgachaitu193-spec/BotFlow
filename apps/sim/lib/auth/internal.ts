@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { jwtVerify, SignJWT } from 'jose'
 import { type NextRequest, NextResponse } from 'next/server'
 import { env } from '@/lib/core/config/env'

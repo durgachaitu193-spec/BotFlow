@@ -36,7 +36,7 @@ describe('OAuth Connections API Route', () => {
       getSession: mockGetSession,
     }))
 
-    vi.doMock('@wazabi/db', () => ({
+    vi.doMock('@botflow/db', () => ({
       db: mockDb,
       account: { userId: 'userId', providerId: 'providerId' },
       user: { email: 'email', id: 'id' },
@@ -51,7 +51,7 @@ describe('OAuth Connections API Route', () => {
       jwtDecode: vi.fn(),
     }))
 
-    vi.doMock('@wazabi/logger', () => ({
+    vi.doMock('@botflow/logger', () => ({
       createLogger: vi.fn().mockReturnValue(mockLogger),
     }))
 

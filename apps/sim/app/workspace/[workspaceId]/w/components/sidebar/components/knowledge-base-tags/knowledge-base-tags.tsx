@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { Eye, MoreHorizontal, Plus, Trash2, X } from 'lucide-react'
 import {
   Button as EmcnButton,

@@ -6,14 +6,27 @@ import { generateBrandedMetadata, generateStructuredData } from '@/lib/branding/
 import { PostHogProvider } from '@/app/_shell/providers/posthog-provider'
 import '@/app/_styles/globals.css'
 
-import { PrivyProviderWrapper } from '@wazabi/ui'
+import { PrivyProviderWrapper } from '@botflow/ui'
 import { OneDollarStats } from '@/components/analytics/onedollarstats'
 import { HydrationErrorHandler } from '@/app/_shell/hydration-error-handler'
 import { QueryProvider } from '@/app/_shell/providers/query-provider'
 import { SessionProvider } from '@/app/_shell/providers/session-provider'
 import { ThemeProvider } from '@/app/_shell/providers/theme-provider'
 import { ZoomPrevention } from '@/app/_shell/zoom-prevention'
+import { Poppins } from 'next/font/google'
 import { season } from '@/app/_styles/fonts/season/season'
+
+/**
+ * BotFlow brand display face, matching the marketing site.
+ * Season Sans stays the product UI font; this is for brand surfaces only
+ * and is applied via the `font-brand` utility.
+ */
+const brandFont = Poppins({
+  subsets: ['latin'],
+  weight: ['500', '600', '700'],
+  variable: '--font-brand',
+  display: 'swap',
+})
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -184,14 +197,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <PublicEnvScript />
       </head>
-      <body className={`${season.variable} font-season theme-aira`} suppressHydrationWarning>
+      <body className={`${season.variable} ${brandFont.variable} font-season theme-aira`} suppressHydrationWarning>
         <HydrationErrorHandler />
         <OneDollarStats />
         <PostHogProvider>
           <ThemeProvider>
             <PrivyProviderWrapper
               appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID}
-              logo="/logo/wazabi-icon-dark.png"
+              logo="/logo/botflow-icon-dark.png"
             >
               <QueryProvider>
                 <SessionProvider>

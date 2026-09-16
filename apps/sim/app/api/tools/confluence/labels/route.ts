@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { NextResponse } from 'next/server'
 import { validateAlphanumericId, validateJiraCloudId } from '@/lib/core/security/input-validation'
 import { getConfluenceCloudId } from '@/tools/confluence/utils'

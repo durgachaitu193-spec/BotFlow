@@ -30,19 +30,19 @@ describe('Chat API Route', () => {
     mockInsert.mockReturnValue({ values: mockValues })
     mockValues.mockReturnValue({ returning: mockReturning })
 
-    vi.doMock('@wazabi/db', () => ({
+    vi.doMock('@botflow/db', () => ({
       db: {
         select: mockSelect,
         insert: mockInsert,
       },
     }))
 
-    vi.doMock('@wazabi/db/schema', () => ({
+    vi.doMock('@botflow/db/schema', () => ({
       chat: { userId: 'userId', identifier: 'identifier' },
       workflow: { id: 'id', userId: 'userId', isDeployed: 'isDeployed' },
     }))
 
-    vi.doMock('@wazabi/logger', () => ({
+    vi.doMock('@botflow/logger', () => ({
       createLogger: vi.fn().mockReturnValue({
         info: vi.fn(),
         error: vi.fn(),

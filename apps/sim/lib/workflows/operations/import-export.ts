@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import JSZip from 'jszip'
 import { sanitizeForExport } from '@/lib/workflows/sanitization/json-sanitizer'
 import type { WorkflowState } from '@/stores/workflows/workflow/types'

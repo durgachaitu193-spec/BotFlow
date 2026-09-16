@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { generateRequestId } from '@/lib/core/utils/request'
 import { preprocessExecution } from '@/lib/execution/preprocessing'

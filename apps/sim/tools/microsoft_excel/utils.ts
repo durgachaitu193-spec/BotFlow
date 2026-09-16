@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { ExcelCellValue } from '@/tools/microsoft_excel/types'
 
 const logger = createLogger('MicrosoftExcelUtils')

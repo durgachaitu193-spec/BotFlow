@@ -1,4 +1,4 @@
-import { syncPrivyUser } from '@wazabi/db/privy-sync'
+import { syncPrivyUser } from '@botflow/db/privy-sync'
 import { type NextRequest, NextResponse } from 'next/server'
 
 /**

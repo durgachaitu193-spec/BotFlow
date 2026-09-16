@@ -1,5 +1,5 @@
-import { db } from '@wazabi/db'
-import { document, embedding, knowledgeBase } from '@wazabi/db/schema'
+import { db } from '@botflow/db'
+import { document, embedding, knowledgeBase } from '@botflow/db/schema'
 import { and, eq, isNull } from 'drizzle-orm'
 import { getUserEntityPermissions } from '@/lib/workspaces/permissions/utils'
 

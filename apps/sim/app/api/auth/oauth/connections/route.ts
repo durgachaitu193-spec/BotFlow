@@ -1,5 +1,5 @@
-import { account, db } from '@wazabi/db'
-import { createLogger } from '@wazabi/logger'
+import { account, db } from '@botflow/db'
+import { createLogger } from '@botflow/logger'
 import { eq } from 'drizzle-orm'
 import { jwtDecode } from 'jwt-decode'
 import { type NextRequest, NextResponse } from 'next/server'

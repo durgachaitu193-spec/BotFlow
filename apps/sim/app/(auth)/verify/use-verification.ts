@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { betterAuthClient, useSession } from '@/lib/auth/auth-client'
 

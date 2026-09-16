@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { ArrowRight, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'

@@ -1,6 +1,6 @@
-import { db } from '@wazabi/db'
-import { workflowExecutionLogs } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { workflowExecutionLogs } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { and, avg, count, desc, eq, gte, inArray } from 'drizzle-orm'
 
 const logger = createLogger('AlertRules')

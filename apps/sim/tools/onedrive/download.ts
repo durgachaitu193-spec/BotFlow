@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { OneDriveDownloadResponse, OneDriveToolParams } from '@/tools/onedrive/types'
 import type { ToolConfig } from '@/tools/types'
 

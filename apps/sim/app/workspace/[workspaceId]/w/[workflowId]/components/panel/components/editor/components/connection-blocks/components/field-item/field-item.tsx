@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import clsx from 'clsx'
 import { ChevronDown } from 'lucide-react'
 import { Badge } from '@/components/emcn'

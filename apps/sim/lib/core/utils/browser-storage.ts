@@ -3,7 +3,7 @@
  * Provides clean error handling and type safety for browser storage operations
  */
 
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 
 const logger = createLogger('BrowserStorage')
 

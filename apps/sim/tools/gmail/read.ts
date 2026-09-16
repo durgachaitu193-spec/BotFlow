@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { GmailAttachment, GmailReadParams, GmailToolResponse } from '@/tools/gmail/types'
 import {
   createMessagesSummary,

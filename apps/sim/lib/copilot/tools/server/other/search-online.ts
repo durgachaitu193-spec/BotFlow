@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { BaseServerTool } from '@/lib/copilot/tools/server/base-tool'
 import { env } from '@/lib/core/config/env'
 import { executeTool } from '@/tools'

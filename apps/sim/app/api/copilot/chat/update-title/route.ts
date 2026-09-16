@@ -3,9 +3,9 @@
  * @remarks Kept for reference - may be removed in future cleanup
  */
 
-import { db } from '@wazabi/db'
-import { copilotChats } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { copilotChats } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'

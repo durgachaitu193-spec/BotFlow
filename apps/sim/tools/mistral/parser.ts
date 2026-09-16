@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { getBaseUrl } from '@/lib/core/utils/urls'
 import type { MistralParserInput, MistralParserOutput } from '@/tools/mistral/types'
 import type { ToolConfig } from '@/tools/types'

@@ -1,6 +1,6 @@
-import { db } from '@wazabi/db'
-import { document, embedding } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { document, embedding } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { and, eq, inArray, isNull, sql } from 'drizzle-orm'
 
 const logger = createLogger('KnowledgeSearchUtils')

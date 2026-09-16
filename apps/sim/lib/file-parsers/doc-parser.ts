@@ -1,6 +1,6 @@
 import { existsSync } from 'fs'
 import { readFile } from 'fs/promises'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { FileParseResult, FileParser } from '@/lib/file-parsers/types'
 import { sanitizeTextForUTF8 } from '@/lib/file-parsers/utils'
 

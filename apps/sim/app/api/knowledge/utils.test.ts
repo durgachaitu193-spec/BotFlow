@@ -85,7 +85,7 @@ vi.stubGlobal(
   })
 )
 
-vi.mock('@wazabi/db', () => {
+vi.mock('@botflow/db', () => {
   const selectBuilder = {
     from(table: any) {
       return {

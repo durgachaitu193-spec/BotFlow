@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { tasks } from '@trigger.dev/sdk'
 import { type NextRequest, NextResponse } from 'next/server'
 import { validate as uuidValidate, v4 as uuidv4 } from 'uuid'

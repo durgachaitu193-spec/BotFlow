@@ -1,6 +1,6 @@
 import { BN } from '@polkadot/util'
-import { db } from '@wazabi/db'
-import { agent, launchpadHoldings, launchpadTokens, launchpadTransactions } from '@wazabi/db/schema'
+import { db } from '@botflow/db'
+import { agent, launchpadHoldings, launchpadTokens, launchpadTransactions } from '@botflow/db/schema'
 import { and, eq } from 'drizzle-orm'
 import { StatusCodes } from 'http-status-codes'
 import { type NextRequest, NextResponse } from 'next/server'

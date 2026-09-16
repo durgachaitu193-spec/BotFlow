@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { Layout, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'

@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useOperationQueueStore } from '@/stores/operation-queue/store'
 import type { WorkflowState } from '@/stores/workflows/workflow/types'
 

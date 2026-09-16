@@ -1,5 +1,5 @@
-import { db } from '@wazabi/db'
-import { permissions, workspace } from '@wazabi/db/schema'
+import { db } from '@botflow/db'
+import { permissions, workspace } from '@botflow/db/schema'
 import { and, desc, eq } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
 import { getSession } from '@/lib/auth'

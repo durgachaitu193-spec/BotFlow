@@ -4,7 +4,7 @@
  * @vitest-environment node
  */
 import { createServer, request as httpRequest } from 'http'
-import { createMockLogger, databaseMock } from '@wazabi/testing'
+import { createMockLogger, databaseMock } from '@botflow/testing'
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createSocketIOServer } from '@/socket/config/socket'
 import { RoomManager } from '@/socket/rooms/manager'
@@ -18,7 +18,7 @@ vi.mock('@/lib/auth', () => ({
   },
 }))
 
-vi.mock('@wazabi/db', () => databaseMock)
+vi.mock('@botflow/db', () => databaseMock)
 
 vi.mock('@/socket/middleware/auth', () => ({
   authenticateSocket: vi.fn((socket, next) => {

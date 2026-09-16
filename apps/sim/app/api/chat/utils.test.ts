@@ -7,7 +7,7 @@ import type { NextResponse } from 'next/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { env } from '@/lib/core/config/env'
 
-vi.mock('@wazabi/db', () => ({
+vi.mock('@botflow/db', () => ({
   db: {
     select: vi.fn(),
     update: vi.fn(),
@@ -46,7 +46,7 @@ vi.mock('@/lib/core/utils/request', () => ({
 
 describe('Chat API Utils', () => {
   beforeEach(() => {
-    vi.doMock('@wazabi/logger', () => ({
+    vi.doMock('@botflow/logger', () => ({
       createLogger: vi.fn().mockReturnValue({
         info: vi.fn(),
         error: vi.fn(),

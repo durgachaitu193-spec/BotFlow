@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import OpenAI from 'openai'
 import type { StreamingExecution } from '@/executor/types'
 import { getProviderDefaultModel, getProviderModels } from '@/providers/models'

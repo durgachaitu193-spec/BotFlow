@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createNeo4jDriver, validateCypherQuery } from '@/app/api/tools/neo4j/utils'

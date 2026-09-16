@@ -10,9 +10,9 @@
  * Response: AdminListResponse<AdminOrganization>
  */
 
-import { db } from '@wazabi/db'
-import { organization } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { organization } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { count } from 'drizzle-orm'
 import { withAdminAuth } from '@/app/api/v1/admin/middleware'
 import { internalErrorResponse, listResponse } from '@/app/api/v1/admin/responses'

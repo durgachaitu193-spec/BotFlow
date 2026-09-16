@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { BASE_EXECUTION_CHARGE } from '@/lib/billing/constants'
 import { executionLogger } from '@/lib/logs/execution/logger'
 import {

@@ -1,5 +1,5 @@
-import { db } from '@wazabi/db'
-import { launchpadTransactions } from '@wazabi/db/schema'
+import { db } from '@botflow/db'
+import { launchpadTransactions } from '@botflow/db/schema'
 import { desc, eq } from 'drizzle-orm'
 import { StatusCodes } from 'http-status-codes'
 import { type NextRequest, NextResponse } from 'next/server'

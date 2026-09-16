@@ -1,5 +1,5 @@
-import { db } from '@wazabi/db'
-import * as schema from '@wazabi/db/schema'
+import { db } from '@botflow/db'
+import * as schema from '@botflow/db/schema'
 import { and, eq } from 'drizzle-orm'
 
 /**

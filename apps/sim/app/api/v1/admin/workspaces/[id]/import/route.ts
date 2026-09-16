@@ -23,9 +23,9 @@
  * Response: WorkspaceImportResponse
  */
 
-import { db } from '@wazabi/db'
-import { workflow, workflowFolder, workspace } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { workflow, workflowFolder, workspace } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { eq } from 'drizzle-orm'
 import { NextResponse } from 'next/server'
 import {

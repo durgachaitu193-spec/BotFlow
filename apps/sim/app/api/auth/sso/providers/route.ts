@@ -1,5 +1,5 @@
-import { db, ssoProvider } from '@wazabi/db'
-import { createLogger } from '@wazabi/logger'
+import { db, ssoProvider } from '@botflow/db'
+import { createLogger } from '@botflow/logger'
 import { eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'

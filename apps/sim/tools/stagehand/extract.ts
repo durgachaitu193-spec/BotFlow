@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { StagehandExtractParams, StagehandExtractResponse } from '@/tools/stagehand/types'
 import type { ToolConfig } from '@/tools/types'
 

@@ -1,7 +1,7 @@
 {
-  "name": "@wazabi/ts-sdk",
+  "name": "@botflow/ts-sdk",
   "version": "0.1.1",
-  "description": "Wazabi SDK - Execute workflows programmatically",
+  "description": "BotFlow SDK - Execute workflows programmatically",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -32,7 +32,7 @@
     "automation",
     "typescript"
   ],
-  "author": "Wazabi",
+  "author": "BotFlow",
   "license": "Apache-2.0",
   "dependencies": {
     "node-fetch": "^3.3.2"
@@ -54,7 +54,7 @@
     "url": "https://github.com/Wazabi-Ai/workflow.git",
     "directory": "packages/ts-sdk"
   },
-  "homepage": "https://wazabi.ai",
+  "homepage": "https://botflow.ai",
   "bugs": {
     "url": "https://github.com/Wazabi-Ai/workflow/issues"
   }

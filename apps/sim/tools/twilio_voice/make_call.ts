@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { convertSquareBracketsToTwiML } from '@/lib/webhooks/utils'
 import type { TwilioCallOutput, TwilioMakeCallParams } from '@/tools/twilio_voice/types'
 import type { ToolConfig } from '@/tools/types'

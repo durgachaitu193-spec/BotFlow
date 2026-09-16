@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { upsertCustomTools } from '@/lib/workflows/custom-tools/operations'
 
 const logger = createLogger('CustomToolsPersistence')

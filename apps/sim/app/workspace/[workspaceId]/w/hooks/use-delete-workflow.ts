@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useRouter } from 'next/navigation'
 import { useFolderStore } from '@/stores/folders/store'
 import { useWorkflowRegistry } from '@/stores/workflows/registry/store'

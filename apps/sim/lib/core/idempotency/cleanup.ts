@@ -1,6 +1,6 @@
-import { db } from '@wazabi/db'
-import { idempotencyKey } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { idempotencyKey } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { and, eq, lt } from 'drizzle-orm'
 
 const logger = createLogger('IdempotencyCleanup')

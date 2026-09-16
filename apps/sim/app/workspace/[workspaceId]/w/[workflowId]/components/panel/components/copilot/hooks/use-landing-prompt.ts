@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { LandingPromptStorage } from '@/lib/core/utils/browser-storage'
 
 const logger = createLogger('useLandingPrompt')

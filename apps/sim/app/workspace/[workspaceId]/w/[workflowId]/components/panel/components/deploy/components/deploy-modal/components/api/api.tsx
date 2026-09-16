@@ -85,7 +85,7 @@ export function ApiDeploy({
 
   const getBaseEndpoint = () => {
     if (!info) return ''
-    return info.endpoint.replace(info.apiKey, '$WAZABI_API_KEY')
+    return info.endpoint.replace(info.apiKey, '$BOTFLOW_API_KEY')
   }
 
   const getPayloadObject = (): Record<string, unknown> => {
@@ -117,7 +117,7 @@ export function ApiDeploy({
     switch (language) {
       case 'curl':
         return `curl -X POST \\
-  -H "X-API-Key: $WAZABI_API_KEY" \\
+  -H "X-API-Key: $BOTFLOW_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '${JSON.stringify(payload)}' \\
   ${endpoint}`
@@ -128,7 +128,7 @@ export function ApiDeploy({
 response = requests.post(
     "${endpoint}",
     headers={
-        "X-API-Key": WAZABI_API_KEY,
+        "X-API-Key": BOTFLOW_API_KEY,
         "Content-Type": "application/json"
     },
     json=${JSON.stringify(payload, null, 4).replace(/\n/g, '\n    ')}
@@ -140,7 +140,7 @@ print(response.json())`
         return `const response = await fetch("${endpoint}", {
   method: "POST",
   headers: {
-    "X-API-Key": WAZABI_API_KEY,
+    "X-API-Key": BOTFLOW_API_KEY,
     "Content-Type": "application/json"
   },
   body: JSON.stringify(${JSON.stringify(payload)})
@@ -153,7 +153,7 @@ console.log(data);`
         return `const response = await fetch("${endpoint}", {
   method: "POST",
   headers: {
-    "X-API-Key": WAZABI_API_KEY,
+    "X-API-Key": BOTFLOW_API_KEY,
     "Content-Type": "application/json"
   },
   body: JSON.stringify(${JSON.stringify(payload)})
@@ -175,7 +175,7 @@ console.log(data);`
     switch (language) {
       case 'curl':
         return `curl -X POST \\
-  -H "X-API-Key: $WAZABI_API_KEY" \\
+  -H "X-API-Key: $BOTFLOW_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '${JSON.stringify(payload)}' \\
   ${endpoint}`
@@ -186,7 +186,7 @@ console.log(data);`
 response = requests.post(
     "${endpoint}",
     headers={
-        "X-API-Key": WAZABI_API_KEY,
+        "X-API-Key": BOTFLOW_API_KEY,
         "Content-Type": "application/json"
     },
     json=${JSON.stringify(payload, null, 4).replace(/\n/g, '\n    ')},
@@ -201,7 +201,7 @@ for line in response.iter_lines():
         return `const response = await fetch("${endpoint}", {
   method: "POST",
   headers: {
-    "X-API-Key": WAZABI_API_KEY,
+    "X-API-Key": BOTFLOW_API_KEY,
     "Content-Type": "application/json"
   },
   body: JSON.stringify(${JSON.stringify(payload)})
@@ -220,7 +220,7 @@ while (true) {
         return `const response = await fetch("${endpoint}", {
   method: "POST",
   headers: {
-    "X-API-Key": WAZABI_API_KEY,
+    "X-API-Key": BOTFLOW_API_KEY,
     "Content-Type": "application/json"
   },
   body: JSON.stringify(${JSON.stringify(payload)})
@@ -251,7 +251,7 @@ while (true) {
         switch (language) {
           case 'curl':
             return `curl -X POST \\
-  -H "X-API-Key: $WAZABI_API_KEY" \\
+  -H "X-API-Key: $BOTFLOW_API_KEY" \\
   -H "Content-Type: application/json" \\
   -H "X-Execution-Mode: async" \\
   -d '${JSON.stringify(payload)}' \\
@@ -263,7 +263,7 @@ while (true) {
 response = requests.post(
     "${endpoint}",
     headers={
-        "X-API-Key": WAZABI_API_KEY,
+        "X-API-Key": BOTFLOW_API_KEY,
         "Content-Type": "application/json",
         "X-Execution-Mode": "async"
     },
@@ -277,7 +277,7 @@ print(job)  # Contains job_id for status checking`
             return `const response = await fetch("${endpoint}", {
   method: "POST",
   headers: {
-    "X-API-Key": WAZABI_API_KEY,
+    "X-API-Key": BOTFLOW_API_KEY,
     "Content-Type": "application/json",
     "X-Execution-Mode": "async"
   },
@@ -291,7 +291,7 @@ console.log(job); // Contains job_id for status checking`
             return `const response = await fetch("${endpoint}", {
   method: "POST",
   headers: {
-    "X-API-Key": WAZABI_API_KEY,
+    "X-API-Key": BOTFLOW_API_KEY,
     "Content-Type": "application/json",
     "X-Execution-Mode": "async"
   },
@@ -308,7 +308,7 @@ console.log(job); // Contains job_id for status checking`
       case 'status':
         switch (language) {
           case 'curl':
-            return `curl -H "X-API-Key: $WAZABI_API_KEY" \\
+            return `curl -H "X-API-Key: $BOTFLOW_API_KEY" \\
   ${baseUrl}/api/jobs/JOB_ID_FROM_EXECUTION`
 
           case 'python':
@@ -316,7 +316,7 @@ console.log(job); // Contains job_id for status checking`
 
 response = requests.get(
     "${baseUrl}/api/jobs/JOB_ID_FROM_EXECUTION",
-    headers={"X-API-Key": WAZABI_API_KEY}
+    headers={"X-API-Key": BOTFLOW_API_KEY}
 )
 
 status = response.json()
@@ -326,7 +326,7 @@ print(status)`
             return `const response = await fetch(
   "${baseUrl}/api/jobs/JOB_ID_FROM_EXECUTION",
   {
-    headers: { "X-API-Key": WAZABI_API_KEY }
+    headers: { "X-API-Key": BOTFLOW_API_KEY }
   }
 );
 
@@ -337,7 +337,7 @@ console.log(status);`
             return `const response = await fetch(
   "${baseUrl}/api/jobs/JOB_ID_FROM_EXECUTION",
   {
-    headers: { "X-API-Key": WAZABI_API_KEY }
+    headers: { "X-API-Key": BOTFLOW_API_KEY }
   }
 );
 
@@ -351,7 +351,7 @@ console.log(status);`
       case 'rate-limits':
         switch (language) {
           case 'curl':
-            return `curl -H "X-API-Key: $WAZABI_API_KEY" \\
+            return `curl -H "X-API-Key: $BOTFLOW_API_KEY" \\
   ${baseUrl}/api/users/me/usage-limits`
 
           case 'python':
@@ -359,7 +359,7 @@ console.log(status);`
 
 response = requests.get(
     "${baseUrl}/api/users/me/usage-limits",
-    headers={"X-API-Key": WAZABI_API_KEY}
+    headers={"X-API-Key": BOTFLOW_API_KEY}
 )
 
 limits = response.json()
@@ -369,7 +369,7 @@ print(limits)`
             return `const response = await fetch(
   "${baseUrl}/api/users/me/usage-limits",
   {
-    headers: { "X-API-Key": WAZABI_API_KEY }
+    headers: { "X-API-Key": BOTFLOW_API_KEY }
   }
 );
 
@@ -380,7 +380,7 @@ console.log(limits);`
             return `const response = await fetch(
   "${baseUrl}/api/users/me/usage-limits",
   {
-    headers: { "X-API-Key": WAZABI_API_KEY }
+    headers: { "X-API-Key": BOTFLOW_API_KEY }
   }
 );
 

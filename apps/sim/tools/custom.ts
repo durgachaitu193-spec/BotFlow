@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { getBaseUrl } from '@/lib/core/utils/urls'
 import { useEnvironmentStore } from '@/stores/settings/environment/store'
 import type { ToolConfig } from '@/tools/types'

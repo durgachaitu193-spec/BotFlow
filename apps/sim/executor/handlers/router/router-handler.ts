@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { getBaseUrl } from '@/lib/core/utils/urls'
 import { generateRouterPrompt } from '@/blocks/blocks/router'
 import type { BlockOutput } from '@/blocks/types'

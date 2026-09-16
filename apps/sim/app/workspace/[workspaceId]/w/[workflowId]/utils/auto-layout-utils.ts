@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import {
   DEFAULT_HORIZONTAL_SPACING,
   DEFAULT_LAYOUT_PADDING,

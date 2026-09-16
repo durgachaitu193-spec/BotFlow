@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { ResponseFormatStreamProcessor } from '@/executor/types'
 
 const logger = createLogger('ExecutorUtils')

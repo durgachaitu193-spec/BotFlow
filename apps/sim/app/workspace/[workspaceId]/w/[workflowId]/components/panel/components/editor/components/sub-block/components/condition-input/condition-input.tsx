@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react'
 import { useEffect, useRef, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { ChevronDown, ChevronUp, Plus } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import Editor from 'react-simple-code-editor'

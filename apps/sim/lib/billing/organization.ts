@@ -1,6 +1,6 @@
-import { db } from '@wazabi/db'
-import * as schema from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import * as schema from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { and, eq } from 'drizzle-orm'
 import { syncUsageLimitsFromSubscription } from '@/lib/billing/core/usage'
 

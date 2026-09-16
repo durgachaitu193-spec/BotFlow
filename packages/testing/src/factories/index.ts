@@ -12,7 +12,7 @@
  *   createAgentBlock,
  *   createLinearWorkflow,
  *   createExecutionContext,
- * } from '@wazabi/testing/factories'
+ * } from '@botflow/testing/factories'
  *
  * // Create a simple workflow
  * const workflow = createLinearWorkflow(3)

@@ -3,7 +3,7 @@ import { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react
 import { Check, Copy, Wand2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import 'prismjs/components/prism-python'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import Editor from 'react-simple-code-editor'
 import {
   CODE_LINE_HEIGHT_PX,

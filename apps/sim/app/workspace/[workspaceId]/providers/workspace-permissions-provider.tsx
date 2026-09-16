@@ -2,7 +2,7 @@
 
 import type React from 'react'
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useParams } from 'next/navigation'
 import { useCollaborativeWorkflow } from '@/hooks/use-collaborative-workflow'
 import { useUserPermissions, type WorkspaceUserPermissions } from '@/hooks/use-user-permissions'

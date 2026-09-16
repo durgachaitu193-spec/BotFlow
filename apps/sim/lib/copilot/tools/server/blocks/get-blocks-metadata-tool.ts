@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'fs'
 import { join } from 'path'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { BaseServerTool } from '@/lib/copilot/tools/server/base-tool'
 import {
   type GetBlocksMetadataInput,

@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { db } from '@wazabi/db'
+import { db } from '@botflow/db'
 import {
   invitation,
   member,
@@ -10,8 +10,8 @@ import {
   userStats,
   type WorkspaceInvitationStatus,
   workspaceInvitation,
-} from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+} from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { and, eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'

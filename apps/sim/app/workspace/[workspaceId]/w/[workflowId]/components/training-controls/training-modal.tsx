@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import {
   Check,
   CheckCircle2,

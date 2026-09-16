@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { layoutContainers } from '@/lib/workflows/autolayout/containers'
 import { assignLayers, layoutBlocksCore } from '@/lib/workflows/autolayout/core'
 import type { Edge, LayoutOptions, LayoutResult } from '@/lib/workflows/autolayout/types'

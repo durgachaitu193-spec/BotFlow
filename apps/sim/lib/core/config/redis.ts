@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import Redis from 'ioredis'
 import { env } from '@/lib/core/config/env'
 

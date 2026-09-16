@@ -40,15 +40,15 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        find: '@wazabi/testing',
+        find: '@botflow/testing',
         replacement: path.resolve(__dirname, '../../packages/testing/src'),
       },
       {
-        find: '@wazabi/db',
+        find: '@botflow/db',
         replacement: path.resolve(__dirname, '../../packages/db'),
       },
       {
-        find: '@wazabi/logger',
+        find: '@botflow/logger',
         replacement: path.resolve(__dirname, '../../packages/logger/src'),
       },
       {

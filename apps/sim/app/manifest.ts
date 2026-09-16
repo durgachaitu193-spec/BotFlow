@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
   const brand = getBrandConfig()
 
   return {
-    name: brand.name === 'Wazabi' ? 'Wazabi - AI Agent Workflow Builder' : brand.name,
+    name: brand.name === 'BotFlow' ? 'BotFlow - AI Agent Workflow Builder' : brand.name,
     short_name: brand.name,
     description:
       'Open-source AI agent workflow builder. 30,000+ developers build and deploy agentic workflows on Sim. Visual drag-and-drop interface for creating AI automations. SOC2 and HIPAA compliant.',

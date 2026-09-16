@@ -1,4 +1,4 @@
-import type { Logger } from '@wazabi/logger'
+import type { Logger } from '@botflow/logger'
 import { z } from 'zod'
 
 function jsonSchemaToZod(logger: Logger, jsonSchema: Record<string, any>): z.ZodTypeAny {

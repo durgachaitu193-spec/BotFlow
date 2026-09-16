@@ -14,7 +14,7 @@ export const BSC_RPC =
 export const BASE_RPC =
   process.env.NEXT_PUBLIC_BASE_RPC_URL || process.env.BASE_RPC_URL || 'https://mainnet.base.org'
 
-// Wazabi Facilitator URL
+// BotFlow Facilitator URL
 // Defaulting to localhost for development/testing as requested
 export const X402_BASE = process.env.NEXT_PUBLIC_X402_BASE_URL || 'http://localhost:4022'
 
@@ -313,7 +313,7 @@ export async function signERC20ViaFacilitator(params: {
       x402Version: X402_VERSION,
       resource: {
         url: 'x402://payment',
-        description: 'ERC-20 payment via Wazabi Stargate',
+        description: 'ERC-20 payment via BotFlow Stargate',
         mimeType: 'application/json',
       },
       accepted: {

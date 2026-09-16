@@ -3,15 +3,15 @@
  * Similar to cost limits but for file storage quotas
  */
 
-import { db } from '@wazabi/db'
+import { db } from '@botflow/db'
 import {
   DEFAULT_ENTERPRISE_STORAGE_LIMIT_GB,
   DEFAULT_FREE_STORAGE_LIMIT_GB,
   DEFAULT_PRO_STORAGE_LIMIT_GB,
   DEFAULT_TEAM_STORAGE_LIMIT_GB,
-} from '@wazabi/db/consts'
-import { organization, subscription, userStats } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+} from '@botflow/db/consts'
+import { organization, subscription, userStats } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { eq } from 'drizzle-orm'
 import { getEnv } from '@/lib/core/config/env'
 import { isBillingEnabled } from '@/lib/core/config/environment'

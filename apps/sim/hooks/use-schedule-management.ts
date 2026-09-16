@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useSubBlockStore } from '@/stores/workflows/subblock/store'
 
 const logger = createLogger('useScheduleManagement')

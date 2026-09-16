@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { type Chunk, JsonYamlChunker, StructuredDataChunker, TextChunker } from '@/lib/chunkers'
 import { env } from '@/lib/core/config/env'
 import { parseBuffer, parseFile } from '@/lib/file-parsers'

@@ -4,7 +4,7 @@ import {
   createFunctionBlock,
   createLoopBlock,
   createStarterBlock,
-} from '@wazabi/testing'
+} from '@botflow/testing'
 import { describe, expect, it } from 'vitest'
 import { getUniqueBlockName, normalizeName } from './utils'
 

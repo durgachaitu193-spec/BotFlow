@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { isUserFile } from '@/lib/core/utils/display-filters'
 import type { ExecutionContext } from '@/lib/uploads/contexts/execution/utils'
 import { generateExecutionFileKey, generateFileId } from '@/lib/uploads/contexts/execution/utils'

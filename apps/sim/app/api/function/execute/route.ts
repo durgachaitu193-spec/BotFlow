@@ -1,5 +1,5 @@
 import { createContext, Script } from 'vm'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { env, isTruthy } from '@/lib/core/config/env'
 import { validateProxyUrl } from '@/lib/core/security/input-validation'

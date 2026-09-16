@@ -20,7 +20,7 @@ const mockSchedule = {
 beforeEach(() => {
   vi.resetModules()
 
-  vi.doMock('@wazabi/logger', () => ({
+  vi.doMock('@botflow/logger', () => ({
     createLogger: () => ({ info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() }),
   }))
 

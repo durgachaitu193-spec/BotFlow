@@ -1,6 +1,6 @@
 'use client'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useParams } from 'next/navigation'
 import { Switch } from '@/components/emcn'
 import { Skeleton } from '@/components/ui'

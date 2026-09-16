@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { usePrivy, useWallets } from '@wazabi/ui'
-import { createLogger } from '@wazabi/logger'
+import { usePrivy, useWallets } from '@botflow/ui'
+import { createLogger } from '@botflow/logger'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Check, Loader2 } from 'lucide-react'
 import { type Chain, createPublicClient, createWalletClient, custom, http } from 'viem'

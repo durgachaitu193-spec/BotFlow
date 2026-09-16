@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { Check, Loader2, XCircle } from 'lucide-react'
 import {
   BaseClientTool,

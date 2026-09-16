@@ -18,14 +18,15 @@ function Logo({ app = 'launchpad' }: { app?: 'launchpad' | 'builder' | string })
   const getLogoPaths = () => {
     if (app === 'builder') {
       return {
-        icon: resolvedTheme === 'dark' ? '/logo/wazabi-icon-light.png' : '/logo/wazabi-icon-dark.png',
-        text: resolvedTheme === 'dark' ? '/logo/wazabi-text-dark.png' : '/logo/wazabi-text-light.png',
+        icon: resolvedTheme === 'dark' ? '/logo/botflow-icon-light.png' : '/logo/botflow-icon-dark.png',
+        // "-light" is the light-coloured wordmark, so it belongs on the dark theme
+        text: resolvedTheme === 'dark' ? '/logo/botflow-text-light.png' : '/logo/botflow-text-dark.png',
       }
     }
     // Launchpad specific branding - always use white text/dark mode assets
     return {
-      icon: '/logo/wazabi-icon-light.png',
-      text: '/logo/wazabi-text-dark.png',
+      icon: '/logo/botflow-icon-light.png',
+      text: '/logo/botflow-text-light.png',
     }
   }
 
@@ -33,7 +34,7 @@ function Logo({ app = 'launchpad' }: { app?: 'launchpad' | 'builder' | string })
     const initialLogos = getLogoPaths()
     return (
       <div className="flex items-center gap-2 opacity-0">
-        <img src={initialLogos.text} alt='Wazabi' className='h-7 w-auto' />
+        <img src={initialLogos.text} alt='BotFlow' className='h-7 w-auto' />
       </div>
     )
   }
@@ -44,10 +45,10 @@ function Logo({ app = 'launchpad' }: { app?: 'launchpad' | 'builder' | string })
     <div className='flex items-center gap-2'>
       <img
         src={text}
-        alt='Wazabi Text'
+        alt='BotFlow Text'
         className={app === 'builder'
-          ? 'h-7 w-auto object-contain object-left brightness-0 opacity-90 dark:brightness-0 dark:invert'
-          : 'h-6 w-auto object-contain object-left brightness-0 opacity-90 dark:brightness-0 dark:invert'
+          ? 'h-8 w-auto object-contain object-left'
+          : 'h-7 w-auto object-contain object-left'
         }
       />
     </div>
@@ -60,10 +61,10 @@ const isDev =
     (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
 const LAUNCHPAD_URL = isDev
   ? 'http://localhost:3000'
-  : process.env.NEXT_PUBLIC_LAUNCHPAD_URL || 'https://launchpad.wazabi.ai'
+  : process.env.NEXT_PUBLIC_LAUNCHPAD_URL || 'https://launchpad.botflow.ai'
 const BUILDER_URL = isDev
   ? 'http://localhost:3001'
-  : process.env.NEXT_PUBLIC_BUILDER_URL || 'https://studio.wazabi.ai'
+  : process.env.NEXT_PUBLIC_BUILDER_URL || 'https://studio.botflow.ai'
 
 export interface LaunchpadNavbarProps {
   currentApp?: 'launchpad' | 'builder' | string

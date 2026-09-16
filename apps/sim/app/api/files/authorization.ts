@@ -1,6 +1,6 @@
-import { db } from '@wazabi/db'
-import { document, workspaceFile } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { document, workspaceFile } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { eq, like, or } from 'drizzle-orm'
 import { getFileMetadata } from '@/lib/uploads'
 import type { StorageContext } from '@/lib/uploads/config'
@@ -391,7 +391,7 @@ async function verifyKBFileAccess(
 
       // Check each document's knowledge base for workspace access
       for (const doc of documents) {
-        const { knowledgeBase } = await import('@wazabi/db/schema')
+        const { knowledgeBase } = await import('@botflow/db/schema')
         const [kb] = await db
           .select({
             workspaceId: knowledgeBase.workspaceId,

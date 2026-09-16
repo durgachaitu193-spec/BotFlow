@@ -1,5 +1,5 @@
 {
-  "name": "wazabistudio",
+  "name": "botflowstudio",
   "packageManager": "bun@1.3.3",
   "version": "0.0.0",
   "private": true,

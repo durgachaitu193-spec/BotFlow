@@ -5,7 +5,7 @@
  * MCP server URLs against common attack patterns and dangerous destinations.
  */
 
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 
 const logger = createLogger('McpUrlValidator')
 

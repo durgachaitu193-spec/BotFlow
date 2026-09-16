@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { GoogleDriveToolParams, GoogleDriveUploadResponse } from '@/tools/google_drive/types'
 import {
   GOOGLE_WORKSPACE_MIME_TYPES,

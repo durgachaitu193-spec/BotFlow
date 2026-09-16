@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { ExecutionLogger } from '@/lib/logs/execution/logger'
 
 // Mock database module
-vi.mock('@wazabi/db', () => ({
+vi.mock('@botflow/db', () => ({
   db: {
     select: vi.fn(() => ({
       from: vi.fn(() => ({
@@ -28,7 +28,7 @@ vi.mock('@wazabi/db', () => ({
 }))
 
 // Mock database schema
-vi.mock('@wazabi/db/schema', () => ({
+vi.mock('@botflow/db/schema', () => ({
   member: {},
   userStats: {},
   user: {},
@@ -73,7 +73,7 @@ vi.mock('@/lib/core/utils/display-filters', () => ({
   filterForDisplay: vi.fn((data) => data),
 }))
 
-vi.mock('@wazabi/logger', () => ({
+vi.mock('@botflow/logger', () => ({
   createLogger: vi.fn(() => ({
     debug: vi.fn(),
     info: vi.fn(),

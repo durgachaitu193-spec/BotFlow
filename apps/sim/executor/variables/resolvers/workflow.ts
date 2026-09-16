@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { VariableManager } from '@/lib/workflows/variables/variable-manager'
 import { isReference, parseReferencePath, REFERENCE } from '@/executor/consts'
 import {

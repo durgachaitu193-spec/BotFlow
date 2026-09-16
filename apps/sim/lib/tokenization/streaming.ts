@@ -2,7 +2,7 @@
  * Streaming-specific tokenization helpers
  */
 
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { calculateStreamingCost } from '@/lib/tokenization/calculators'
 import { TOKENIZATION_CONFIG } from '@/lib/tokenization/constants'
 import {

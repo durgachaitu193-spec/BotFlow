@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { ChevronsUpDown, Wand2 } from 'lucide-react'
 import { Textarea } from '@/components/emcn'
 import { Button } from '@/components/ui/button'

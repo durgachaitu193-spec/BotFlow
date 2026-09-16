@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { extractEnvVarName, isEnvVarReference } from '@/executor/consts'
 import type { ResolutionContext, Resolver } from '@/executor/variables/resolvers/reference'
 

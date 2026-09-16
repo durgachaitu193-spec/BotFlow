@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import type { ClientToolDefinition, ToolExecutionContext } from '@/lib/copilot/tools/client/types'
 
 const logger = createLogger('ClientToolRegistry')

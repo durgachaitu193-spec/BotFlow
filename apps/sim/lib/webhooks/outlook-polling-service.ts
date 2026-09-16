@@ -1,6 +1,6 @@
-import { db } from '@wazabi/db'
-import { account, webhook, workflow } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { account, webhook, workflow } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { and, eq, sql } from 'drizzle-orm'
 import { htmlToText } from 'html-to-text'
 import { nanoid } from 'nanoid'
@@ -466,7 +466,7 @@ async function processOutlookEmails(
             headers: {
               'Content-Type': 'application/json',
               'X-Webhook-Secret': webhookData.secret || '',
-              'User-Agent': 'Wazabi/1.0',
+              'User-Agent': 'BotFlow/1.0',
             },
             body: JSON.stringify(payload),
           })

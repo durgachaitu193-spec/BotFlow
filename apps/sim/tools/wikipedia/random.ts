@@ -15,7 +15,7 @@ export const randomPageTool: ToolConfig<Record<string, never>, WikipediaRandomPa
     },
     method: 'GET',
     headers: () => ({
-      'User-Agent': 'Wazabi/1.0 (https://wazabi.ai)',
+      'User-Agent': 'BotFlow/1.0 (https://botflow.ai)',
       Accept: 'application/json',
     }),
   },

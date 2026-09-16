@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { ArrowDown, Plus, Search } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { Button, FolderPlus, Tooltip } from '@/components/emcn'

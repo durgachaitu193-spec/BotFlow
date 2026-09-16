@@ -127,9 +127,9 @@ const nextConfig: NextConfig = {
     '@react-email/render',
     '@t3-oss/env-nextjs',
     '@t3-oss/env-core',
-    '@wazabi/db',
-    '@wazabi/ui',
-    '@wazabi/logger',
+    '@botflow/db',
+    '@botflow/ui',
+    '@botflow/logger',
   ],
   webpack: (config, { webpack }) => {
     config.resolve.alias = {

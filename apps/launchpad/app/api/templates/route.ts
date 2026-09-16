@@ -1,5 +1,5 @@
-import { db } from '@wazabi/db'
-import { templateCreators, templates } from '@wazabi/db/schema'
+import { db } from '@botflow/db'
+import { templateCreators, templates } from '@botflow/db/schema'
 import { and, desc, eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 

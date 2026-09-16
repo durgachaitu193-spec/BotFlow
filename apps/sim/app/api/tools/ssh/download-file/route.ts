@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto'
 import path from 'path'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import type { Client, SFTPWrapper } from 'ssh2'
 import { z } from 'zod'

@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto'
 import { render } from '@react-email/render'
-import { db } from '@wazabi/db'
+import { db } from '@botflow/db'
 import {
   permissions,
   type permissionTypeEnum,
@@ -8,8 +8,8 @@ import {
   type WorkspaceInvitationStatus,
   workspace,
   workspaceInvitation,
-} from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+} from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { and, eq, inArray } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { WorkspaceInvitationEmail } from '@/components/emails/workspace-invitation'

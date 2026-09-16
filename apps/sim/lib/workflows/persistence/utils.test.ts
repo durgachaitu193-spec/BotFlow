@@ -53,7 +53,7 @@ const { mockDb, mockWorkflowBlocks, mockWorkflowEdges, mockWorkflowSubflows } = 
   return { mockDb, mockWorkflowBlocks, mockWorkflowEdges, mockWorkflowSubflows }
 })
 
-vi.mock('@wazabi/db', () => ({
+vi.mock('@botflow/db', () => ({
   db: mockDb,
   workflowBlocks: mockWorkflowBlocks,
   workflowEdges: mockWorkflowEdges,
@@ -84,7 +84,7 @@ vi.mock('drizzle-orm', () => ({
   })),
 }))
 
-vi.mock('@wazabi/logger', () => ({
+vi.mock('@botflow/logger', () => ({
   createLogger: vi.fn(() => ({
     info: vi.fn(),
     error: vi.fn(),

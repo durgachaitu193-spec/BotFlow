@@ -1,7 +1,7 @@
 'use server'
 
-import { db } from '@wazabi/db'
-import { launchpadTransactions } from '@wazabi/db/schema'
+import { db } from '@botflow/db'
+import { launchpadTransactions } from '@botflow/db/schema'
 import { desc, eq } from 'drizzle-orm'
 
 export interface Transaction {

@@ -7,7 +7,7 @@
 
 import type React from 'react'
 import { useCallback, useMemo } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { useQueryClient } from '@tanstack/react-query'
 import { McpIcon } from '@/components/icons'
 import { createMcpToolId } from '@/lib/mcp/utils'

@@ -1,5 +1,5 @@
 import { useCallback, useRef } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { createDragPreview, type DragItemInfo } from '../components'
 
 const logger = createLogger('ToolbarItemInteractions')

@@ -11,7 +11,7 @@ vi.mock('@/lib/billing/constants', () => ({
 }))
 
 // Mock the console logger
-vi.mock('@wazabi/logger', () => ({
+vi.mock('@botflow/logger', () => ({
   createLogger: vi.fn(() => ({
     debug: vi.fn(),
     info: vi.fn(),

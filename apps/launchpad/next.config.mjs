@@ -58,7 +58,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: true,
-  transpilePackages: ['@wazabi/db', '@wazabi/ui'],
+  transpilePackages: ['@botflow/db', '@botflow/ui'],
 }
 
 export default nextConfig

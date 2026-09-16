@@ -19,9 +19,9 @@
  * }>
  */
 
-import { db } from '@wazabi/db'
-import { member, organization, user } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { member, organization, user } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { eq } from 'drizzle-orm'
 import { addUserToOrganization } from '@/lib/billing/organizations/membership'
 import { withAdminAuthParams } from '@/app/api/v1/admin/middleware'

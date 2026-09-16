@@ -6,54 +6,54 @@ const baseUrl = getBaseUrl()
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
-  title: 'Wazabi - AI Agent Workflow Builder | Open Source Platform',
+  title: 'BotFlow - AI Agent Workflow Builder | Open Source Platform',
   description:
     'Open-source AI agent workflow builder used by 60,000+ developers. Build and deploy agentic workflows with a visual drag-and-drop canvas. Connect 100+ apps and ship SOC2 & HIPAA-ready AI automations from startups to Fortune 500.',
   keywords:
     'AI agent workflow builder, agentic workflows, open source AI, visual workflow builder, AI automation, LLM workflows, AI agents, workflow automation, no-code AI, SOC2 compliant, HIPAA compliant, enterprise AI',
-  authors: [{ name: 'Wazabi Studio' }],
-  creator: 'Wazabi Studio',
-  publisher: 'Wazabi Studio',
+  authors: [{ name: 'BotFlow Studio' }],
+  creator: 'BotFlow Studio',
+  publisher: 'BotFlow Studio',
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   openGraph: {
-    title: 'Wazabi - AI Agent Workflow Builder | Open Source',
+    title: 'BotFlow - AI Agent Workflow Builder | Open Source',
     description:
       'Open-source platform used by 60,000+ developers. Design, deploy, and monitor agentic workflows with a visual drag-and-drop interface, 100+ integrations, and enterprise-grade security.',
     type: 'website',
     url: baseUrl,
-    siteName: 'Wazabi',
+    siteName: 'BotFlow',
     locale: 'en_US',
     images: [
       {
         url: '/social/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Wazabi - Visual AI Workflow Builder',
+        alt: 'BotFlow - Visual AI Workflow Builder',
         type: 'image/png',
       },
       {
         url: '/social/og-image-square.png',
         width: 600,
         height: 600,
-        alt: 'Wazabi Logo',
+        alt: 'BotFlow Logo',
         type: 'image/png',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@wazabidotai',
-    creator: '@wazabidotai',
-    title: 'Wazabi - AI Agent Workflow Builder | Open Source',
+    site: '@botflow',
+    creator: '@botflow',
+    title: 'BotFlow - AI Agent Workflow Builder | Open Source',
     description:
       'Open-source platform for agentic workflows. 60,000+ developers. Visual builder. 100+ integrations. SOC2 & HIPAA compliant.',
     images: {
       url: '/social/twitter-image.png',
-      alt: 'Wazabi - Visual AI Workflow Builder',
+      alt: 'BotFlow - Visual AI Workflow Builder',
     },
   },
   alternates: {

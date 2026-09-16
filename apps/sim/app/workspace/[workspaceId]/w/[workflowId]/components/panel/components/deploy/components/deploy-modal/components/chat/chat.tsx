@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { AlertTriangle, Check, Clipboard, Eye, EyeOff, Loader2, RefreshCw, X } from 'lucide-react'
 import { Button, Input, Label, Textarea, Tooltip } from '@/components/emcn'
 import {

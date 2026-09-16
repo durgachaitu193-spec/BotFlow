@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import clsx from 'clsx'
 import { Pencil } from 'lucide-react'
 import Link from 'next/link'

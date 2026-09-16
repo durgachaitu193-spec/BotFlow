@@ -1,5 +1,5 @@
-import { db, workflow, workflowSchedule } from '@wazabi/db'
-import { createLogger } from '@wazabi/logger'
+import { db, workflow, workflowSchedule } from '@botflow/db'
+import { createLogger } from '@botflow/logger'
 import { task } from '@trigger.dev/sdk'
 import { Cron } from 'croner'
 import { eq } from 'drizzle-orm'

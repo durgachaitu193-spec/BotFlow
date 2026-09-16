@@ -40,7 +40,7 @@ export const isEmailVerificationEnabled = isTruthy(env.EMAIL_VERIFICATION_ENABLE
 export const isAuthDisabled = isTruthy(env.DISABLE_AUTH) && !isHosted
 
 if (isTruthy(env.DISABLE_AUTH)) {
-  import('@wazabi/logger')
+  import('@botflow/logger')
     .then(({ createLogger }) => {
       const logger = createLogger('FeatureFlags')
       if (isHosted) {

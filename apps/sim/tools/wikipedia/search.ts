@@ -41,7 +41,7 @@ export const searchTool: ToolConfig<WikipediaSearchParams, WikipediaSearchRespon
     },
     method: 'GET',
     headers: () => ({
-      'User-Agent': 'Wazabi/1.0 (https://wazabi.ai)',
+      'User-Agent': 'BotFlow/1.0 (https://botflow.ai)',
       Accept: 'application/json',
     }),
   },

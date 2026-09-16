@@ -1,6 +1,6 @@
-import { db } from '@wazabi/db'
-import { environment, workspaceEnvironment } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { environment, workspaceEnvironment } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { eq } from 'drizzle-orm'
 import { decryptSecret } from '@/lib/core/security/encryption'
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { ExternalLink } from 'lucide-react'
 import { Button, Combobox } from '@/components/emcn/components'
 import {

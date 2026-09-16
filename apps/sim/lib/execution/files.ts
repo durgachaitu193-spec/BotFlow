@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { v4 as uuidv4 } from 'uuid'
 import { uploadExecutionFile } from '@/lib/uploads/contexts/execution'
 import { TRIGGER_TYPES } from '@/lib/workflows/triggers/triggers'

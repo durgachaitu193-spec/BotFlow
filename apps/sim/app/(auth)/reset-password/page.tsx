@@ -1,7 +1,7 @@
 'use client'
 
 import { Suspense, useEffect, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { inter } from '@/app/_styles/fonts/inter/inter'

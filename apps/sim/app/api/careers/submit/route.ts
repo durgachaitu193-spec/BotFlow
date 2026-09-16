@@ -1,5 +1,5 @@
 import { render } from '@react-email/components'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import CareersConfirmationEmail from '@/components/emails/careers/careers-confirmation-email'

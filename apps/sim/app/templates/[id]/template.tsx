@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { usePrivy } from '@wazabi/ui'
-import { createLogger } from '@wazabi/logger'
+import { usePrivy } from '@botflow/ui'
+import { createLogger } from '@botflow/logger'
 import { formatDistanceToNow } from 'date-fns'
 import {
   ArrowLeft,

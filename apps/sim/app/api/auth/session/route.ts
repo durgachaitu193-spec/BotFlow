@@ -1,5 +1,5 @@
-import { db } from '@wazabi/db'
-import { user } from '@wazabi/db/schema'
+import { db } from '@botflow/db'
+import { user } from '@botflow/db/schema'
 import { eq } from 'drizzle-orm'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'

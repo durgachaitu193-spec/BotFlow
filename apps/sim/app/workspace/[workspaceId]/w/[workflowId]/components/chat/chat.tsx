@@ -1,7 +1,7 @@
 'use client'
 
 import { type KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { AlertCircle, ArrowDownToLine, ArrowUp, MoreVertical, Paperclip, X } from 'lucide-react'
 import {
   Badge,

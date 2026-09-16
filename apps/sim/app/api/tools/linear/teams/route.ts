@@ -1,6 +1,6 @@
 import type { Team } from '@linear/sdk'
 import { LinearClient } from '@linear/sdk'
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { NextResponse } from 'next/server'
 import { authorizeCredentialUse } from '@/lib/auth/credential-access'
 import { generateRequestId } from '@/lib/core/utils/request'

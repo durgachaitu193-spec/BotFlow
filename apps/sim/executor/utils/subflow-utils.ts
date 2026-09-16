@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { LOOP, PARALLEL, PARSING, REFERENCE } from '@/executor/consts'
 import type { SerializedParallel } from '@/serializer/types'
 

@@ -1,7 +1,7 @@
 'use server'
 
-import { db } from '@wazabi/db'
-import { launchpadHoldings, launchpadTokens } from '@wazabi/db/schema'
+import { db } from '@botflow/db'
+import { launchpadHoldings, launchpadTokens } from '@botflow/db/schema'
 import { desc, eq } from 'drizzle-orm'
 
 export interface Holder {

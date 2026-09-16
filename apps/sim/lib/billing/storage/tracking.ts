@@ -4,9 +4,9 @@
  * Only tracks when billing is enabled
  */
 
-import { db } from '@wazabi/db'
-import { organization, userStats } from '@wazabi/db/schema'
-import { createLogger } from '@wazabi/logger'
+import { db } from '@botflow/db'
+import { organization, userStats } from '@botflow/db/schema'
+import { createLogger } from '@botflow/logger'
 import { eq, sql } from 'drizzle-orm'
 import { isBillingEnabled } from '@/lib/core/config/environment'
 

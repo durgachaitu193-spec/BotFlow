@@ -3,16 +3,16 @@
  *
  * @example
  * ```ts
- * import { createMockLogger, setupGlobalFetchMock, databaseMock } from '@wazabi/testing/mocks'
+ * import { createMockLogger, setupGlobalFetchMock, databaseMock } from '@botflow/testing/mocks'
  *
  * // Mock the logger
- * vi.mock('@wazabi/logger', () => ({ createLogger: () => createMockLogger() }))
+ * vi.mock('@botflow/logger', () => ({ createLogger: () => createMockLogger() }))
  *
  * // Mock fetch globally
  * setupGlobalFetchMock({ json: { success: true } })
  *
  * // Mock database
- * vi.mock('@wazabi/db', () => databaseMock)
+ * vi.mock('@botflow/db', () => databaseMock)
  * ```
  */
 

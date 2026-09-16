@@ -1,4 +1,4 @@
-import { createLogger } from '@wazabi/logger'
+import { createLogger } from '@botflow/logger'
 import { getBlock } from '@/blocks/registry'
 import type { WorkflowState } from '@/stores/workflows/workflow/types'
 import { getToolAsync, getToolMetadata } from '@/tools/utils'
