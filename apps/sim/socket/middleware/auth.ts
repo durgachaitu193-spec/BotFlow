@@ -1,6 +1,9 @@
+import { db } from '@botflow/db'
+import { user } from '@botflow/db/schema'
 import { createLogger } from '@botflow/logger'
+import { eq } from 'drizzle-orm'
+import { jwtVerify } from 'jose'
 import type { Socket } from 'socket.io'
-import { auth } from '@/lib/auth'
 import { ANONYMOUS_USER, ANONYMOUS_USER_ID } from '@/lib/auth'
 import { isAuthDisabled } from '@/lib/core/config/feature-flags'
 
@@ -48,30 +51,53 @@ export async function authenticateSocket(socket: AuthenticatedSocket, next: any)
       return next(new Error('Authentication required'))
     }
 
-    // Validate one-time token with Better Auth
+    // Validate the JWT minted by /api/auth/socket-token.
+    //
+    // Not better-auth's verifyOneTimeToken: sign-in goes through Privy, which
+    // never creates a better-auth `session` row, so issuing one of those tokens
+    // was impossible and the handshake could never happen.
     try {
       logger.debug(`Attempting token validation for socket ${socket.id}`, {
         tokenLength: token?.length || 0,
         origin,
       })
 
-      const session = await auth.api.verifyOneTimeToken({
-        body: {
-          token,
-        },
-      })
+      const secretValue = process.env.INTERNAL_API_SECRET
+      if (!secretValue) {
+        logger.error('INTERNAL_API_SECRET is not set; cannot verify socket tokens')
+        return next(new Error('Server misconfigured'))
+      }
 
-      if (!session?.user?.id) {
-        logger.warn(`Socket ${socket.id} rejected: Invalid token - no user found`)
+      const { payload } = await jwtVerify(token, new TextEncoder().encode(secretValue))
+
+      if (!payload.userId || typeof payload.userId !== 'string') {
+        logger.warn(`Socket ${socket.id} rejected: token carries no user id`)
         return next(new Error('Invalid session'))
       }
 
-      // Store user info in socket for later use
-      socket.userId = session.user.id
-      socket.userName = session.user.name || session.user.email || 'Unknown User'
-      socket.userEmail = session.user.email
-      socket.userImage = session.user.image || null
-      socket.activeOrganizationId = session.session.activeOrganizationId || undefined
+      const [userData] = await db
+        .select({
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+        })
+        .from(user)
+        .where(eq(user.id, payload.userId))
+        .limit(1)
+
+      if (!userData) {
+        logger.warn(`Socket ${socket.id} rejected: user ${payload.userId} not found`)
+        return next(new Error('Invalid session'))
+      }
+
+      socket.userId = userData.id
+      socket.userName = userData.name || userData.email || 'Unknown User'
+      socket.userEmail = userData.email || ''
+      socket.userImage = userData.image || null
+      // activeOrganizationId comes from a better-auth session, which this flow
+      // does not have; org-scoped features fall back to undefined.
+      socket.activeOrganizationId = undefined
 
       next()
     } catch (tokenError) {
