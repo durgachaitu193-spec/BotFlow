@@ -46,6 +46,36 @@ const transformPrivyUser = (privyUser: any): PrivyUserData => {
   }
 }
 
+/**
+ * Transient auth state (signing out, syncing, provisioning a wallet).
+ *
+ * Styled for the ink backdrop only. These previously used
+ * `text-zinc-900 dark:text-white`, which rendered near-black on the dark
+ * surface whenever the app was in light theme, so the messages were invisible.
+ */
+function AuthStatus({ title }: { title: string }) {
+  return (
+    <div className='text-center'>
+      <div className='mb-5 flex items-center justify-center gap-1.5' aria-hidden>
+        {[0, 1, 2].map((i) => (
+          <span
+            key={i}
+            className='auth-flow-node size-2 rounded-full bg-[#ff6a00]'
+            style={{ animationDelay: `${i * 0.18}s` }}
+          />
+        ))}
+      </div>
+      <h1
+        aria-live='polite'
+        className='font-brand text-[26px] font-bold tracking-[-0.02em] text-white'
+      >
+        {title}
+      </h1>
+      <p className='mt-2 text-[15px] text-[rgba(242,242,242,0.62)]'>This will only take a moment.</p>
+    </div>
+  )
+}
+
 export default function PrivyLogin() {
   const { ready, authenticated, login, user } = usePrivy()
   const { resolvedTheme } = useTheme()
@@ -260,30 +290,21 @@ export default function PrivyLogin() {
         }, 2000)
       }
 
-      return (
-        <div className='space-y-1 text-center'>
-          <h1 className={`${season.className} font-medium text-[32px] text-zinc-900 dark:text-white tracking-tight`}>
-            Finishing sign out...
-          </h1>
-          <p className={`${season.className} mt-2 font-[380] text-[16px] text-zinc-500 dark:text-gray-400`}>
-            Please wait...
-          </p>
-        </div>
-      )
+      return <AuthStatus title='Finishing sign out...' />
     }
 
     if (error) {
       return (
-        <div className='mx-auto max-w-md space-y-4 rounded-2xl border border-red-500/20 bg-black/50 p-6 text-center backdrop-blur-sm'>
-          <h1 className={`${season.className} font-medium text-[24px] text-red-500 tracking-tight`}>
-            Authentication Error
+        <div className='text-center'>
+          <h1 className='font-brand text-[24px] font-bold tracking-[-0.02em] text-[#ff6a00]'>
+            Authentication error
           </h1>
-          <p className={`${season.className} font-[380] text-[16px] text-zinc-600 dark:text-gray-300`}>{error}</p>
+          <p className='mt-3 text-[15px] leading-relaxed text-[rgba(242,242,242,0.62)]'>{error}</p>
           <Button
             onClick={() => window.location.reload()}
-            className='mt-4 border border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-50 dark:border-white/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/20'
+            className='mt-6 rounded-full border border-white/15 bg-white/5 px-6 py-5 font-brand text-[15px] font-medium text-white transition-colors hover:border-white/30 hover:bg-white/10'
           >
-            Retry Connection
+            Retry connection
           </Button>
         </div>
       )
@@ -298,16 +319,7 @@ export default function PrivyLogin() {
           ? 'Setting up wallet...'
           : 'Setting up your account...'
 
-    return (
-      <div className='space-y-1 text-center'>
-        <h1 className={`${season.className} font-medium text-[32px] text-zinc-900 dark:text-white tracking-tight`}>
-          {statusMessage}
-        </h1>
-        <p className={`${season.className} mt-2 font-[380] text-[16px] text-zinc-500 dark:text-gray-400`}>
-          Please wait...
-        </p>
-      </div>
-    )
+    return <AuthStatus title={statusMessage} />
   }
 
   return (
