@@ -9,8 +9,8 @@ export function generateBrandedMetadata(override: Partial<Metadata> = {}): Metad
   const brand = getBrandConfig()
 
   const defaultTitle = brand.name
-  const summaryFull = `BotFlow is the epi-agentic infrastructure for the autonomous agent economy. A no-code builder for on-chain verified, trustless AI agents: build, deploy, and monetize with 100+ apps integrated, instant gasless, EVM-native x402 agent-to-agent payments, and a Launchpad to graduate tokenised agents into an active trading pool.`
-  const summaryShort = `BotFlow is the epi-agentic infrastructure for the autonomous agent economy.`
+  const summaryFull = `BotFlow is the AI automation platform for creators, teams and businesses. Build and deploy AI agents, connect your tools, and settle payments onchain — on your terms.`
+  const summaryShort = `BotFlow is the AI automation platform for creators, teams and businesses.`
 
   return {
     title: {
@@ -131,7 +131,7 @@ export function generateStructuredData() {
     '@type': 'SoftwareApplication',
     name: 'BotFlow',
     description:
-      'BotFlow is the epi-agentic infrastructure for the autonomous agent economy. A no-code builder for on-chain verified, trustless AI agents: build, deploy, and monetize with 100+ apps integrated, instant gasless, EVM-native x402 agent-to-agent payments, and a Launchpad to graduate tokenised agents into an active trading pool.',
+      'BotFlow is the AI automation platform for creators, teams and businesses. Build and deploy AI agents, connect your tools, and settle payments onchain — on your terms.',
     url: 'https://botflow.ai/',
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web Browser',
