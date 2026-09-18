@@ -16,11 +16,12 @@ interface Logger {
  */
 export function createHttpHandler(roomManager: RoomManager, logger: Logger) {
   return (req: IncomingMessage, res: ServerResponse) => {
-    if (req.method === 'GET' && req.url === '/health') {
+    if (req.method === 'GET' && (req.url === '/' || req.url === '/health')) {
       res.writeHead(200, { 'Content-Type': 'application/json' })
       res.end(
         JSON.stringify({
           status: 'ok',
+          service: 'BotFlow Collaborative Socket Server',
           timestamp: new Date().toISOString(),
           connections: roomManager.getTotalActiveConnections(),
         })
