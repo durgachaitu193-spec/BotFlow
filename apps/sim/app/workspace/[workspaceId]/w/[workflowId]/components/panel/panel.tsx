@@ -27,7 +27,6 @@ import { useRegisterGlobalCommands } from '@/app/workspace/[workspaceId]/provide
 import { useUserPermissionsContext } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
 import { createCommands } from '@/app/workspace/[workspaceId]/utils/commands-utils'
 import {
-  Copilot,
   Deploy,
   Editor,
   Toolbar,
@@ -73,11 +72,12 @@ export function Panel() {
   const panelRef = useRef<HTMLElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { activeTab, setActiveTab, panelWidth, _hasHydrated, setHasHydrated } = usePanelStore()
-  const copilotRef = useRef<{
-    createNewChat: () => void
-    setInputValueAndFocus: (value: string) => void
-    focusInput: () => void
-  }>(null)
+  // Unused while the Copilot tab is hidden; kept for when it ships.
+  // const copilotRef = useRef<{
+  //   createNewChat: () => void
+  //   setInputValueAndFocus: (value: string) => void
+  //   focusInput: () => void
+  // }>(null)
   const toolbarRef = useRef<{
     focusSearch: () => void
   } | null>(null)
@@ -311,15 +311,17 @@ export function Panel() {
           allowInEditable: false,
         },
       },
-      {
-        id: 'focus-copilot-tab',
-        handler: () => {
-          setActiveTab('copilot')
-        },
-        overrides: {
-          allowInEditable: false,
-        },
-      },
+      // Copilot tab is hidden, so its focus shortcut would strand the user on a
+      // tab with no button to leave by.
+      // {
+      //   id: 'focus-copilot-tab',
+      //   handler: () => {
+      //     setActiveTab('copilot')
+      //   },
+      //   overrides: {
+      //     allowInEditable: false,
+      //   },
+      // },
       {
         id: 'focus-toolbar-tab',
         handler: () => {
@@ -448,6 +450,7 @@ export function Panel() {
           {/* Tabs */}
           <div className='flex flex-shrink-0 items-center justify-between px-[8px] pt-[14px]'>
             <div className='flex gap-[4px]'>
+              {/* Copilot is not shipped yet; hide the tab entirely.
               <Button
                 className='h-[28px] truncate px-[8px] py-[5px] text-[12.5px] hover:bg-[var(--surface-9)] hover:text-[var(--text-primary)]'
                 variant={_hasHydrated && activeTab === 'copilot' ? 'active' : 'ghost'}
@@ -456,6 +459,7 @@ export function Panel() {
               >
                 Copilot
               </Button>
+              */}
               <Button
                 className='h-[28px] px-[8px] py-[5px] text-[12.5px] hover:bg-[var(--surface-9)] hover:text-[var(--text-primary)]'
                 variant={_hasHydrated && activeTab === 'toolbar' ? 'active' : 'ghost'}
@@ -480,6 +484,9 @@ export function Panel() {
 
           {/* Tab Content - Keep all tabs mounted but hidden to preserve state */}
           <div className='flex-1 overflow-hidden pt-[12px]'>
+            {/* Copilot is hidden until it ships. Left unmounted rather than
+                hidden with CSS so it does not initialise chats or fetch on
+                every workspace load.
             <div
               className={
                 _hasHydrated && activeTab === 'copilot'
@@ -492,6 +499,7 @@ export function Panel() {
             >
               <Copilot ref={copilotRef} panelWidth={panelWidth} />
             </div>
+            */}
             <div
               className={
                 _hasHydrated && activeTab === 'editor'
