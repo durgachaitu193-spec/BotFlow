@@ -70,12 +70,6 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  eslint: {
-    // Linting ~3,300 files during the build adds minutes and blocks deploys for
-    // issues that CI should catch. NEXT_DISABLE_ESLINT is not a documented Next
-    // variable; this is the supported switch.
-    ignoreDuringBuilds: true,
-  },
   output: isTruthy(env.DOCKER_BUILD) ? 'standalone' : undefined,
   serverExternalPackages: [
     'unpdf',
@@ -138,9 +132,9 @@ const nextConfig: NextConfig = {
     '@botflow/logger',
   ],
   webpack: (config, { webpack, dev }) => {
-    // Minifying this bundle (369 routes, ~1400 tool modules) is the slowest and
-    // most memory-hungry part of the build. Set SKIP_MINIFY=true to trade bundle
-    // size for build time on constrained CI machines.
+    // NOTE: this whole webpack() hook is IGNORED on Next 16, which builds with
+    // Turbopack by default. SKIP_MINIFY only takes effect if the build is run
+    // with `next build --webpack`.
     if (!dev && process.env.SKIP_MINIFY === 'true') {
       config.optimization.minimize = false
     }
