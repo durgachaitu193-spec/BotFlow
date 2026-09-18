@@ -142,11 +142,11 @@
     /* stone-300 */
 
     /* Brand & state */
-    --brand-400: #1B9B8C;
-    --brand-500: #2DFFA8;
-    --brand-secondary: #00bac7;
-    --brand-tertiary: #22c55e;
-    --brand-tertiary-2: #33c481;
+    --brand-400: #CC5500;
+    --brand-500: #FF6A00;
+    --brand-secondary: #FF8C3A;
+    --brand-tertiary: #FF6A00;
+    --brand-tertiary-2: #FF8C3A;
     --warning: #ea580c;
 
     /* Utility */
@@ -308,11 +308,11 @@
     --border-success: #575757;
 
     /* Brand & state */
-    --brand-400: #1B9B8C;
-    --brand-500: #2DFFA8;
-    --brand-secondary: #00bac7;
-    --brand-tertiary: #22c55e;
-    --brand-tertiary-2: #33c481;
+    --brand-400: #CC5500;
+    --brand-500: #FF6A00;
+    --brand-secondary: #FF8C3A;
+    --brand-tertiary: #FF6A00;
+    --brand-tertiary-2: #FF8C3A;
     --warning: #ff6600;
 
     /* Utility */
@@ -779,10 +779,10 @@ input[type="search"]::-ms-clear {
     --gradient-secondary: 336 95% 65%;
     --brand-background-hex: #ffffff;
     --surface-elevated: #202020;
-    --brand-primary-hex: #2DFFA8;
-    --brand-primary-hover-hex: #1B9B8C;
-    --brand-accent-hex: #2DFFA8;
-    --brand-accent-hover-hex: #1B9B8C;
+    --brand-primary-hex: #FF6A00;
+    --brand-primary-hover-hex: #CC5500;
+    --brand-accent-hex: #FF6A00;
+    --brand-accent-hover-hex: #CC5500;
   }
 
   .dark {
@@ -816,10 +816,10 @@ input[type="search"]::-ms-clear {
     --base-muted-foreground: #a3a3a3;
     --gradient-primary: 263 90% 75%;
     --gradient-secondary: 336 100% 72%;
-    --brand-primary-hex: #f26522;
-    --brand-primary-hover-hex: #00bac7;
-    --brand-accent-hex: #f26522;
-    --brand-accent-hover-hex: #00bac7;
+    --brand-primary-hex: #FF6A00;
+    --brand-primary-hover-hex: #CC5500;
+    --brand-accent-hex: #FF6A00;
+    --brand-accent-hover-hex: #CC5500;
     --surface-elevated: #202020;
   }
 
@@ -832,8 +832,8 @@ input[type="search"]::-ms-clear {
     --card: #0F0F0F;
     --card-foreground: #FFFFFF;
     --navbar-bg: rgba(5, 5, 5, 0.8);
-    --workflow-connector: #BEF264;
-    /* Lime green */
+    --workflow-connector: #FF6A00;
+    /* Brand orange */
 
     /* Borders and Dividers */
     --border: #1E1E1E;
@@ -851,10 +851,10 @@ input[type="search"]::-ms-clear {
     /* Accents */
     --primary: #FFFFFF;
     --primary-foreground: #000000;
-    --brand-500: #8B5CF6;
-    /* Violet accent */
-    --brand-secondary: #00FF94;
-    /* Emerald accent from image */
+    --brand-500: #FF6A00;
+    /* Brand orange */
+    --brand-secondary: #FF8C3A;
+    /* Brand orange, lighter */
     --accent: #1E1E1E;
     --accent-foreground: #FFFFFF;
 
