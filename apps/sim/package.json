@@ -13,6 +13,7 @@
     "dev:sockets": "bun run socket/index.ts",
     "dev:full": "concurrently -n \"App,Realtime\" -c \"cyan,magenta\" \"bun run dev\" \"bun run dev:sockets\"",
     "build": "NEXT_TELEMETRY_DISABLED=1 NEXT_DISABLE_ESLINT=1 NODE_OPTIONS='--max-old-space-size=6144' next build",
+    "build:webpack": "NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS='--max-old-space-size=6144' next build --webpack",
     "start": "next start",
     "prepare": "cd ../.. && bun husky",
     "test": "vitest run",

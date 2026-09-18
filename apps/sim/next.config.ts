@@ -132,9 +132,10 @@ const nextConfig: NextConfig = {
     '@botflow/logger',
   ],
   webpack: (config, { webpack, dev }) => {
-    // NOTE: this whole webpack() hook is IGNORED on Next 16, which builds with
-    // Turbopack by default. SKIP_MINIFY only takes effect if the build is run
-    // with `next build --webpack`.
+    // This hook only runs when the build uses webpack. Next 16 builds with
+    // Turbopack by default and ignores it entirely — use the `build:webpack`
+    // script to opt out. SKIP_MINIFY=true then drops minification, which is
+    // the slowest and most memory-hungry step for a bundle this size.
     if (!dev && process.env.SKIP_MINIFY === 'true') {
       config.optimization.minimize = false
     }
