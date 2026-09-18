@@ -8,7 +8,9 @@ import type { VideoRequestBody } from '@/tools/video/types'
 const logger = createLogger('VideoProxyAPI')
 
 export const dynamic = 'force-dynamic'
-export const maxDuration = 600 // 10 minutes for video generation
+// Vercel caps function duration at 300s on Pro; 600 fails deployment
+// validation regardless of build resources.
+export const maxDuration = 300 // 5 minutes for video generation
 
 export async function POST(request: NextRequest) {
   const requestId = crypto.randomUUID()
